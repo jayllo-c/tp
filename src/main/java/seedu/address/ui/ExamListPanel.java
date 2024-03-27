@@ -27,6 +27,7 @@ public class ExamListPanel extends UiPart<Region> {
         super(FXML);
         examListView.setItems(examList);
         examListView.setCellFactory(listView -> new ExamListViewCell());
+        examListView.setSelectionModel(null);
     }
 
     /**
