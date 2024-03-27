@@ -2,6 +2,7 @@ package seedu.address.ui;
 
 import java.util.logging.Logger;
 
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
@@ -19,15 +20,17 @@ public class ExamListPanel extends UiPart<Region> {
 
     @FXML
     private ListView<Exam> examListView;
+    private ObservableValue<Exam> selectedExam;
 
     /**
      * Creates a {@code ExamListPanel} with the given {@code ObservableList}.
      */
-    public ExamListPanel(ObservableList<Exam> examList) {
+    public ExamListPanel(ObservableList<Exam> examList, ObservableValue<Exam> selectedExam) {
         super(FXML);
         examListView.setItems(examList);
         examListView.setCellFactory(listView -> new ExamListViewCell());
         examListView.setSelectionModel(null);
+        this.selectedExam = selectedExam;
     }
 
     /**
@@ -42,7 +45,7 @@ public class ExamListPanel extends UiPart<Region> {
                 setGraphic(null);
                 setText(null);
             } else {
-                setGraphic(new ExamCard(exam, getIndex() + 1).getRoot());
+                setGraphic(new ExamCard(exam, getIndex() + 1, selectedExam).getRoot());
             }
         }
     }
