@@ -69,4 +69,18 @@ public class DeleteScoreCommand extends Command {
                 personWithScoreToDelete.getEmail(),
                 selectedExam.getName()));
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        if (!(other instanceof DeleteScoreCommand)) {
+            return false;
+        }
+
+        DeleteScoreCommand otherDeleteScoreCommand = (DeleteScoreCommand) other;
+        return index.equals(otherDeleteScoreCommand.index);
+    }
 }
