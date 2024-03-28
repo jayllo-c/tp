@@ -31,8 +31,10 @@ public class EditScoreCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_SCORE + "17";
 
+    public static final String MESSAGE_EDIT_SCORE_SUCCESS = "Edited score for %s to %s for %s (%s)";
     public static final String MESSAGE_SCORE_GREATER_THAN_MAX =
             "Score for %s cannot be greater than the maximum score.";
+    public static final String MESSAGE_NO_SCORE_TO_EDIT = "%s (%s) does not have a score to edit for %s";
 
     private final Index index;
     private final Score score;
@@ -70,12 +72,19 @@ public class EditScoreCommand extends Command {
         Person personToEdit = filteredPersons.get(index.getZeroBased());
 
         Map<Exam, Score> updatedScores = new HashMap<>(personToEdit.getScores());
+        if (!updatedScores.containsKey(selectedExam)) {
+            throw new CommandException(String.format(MESSAGE_NO_SCORE_TO_EDIT, personToEdit.getEmail(),
+                    personToEdit.getName(),
+                    selectedExam.getName()));
+        }
+
         updatedScores.put(selectedExam, score);
 
         Person editedPerson = createEditedPerson(personToEdit, updatedScores);
 
         model.setPerson(personToEdit, editedPerson);
-        return new CommandResult(String.format("Edited score for %s for %s", score, editedPerson.getName()));
+        return new CommandResult(String.format(MESSAGE_EDIT_SCORE_SUCCESS, selectedExam.getName(), score,
+                editedPerson.getName(), editedPerson.getEmail()));
     }
 
     /**
