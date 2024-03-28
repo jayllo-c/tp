@@ -31,10 +31,10 @@ public class EditScoreCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_SCORE + "17";
 
-    public static final String MESSAGE_EDIT_SCORE_SUCCESS = "Edited score for %s to %s for %s (%s)";
+    public static final String MESSAGE_EDIT_SCORE_SUCCESS = "Edited score for %s to %s for %s (%s).";
     public static final String MESSAGE_SCORE_GREATER_THAN_MAX =
             "Score for %s cannot be greater than the maximum score.";
-    public static final String MESSAGE_NO_SCORE_TO_EDIT = "%s (%s) does not have a score to edit for %s";
+    public static final String MESSAGE_NO_SCORE_TO_EDIT = "%s (%s) does not have a score to edit for %s.";
 
     private final Index index;
     private final Score score;
@@ -73,35 +73,14 @@ public class EditScoreCommand extends Command {
 
         Map<Exam, Score> updatedScores = new HashMap<>(personToEdit.getScores());
         if (!updatedScores.containsKey(selectedExam)) {
-            throw new CommandException(String.format(MESSAGE_NO_SCORE_TO_EDIT, personToEdit.getEmail(),
-                    personToEdit.getName(),
+            throw new CommandException(String.format(MESSAGE_NO_SCORE_TO_EDIT, personToEdit.getName(),
+                    personToEdit.getEmail(),
                     selectedExam.getName()));
         }
 
-        updatedScores.put(selectedExam, score);
-
-        Person editedPerson = createEditedPerson(personToEdit, updatedScores);
-
-        model.setPerson(personToEdit, editedPerson);
+        model.addExamScoreToPerson(personToEdit, selectedExam, score);
         return new CommandResult(String.format(MESSAGE_EDIT_SCORE_SUCCESS, selectedExam.getName(), score,
-                editedPerson.getName(), editedPerson.getEmail()));
-    }
-
-    /**
-     * Creates and returns a {@code Person} with the details of {@code personToEdit} and the updated scores map.
-     */
-    private static Person createEditedPerson(Person personToEdit, Map<Exam, Score> updatedScores) {
-        return new Person(
-                personToEdit.getName(),
-                personToEdit.getPhone(),
-                personToEdit.getEmail(),
-                personToEdit.getAddress(),
-                personToEdit.getTags(),
-                personToEdit.getMatric(),
-                personToEdit.getReflection(),
-                personToEdit.getStudio(),
-                updatedScores
-        );
+                personToEdit.getName(), personToEdit.getEmail()));
     }
 
     @Override
