@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static seedu.address.commons.util.CollectionUtil.isAnyNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +44,7 @@ public class AddScoreCommand extends Command {
      * Creates an AddScoreCommand to add the specified {@code Score} to the person at the specified {@code Index}.
      */
     public AddScoreCommand(Index targetIndex, Score score) {
+        requireAllNonNull(targetIndex, score);
         this.targetIndex = targetIndex;
         this.score = score;
     }
@@ -71,31 +73,11 @@ public class AddScoreCommand extends Command {
             throw new CommandException(MESSAGE_SCORE_EXISTS);
         }
 
-        updatedScores.put(selectedExam , score);
+        model.addExamScoreToPerson(personToEdit, selectedExam, score);
 
-        Person editedPerson = createEditedPerson(personToEdit, updatedScores);
-
-        model.setPerson(personToEdit, editedPerson);
-        return new CommandResult(String.format("Added score %s for %s", score, editedPerson.getName()));
+        return new CommandResult(String.format("Added score %s for %s", score, personToEdit.getName()));
     }
 
-    /**
-     * Creates and returns a {@code Person} with the details of {@code personToEdit}
-     * and the updated scores map.
-     */
-    private static Person createEditedPerson(Person personToEdit, Map<Exam, Score> updatedScores) {
-        return new Person(
-                personToEdit.getName(),
-                personToEdit.getPhone(),
-                personToEdit.getEmail(),
-                personToEdit.getAddress(),
-                personToEdit.getTags(),
-                personToEdit.getMatric(),
-                personToEdit.getReflection(),
-                personToEdit.getStudio(),
-                updatedScores
-        );
-    }
 
     @Override
     public boolean equals(Object other) {
