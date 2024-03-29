@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.logic.commands.ImportExamCommand.addToErrorReport;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.nio.file.Path;
@@ -18,15 +17,12 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.exam.UniqueExamList;
+import seedu.address.model.exam.Exam;
+import seedu.address.model.person.Score;
 
 public class ImportExamCommandTest {
-
-    public static final String MIDTERM_NOT_FOUND_ERROR =
-            "\nBelow are the errors that occurred while importing exams:\n"
-            + "Midterm: Exam not found\n";
-    public static final String CREATE_MIDTERM_100 = " n/Midterm s/100";
-    public static final String VALID_PATH = "src/test/data/ImportExamCommandTest/testimportexam.csv";
+    public static final String VALID_PATH = "src\\test\\data\\ImportExamCommandTest\\testimportexam.csv";
+    public static final String EXTRA_PATH = "src\\test\\data\\ImportExamCommandTest\\testimportexamextra.csv";
     private ImportExamCommand importExamCommand;
     private Model model;
 
@@ -34,7 +30,6 @@ public class ImportExamCommandTest {
     public void setUp() throws CommandException, ParseException {
         model = mock(Model.class);
         model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        UniqueExamList examList = new UniqueExamList();
     }
 
     @Test
@@ -59,15 +54,15 @@ public class ImportExamCommandTest {
         Path invalidFilePath = Paths.get("invalid/path/to/file.csv");
         importExamCommand = new ImportExamCommand(invalidFilePath);
 
-        addToErrorReport("Email", "Invalid email format");
+        importExamCommand.addToErrorReport("Email", "Invalid email format");
         assertEquals(
                 "\nBelow are the errors that occurred while importing exams:\nEmail: Invalid email format\n",
-                ImportExamCommand.generateErrorReport());
+                importExamCommand.generateErrorReport());
     }
 
     @Test
     public void testGenerateErrorReportEmpty() {
-        String result = ImportExamCommand.generateErrorReport();
+        String result = new ImportExamCommand(Paths.get(VALID_PATH)).generateErrorReport();
         assertEquals("", result);
     }
 
@@ -85,6 +80,21 @@ public class ImportExamCommandTest {
         ImportExamCommand importExamCommand = new ImportExamCommand(filePath);
         ImportExamCommand importExamCommandCopy = new ImportExamCommand(filePath);
         assertEquals(importExamCommand, importExamCommandCopy);
+    }
+
+    @Test
+    public void testFailing() throws CommandException {
+        Path filePath = Paths.get(EXTRA_PATH);
+        Exam midterm = new Exam("MidtermTestFailing", new Score(100));
+        model.addExam(midterm);
+        ImportExamCommand importExamCommand = new ImportExamCommand(filePath);
+
+        String expectedError = String.format(ImportExamCommand.MESSAGE_SUCCESS, EXTRA_PATH)
+                + ImportExamCommand.PREFIX_ERROR_REPORT;
+        expectedError += "non@example.com: Person does not exist\n";
+        expectedError += "johnd@example.com: Grade for Midterm exceeds maximum score\n";
+        expectedError += "NonExistent: Exam does not exist\n";
+        assertCommandSuccess(importExamCommand, model, expectedError, model);
     }
 
 }

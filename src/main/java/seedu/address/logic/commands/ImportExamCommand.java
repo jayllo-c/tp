@@ -40,7 +40,7 @@ public class ImportExamCommand extends Command {
     public static final String PREFIX_SCORE = " 1 s/";
     public static final String PREFIX_FIND_BY_EMAIL = " e/";
     public static final String PREFIX_ERROR_REPORT = "\nBelow are the errors that occurred while importing exams:\n";
-    private static StringBuilder errorReport;
+    private StringBuilder errorReport;
     private Path filepath;
 
     /**
@@ -59,7 +59,7 @@ public class ImportExamCommand extends Command {
      * @param subject the subject of the error
      * @param error the error message
      */
-    static void addToErrorReport(String subject, String error) {
+    void addToErrorReport(String subject, String error) {
         errorReport.append(String.format("%s: %s\n", subject, error));
     }
 
@@ -67,7 +67,7 @@ public class ImportExamCommand extends Command {
      * Generates the error report.
      * @return the error report
      */
-    static String generateErrorReport() {
+    String generateErrorReport() {
         String errorReportString = errorReport.toString();
         if (errorReportString.isBlank()) {
             return "";
@@ -177,7 +177,7 @@ public class ImportExamCommand extends Command {
         }
     }
 
-    private static void insertGrades(
+    private void insertGrades(
             HashMap<String, HashMap<String, Integer>> headers, Model model, Exam exam, Object examNames) {
         HashMap<String, Integer> grades = headers.get((String) examNames);
         Object[] emails = grades.keySet().toArray();
@@ -190,7 +190,7 @@ public class ImportExamCommand extends Command {
         }
     }
 
-    private static void addScoreToPerson(Model model, String email, Exam exam, Integer grade) {
+    private void addScoreToPerson(Model model, String email, Exam exam, Integer grade) {
         ObservableList<Person> persons = model.getPersonByEmail(email);
         if (persons.size() > 0) {
             Person person = persons.get(0);
