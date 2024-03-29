@@ -29,6 +29,10 @@ public class ExamListPanel extends UiPart<Region> {
         examListView.setCellFactory(listView -> new ExamListViewCell());
     }
 
+    public void update() {
+        examListView.refresh();
+    }
+
     /**
      * Custom {@code ListCell} that displays the graphics of a {@code Exam} using a {@code ExamCard}.
      */

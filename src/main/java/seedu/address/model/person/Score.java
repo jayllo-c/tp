@@ -7,7 +7,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  * Represents an Exam's score in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidScore(String)}
  */
-public class Score {
+public class Score implements Comparable<Score> {
 
     public static final String MESSAGE_CONSTRAINTS =
             "Scores should be numeric, and it should not be blank or less than zero.";
@@ -64,6 +64,11 @@ public class Score {
     @Override
     public int hashCode() {
         return Integer.hashCode(value);
+    }
+
+    @Override
+    public int compareTo(Score other) {
+        return Integer.compare(this.value, other.value);
     }
 
 }

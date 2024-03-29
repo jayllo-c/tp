@@ -9,6 +9,7 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ScoreStatistics;
 import seedu.address.model.exam.Exam;
 import seedu.address.model.person.Person;
 
@@ -42,6 +43,11 @@ public interface Logic {
      * Returns the selected exam in the exam list.
      */
     ObservableValue<Exam> getSelectedExam();
+
+    /**
+     * Returns the exam score statistics for the given exam.
+     */
+    ScoreStatistics getExamScoreStatistics(Exam exam);
 
     /**
      * Returns the user prefs' address book file path.

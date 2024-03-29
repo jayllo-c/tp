@@ -140,4 +140,9 @@ public interface Model {
 
     /** Returns an unmodifiable view of the filtered exam list */
     ObservableList<Exam> getExamList();
+
+    /**
+     * Returns the exam score statistics for the given exam.
+     */
+    ScoreStatistics getExamScoreStatistics(Exam exam);
 }
