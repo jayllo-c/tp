@@ -99,6 +99,9 @@ public class PersonCard extends UiPart<Region> {
         addressicon.setImage(addressIcon);
     }
 
+    /**
+     * Populates the exam score of the person.
+     */
     public void populateExamScore(Exam selectedExamValue) {
         if (selectedExamValue != null) {
             Score score = person.getScores().get(selectedExamValue);

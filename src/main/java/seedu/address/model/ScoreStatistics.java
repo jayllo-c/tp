@@ -1,5 +1,8 @@
 package seedu.address.model;
 
+/**
+ * Represents the statistics of a list of scores.
+ */
 public class ScoreStatistics {
     private final double mean;
     private final double median;
@@ -8,6 +11,9 @@ public class ScoreStatistics {
     private final double q1;
     private final double q3;
 
+    /**
+     * Constructs a {@code ScoreStatistics} object with the given statistics.
+     */
     public ScoreStatistics(double mean, double median, double min, double max, double q1, double q3) {
         this.mean = mean;
         this.median = median;
@@ -17,6 +23,9 @@ public class ScoreStatistics {
         this.q3 = q3;
     }
 
+    /**
+     * Constructs a {@code ScoreStatistics} object with no scores available.
+     */
     public ScoreStatistics() {
         this.mean = -1;
         this.median = -1;

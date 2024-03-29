@@ -31,6 +31,9 @@ public class StatusBarFooter extends UiPart<Region> {
         this.logic = logic;
     }
 
+    /**
+     * Updates the status bar to display the grade statistics of the selected exam.
+     */
     public void update() {
         Exam selectedExam = logic.getSelectedExam().getValue();
         if (selectedExam == null) {
