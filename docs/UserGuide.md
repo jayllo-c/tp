@@ -260,15 +260,22 @@ Format: `copy`
 
 Deletes the specified person from your contact list.
 
-Format: `delete INDEX`
+<box type="info" seamless>
 
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
+**Important:** <br>
 
-Examples:
-* `list` followed by `delete 2` deletes the 2nd person in AA.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+The person at the specified `INDEX` will be deleted. The index **must be a positive integer** (1, 2, 3, …)​
+
+</box>
+
+**Examples**:
+1. `list` followed by `delete 2` deletes the 2nd person stored in the app.
+2. `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+
+>You will see this message once you successfully delete a person from your list, indicating the details of the deleted person:
+>
+>![delete success message](images/success_images/delete_success.png)
+
 
 ### Deleting filtered persons : `deleteshown`
 
@@ -345,7 +352,7 @@ Format: `addScore s/SCORE`
 
 </box>
 
-Example: `addscore 1 s/34`
+Example: `addScore 1 s/34`
 
 * Adds a score of 34 to the person currently displayed at index 1.
 
@@ -412,6 +419,7 @@ Format: `deleteExam INDEX`
 <box type="info" seamless>
 
 **Information:**
+
 * Deletes the exam at the specified `INDEX`.
 * When an Exam is deleted, all corresponding records of scores associated with that Exam will also be deleted.
 * If the currently selected exam is deleted, it will be deselected.
@@ -421,42 +429,6 @@ Format: `deleteExam INDEX`
 Example: `deleteExam 2`
 
 * Removes the 2nd exam displayed in AA.
-
-### Clearing all entries : `clear`
-
-Clears all entries from AA.
-
-Format: `clear`
->Note: The application ignores any extraneous parameters as we assume they are typos.
-
-### Exporting Data to a CSV file : `export`
-
-Exports currently listed persons and their details to a CSV file, avengersassemble.csv, which can be found in addressbookdata.
-
-**Steps:**
-1. Filter out the persons you want to export using the [`find`](#filtering-persons--find) or
-[`list`](#listing-all-persons--list) command.
-2. Type `export` to export the currently listed persons and their details to a CSV file.
-3. Upon export, a folder named addressbookdata will be created in the same directory where Avengers Assemble is located. Within this folder, you'll find the CSV file named avengersassemble.csv, containing the exported data.
-
-Format: `export`
->Note: The application ignores any extraneous parameters as we assume they are typos.
-
-<box type="info" seamless>
-
-**Important:** <br>
-
-The person at the specified `INDEX` will be deleted. The index **must be a positive integer** (1, 2, 3, …)​
-
-</box>
-
-**Examples**:
-1. `list` followed by `delete 2` deletes the 2nd person stored in the app.
-2. `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
-
->You will see this message once you successfully delete a person from your list, indicating the details of the deleted person:
->
->![delete success message](images/success_images/delete_success.png)
 
 ### Clearing All Entries : `clear`
 
