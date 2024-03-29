@@ -6,18 +6,18 @@
 
 # Avengers Assemble User Guide
 
-Avengers Assemble (AA) is a **desktop app for managing contacts**, meant for use with a Command Line Interface (CLI) 
-while still having the benefits of a Graphical User Interface (GUI). 
+Avengers Assemble (AA) is a **desktop app for managing contacts**, meant for use with a Command Line Interface (CLI)
+while still having the benefits of a Graphical User Interface (GUI).
 
 The application is designed for **Head Tutors** of the NUS CS1101S Programming Methodology course, who intend to simplify their administrative tasks relating to contact management between students, other teaching assistants, and course instructors.
-However, its functions can also be extended to you if you are a head tutor of another course. 
+However, its functions can also be extended to you if you are a head tutor of another course.
 
 Our user guide aims to help you understand how to get started with the application.
 
 
 We will cover the features in a chronological order, from:
-1. Installation, to 
-2. Simple commands like adding and editing, followed by 
+1. Installation, to
+2. Simple commands like adding and editing, followed by
 3. More advanced commands like filtering and exporting data.
 
 <!-- * Table of Contents -->
@@ -142,7 +142,7 @@ Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]… [m/MATRICULATION
 > 1. `student`: If matriculation number, studio, and reflection fields are present;
 > 2. `TA`: If matriculation number and one of either studio or reflection fields are present;
 > 3. `instructor`: If none of the three fields are present.
-> 
+>
 > You are free to edit or remove the tags after the person is added.
 
 
@@ -197,7 +197,7 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]… [m/MATRI
 
 
 <box type="info" seamless>
-  
+
 **Important:**
 
 Updating a matriculation number, studio, or reflection field will not automatically update the tags of the person. You will need to manually update the tags if necessary.
@@ -216,7 +216,7 @@ Format: `find PREFIX/KEYWORD`
 
 **Information:** <br>
 * Use this command to search for persons using a specific aspect of their details, as specified by the prefix.
-* The search will return any result that contains the keyword you have specified. 
+* The search will return any result that contains the keyword you have specified.
     > e.g. `find e/john` will find any person that contains `john` in their email.
 * The search is **case-insensitive**.
 * Only one prefix can be used at a time.
@@ -276,9 +276,150 @@ Deletes the current filtered list of persons. Requires a `find` command to be ru
 Format: `deleteshown`
 >Note: The application ignores any extraneous parameters as we assume they are typos.
 
+<box type="info" seamless>
+
+**Information:**
+
 * Deletes all persons in the current filtered list of persons.
 * The list of persons is filtered using the most recent `find` command.
 * The remaining list of persons is shown after the `find` command is executed.
+
+</box>
+
+### Adding an Exam : `addExam`
+
+Adds an exam into your exam list.
+
+Format: `addExam n/NAME s/MAX_SCORE`
+
+<box type="info" seamless>
+
+**Important:** Each exam should have a unique name. AA does not allow for exams with duplicate names to be added
+
+</box>
+
+Example: `addExam n/Midterm s/100`
+* Adds an exam with the name of "Midterm" and a max score of "100"
+
+### Selecting an Exam : `selectExam`
+
+Selects an exam in your exam list.
+
+Format: `selectExam INDEX`
+
+<box type="info" seamless>
+
+**Information:**
+
+* Selects the exam at the specified INDEX.
+* On selection, the exam will become highlighted on the user Interface.
+* Selecting an exam will display all scores of persons associated with that exam.
+
+</box>
+
+Example: `selectExam 1`
+
+* Selects the first exam displayed on the exam list.
+
+### Adding an Exam Score : `addScore`
+
+Adds an exam score to a person.
+
+Format: `addScore s/SCORE`
+
+<box type="info" seamless>
+
+**Important: An exam must be selected for this command to work!**
+
+</box>
+
+<box type="info" seamless>
+
+**Information:**
+
+* Adds an exam score to the person at the specific INDEX.
+* The exam score added will correspond to the currently selected exam.
+* The exam score added **cannot** be greater than the max score of the currently selected exam.
+* The exam score will be displayed on the user interface only when the corresponding exam is selected.
+
+</box>
+
+Example: `addscore 1 s/34`
+
+* Adds a score of 34 to the person currently displayed at index 1.
+
+### Editing an Exam Score : `editScore`
+
+Edits a person's exam score.
+
+Format: `editScore INDEX s/SCORE`
+
+<box type="info" seamless>
+
+**Important: An exam must be selected for this command to work!**
+
+</box>
+
+<box type="info" seamless>
+
+**Information:**
+
+* Edits the exam score of the person at the specific INDEX.
+* A person **must** have an exam score for the currently selected exam for this command to work.
+* The exam score edited corresponds to the currently selected exam.
+* The exam score **cannot** be edited to be greater than the max score of the currently selected exam.
+
+</box>
+
+Example: `editScore 1 s/43`
+
+* Edits the score of the person currently displayed at index 1 to 43.
+
+### Deleting an Exam Score : `deleteScore`
+
+Deletes a person's exam score.
+
+Format: `deleteScore INDEX`
+
+<box type="info" seamless>
+
+**Important: An exam must be selected for this command to work!**
+
+</box>
+
+<box type="info" seamless>
+
+**Information:**
+
+* Deletes the exam score of the person at the specific INDEX.
+* A person **must** have an exam score for the currently selected exam for this command to work.
+* The exam score deleted corresponds to the currently selected exam.
+
+</box>
+
+Example: `deleteScore 1`
+
+* deletes the score of the person currently displayed at index 1.
+
+
+### Deleting an Exam : `deleteExam`
+
+Removes an exam from your exam list.
+
+Format: `deleteExam INDEX`
+
+<box type="info" seamless>
+
+**Information:**
+* Deletes the exam at the specified `INDEX`.
+* When an Exam is deleted, all corresponding records of scores associated with that Exam will also be deleted.
+* If the currently selected exam is deleted, it will be deselected.
+
+</box>
+
+Example: `deleteExam 2`
+
+* Removes the 2nd exam displayed in AA.
 
 ### Clearing all entries : `clear`
 
@@ -292,7 +433,7 @@ Format: `clear`
 Exports currently listed persons and their details to a CSV file, avengersassemble.csv, which can be found in addressbookdata.
 
 **Steps:**
-1. Filter out the persons you want to export using the [`find`](#filtering-persons--find) or 
+1. Filter out the persons you want to export using the [`find`](#filtering-persons--find) or
 [`list`](#listing-all-persons--list) command.
 2. Type `export` to export the currently listed persons and their details to a CSV file.
 3. Upon export, a folder named addressbookdata will be created in the same directory where Avengers Assemble is located. Within this folder, you'll find the CSV file named avengersassemble.csv, containing the exported data.
@@ -354,7 +495,7 @@ If you want to preserve the exported data, you should rename it or save it in a 
 
 </box>
 
-### Importing Data from a CSV File : `import`
+### Importing Persons from a CSV File : `import`
 
 Imports all persons and their details from a CSV file of your specification.
 
@@ -363,7 +504,9 @@ Format: `import i/FILEPATH`
 <box type="info" seamless>
 
 **Important:**<br>
-The file path should be **absolute**.
+
+* The file path should be **absolute**.
+* This command will only import persons' particulars. To import exam scores, take a look at [importexam](#importing-exam-scores-from-a-csv-file--importexam)
 
 </box>
 
@@ -372,12 +515,30 @@ The file path should be **absolute**.
 `import i/C:/Users/alk/Downloads/avengersassemble.csv` imports the data from the CSV file located at `C:/Users/alk/Downloads/avengersassemble.csv`.
 
 > You will see this message once you successfully import the data, with the app showing the details of the imported persons:
-> 
+>
 > ![import success message](images/success_images/import_success.png)
 
 
 
 For more details on the input parameter, [click here](#command-format-summary).
+
+### Importing Exam Scores from a CSV File : `importExam`
+
+Imports all exam results from a CSV file
+
+Format: `import i/FILEPATH`
+
+**Important:**<br>
+
+* The file path should be **absolute**.
+* This command will only import persons' exam scores. To import persons' particulars, take a look at [import](#importing-persons-from-a-csv-file--import)
+
+</box>
+
+**Example:**
+
+`import i/C:/Users/alk/Downloads/examresults.csv` imports exam results from the CSV file located at `C:/Users/alk/Downloads/examresults.csv`.
+
 
 ### Exiting the Program : `exit`
 
@@ -467,6 +628,7 @@ Some commands require you to include parameters. These parameters are identified
 
 **Caution:** </br>
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
+* Note the same prefix may be used for different purposes such as in the case of `/s` for studios and for scores. In these cases, we ensure no command would have to use the same prefix for multiple purposes.
 
 </box>
 
@@ -475,10 +637,11 @@ Some commands require you to include parameters. These parameters are identified
 |--------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | n/     | Name                       | Should only contain alphanumeric characters and spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | p/     | Phone Number               | Should only contain numbers, and it should be at least 3 digits long.                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| e/     | Email                      | **Format:** local-part@domain<br/> **Constraints for local part:**<br/> • Should only contain alphanumeric characters, and the characters `+`, `_`, `.` and `-`<br/> • Should not start with special characters<br/> **Constraints for domain:**<br/> • Made up of domain labels followed by periods<br/> • Must end with a domain label of at least 2 characters long<br/> • Should start and end with alphanumeric characters<br/> • Domain label should consists of alphanumeric characters separated only by hyphens, if any |         
+| e/     | Email                      | **Format:** local-part@domain<br/> **Constraints for local part:**<br/> • Should only contain alphanumeric characters, and the characters `+`, `_`, `.` and `-`<br/> • Should not start with special characters<br/> **Constraints for domain:**<br/> • Made up of domain labels followed by periods<br/> • Must end with a domain label of at least 2 characters long<br/> • Should start and end with alphanumeric characters<br/> • Domain label should consists of alphanumeric characters separated only by hyphens, if any |
 | a/     | Address                    | Can take any values.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | i/     | Path of CSV file to import | Should be the absolute file path of the CSV file.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | [m/]   | Matriculation ID           | The first letter must be an uppercase 'A', followed by 7 numbers, and end with an uppercase letter.                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | [r/]   | Recitation Group           | The first letter must be an uppercase 'R', followed by any number.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | [s/]   | Studio Group               | The first letter must be an uppercase 'S', followed by any number.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| [s/]   | Score                      | For Exam Max Scores: the input must be a positive integer <br/> For Persons' Exam Scores: the input must be an integer greater than or equal to zero                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | [t/]…  | Tags                       | Should be alphanumeric, and should not contain spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
