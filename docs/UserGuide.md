@@ -282,6 +282,9 @@ The person at the specified `INDEX` will be deleted. The index **must be a posit
 Deletes the current filtered list of persons. Requires a `find` command to be run first.
 
 Format: `deleteshown`
+>You will see this message once you successfully delete the shown persons from your list.
+>
+>![deleteShown success message](images/success_images/deleteShown_success.png)
 >Note: The application ignores any extraneous parameters as we assume they are typos.
 
 <box type="info" seamless>
@@ -307,7 +310,12 @@ Format: `addExam n/NAME s/MAX_SCORE`
 </box>
 
 Example: `addExam n/Midterm s/100`
+
 * Adds an exam with the name of "Midterm" and a max score of "100"
+
+>You will see this message once you successfully add an exam, including the details of the exam.
+>
+>![addExam success message](images/success_images/addExam_success.png)
 
 ### Selecting an Exam : `selectExam`
 
@@ -328,6 +336,10 @@ Format: `selectExam INDEX`
 Example: `selectExam 1`
 
 * Selects the first exam displayed on the exam list.
+
+>You will see this message once you successfully select an exam, including the details of the exam.
+>
+>![addExam success message](images/success_images/selectExam_success.png)
 
 ### Adding an Exam Score : `addScore`
 
@@ -356,6 +368,11 @@ Example: `addScore 1 s/34`
 
 * Adds a score of 34 to the person currently displayed at index 1.
 
+
+>You will see this message once you successfully add a score, including the name of the person you added the score for.
+>
+>![addScore success message](images/success_images/addScore_success.png)
+
 ### Editing an Exam Score : `editScore`
 
 Edits a person's exam score.
@@ -379,9 +396,14 @@ Format: `editScore INDEX s/SCORE`
 
 </box>
 
+
 Example: `editScore 1 s/43`
 
 * Edits the score of the person currently displayed at index 1 to 43.
+
+>You will see this message once you successfully edit a score, including some details of the person you added the score for.
+>
+>![editScore success message](images/success_images/editScore_success.png)
 
 ### Deleting an Exam Score : `deleteScore`
 
@@ -409,6 +431,9 @@ Example: `deleteScore 1`
 
 * deletes the score of the person currently displayed at index 1.
 
+>You will see this message once you successfully delete a score, including some details of the person you added the score for.
+>
+>![deleteScore success message](images/success_images/deleteScore_success.png)
 
 ### Deleting an Exam : `deleteExam`
 
@@ -429,6 +454,10 @@ Format: `deleteExam INDEX`
 Example: `deleteExam 2`
 
 * Removes the 2nd exam displayed in AA.
+
+>You will see this message once you successfully delete an exam, including some details of the exam you are deleting
+>
+>![deleteExam success message](images/success_images/deleteExam_success.png)
 
 ### Clearing All Entries : `clear`
 
@@ -512,6 +541,9 @@ Format: `import i/FILEPATH`
 
 `import i/C:/Users/alk/Downloads/examresults.csv` imports exam results from the CSV file located at `C:/Users/alk/Downloads/examresults.csv`.
 
+>You will see this message once you successfully import exam results.
+>
+>![importExam success message](images/success_images/importExam_success.png)
 
 ### Exiting the Program : `exit`
 
