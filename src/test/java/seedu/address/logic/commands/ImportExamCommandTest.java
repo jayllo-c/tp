@@ -79,4 +79,12 @@ public class ImportExamCommandTest {
         assertCommandSuccess(importExamCommand, model, expectedMessage, model);
     }
 
+    @Test
+    public void testEquals() {
+        Path filePath = Paths.get(VALID_PATH);
+        ImportExamCommand importExamCommand = new ImportExamCommand(filePath);
+        ImportExamCommand importExamCommandCopy = new ImportExamCommand(filePath);
+        assertEquals(importExamCommand, importExamCommandCopy);
+    }
+
 }

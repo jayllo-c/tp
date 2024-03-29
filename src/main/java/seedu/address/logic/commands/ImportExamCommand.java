@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
@@ -17,12 +16,11 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 
-import seedu.address.commons.core.index.Index;
+import javafx.collections.ObservableList;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.logic.parser.AddScoreCommandParser;
-import seedu.address.logic.parser.FindCommandParser;
-import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
+import seedu.address.model.exam.Exam;
+import seedu.address.model.person.Person;
 import seedu.address.model.person.Score;
 
 /**
@@ -40,7 +38,6 @@ public class ImportExamCommand extends Command {
     public static final String MESSAGE_PERSON_DOES_NOT_EXIST = "Person does not exist";
     public static final String MESSAGE_SUCCESS = "Imported exams from: %s";
     public static final String PREFIX_SCORE = " 1 s/";
-    public static final String PREFIX_SELECT_EXAM = " n/";
     public static final String PREFIX_FIND_BY_EMAIL = " e/";
     public static final String PREFIX_ERROR_REPORT = "\nBelow are the errors that occurred while importing exams:\n";
     private static StringBuilder errorReport;
@@ -166,21 +163,22 @@ public class ImportExamCommand extends Command {
         }
     }
 
-    private void addScores(HashMap<String, HashMap<String, Integer>> headers, Model model)
-            throws CommandException {
+    private void addScores(HashMap<String, HashMap<String, Integer>> headers, Model model) {
         Object[] examNames = headers.keySet().toArray();
 
         for (int i = 0; i < examNames.length; i++) {
-            if (executeSelectExam(model, examNames[i])) {
-                continue;
+            ObservableList<Exam> exams = model.getExamByName(examNames[i].toString().strip());
+            if (exams.size() > 0) {
+                Exam exam = exams.get(0);
+                insertGrades(headers, model, exam, examNames[i]);
+            } else {
+                addToErrorReport((String) examNames[i], "Exam does not exist");
             }
-            insertGrades(headers, model, examNames[i]);
         }
     }
 
     private static void insertGrades(
-            HashMap<String, HashMap<String, Integer>> headers, Model model, Object examNames)
-            throws CommandException {
+            HashMap<String, HashMap<String, Integer>> headers, Model model, Exam exam, Object examNames) {
         HashMap<String, Integer> grades = headers.get((String) examNames);
         Object[] emails = grades.keySet().toArray();
 
@@ -188,101 +186,22 @@ public class ImportExamCommand extends Command {
             String email = (String) emails[j];
             Integer grade = grades.get(email);
 
-            addScoreToPerson(model, email, grade);
+            addScoreToPerson(model, email, exam, grade);
         }
     }
 
-    private static void addScoreToPerson(Model model, String email, Integer grade)
-            throws CommandException {
-        executeFindCommand(model, email);
-
-        if (doesPersonExist(model)) {
-            executeAddScore(model, grade);
+    private static void addScoreToPerson(Model model, String email, Exam exam, Integer grade) {
+        ObservableList<Person> persons = model.getPersonByEmail(email);
+        if (persons.size() > 0) {
+            Person person = persons.get(0);
+            if (grade <= exam.maxScore.value) {
+                model.addExamScoreToPerson(person, exam, new Score(grade));
+            } else {
+                addToErrorReport(email, String.format("Grade for %s exceeds maximum score", exam.getName()));
+            }
         } else {
             addToErrorReport(email, MESSAGE_PERSON_DOES_NOT_EXIST);
         }
-    }
-
-    // Command execution methods
-
-    /**
-     * Helper to execute the selectExam command.
-     * @param model the model to execute the command on
-     * @param examName the exam name to select
-     * @return
-     */
-    private static boolean executeSelectExam(Model model, Object examName) {
-        try {
-            // Find the index of the exam with the given name
-            Index examIndex = Index.fromZeroBased(
-                IntStream.range(0, model.getExamList().size())
-                    .filter(i -> model.getExamList().get(i).getName().equals(examName.toString()))
-                    .findFirst()
-                    .orElse(-1)
-            );
-
-            // If the exam was not found, throw an exception
-            if (examIndex.getZeroBased() == -1) {
-                throw new CommandException("Exam not found");
-            }
-
-            // Select the exam
-            SelectExamCommand selectExamCommand = new SelectExamCommand(examIndex);
-            selectExamCommand.execute(model);
-        } catch (CommandException commandException) {
-            addToErrorReport(examName.toString(), commandException.getMessage());
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Helper to execute the find command.
-     *
-     * @param model the model to execute the command on
-     * @param email the email to find
-     * @throws CommandException if an error occurs while executing the command
-     */
-    private static void executeFindCommand(Model model, Object email)
-            throws CommandException {
-        try {
-            FindCommandParser findCommandParser = new FindCommandParser();
-            FindCommand findCommand = findCommandParser.parse(PREFIX_FIND_BY_EMAIL + email);
-            findCommand.execute(model);
-        } catch (ParseException e) {
-            throw new CommandException(e.getMessage());
-        }
-    }
-
-    /**
-     * Helper to execute the addScore command.
-     *
-     * @param model the model to execute the command on
-     * @param grade the grade to add
-     * @throws CommandException if an error occurs while executing the command
-     */
-    private static void executeAddScore(Model model, Integer grade) throws CommandException {
-        try {
-            AddScoreCommandParser addScoreCommandParser = new AddScoreCommandParser();
-            AddScoreCommand addScoreCommand = addScoreCommandParser.parse(PREFIX_SCORE + grade.toString());
-            addScoreCommand.execute(model);
-        } catch (ParseException e) {
-            throw new CommandException(e.getMessage());
-        } catch (CommandException e) {
-            // Already checked if person exists. Hence, this should not happen.
-            assert model.getFilteredPersonList().size() > 0;
-            String email = String.valueOf(model.getFilteredPersonList().get(0).getEmail());
-            addToErrorReport(email, e.getMessage());
-        }
-    }
-
-    /**
-     * Helper to execute the list command.
-     * @param model the model to execute the command on
-     */
-    private static void executeListCommand(Model model) {
-        ListCommand listCommand = new ListCommand();
-        listCommand.execute(model);
     }
 
     @Override
@@ -294,14 +213,19 @@ public class ImportExamCommand extends Command {
 
         addScores(headers, model);
 
-        // Cleanup
-        executeListCommand(model);
-
         return new CommandResult(
                 String.format(MESSAGE_SUCCESS, filepath.toString()) + generateErrorReport());
     }
 
+
     // Trivial methods
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this
+                || (other instanceof ImportExamCommand
+                && filepath.equals(((ImportExamCommand) other).filepath));
+    }
 
     private boolean isValidScore(String score) {
         try {
@@ -321,9 +245,5 @@ public class ImportExamCommand extends Command {
 
     private boolean hasEmail(String[] row) {
         return row.length > 0;
-    }
-
-    private static boolean doesPersonExist(Model model) {
-        return model.getFilteredPersonList().size() > 0;
     }
 }
