@@ -21,8 +21,8 @@ import seedu.address.model.exam.Exam;
 import seedu.address.model.person.Score;
 
 public class ImportExamCommandTest {
-    public static final String VALID_PATH = "src\\test\\data\\ImportExamCommandTest\\testimportexam.csv";
-    public static final String EXTRA_PATH = "src\\test\\data\\ImportExamCommandTest\\testimportexamextra.csv";
+    public static final String VALID_PATH = "src/test/data/ImportExamCommandTest/testimportexam.csv";
+    public static final String EXTRA_PATH = "src/test/data/ImportExamCommandTest/testimportexamextra.csv";
     private ImportExamCommand importExamCommand;
     private Model model;
 
@@ -89,7 +89,7 @@ public class ImportExamCommandTest {
         model.addExam(midterm);
         ImportExamCommand importExamCommand = new ImportExamCommand(filePath);
 
-        String expectedError = String.format(ImportExamCommand.MESSAGE_SUCCESS, EXTRA_PATH)
+        String expectedError = String.format(ImportExamCommand.MESSAGE_SUCCESS, filePath.toString())
                 + ImportExamCommand.PREFIX_ERROR_REPORT;
         expectedError += "non@example.com: Person does not exist\n";
         expectedError += "johnd@example.com: Grade for Midterm exceeds maximum score\n";
