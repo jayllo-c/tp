@@ -203,6 +203,7 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]… [m/MATRI
 Updating a matriculation number, studio, or reflection field will not automatically update the tags of the person. You will need to manually update the tags if necessary.
 
 </box>
+
 For more details on each parameter, [click here](#command-format-summary).
 
 
