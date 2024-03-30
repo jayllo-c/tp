@@ -28,7 +28,6 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.PersonDetailContainsKeywordPredicate;
 import seedu.address.model.person.Score;
 import seedu.address.testutil.AddressBookBuilder;
-import seedu.address.testutil.TypicalPersons;
 
 public class ModelManagerTest {
 
