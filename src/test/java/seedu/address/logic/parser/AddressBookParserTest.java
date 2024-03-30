@@ -18,6 +18,7 @@ import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.CopyCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DeleteExamCommand;
+import seedu.address.logic.commands.DeleteScoreCommand;
 import seedu.address.logic.commands.DeleteShownCommand;
 import seedu.address.logic.commands.DeselectExamCommand;
 import seedu.address.logic.commands.EditCommand;
@@ -75,7 +76,6 @@ public class AddressBookParserTest {
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD) instanceof ExitCommand);
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD + " 3") instanceof ExitCommand);
     }
-
 
     @Test
     public void parseCommand_find() throws Exception {
@@ -143,6 +143,13 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_deleteExam() throws Exception {
         assertTrue(parser.parseCommand("deleteExam 1") instanceof DeleteExamCommand);
+    }
+
+    @Test
+    public void parseCommand_deleteScore() throws Exception {
+        DeleteScoreCommand command = (DeleteScoreCommand) parser.parseCommand(
+                DeleteScoreCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
+        assertEquals(new DeleteScoreCommand(INDEX_FIRST_PERSON), command);
     }
 
     @Test
