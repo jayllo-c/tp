@@ -23,11 +23,12 @@ public class CsvUtil {
      * where each map represents a row of person's data in the csv file.
      * @throws DataLoadingException
      */
-    public static List<Map<String, String>> readCsvFile(Path filePath) throws DataLoadingException {
+    public static List<Map<String, String>> readCsvFile(Path filePath, String[] compulsory_parameters)
+            throws DataLoadingException {
         try {
             CSVReader reader = new CSVReaderBuilder(new FileReader(filePath.toString())).build();
             List<String[]> rows = reader.readAll();
-            return parseData(rows);
+            return parseData(rows, compulsory_parameters);
         } catch (IOException | CsvException e) {
             throw new DataLoadingException(e);
         }
@@ -35,12 +36,18 @@ public class CsvUtil {
 
     /**
      * Parses the data from the csv file into a list of maps. Each map represents a person's data.
+     *
      * @param rows
+     * @param compulsory_parameters
      * @return
      */
-    public static List<Map<String, String>> parseData(List<String[]> rows) {
+    public static List<Map<String, String>> parseData(List<String[]> rows, String[] compulsory_parameters)
+            throws DataLoadingException {
+
         List<Map<String, String>> data = new ArrayList<>();
         String[] header = rows.get(0);
+        List<String> headerList = List.of(header);
+        check_compulsory_parameters(compulsory_parameters, header);
         for (int i = 1; i < rows.size(); i++) {
             String[] row = rows.get(i);
             Map<String, String> map = new HashMap<>();
@@ -50,5 +57,16 @@ public class CsvUtil {
             data.add(map);
         }
         return data;
+    }
+
+    public static void check_compulsory_parameters(String[] compulsory_parameters, String[] header)
+            throws DataLoadingException {
+        List<String> headerList = List.of(header);
+        for (String compulsory_parameter : compulsory_parameters) {
+            if (!headerList.contains(compulsory_parameter)) {
+                throw new DataLoadingException(
+                        new Exception("Missing compulsory parameter: " + compulsory_parameter));
+            }
+        }
     }
 }

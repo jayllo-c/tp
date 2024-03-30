@@ -47,6 +47,7 @@ public class ImportCommand extends Command {
     /**
      * Represents the order of the data that should be parsed into the addCommandParser
      */
+    private final String[] compulsory_parameters = {"name", "phone", "email", "address"};
     private final String[] header = {"name", "phone", "email", "address", "matric", "reflection", "studio", "tags"};
 
     /**
@@ -76,7 +77,7 @@ public class ImportCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         try {
-            List<Map<String, String>> personsData = readCsvFile(filePath);
+            List<Map<String, String>> personsData = readCsvFile(filePath, compulsory_parameters);
             addToModel(model, personsData);
         } catch (DataLoadingException e) {
             throw new CommandException(String.format(MESSAGE_DATA_LOAD_ERROR, filePath));
