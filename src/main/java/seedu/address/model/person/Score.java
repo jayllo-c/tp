@@ -3,6 +3,8 @@ package seedu.address.model.person;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+import java.text.DecimalFormat;
+
 /**
  * Represents an Exam's score in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidScore(String)}
@@ -49,7 +51,8 @@ public class Score implements Comparable<Score> {
 
     @Override
     public String toString() {
-        return String.valueOf(value);
+        DecimalFormat df = new DecimalFormat("0.##");
+        return df.format(value);
     }
 
     @Override

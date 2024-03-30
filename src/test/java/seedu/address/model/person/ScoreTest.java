@@ -53,7 +53,7 @@ public class ScoreTest {
     public void testToString() {
         double scoreValue = 100;
         Score score = new Score(scoreValue);
-        assertEquals(String.valueOf(scoreValue), score.toString());
+        assertEquals("100", score.toString());
     }
 
     @Test
