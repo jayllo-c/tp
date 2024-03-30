@@ -122,6 +122,11 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public ObservableList<Person> getPersonByEmail(String email) {
+        return addressBook.getPersonByEmail(email);
+    }
+
+    @Override
     public void addExamScoreToPerson(Person person, Exam exam, Score score) {
         Person newPerson = person.addExamScore(exam, score);
         setPerson(person, newPerson);
@@ -210,7 +215,7 @@ public class ModelManager implements Model {
     }
 
     /**
-     * Returns the a view of the selected exam. (For updating UI purposes)
+     * Returns a view of the selected exam. (For updating UI purposes)
      */
     @Override
     public ObservableValue<Exam> getSelectedExam() {
@@ -250,5 +255,9 @@ public class ModelManager implements Model {
         return new ScoreStatistics(mean, median);
     }
 
+    @Override
+    public ObservableList<Exam> getExamByName(String examName) {
+        return addressBook.getExamByName(examName);
+    }
 
 }

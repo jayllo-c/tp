@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.List;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.exam.Exam;
@@ -133,6 +134,21 @@ public class AddressBook implements ReadOnlyAddressBook {
         exams.remove(key);
     }
 
+
+    /**
+     * Returns the ObservableList containing the exam object with the given name, if it exists.
+     * @param examName The name of the exam to search for.
+     * @return An ObservableList containing the exam with the given name, if it exists.
+     */
+    public ObservableList<Exam> getExamByName(String examName) {
+        for (Exam exam : exams) {
+            if (exam.getName().equals(examName)) {
+                return FXCollections.observableArrayList(exam);
+            }
+        }
+        return FXCollections.observableArrayList();
+    }
+
     //// util methods
 
     @Override
@@ -151,6 +167,20 @@ public class AddressBook implements ReadOnlyAddressBook {
     @Override
     public ObservableList<Exam> getExamList() {
         return exams.asUnmodifiableObservableList();
+    }
+
+    /**
+     * Returns the ObservableList containing the person object with the given email, if it exists.
+     * @param email The email of the person to search for.
+     * @return An ObservableList containing the person with the given email, if it exists.
+     */
+    public ObservableList<Person> getPersonByEmail(String email) {
+        for (Person person : persons) {
+            if (person.getEmail().toString().equals(email)) {
+                return FXCollections.observableArrayList(person);
+            }
+        }
+        return FXCollections.observableArrayList();
     }
 
     @Override
