@@ -4,8 +4,12 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -216,6 +220,39 @@ public class ModelManager implements Model {
     @Override
     public ObservableValue<Exam> getSelectedExam() {
         return selectedExam;
+    }
+
+    @Override
+    public ScoreStatistics getExamScoreStatistics(Exam exam) {
+        List<Score> scores = filteredPersons.stream()
+            .map(person -> person.getScores().get(exam))
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+
+        if (scores.isEmpty()) {
+            return new ScoreStatistics();
+        }
+
+        Collections.sort(scores);
+
+        double sum = scores.stream().mapToDouble(Score::getScore).sum();
+        double mean = sum / scores.size(); //Division by zero is handled by the if statement above
+
+        double median;
+        if (scores.size() % 2 == 0) {
+            median = (scores.get(scores.size() / 2 - 1).getScore()
+                        + scores.get(scores.size() / 2).getScore()) / 2.0;
+        } else {
+            median = scores.get(scores.size() / 2).getScore();
+        }
+
+        double min = scores.get(0).getScore();
+        double max = scores.get(scores.size() - 1).getScore();
+
+        double q1 = scores.get(scores.size() / 4).getScore();
+        double q3 = scores.get(3 * scores.size() / 4).getScore();
+
+        return new ScoreStatistics(mean, median);
     }
 
     @Override

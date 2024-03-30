@@ -35,13 +35,11 @@ public class ExamCard extends UiPart<Region> {
         name.setText(exam.getName());
         maxScore.setText(String.valueOf(exam.getMaxScore()));
 
-        selectedExam.addListener((observable, oldValue, newValue) -> {
-            if (this.exam.equals(newValue)) {
-                highlight();
-            } else {
-                removeHighlight();
-            }
-        });
+        if (this.exam.equals(selectedExam.getValue())) {
+            highlight();
+        } else {
+            removeHighlight();
+        }
     }
 
     public void highlight() {

@@ -9,6 +9,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.ScoreStatistics;
 import seedu.address.model.exam.Exam;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Score;
@@ -139,6 +140,11 @@ public class ModelStub implements Model {
 
     @Override
     public void removeExamScoreFromPerson(Person target, Exam exam) {
+        throw new AssertionError("This method should not be called.");
+    }
+
+    @Override
+    public ScoreStatistics getExamScoreStatistics(Exam exam) {
         throw new AssertionError("This method should not be called.");
     }
 
