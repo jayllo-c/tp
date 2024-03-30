@@ -32,7 +32,9 @@ public class MainWindow extends UiPart<Stage> {
 
     // Independent Ui parts residing in this Ui container
     private PersonListPanel personListPanel;
+    private ExamListPanel examListPanel;
     private ResultDisplay resultDisplay;
+    private StatusBarFooter statusBarFooter;
     private HelpWindow helpWindow;
 
     @FXML
@@ -43,6 +45,9 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private StackPane personListPanelPlaceholder;
+
+    @FXML
+    private StackPane examListPanelPlaceholder;
 
     @FXML
     private StackPane resultDisplayPlaceholder;
@@ -110,13 +115,16 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        personListPanel = new PersonListPanel(logic.getFilteredPersonList());
+        personListPanel = new PersonListPanel(logic.getFilteredPersonList(), logic.getSelectedExam());
         personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
+
+        examListPanel = new ExamListPanel(logic.getExamList(), logic.getSelectedExam());
+        examListPanelPlaceholder.getChildren().add(examListPanel.getRoot());
 
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
 
-        StatusBarFooter statusBarFooter = new StatusBarFooter(logic.getAddressBookFilePath());
+        statusBarFooter = new StatusBarFooter(logic.getAddressBookFilePath(), logic);
         statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
 
         CommandBox commandBox = new CommandBox(this::executeCommand);
@@ -186,7 +194,13 @@ public class MainWindow extends UiPart<Stage> {
                 handleExit();
             }
 
+            personListPanel.update();
+            examListPanel.update();
+            statusBarFooter.update();
+
             return commandResult;
+
+
         } catch (CommandException | ParseException e) {
             logger.info("An error occurred while executing command: " + commandText);
             resultDisplay.setFeedbackToUser(e.getMessage());

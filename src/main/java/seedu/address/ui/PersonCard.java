@@ -2,12 +2,18 @@ package seedu.address.ui;
 
 import java.util.Comparator;
 
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import seedu.address.model.exam.Exam;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Score;
 
 /**
  * An UI component that displays information of a {@code Person}.
@@ -41,16 +47,27 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private FlowPane tags;
     @FXML
+    private VBox classes;
+    @FXML
     private Label matric;
     @FXML
-    private Label reflection;
+    private VBox examScore;
+
     @FXML
-    private Label studio;
+    private ImageView phoneicon;
+    @FXML
+    private ImageView emailicon;
+    @FXML
+    private ImageView addressicon;
+
+    private Image phoneIcon = new Image(this.getClass().getResourceAsStream("/images/phoneicon.png"));
+    private Image emailIcon = new Image(this.getClass().getResourceAsStream("/images/emailicon.png"));
+    private Image addressIcon = new Image(this.getClass().getResourceAsStream("/images/addressicon.png"));
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
      */
-    public PersonCard(Person person, int displayedIndex) {
+    public PersonCard(Person person, int displayedIndex, ObservableValue<Exam> selectedExam) {
         super(FXML);
         this.person = person;
         id.setText(displayedIndex + ". ");
@@ -59,10 +76,39 @@ public class PersonCard extends UiPart<Region> {
         address.setText(person.getAddress().value);
         email.setText(person.getEmail().value);
         matric.setText(person.getMatric().toString());
-        reflection.setText(person.getReflection().toString());
-        studio.setText(person.getStudio().toString());
+        if (matric.getText().isEmpty()) {
+            matric.setVisible(false);
+            matric.setManaged(false);
+        }
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+
+        if (!person.getReflection().toString().isEmpty()) {
+            classes.getChildren().add(new Label(person.getReflection().toString()));
+        }
+        if (!person.getStudio().toString().isEmpty()) {
+            classes.getChildren().add(new Label(person.getStudio().toString()));
+        }
+
+        // Update exam score whenever new personcard is created
+        populateExamScore(selectedExam.getValue());
+
+        phoneicon.setImage(phoneIcon);
+        emailicon.setImage(emailIcon);
+        addressicon.setImage(addressIcon);
     }
+
+    /**
+     * Populates the exam score of the person.
+     */
+    public void populateExamScore(Exam selectedExamValue) {
+        if (selectedExamValue != null) {
+            Score score = person.getScores().get(selectedExamValue);
+            if (score != null) {
+                examScore.getChildren().add(new Label("Score: \n" + String.valueOf(score.getScore())));
+            }
+        }
+    }
+
 }

@@ -11,7 +11,9 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BOB;
+import static seedu.address.testutil.TypicalPersons.MIDTERM;
 
+import java.util.Collections;
 import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
@@ -97,13 +99,19 @@ public class PersonTest {
         // different studio -> returns false
         editedAlice = new PersonBuilder(ALICE).withStudio("S143").build();
         assertFalse(ALICE.equals(editedAlice));
+
+        // different scores -> returns false
+        editedAlice = new PersonBuilder(ALICE).withScores(Collections.singletonMap(MIDTERM, new Score(70)))
+                                              .build();
+        assertFalse(ALICE.equals(editedAlice));
     }
 
     @Test
     public void hashCodeMethod() {
         int expected = Objects.hash(
                 ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(),
-                ALICE.getAddress(), ALICE.getTags(), ALICE.getMatric(), ALICE.getReflection(), ALICE.getStudio());
+                ALICE.getAddress(), ALICE.getTags(), ALICE.getMatric(),
+                ALICE.getReflection(), ALICE.getStudio(), ALICE.getScores());
         int actual = ALICE.hashCode();
         assertEquals(expected, actual);
     }
@@ -114,7 +122,8 @@ public class PersonTest {
                 + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress()
                 + ", tags=" + ALICE.getTags() + ", matriculation number=" + ALICE.getMatric()
                 + ", reflection=" + ALICE.getReflection()
-                + ", studio=" + ALICE.getStudio() + "}";
+                + ", studio=" + ALICE.getStudio()
+                + ", scores=" + ALICE.getScores() + "}";
         assertEquals(expected, ALICE.toString());
     }
 }

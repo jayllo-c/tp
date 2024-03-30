@@ -1,8 +1,10 @@
 package seedu.address.storage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -10,11 +12,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.model.exam.Exam;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Score;
 import seedu.address.model.student.Matric;
 import seedu.address.model.student.Reflection;
 import seedu.address.model.student.Studio;
@@ -35,6 +39,7 @@ class JsonAdaptedPerson {
     private final String matric;
     private final String reflection;
     private final String studio;
+    private final List<JsonAdaptedExamScore> examScores = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -44,7 +49,8 @@ class JsonAdaptedPerson {
             @JsonProperty("email") String email, @JsonProperty("address") String address,
             @JsonProperty("tags") List<JsonAdaptedTag> tags, @JsonProperty("matric") String matric,
             @JsonProperty("reflection") String reflection,
-            @JsonProperty("studio") String studio) {
+            @JsonProperty("studio") String studio,
+            @JsonProperty("examScores") List<JsonAdaptedExamScore> examScores) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -55,6 +61,9 @@ class JsonAdaptedPerson {
         this.matric = matric;
         this.reflection = reflection;
         this.studio = studio;
+        if (examScores != null) {
+            this.examScores.addAll(examScores);
+        }
     }
 
     /**
@@ -71,6 +80,11 @@ class JsonAdaptedPerson {
         matric = source.getMatric().matricNumber;
         reflection = source.getReflection().reflection;
         studio = source.getStudio().studio;
+        examScores.addAll(source.getScores().entrySet().stream()
+                .map(entry -> new JsonAdaptedExamScore(entry.getKey().getName(),
+                                                       entry.getKey().getMaxScore().getScore(),
+                                                       entry.getValue().getScore()))
+                .collect(Collectors.toList()));
     }
 
     /**
@@ -82,6 +96,11 @@ class JsonAdaptedPerson {
         final List<Tag> personTags = new ArrayList<>();
         for (JsonAdaptedTag tag : tags) {
             personTags.add(tag.toModelType());
+        }
+
+        final Map<Exam, Score> personExamScores = new HashMap<>();
+        for (JsonAdaptedExamScore examScore : examScores) {
+            personExamScores.put(examScore.toModelTypeExam(), examScore.toModelTypeScore());
         }
 
         if (name == null) {
@@ -114,13 +133,13 @@ class JsonAdaptedPerson {
         if (!Address.isValidAddress(address)) {
             throw new IllegalValueException(Address.MESSAGE_CONSTRAINTS);
         }
-        if (!Matric.isValidMatric(matric)) {
+        if (!Matric.isValidConstructorParam(matric)) {
             throw new IllegalValueException(Matric.MESSAGE_CONSTRAINTS);
         }
-        if (!Reflection.isValidReflection(reflection)) {
+        if (!Reflection.isValidConstructorParam(reflection)) {
             throw new IllegalValueException(Reflection.MESSAGE_CONSTRAINTS);
         }
-        if (!Studio.isValidStudio(studio)) {
+        if (!Studio.isValidConstructorParam(studio)) {
             throw new IllegalValueException(Studio.MESSAGE_CONSTRAINTS);
         }
 
@@ -132,11 +151,12 @@ class JsonAdaptedPerson {
 
         final Reflection modelReflection = new Reflection(reflection);
 
-
         final Studio modelStudio = new Studio(studio);
 
+        final Map<Exam, Score> scores = new HashMap<>(personExamScores);
+
         return new Person(modelName, modelPhone, modelEmail, modelAddress,
-                          modelTags, modelMatric, modelReflection, modelStudio);
+                          modelTags, modelMatric, modelReflection, modelStudio, scores);
     }
 
 }

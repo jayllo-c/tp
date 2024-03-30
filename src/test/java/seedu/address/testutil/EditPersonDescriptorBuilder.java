@@ -43,6 +43,7 @@ public class EditPersonDescriptorBuilder {
         descriptor.setMatric(person.getMatric());
         descriptor.setReflection(person.getReflection());
         descriptor.setStudio(person.getStudio());
+        // descriptor will never have setScore as it is not used in EditCommand
     }
 
     /**
