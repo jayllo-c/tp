@@ -247,7 +247,7 @@ public class ModelManager implements Model {
         double q1 = scores.get(scores.size() / 4).getScore();
         double q3 = scores.get(3 * scores.size() / 4).getScore();
 
-        return new ScoreStatistics(mean, median, min, max, q1, q3);
+        return new ScoreStatistics(mean, median);
     }
 
 

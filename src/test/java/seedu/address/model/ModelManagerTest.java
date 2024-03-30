@@ -9,6 +9,13 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
+import static seedu.address.testutil.TypicalPersons.CARL;
+import static seedu.address.testutil.TypicalPersons.DANIEL;
+import static seedu.address.testutil.TypicalPersons.ELLE;
+import static seedu.address.testutil.TypicalPersons.FIONA;
+import static seedu.address.testutil.TypicalPersons.GEORGE;
+import static seedu.address.testutil.TypicalPersons.MIDTERM;
+import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,9 +24,11 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.exam.Exam;
+import seedu.address.model.person.Person;
 import seedu.address.model.person.PersonDetailContainsKeywordPredicate;
 import seedu.address.model.person.Score;
 import seedu.address.testutil.AddressBookBuilder;
+import seedu.address.testutil.TypicalPersons;
 
 public class ModelManagerTest {
 
@@ -149,6 +158,108 @@ public class ModelManagerTest {
 
         // ALICE should not have the exam in her scores
         assertFalse(modelManager.getFilteredPersonList().get(0).getScores().containsKey(midterm));
+    }
+
+    @Test
+    public void getExamScoreStatistics_scoresInEvenPersonsInAddressBook_success() {
+        ModelManager modelManager = new ModelManager();
+
+        // Add some persons with scores
+        Person daniel = DANIEL;
+        Person elle = ELLE;
+        Person fiona = FIONA;
+        Person george = GEORGE;
+
+        modelManager.addPerson(daniel);
+        modelManager.addPerson(elle);
+        modelManager.addPerson(fiona);
+        modelManager.addPerson(george);
+
+        Exam midterm = MIDTERM;
+
+        // Calculate statistics
+        ScoreStatistics stats = modelManager.getExamScoreStatistics(midterm);
+
+        // Verify the statistics
+        assertEquals(55, stats.getMean());
+        assertEquals(55, stats.getMedian());
+    }
+
+    @Test
+    public void getExamScoreStatistics_scoresInAllPersonsInAddressBook_success() {
+        ModelManager modelManager = new ModelManager();
+
+        // Add some persons with scores
+        Person carl = CARL;
+        Person daniel = DANIEL;
+        Person elle = ELLE;
+        Person fiona = FIONA;
+        Person george = GEORGE;
+
+        modelManager.addPerson(carl);
+        modelManager.addPerson(daniel);
+        modelManager.addPerson(elle);
+        modelManager.addPerson(fiona);
+        modelManager.addPerson(george);
+
+        Exam midterm = MIDTERM;
+
+        // Calculate statistics
+        ScoreStatistics stats = modelManager.getExamScoreStatistics(midterm);
+
+        // Verify the statistics
+        assertEquals(50, stats.getMean());
+        assertEquals(50, stats.getMedian());
+    }
+
+    @Test
+    public void getExamScoreStatistics_someScoresInPersonsInAddressBook_success() {
+
+        ModelManager modelManager = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+        Exam midterm = MIDTERM;
+
+        // Calculate statistics
+        ScoreStatistics stats = modelManager.getExamScoreStatistics(midterm);
+
+        // Verify the statistics
+        assertEquals(50, stats.getMean());
+        assertEquals(50, stats.getMedian());
+    }
+
+    @Test
+    public void getExamScoreStatistics_noScoresInPersonsInAddressBook_success() {
+        ModelManager modelManager = new ModelManager();
+
+        // Add some persons without scores
+        Person alice = ALICE;
+        Person benson = BENSON;
+
+        modelManager.addPerson(alice);
+        modelManager.addPerson(benson);
+
+        Exam midterm = MIDTERM;
+
+        // Calculate statistics
+        ScoreStatistics stats = modelManager.getExamScoreStatistics(midterm);
+
+        // Verify the statistics
+        assertEquals(-1, stats.getMean());
+        assertEquals(-1, stats.getMedian());
+    }
+
+    @Test
+    public void getExamScoreStatistics_noPersonsInAddressBook_success() {
+        ModelManager modelManager = new ModelManager();
+
+        Exam midterm = MIDTERM;
+
+        // Calculate statistics
+        ScoreStatistics stats = modelManager.getExamScoreStatistics(midterm);
+
+        // Verify the statistics
+        assertEquals(-1, stats.getMean());
+        assertEquals(-1, stats.getMedian());
     }
 
     @Test
