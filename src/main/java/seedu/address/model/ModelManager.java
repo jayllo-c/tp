@@ -224,6 +224,7 @@ public class ModelManager implements Model {
 
     @Override
     public ScoreStatistics getExamScoreStatistics(Exam exam) {
+        // Get all scores for the exam that exist in the filtered persons
         List<Score> scores = filteredPersons.stream()
             .map(person -> person.getScores().get(exam))
             .filter(Objects::nonNull)
@@ -233,26 +234,21 @@ public class ModelManager implements Model {
             return new ScoreStatistics();
         }
 
-        Collections.sort(scores);
-
         double sum = scores.stream().mapToDouble(Score::getScore).sum();
         double mean = sum / scores.size(); //Division by zero is handled by the if statement above
-
-        double median;
-        if (scores.size() % 2 == 0) {
-            median = (scores.get(scores.size() / 2 - 1).getScore()
-                        + scores.get(scores.size() / 2).getScore()) / 2.0;
-        } else {
-            median = scores.get(scores.size() / 2).getScore();
-        }
-
-        double min = scores.get(0).getScore();
-        double max = scores.get(scores.size() - 1).getScore();
-
-        double q1 = scores.get(scores.size() / 4).getScore();
-        double q3 = scores.get(3 * scores.size() / 4).getScore();
+        double median = getMedian(scores);
 
         return new ScoreStatistics(mean, median);
+    }
+
+    private double getMedian(List<Score> scores) {
+        Collections.sort(scores);
+        int size = scores.size();
+        if (size % 2 == 0) {
+            return (scores.get(size / 2 - 1).getScore() + scores.get(size / 2).getScore()) / 2.0;
+        } else {
+            return scores.get(size / 2).getScore();
+        }
     }
 
     @Override

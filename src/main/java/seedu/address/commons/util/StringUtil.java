@@ -108,4 +108,23 @@ public class StringUtil {
             return false;
         }
     }
+
+    /**
+     * Returns true if {@code s} represents a non-negative unsigned double
+     * e.g. 0.0, 1.0, 2.0, 3.0, ..., {@code Double.MAX_VALUE} <br>
+     * Will return false for any other non-null string input
+     * e.g. empty string, "-1.0", "+1.0", and " 2.0 " (untrimmed),
+     * "3.0 0.0" (contains whitespace), "1.0 a" (contains letters)
+     * @throws NullPointerException if {@code s} is null.
+     */
+    public static boolean isNonNegativeUnsignedDouble(String s) {
+        requireNonNull(s);
+
+        try {
+            double value = Double.parseDouble(s);
+            return value >= 0 && !s.startsWith("+"); // "+1.0" is successfully parsed by Double#parseDouble(String)
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+    }
 }

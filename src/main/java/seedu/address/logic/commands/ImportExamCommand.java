@@ -112,8 +112,8 @@ public class ImportExamCommand extends Command {
      * @param lst the list of String arrays representing the lines of the CSV file
      * @return a mapping of exam names to a mapping of student emails to their respective scores
      */
-    private HashMap<String, HashMap<String, Integer>> createExamsMapping(List<String[]> lst) {
-        HashMap<String, HashMap<String, Integer>> map = new HashMap<>();
+    private HashMap<String, HashMap<String, Double>> createExamsMapping(List<String[]> lst) {
+        HashMap<String, HashMap<String, Double>> map = new HashMap<>();
 
         // Check if there is at least a header row within the CSV file.
         if (hasHeader(lst)) {
@@ -123,7 +123,7 @@ public class ImportExamCommand extends Command {
         return map;
     }
 
-    private void createExamNameHeaders(List<String[]> lst, HashMap<String, HashMap<String, Integer>> map) {
+    private void createExamNameHeaders(List<String[]> lst, HashMap<String, HashMap<String, Double>> map) {
         String[] examNames = getExamNames(lst);
 
         for (int i = 1; i < examNames.length; i++) {
@@ -131,7 +131,7 @@ public class ImportExamCommand extends Command {
         }
     }
 
-    private void updateExamResults(List<String[]> lst, HashMap<String, HashMap<String, Integer>> map) {
+    private void updateExamResults(List<String[]> lst, HashMap<String, HashMap<String, Double>> map) {
         String[] examNames = getExamNames(lst);
 
         for (int i = 1; i < lst.size(); i++) {
@@ -140,7 +140,7 @@ public class ImportExamCommand extends Command {
         }
     }
 
-    private void updateExamResult(HashMap<String, HashMap<String, Integer>> map, String[] examNames, String[] row) {
+    private void updateExamResult(HashMap<String, HashMap<String, Double>> map, String[] examNames, String[] row) {
         if (hasEmail(row)) {
             String email = row[0];
             addRows(map, examNames, row, email);
@@ -148,22 +148,22 @@ public class ImportExamCommand extends Command {
     }
 
     private void addRows(
-            HashMap<String, HashMap<String, Integer>> map, String[] examNames, String[] row, String email) {
+            HashMap<String, HashMap<String, Double>> map, String[] examNames, String[] row, String email) {
         for (int j = 1; j < row.length; j++) {
             addRow(map, examNames, row, email, j);
         }
     }
 
     private void addRow(
-            HashMap<String, HashMap<String, Integer>> map, String[] examNames, String[] row, String email, int j) {
+            HashMap<String, HashMap<String, Double>> map, String[] examNames, String[] row, String email, int j) {
         if (isValidScore(row[j])) {
-            map.get(examNames[j]).put(email, new Score(Integer.parseInt(row[j])).getScore());
+            map.get(examNames[j]).put(email, new Score(Double.parseDouble(row[j])).getScore());
         } else {
             addToErrorReport(email, String.format(MESSAGE_SCORE_NOT_NUMBER, examNames[j]));
         }
     }
 
-    private void addScores(HashMap<String, HashMap<String, Integer>> headers, Model model) {
+    private void addScores(HashMap<String, HashMap<String, Double>> headers, Model model) {
         Object[] examNames = headers.keySet().toArray();
 
         for (int i = 0; i < examNames.length; i++) {
@@ -178,19 +178,19 @@ public class ImportExamCommand extends Command {
     }
 
     private void insertGrades(
-            HashMap<String, HashMap<String, Integer>> headers, Model model, Exam exam, Object examNames) {
-        HashMap<String, Integer> grades = headers.get((String) examNames);
+            HashMap<String, HashMap<String, Double>> headers, Model model, Exam exam, Object examNames) {
+        HashMap<String, Double> grades = headers.get((String) examNames);
         Object[] emails = grades.keySet().toArray();
 
         for (int j = 0; j < emails.length; j++) {
             String email = (String) emails[j];
-            Integer grade = grades.get(email);
+            Double grade = grades.get(email);
 
             addScoreToPerson(model, email, exam, grade);
         }
     }
 
-    private void addScoreToPerson(Model model, String email, Exam exam, Integer grade) {
+    private void addScoreToPerson(Model model, String email, Exam exam, Double grade) {
         ObservableList<Person> persons = model.getPersonByEmail(email);
         if (persons.size() > 0) {
             Person person = persons.get(0);
@@ -209,7 +209,7 @@ public class ImportExamCommand extends Command {
         requireNonNull(model);
 
         List<String[]> lst = readAllLines(filepath);
-        HashMap<String, HashMap<String, Integer>> headers = createExamsMapping(lst);
+        HashMap<String, HashMap<String, Double>> headers = createExamsMapping(lst);
 
         addScores(headers, model);
 

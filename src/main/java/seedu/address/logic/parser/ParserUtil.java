@@ -240,16 +240,11 @@ public class ParserUtil {
     public static Score parseScore(String score) throws ParseException {
         requireNonNull(score);
         String trimmedScore = score.trim();
-        if (!StringUtil.isNonZeroUnsignedInteger(trimmedScore)) {
+        if (!Score.isValidScoreString(trimmedScore)) {
             throw new ParseException(Score.MESSAGE_CONSTRAINTS);
         }
 
-        int parsedScore = Integer.parseInt(trimmedScore);
-
-
-        if (!Score.isValidScore(parsedScore)) {
-            throw new ParseException(Score.MESSAGE_CONSTRAINTS);
-        }
+        double parsedScore = Double.parseDouble(trimmedScore);
 
         return new Score(parsedScore);
     }
@@ -263,16 +258,11 @@ public class ParserUtil {
     public static Score parseExamScore(String score) throws ParseException {
         requireNonNull(score);
         String trimmedScore = score.trim();
-        if (!StringUtil.isNonZeroUnsignedInteger(trimmedScore)) {
-            throw new ParseException(Score.MESSAGE_CONSTRAINTS);
-        }
-
-        int parsedScore = Integer.parseInt(trimmedScore);
-
-        if (!Exam.isValidExamScore(parsedScore)) {
+        if (!Exam.isValidExamScoreString(trimmedScore)) {
             throw new ParseException(Exam.MESSAGE_CONSTRAINTS);
         }
 
+        double parsedScore = Double.parseDouble(trimmedScore);
         return new Score(parsedScore);
     }
 
@@ -285,7 +275,7 @@ public class ParserUtil {
     public static String parseExamName(String examName) throws ParseException {
         requireNonNull(examName);
         String trimmedExamName = examName.trim();
-        if (!Exam.isValidName(trimmedExamName)) {
+        if (!Exam.isValidExamName(trimmedExamName)) {
             throw new ParseException(Exam.MESSAGE_CONSTRAINTS);
         }
         return trimmedExamName;
