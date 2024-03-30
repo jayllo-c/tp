@@ -7,6 +7,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
+import static seedu.address.testutil.TypicalPersons.BOB;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Arrays;
@@ -208,6 +209,36 @@ public class AddressBookTest {
         public ObservableList<Exam> getExamList() {
             return exams;
         }
+    }
+
+    @Test
+    public void getPersonByEmail_emailDoesNotExist() {
+        ObservableList<Person> expected = FXCollections.observableArrayList();
+        assertEquals(expected, addressBook.getPersonByEmail("this person does not exist"));
+    }
+
+    @Test
+    public void getPersonByEmail_emailExists() {
+        addressBook.addPerson(BOB);
+        addressBook.addPerson(ALICE);
+        ObservableList<Person> expected = FXCollections.observableArrayList(ALICE);
+        assertEquals(expected, addressBook.getPersonByEmail(ALICE.getEmail().toString()));
+    }
+
+    @Test
+    public void getExamByName_examExists() {
+        Exam exam2 = new Exam("Midterm2", new Score(100));
+        Exam midterm = new Exam("Midterm", new Score(100));
+        addressBook.addExam(exam2);
+        addressBook.addExam(midterm);
+        ObservableList<Exam> expected = FXCollections.observableArrayList(midterm);
+        assertEquals(expected, addressBook.getExamByName("Midterm"));
+    }
+
+    @Test
+    public void getExamByName_examDoesNotExist() {
+        ObservableList<Exam> expected = FXCollections.observableArrayList();
+        assertEquals(expected, addressBook.getExamByName("this exam does not exist"));
     }
 
 }
