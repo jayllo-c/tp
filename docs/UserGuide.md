@@ -497,9 +497,12 @@ Imports all exam results from a CSV file.
 
 <box type="info" seamless>
 
-**Important:**<br>
+**Information:**<br>
 
 * The file path should be **absolute**.
+* The `email` header **must** be the first header.
+* This command will only import scores if both the person and exam exists.
+* Erroneous entries will be ignored, and the application will continue to import the rest of the data.
 * This command will only import persons' exam scores. To import persons' particulars, take a look at [`import`](#importing-persons-from-a-csv-file--import)
 
 </box>
