@@ -12,13 +12,13 @@ import java.text.DecimalFormat;
 public class Score implements Comparable<Score> {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Scores should be numeric, and it should not be blank or less than zero. "
-            + "Scores can have up to 2 decimal places.";
+            "Scores should be numeric, and it should have between 1 and 7 digits inclusive,"
+            + "with up to 2 decimal places.";
 
     /*
-     * The score must be a non-negative integer. and only have
+     * The score must be a non-negative integer. and only have up to 7 digits and 2 decimal places.
      */
-    public static final String VALIDATION_REGEX = "^\\d+(\\.\\d{1,2})?$";
+    public static final String VALIDATION_REGEX = "^\\d{1,7}(\\.\\d{1,2})?$";
 
     public final double value;
 

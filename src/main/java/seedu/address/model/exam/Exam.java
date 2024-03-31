@@ -13,8 +13,8 @@ import seedu.address.model.person.Score;
  */
 public class Exam {
 
-    public static final String MESSAGE_CONSTRAINTS = "Names should only contain alphanumeric characters and spaces, "
-                                                      + "and it should not be blank. "
+    public static final String MESSAGE_CONSTRAINTS = "Names should only contain alphanumeric characters and spaces "
+                                                      + "up to 160 characters, and it should not be blank. "
                                                       + "Exam Score must be greater than zero and "
                                                       + "can have up to 2 decimal places.";
 
@@ -23,7 +23,7 @@ public class Exam {
      * otherwise " " (a blank string) becomes a valid input.
      * The rest of the string can contain any alphanumeric character and spaces.
      */
-    public static final String VALIDATION_REGEX_EXAM_NAME = "[\\p{Alnum}][\\p{Alnum} ]*";
+    public static final String VALIDATION_REGEX_EXAM_NAME = "[\\p{Alnum}][\\p{Alnum} ]{1,159}";
 
     public final String name;
     public final Score maxScore;
