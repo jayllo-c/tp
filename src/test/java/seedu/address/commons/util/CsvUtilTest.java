@@ -36,4 +36,20 @@ public class CsvUtilTest {
                         Paths.get("src/test/data/CsvUtilTest/nonExistent.csv"),
                         new String[]{"name", "phone", "email", "address"}));
     }
+
+    @Test
+    public void checkCompulsoryParameters_missingCompulsoryParameter_failure() {
+        assertThrows(DataLoadingException.class, () ->
+                CsvUtil.checkCompulsoryParameters(
+                        new String[]{"name", "phone", "email", "address"},
+                        new String[]{"name", "phone", "email"}));
+    }
+
+    @Test
+    public void checkCompulsoryParameters_multipleMissingCompulsoryParameters_failure() {
+        assertThrows(DataLoadingException.class, () ->
+                CsvUtil.checkCompulsoryParameters(
+                        new String[]{"name", "phone", "email", "address"},
+                        new String[]{"name"}));
+    }
 }

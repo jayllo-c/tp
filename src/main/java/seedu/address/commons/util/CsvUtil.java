@@ -47,7 +47,7 @@ public class CsvUtil {
         List<Map<String, String>> data = new ArrayList<>();
         String[] header = rows.get(0);
         List<String> headerList = List.of(header);
-        check_compulsory_parameters(compulsoryParameters, header);
+        checkCompulsoryParameters(compulsoryParameters, header);
         for (int i = 1; i < rows.size(); i++) {
             String[] row = rows.get(i);
             Map<String, String> map = new HashMap<>();
@@ -65,7 +65,7 @@ public class CsvUtil {
      * @param header
      * @throws DataLoadingException
      */
-    public static void check_compulsory_parameters(String[] compulsoryParameters, String[] header)
+    public static void checkCompulsoryParameters(String[] compulsoryParameters, String[] header)
             throws DataLoadingException {
         List<String> headerList = List.of(header);
         StringBuilder missingParameters = new StringBuilder();
