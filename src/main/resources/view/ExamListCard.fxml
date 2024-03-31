@@ -28,12 +28,8 @@
         </Label>
         <Label fx:id="name" styleClass="cell_big_label" text="\$exam_name" />
       </HBox>
-         <HBox alignment="CENTER_LEFT" spacing="5">
-            <children>
-               <Label text="Max Score: " />
-            <Label fx:id="maxScore" styleClass="cell_small_label" text="\$maxScore" />
-            </children>
-         </HBox>
+         <Label text="Max Score: " styleClass="cell_small_label"/>
+      <Label fx:id="maxScore" styleClass="cell_small_label" text="\$maxScore" />
     </VBox>
       <rowConstraints>
          <RowConstraints />
