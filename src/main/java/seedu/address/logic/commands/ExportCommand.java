@@ -7,21 +7,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema.Builder;
 
 import javafx.collections.ObservableList;
+import seedu.address.commons.util.CsvUtil;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
@@ -34,6 +27,7 @@ import seedu.address.storage.JsonAddressBookStorage;
 public class ExportCommand extends Command {
 
     public static final String COMMAND_WORD = "export";
+
     public static final String MESSAGE_SUCCESS = "Exported all currently listed person(s)'s information to a "
             + "CSV file. \n"
             + "CSV file can be found in addressbookdata file.";
@@ -191,75 +185,6 @@ public class ExportCommand extends Command {
         }
     }
 
-    /**
-     * Builds the CSV schema from the JSON array.
-     *
-     * @param personsArray The JSON persons array to derive the schema from.
-     * @param examsArray The JSON exams array to derive the schema from.
-     * @return The CSV schema.
-     */
-    public CsvSchema buildCsvSchema(JsonNode personsArray, JsonNode examsArray) {
-        Builder csvSchemaBuilder = CsvSchema.builder();
-        JsonNode firstObject = personsArray.elements().next();
-        Set<String> addedColumns = new HashSet<>();
-
-        firstObject.fieldNames().forEachRemaining(fieldName -> {
-            if (!fieldName.equals("examScores")) {
-                csvSchemaBuilder.addColumn(fieldName);
-                addedColumns.add(fieldName);
-            }
-        });
-
-        if (examsArray != null && examsArray.size() != 0) {
-            for (JsonNode exam : examsArray) {
-                String examName = "Exam:" + exam.get("name").asText();
-                if (!addedColumns.contains(examName)) {
-                    csvSchemaBuilder.addColumn(examName);
-                    addedColumns.add(examName);
-                }
-            }
-        }
-
-        CsvSchema csvSchema = csvSchemaBuilder
-                .build()
-                .withHeader();
-        return csvSchema;
-    }
-
-    /**
-     * Writes JSON data to a CSV file.
-     *
-     * @param csvFile The CSV file to write to.
-     * @param personsArray The JSON person array to be written to CSV.
-     * @param examsArray The JSON exams array to be written to CSV.
-     * @throws IOException If an I/O error occurs during file writing.
-     */
-    public void writeToCsvFile(File csvFile, JsonNode personsArray, JsonNode examsArray) throws IOException {
-        CsvSchema csvSchema = buildCsvSchema(personsArray, examsArray);
-        CsvMapper csvMapper = new CsvMapper();
-
-        ArrayNode modifiedJsonTree = JsonNodeFactory.instance.arrayNode();
-        for (JsonNode person : personsArray) {
-            ObjectNode modifiedJsonNode = ((ObjectNode) person).deepCopy();
-            JsonNode examScores = modifiedJsonNode.get("examScores");
-            modifiedJsonNode.remove("examScores");
-            if (examScores != null && examScores.isArray()) {
-                examScores.forEach(exam -> {
-                    String fieldName = "Exam:" + exam.get("examName").asText();
-                    Double score = exam.get("score").asDouble();
-                    ObjectNode scoreNode = JsonNodeFactory.instance.objectNode();
-                    scoreNode.put(fieldName, score);
-                    modifiedJsonNode.setAll(scoreNode);
-                });
-            }
-            modifiedJsonTree.add(modifiedJsonNode);
-        }
-
-        csvMapper.writerFor(JsonNode.class)
-                .with(csvSchema)
-                .writeValue(csvFile, modifiedJsonTree);
-    }
-
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
@@ -286,7 +211,8 @@ public class ExportCommand extends Command {
 
             createCsvDirectory(csvFile);
 
-            writeToCsvFile(csvFile, personsArray, examsArray);
+            CsvUtil csvUtil = new CsvUtil();
+            csvUtil.writeToCsvFile(csvFile, personsArray, examsArray);
 
             return new CommandResult(MESSAGE_SUCCESS);
 
