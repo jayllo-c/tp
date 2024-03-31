@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import com.opencsv.CSVParser;
@@ -37,9 +38,13 @@ public class ImportExamCommand extends Command {
     public static final String MESSAGE_SCORE_NOT_NUMBER = "Score for %s is not a number";
     public static final String MESSAGE_PERSON_DOES_NOT_EXIST = "Person does not exist";
     public static final String MESSAGE_SUCCESS = "Imported exams from: %s";
-    public static final String PREFIX_SCORE = " 1 s/";
-    public static final String PREFIX_FIND_BY_EMAIL = " e/";
+    public static final String MESSAGE_DUPLICATE_EXAM =
+            "Duplicate exam header. Only the records of the first exam will be imported if present.";
+    public static final String EXAM_HEADER = "Exam:";
     public static final String PREFIX_ERROR_REPORT = "\nBelow are the errors that occurred while importing exams:\n";
+    public static final String MESSAGE_EXAM_DOES_NOT_EXIST = "Exam does not exist";
+    public static final String MESSAGE_GRADE_TOO_HIGH = "Grade for %s exceeds maximum score";
+    public static final String HEADER_EMAIL = "email";
     private StringBuilder errorReport;
     private Path filepath;
 
@@ -76,6 +81,17 @@ public class ImportExamCommand extends Command {
         }
     }
 
+    private void detectDuplicateExamHeaders(List<String[]> lst) {
+        String[] examNames = getExamNames(lst);
+        HashSet<String> uniqueExamNames = new HashSet<>();
+        for (int i = 1; i < examNames.length; i++) {
+            if (!uniqueExamNames.add(examNames[i]) && isExam(examNames[i])) {
+                addToErrorReport(
+                        getExamName(examNames[i]), MESSAGE_DUPLICATE_EXAM);
+            }
+        }
+    }
+
     // CSV parsing methods
 
     /**
@@ -102,7 +118,9 @@ public class ImportExamCommand extends Command {
     private List<String[]> readCsv(Reader reader) throws IOException, CsvException {
         CSVParser parser = new CSVParserBuilder().build();
         CSVReader csvReader = new CSVReaderBuilder(reader).withCSVParser(parser).build();
-        return csvReader.readAll();
+        List<String[]> lst = csvReader.readAll();
+        reverse(lst);
+        return lst;
     }
 
     // Exam mapping methods
@@ -117,6 +135,7 @@ public class ImportExamCommand extends Command {
 
         // Check if there is at least a header row within the CSV file.
         if (hasHeader(lst)) {
+            detectDuplicateExamHeaders(lst);
             createExamNameHeaders(lst, map);
             updateExamResults(lst, map);
         }
@@ -159,7 +178,9 @@ public class ImportExamCommand extends Command {
         if (isValidScore(row[j])) {
             map.get(examNames[j]).put(email, new Score(Integer.parseInt(row[j])).getScore());
         } else {
-            addToErrorReport(email, String.format(MESSAGE_SCORE_NOT_NUMBER, examNames[j]));
+            if (isExam(examNames[j])) {
+                addToErrorReport(email, String.format(MESSAGE_SCORE_NOT_NUMBER, getExamName(examNames[j])));
+            }
         }
     }
 
@@ -172,7 +193,7 @@ public class ImportExamCommand extends Command {
                 Exam exam = exams.get(0);
                 insertGrades(headers, model, exam, examNames[i]);
             } else {
-                addToErrorReport((String) examNames[i], "Exam does not exist");
+                addToErrorReport((String) examNames[i], MESSAGE_EXAM_DOES_NOT_EXIST);
             }
         }
     }
@@ -197,7 +218,7 @@ public class ImportExamCommand extends Command {
             if (grade <= exam.maxScore.value) {
                 model.addExamScoreToPerson(person, exam, new Score(grade));
             } else {
-                addToErrorReport(email, String.format("Grade for %s exceeds maximum score", exam.getName()));
+                addToErrorReport(email, String.format(MESSAGE_GRADE_TOO_HIGH, exam.getName()));
             }
         } else {
             addToErrorReport(email, MESSAGE_PERSON_DOES_NOT_EXIST);
@@ -211,7 +232,8 @@ public class ImportExamCommand extends Command {
         List<String[]> lst = readAllLines(filepath);
         HashMap<String, HashMap<String, Integer>> headers = createExamsMapping(lst);
 
-        addScores(headers, model);
+        HashMap<String, HashMap<String, Integer>> headersForExams = removeNonExams(headers);
+        addScores(headersForExams, model);
 
         return new CommandResult(
                 String.format(MESSAGE_SUCCESS, filepath.toString()) + generateErrorReport());
@@ -246,4 +268,53 @@ public class ImportExamCommand extends Command {
     private boolean hasEmail(String[] row) {
         return row.length > 0;
     }
+
+    private boolean isExam(String examName) {
+        return examName.startsWith(EXAM_HEADER);
+    }
+
+    private boolean isEmailHeader(String header) {
+        return header.equals(HEADER_EMAIL);
+    }
+
+    // Utility methods
+
+    private String getExamName(String examName) {
+        return examName.substring(EXAM_HEADER.length()).strip();
+    }
+
+    private HashMap<String, HashMap<String, Integer>> removeNonExams(HashMap<String, HashMap<String, Integer>> map) {
+        HashMap<String, HashMap<String, Integer>> newMap = new HashMap<>();
+        for (String key : map.keySet()) {
+            if (isExam(key) || isEmailHeader(key)) {
+                newMap.put(getExamName(key), map.get(key));
+            }
+        }
+        return newMap;
+    }
+
+    private void reverse(List<String[]> lst) {
+        for (int i = 0; i < lst.size(); i++) {
+            String[] row = lst.get(i);
+            reverseRowButKeepEmail(lst, i, row);
+        }
+    }
+
+    private static void reverseRowButKeepEmail(List<String[]> lst, int i, String[] row) {
+        String[] reversedRow = new String[row.length];
+        if (row.length > 0) {
+            reversedRow[0] = row[0];
+        }
+        if (row.length > 1) {
+            reverseElements(row, reversedRow);
+        }
+        lst.set(i, reversedRow);
+    }
+
+    private static void reverseElements(String[] row, String[] reversedRow) {
+        for (int j = 1; j < row.length; j++) {
+            reversedRow[j] = row[row.length - j];
+        }
+    }
+
 }
