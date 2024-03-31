@@ -29,7 +29,7 @@ import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ImportCommand;
-import seedu.address.logic.commands.ImportExamCommand;
+import seedu.address.logic.commands.ImportExamScoresCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.SelectExamCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -127,7 +127,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_importExam() throws Exception {
-        assertTrue(parser.parseCommand("importExam i/src.csv") instanceof ImportExamCommand);
+        assertTrue(parser.parseCommand("importExamScores i/src.csv") instanceof ImportExamScoresCommand);
     }
 
     @Test

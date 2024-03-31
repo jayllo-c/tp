@@ -3,6 +3,8 @@ package seedu.address.commons.util;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,16 +19,21 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 
 import seedu.address.commons.exceptions.DataLoadingException;
+import seedu.address.logic.commands.exceptions.CommandException;
 
 /**
  * Utility class for processing CSV files.
  */
 public class CsvUtil {
+
+    public static final String MESSAGE_ERROR_READING_FILE = "Error reading file: ";
 
     /**
      * Reads the CSV file and returns a list of maps,
@@ -60,6 +67,34 @@ public class CsvUtil {
             data.add(map);
         }
         return data;
+    }
+
+    /**
+     * Reads all lines from a CSV file.
+     * @param filePath the path of the file
+     * @return a list of String arrays representing the lines of the CSV file
+     * @throws CommandException if an error occurs while reading the file
+     */
+    public static List<String[]> readAllLinesForImportExamScores(Path filePath) throws CommandException {
+        try (Reader reader = Files.newBufferedReader(filePath)) {
+            return readCsvForImportExamScores(reader);
+        } catch (IOException | CsvException exception) {
+            throw new CommandException(MESSAGE_ERROR_READING_FILE + filePath.toString());
+        }
+    }
+
+    /**
+     * Reads a CSV file.
+     * @param reader the reader to read the file
+     * @return a list of String arrays representing the lines of the CSV file
+     * @throws IOException if an error occurs while reading the file
+     * @throws CsvException if an error occurs while parsing the CSV file
+     */
+    private static List<String[]> readCsvForImportExamScores(Reader reader) throws IOException, CsvException {
+        CSVParser parser = new CSVParserBuilder().build();
+        CSVReader csvReader = new CSVReaderBuilder(reader).withCSVParser(parser).build();
+        List<String[]> lst = csvReader.readAll();
+        return lst;
     }
 
     /**
