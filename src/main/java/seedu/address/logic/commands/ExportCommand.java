@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -163,6 +165,17 @@ public class ExportCommand extends Command {
     }
 
     /**
+     * Reads the exams array in the JSON file and returns the contents as a JSON tree.
+     *
+     * @param jsonTree The JSON file where the exams array should be read from.
+     * @return The JSON tree representing the content of the exams array in the release file.
+     */
+    public JsonNode readExamsArray(JsonNode jsonTree) {
+        JsonNode examsArray = jsonTree.get("exams");
+        return examsArray;
+    }
+
+    /**
      * Creates the directory for the CSV file if it does not exist.
      *
      * @param csvFile The CSV file for which the directory needs to be created.
@@ -181,15 +194,32 @@ public class ExportCommand extends Command {
     /**
      * Builds the CSV schema from the JSON array.
      *
-     * @param jsonTree The JSON array to derive the schema from.
+     * @param personsArray The JSON persons array to derive the schema from.
+     * @param examsArray The JSON exams array to derive the schema from.
      * @return The CSV schema.
      */
-    public CsvSchema buildCsvSchema(JsonNode jsonTree) {
+    public CsvSchema buildCsvSchema(JsonNode personsArray, JsonNode examsArray) {
         Builder csvSchemaBuilder = CsvSchema.builder();
-        JsonNode firstObject = jsonTree.elements().next();
+        JsonNode firstObject = personsArray.elements().next();
+        Set<String> addedColumns = new HashSet<>();
+
         firstObject.fieldNames().forEachRemaining(fieldName -> {
-            csvSchemaBuilder.addColumn(fieldName);
+            if (!fieldName.equals("examScores")) {
+                csvSchemaBuilder.addColumn(fieldName);
+                addedColumns.add(fieldName);
+            }
         });
+
+        if (examsArray != null && examsArray.size() != 0) {
+            for (JsonNode exam : examsArray) {
+                String examName = "Exam:" + exam.get("name").asText();
+                if (!addedColumns.contains(examName)) {
+                    csvSchemaBuilder.addColumn(examName);
+                    addedColumns.add(examName);
+                }
+            }
+        }
+
         CsvSchema csvSchema = csvSchemaBuilder
                 .build()
                 .withHeader();
@@ -200,25 +230,28 @@ public class ExportCommand extends Command {
      * Writes JSON data to a CSV file.
      *
      * @param csvFile The CSV file to write to.
-     * @param jsonTree The JSON array to be written to CSV.
+     * @param personsArray The JSON person array to be written to CSV.
+     * @param examsArray The JSON exams array to be written to CSV.
      * @throws IOException If an I/O error occurs during file writing.
      */
-    public void writeToCsvFile(File csvFile, JsonNode jsonTree) throws IOException {
-        CsvSchema csvSchema = buildCsvSchema(jsonTree);
+    public void writeToCsvFile(File csvFile, JsonNode personsArray, JsonNode examsArray) throws IOException {
+        CsvSchema csvSchema = buildCsvSchema(personsArray, examsArray);
         CsvMapper csvMapper = new CsvMapper();
 
-        // The Code below removes examscores from the json tree
-        // Potential future implementation: Export Command also exports exam scores
-
-        // Create a new array node to hold the modified json nodes
         ArrayNode modifiedJsonTree = JsonNodeFactory.instance.arrayNode();
-        // Iterate over each json node in the json tree
-        for (JsonNode jsonNode : jsonTree) {
-            // Create a copy of the json node
-            ObjectNode modifiedJsonNode = ((ObjectNode) jsonNode).deepCopy();
-            // Remove the 'examScores' field from the copy
+        for (JsonNode person : personsArray) {
+            ObjectNode modifiedJsonNode = ((ObjectNode) person).deepCopy();
+            JsonNode examScores = modifiedJsonNode.get("examScores");
             modifiedJsonNode.remove("examScores");
-            // Add the modified json node to the new array node
+            if (examScores != null && examScores.isArray()) {
+                examScores.forEach(exam -> {
+                    String fieldName = "Exam:" + exam.get("examName").asText();
+                    Double score = exam.get("score").asDouble();
+                    ObjectNode scoreNode = JsonNodeFactory.instance.objectNode();
+                    scoreNode.put(fieldName, score);
+                    modifiedJsonNode.setAll(scoreNode);
+                });
+            }
             modifiedJsonTree.add(modifiedJsonNode);
         }
 
@@ -241,15 +274,19 @@ public class ExportCommand extends Command {
             JsonAddressBookStorage jsonAddressBookStorage = new JsonAddressBookStorage(filteredJsonFilePath);
             writeToJsonFile(jsonAddressBookStorage, filteredPersonAddressBook);
 
-            File jsonFile = filteredJsonFilePath.toFile();
+            File filteredJsonFile = filteredJsonFilePath.toFile();
+            File unfilteredJsonFile = model.getAddressBookFilePath().toFile();
             File csvFile = new File(csvFilePath);
 
-            JsonNode jsonTree = readJsonFile(jsonFile);
-            JsonNode personsArray = readPersonsArray(jsonTree);
+            JsonNode filteredJsonTree = readJsonFile(filteredJsonFile);
+            JsonNode unfilteredJsonTree = readJsonFile(unfilteredJsonFile);
+
+            JsonNode personsArray = readPersonsArray(filteredJsonTree);
+            JsonNode examsArray = readExamsArray(unfilteredJsonTree);
 
             createCsvDirectory(csvFile);
 
-            writeToCsvFile(csvFile, personsArray);
+            writeToCsvFile(csvFile, personsArray, examsArray);
 
             return new CommandResult(MESSAGE_SUCCESS);
 
