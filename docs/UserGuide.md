@@ -19,6 +19,10 @@ This user guide provides a comprehensive overview of the Avengers Assemble's fea
 
 By following this guide, you will be able to gain a thorough understanding of Avengers Assemble and maximize its potential to streamline your administrative tasks.
 
+<br>
+
+--------------------------------------------------------------------------------------------------------------------
+
 <!-- * Table of Contents -->
 <page-nav-print />
 
@@ -39,9 +43,13 @@ By following this guide, you will be able to gain a thorough understanding of Av
     ```
    You should see this when the app starts up. Note how it contains some sample data.<br>
 
-   ![Ui](images/Ui.png)
+<p align="center">
+    <img src="images/Ui.png" alt="image of avengers assemble's ui" />
+</p>
 
 1. Refer to the [features](#contact-management-features) below for details of each command.
+
+<br>
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -87,7 +95,7 @@ Shows you a link to guide you on how to use the application. Click on the link t
 
 <br>
 
-Before we proceed with the commands, here are some important points to note on their formatting. These points will also be repeated in the [command format summary](#command-format-summary) for you to refer to easily at any point in time.
+Before we proceed with the commands, here are some important points to note on their formatting. These points will also be repeated in the [command format summary](#command-parameter-summary) for you to refer to easily at any point in time.
 
 <box type="info" seamless>
 
@@ -152,7 +160,7 @@ You will see this message once you successfully imported the data, with the app 
   <img src="images/success_images/import_success.png" alt="image of successful import" width="750"/>
 </p>
 
-For more details on the input parameter, [click here](#command-format-summary).
+For more details on the input parameter, [click here](#command-parameter-summary).
 
 <br>
 
@@ -192,7 +200,7 @@ You will see this message once you have successfully added a person, indicating 
   <img src="images/success_images/add_success.png" alt="image showing the successfull addition of persons" width="750" />
 </p>
 
-For more details on each parameter, [click here](#command-format-summary).
+For more details on each parameter, [click here](#command-parameter-summary).
 
 <br>
 
@@ -235,7 +243,7 @@ You will see this message once you have successfully edited a person, indicating
   <img src="images/success_images/edit_success.png" alt="image showing a successful edit" width="750">
 </p>
 
-For more details on each parameter, [click here](#command-format-summary).
+For more details on each parameter, [click here](#command-parameter-summary).
 
 <br>
 
@@ -333,7 +341,7 @@ You will see this message once you have successfully found a person, with the ap
   <img src="images/success_images/find_success.png" alt="image of successful find" width="750" />
 </p>
 
-For more details on each parameter, [click here](#command-format-summary).
+For more details on each parameter, [click here](#command-parameter-summary).
 
 <br>
 
@@ -433,6 +441,8 @@ You will see this message once you have successfully imported the exam results:
     <img src="images/success_images/importExam_success.png" alt="image of successful importExamScores" width="750" />
 </p>
 
+For more details on the parameter, [click here](#command-parameter-summary).
+
 <br>
 
 ### Adding an Exam : `addExam`
@@ -456,6 +466,8 @@ You will see this message once you successfully add an exam, including the detai
 <p align="center">
   <img src="images/success_images/addExam_success.png" alt="image of successful addExam" width="750" />
 </p>
+
+For more details on each parameter, [click here](#command-parameter-summary).
 
 <br>
 
@@ -548,6 +560,8 @@ You will see this message once you successfully add a score, including the name 
     <img src="images/success_images/addScore_success.png" alt="image of successful addScore" width="750" />
 </p>
 
+For more details on the parameter, [click here](#command-parameter-summary).
+
 <br>
 
 ### Editing an Exam Score : `editScore`
@@ -582,6 +596,8 @@ You will see this message once you successfully edit a score, including some det
 <p align="center">
     <img src="images/success_images/editScore_success.png" alt="image of successful editScore" width="750" />
 </p>
+
+For more details on the parameter, [click here](#command-parameter-summary).
 
 <br>
 
@@ -658,7 +674,10 @@ All data are saved automatically as a JSON file located at `[JAR file location]/
 **Caution:**
 If your changes to the data file makes its format invalid, Avengers Assemble will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br/>
 Furthermore, certain edits can cause the Avengers Assemble application to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+
 </box>
+
+<br>
 
 --------------------------------------------------------------------------------------------------------------------
 
