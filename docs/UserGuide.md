@@ -201,9 +201,9 @@ Imports all persons and their details from a CSV file of your specification.
 
 </box>
 
-**Example:** `import i/C:/Users/alk/Downloads/avengersassemble.csv` 
+**Example:** `import i/C:/Users/soojo/Desktop/sample_data.csv` 
 
-imports the data from the CSV file located at `C:/Users/alk/Downloads/avengersassemble.csv`.
+imports the data from the CSV file located at `C:/Users/soojo/Desktop/sample_data.csv`
 
 You will see this message once you successfully imported the data, with the app showing the details of the imported persons:
 
@@ -504,9 +504,9 @@ Imports all exam results from a CSV file.
 
 </box>
 
-**Example:**`import i/C:/Users/alk/Downloads/examresults.csv` 
+**Example:** `importExamScores i/C:/Users/soojo/Desktop/sample_exam_data.csv` 
 
-imports exam results from the CSV file located at `C:/Users/alk/Downloads/examresults.csv`.
+imports exam results from the CSV file located at `C:/Users/soojo/Desktop/sample_exam_data.csv`.
 
 You will see this message once you have successfully imported the exam results:
 
@@ -721,6 +721,11 @@ You will see this message once you have successfully deleted a score, including 
 <br>
 
 <div id="mean-and-median"></div>
+
+> **Notes:**
+> 
+> 1. Duplicate exam headers in the CSV file will be ignored, with only the first occurrence being used.
+> 2. Erroneous entries in the CSV file will be ignored, and the application will continue to import the rest of the data.
 
 ### Mean and Median of Exam Scores
 
