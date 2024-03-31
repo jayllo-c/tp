@@ -532,6 +532,8 @@ Format: `importExamScores i/FILEPATH`
 
 <box type="info" seamless>
 
+<box type="info" seamless>
+
 **Important:**<br>
 
 * The file path should be **absolute**.
@@ -551,6 +553,24 @@ Format: `importExamScores i/FILEPATH`
 > 
 > 1. Duplicate exam headers in the CSV file will be ignored, with only the first occurrence being used.
 > 2. Erroneous entries in the CSV file will be ignored, and the application will continue to import the rest of the data.
+
+### Mean and Median of Exam Scores
+
+View the Mean and Median of the scores of the exam currently selected
+
+<box type="info" seamless>
+
+**Information:**<br>
+
+* When an exam is selected, the mean and median will automatically show up on the right of the footer of the application
+* The mean and median is calculated based on the currently filtered list of Persons
+* If a person has no score for the selected exam, he is completely excluded from the calculation of mean and median.
+
+</box>
+
+>When an exam is selected, the statistics will show on the bottom right of the application
+>
+>![mean and median](images/success_images/mean_median_success.png)
 
 ### Exiting the Program : `exit`
 
