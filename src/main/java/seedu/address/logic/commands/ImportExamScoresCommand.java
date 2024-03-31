@@ -3,21 +3,13 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_IMPORT;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-import com.opencsv.exceptions.CsvException;
-
 import javafx.collections.ObservableList;
+import seedu.address.commons.util.CsvUtil;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.exam.Exam;
@@ -90,37 +82,6 @@ public class ImportExamScoresCommand extends Command {
                         getExamName(examNames[i]), MESSAGE_DUPLICATE_EXAM);
             }
         }
-    }
-
-    // CSV parsing methods
-
-    /**
-     * Reads all lines from a CSV file.
-     * @param filePath the path of the file
-     * @return a list of String arrays representing the lines of the CSV file
-     * @throws CommandException if an error occurs while reading the file
-     */
-    public List<String[]> readAllLines(Path filePath) throws CommandException {
-        try (Reader reader = Files.newBufferedReader(filePath)) {
-            return readCsv(reader);
-        } catch (IOException | CsvException exception) {
-            throw new CommandException(MESSAGE_ERROR_READING_FILE + filePath.toString());
-        }
-    }
-
-    /**
-     * Reads a CSV file.
-     * @param reader the reader to read the file
-     * @return a list of String arrays representing the lines of the CSV file
-     * @throws IOException if an error occurs while reading the file
-     * @throws CsvException if an error occurs while parsing the CSV file
-     */
-    private List<String[]> readCsv(Reader reader) throws IOException, CsvException {
-        CSVParser parser = new CSVParserBuilder().build();
-        CSVReader csvReader = new CSVReaderBuilder(reader).withCSVParser(parser).build();
-        List<String[]> lst = csvReader.readAll();
-        reverse(lst);
-        return lst;
     }
 
     // Exam mapping methods
@@ -229,7 +190,8 @@ public class ImportExamScoresCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        List<String[]> lst = readAllLines(filepath);
+        List<String[]> lst = CsvUtil.readAllLinesForImportExamScores(filepath);
+        reverse(lst);
         HashMap<String, HashMap<String, Integer>> headers = createExamsMapping(lst);
 
         HashMap<String, HashMap<String, Integer>> headersForExams = removeNonExams(headers);
