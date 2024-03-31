@@ -59,18 +59,28 @@ public class FindCommand extends Command {
         requireNonNull(model);
         Exam selectedExam = model.getSelectedExam().getValue();
         if (predicate.isExamRequired()) {
-            if (!isAnyNonNull(selectedExam)) {
-                throw new CommandException(Messages.MESSAGE_NO_EXAM_SELECTED);
-            }
-            if (selectedExam.getMaxScore().getScore() < Integer.parseInt(predicate.getKeyword())) {
-                throw new CommandException(MESSAGE_SCORE_GREATER_THAN_MAX);
-            }
-            model.updateFilteredPersonList(predicate.withExam(selectedExam));
+            updateFilteredPersonListByScore(model, selectedExam);
         } else {
             model.updateFilteredPersonList(predicate);
         }
         return new CommandResult(
                 String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
+    }
+
+    /**
+     * Updates the filtered person list by score.
+     * @param model
+     * @param selectedExam
+     * @throws CommandException
+     */
+    private void updateFilteredPersonListByScore(Model model, Exam selectedExam) throws CommandException {
+        if (!isAnyNonNull(selectedExam)) {
+            throw new CommandException(Messages.MESSAGE_NO_EXAM_SELECTED);
+        }
+        if (selectedExam.getMaxScore().getScore() < Integer.parseInt(predicate.getKeyword())) {
+            throw new CommandException(MESSAGE_SCORE_GREATER_THAN_MAX);
+        }
+        model.updateFilteredPersonList(predicate.withExam(selectedExam));
     }
 
     @Override
