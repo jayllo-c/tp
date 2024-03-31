@@ -56,7 +56,12 @@ public class Messages {
                 .append("; Tags: ");
         person.getTags().forEach(builder::append);
         builder.append("; Scores: ");
-        person.getScores().forEach((exam, score) -> builder.append(exam).append(": ").append(score).append(", "));
+        person.getScores().forEach((exam, score) -> builder.append("[ ")
+                                        .append(exam.getName()).append(": ")
+                                        .append(score).append(" / ").append(exam.getMaxScore())
+                                        .append(" ] ")
+        );
+        builder.append(";");
         return builder.toString();
     }
 
