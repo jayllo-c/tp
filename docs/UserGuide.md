@@ -24,9 +24,52 @@ By following this guide, you will be able to gain a thorough understanding of Av
 --------------------------------------------------------------------------------------------------------------------
 
 <!-- * Table of Contents -->
-<page-nav-print />
+## Table of Contents
+
+Click below to navigate the user guide:
+
+<div id="table-of-contents">
+<ol>
+    <li><a href="#quick-start">Quick Start</a></li>
+    <li><a href="#contact-management-features">Contact Management Features</a></li>
+    <ul>
+        <li><a href="#help">Getting Help: <code>help</code></a></li>
+        <li><a href="#clear">Clearing All Entries: <code>clear</code></a></li>
+        <li><a href="#import">Importing Persons from a CSV File: <code>import</code></a></li>
+        <li><a href="#add">Adding a Person: <code>add</code></a></li>
+        <li><a href="#edit">Editing a Person: <code>edit</code></a></li>
+        <li><a href="#delete">Deleting a Person: <code>delete</code></a></li>
+        <li><a href="#deleteshown">Deleting Filtered Persons: <code>deleteShown</code></a></li>
+        <li><a href="#list">Listing All Persons: <code>list</code></a></li>
+        <li><a href="#find">Filtering Persons: <code>find</code></a></li>
+        <li><a href="#copy">Filtering Persons: <code>copy</code></a></li>
+        <li><a href="#export">Exporting Data to a CSV File: <code>export</code></a></li>
+        <li><a href="#exit">Exiting the Program: <code>exit</code></a></li>
+    </ul>
+    <li><a href="#exam-management-features">Exam Management Features</a></li>
+    <ul>
+        <li><a href="#importexamscores">Importing Exam Scores from a CSV File<code>importExamScores</code></a></li>
+        <li><a href="#addexam">Adding an Exam: <code>addExam</code></a></li>
+        <li><a href="#deleteexam">Deleting an Exam: <code>deleteExam</code></a></li>
+        <li><a href="#selectexam">Selecting an Exam: <code>selectExam</code></a></li>
+        <li><a href="#addscore">Adding an Exam Score: <code>addScore</code></a></li>
+        <li><a href="#editscore">Editing an Exam Score: <code>editScore</code></a></li>
+        <li><a href="#deletescore">Deleting an Exam Score: <code>deleteScore</code></a></li>
+        <li><a href="#mean-and-median">Mean and Median of Exam Scores</a></li>
+    </ul>
+    <li><a href="#additional-information">Addtional Information</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="known-issues">Known Issues</a></li>
+    <li><a href="command-summary">Command Summary</a></li>
+    <li><a href="command-parameter-summary">Command Parameter Summary</a></li>
+</ol>
+</div>
+
+<br>
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div id="quick-start"></div>
 
 ## Quick Start
 
@@ -52,6 +95,8 @@ By following this guide, you will be able to gain a thorough understanding of Av
 <br>
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div id="contact-management-features"></div>
 
 ## Contact Management Features
 
@@ -80,6 +125,8 @@ I provide you with warnings about potential issues you might face.
 </box>
 
 <br>
+
+<div id="help"></div>
 
 ### Getting Help : `help`
 
@@ -127,6 +174,8 @@ Before we proceed with the commands, here are some important points to note on t
 
 <br>
 
+<div id="clear"></div>
+
 ### Clearing All Entries : `clear`
 
 Deletes **all** entries from your contact list.
@@ -134,6 +183,8 @@ Deletes **all** entries from your contact list.
 **Format:** `clear`
 
 <br>
+
+<div id="import"></div>
 
 ### Importing Persons from a CSV File : `import`
 
@@ -164,7 +215,9 @@ For more details on the input parameter, [click here](#command-parameter-summary
 
 <br>
 
-### Adding a Person: `add`
+<div id="add"></div>
+
+### Adding a Person : `add`
 
 Adds a person to your contact list. The person's details are now stored in the application.
 
@@ -203,6 +256,8 @@ You will see this message once you have successfully added a person, indicating 
 For more details on each parameter, [click here](#command-parameter-summary).
 
 <br>
+
+<div id="edit"></div>
 
 ### Editing a Person : `edit`
 
@@ -247,6 +302,8 @@ For more details on each parameter, [click here](#command-parameter-summary).
 
 <br>
 
+<div id="delete"></div>
+
 ### Deleting a Person : `delete`
 
 Deletes the specified person from your contact list.
@@ -272,6 +329,8 @@ You will see this message once you successfully delete a person from your list, 
 </p>
 
 <br>
+
+<div id="deleteshown"></div>
 
 ### Deleting Filtered Persons : `deleteShown`
 
@@ -299,6 +358,8 @@ You will see this message once you have successfully deleted the shown persons f
 
 <br>
 
+<div id="list"></div>
+
 ### Listing All Persons : `list`
 
 Displays all the persons in your contact list.
@@ -315,7 +376,9 @@ You will see this message once you have successfully listed all contacts, with t
 
 <br>
 
-### Filtering Persons: `find`
+<div id="find"></div>
+
+### Filtering Persons : `find`
 
 Filters your contacts based on specific criteria you set.
 
@@ -345,7 +408,9 @@ For more details on each parameter, [click here](#command-parameter-summary).
 
 <br>
 
-### Copying Contact Details: `copy`
+<div id="copy"></div>
+
+### Copying Contact Details : `copy`
 
 Copies the emails of currently displayed persons into your clipboard.
 
@@ -369,6 +434,8 @@ You will see this message once you have successfully copied the contact details 
 </p>
 
 <br>
+
+<div id="export"></div>
 
 ### Exporting Data to a CSV File : `export`
 
@@ -402,6 +469,8 @@ You will see this message once you have successfully exported the data:
 
 <br>
 
+<div id="exit"></div>
+
 ### Exiting the Program : `exit`
 
 Exits the program. The app will close automatically.
@@ -414,7 +483,11 @@ Exits the program. The app will close automatically.
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div id="exam-management-features"></div>
+
 ## Exam Management Features
+
+<div id="importexamscores"></div>
 
 ### Importing Exam Scores from a CSV File : `importExamScores`
 
@@ -445,6 +518,8 @@ For more details on the parameter, [click here](#command-parameter-summary).
 
 <br>
 
+<div id="addexam"></div>
+
 ### Adding an Exam : `addExam`
 
 Adds an exam into your exam list.
@@ -470,6 +545,8 @@ You will see this message once you successfully add an exam, including the detai
 For more details on each parameter, [click here](#command-parameter-summary).
 
 <br>
+
+<div id="deleteexam></div>
 
 ### Deleting an Exam : `deleteExam`
 
@@ -499,6 +576,8 @@ You will see this message once you have successfully deleted an exam, including 
 
 <br>
 
+<div id="selectexam"></div>
+
 ### Selecting an Exam : `selectExam`
 
 Selects an exam in your exam list.
@@ -526,6 +605,8 @@ You will see this message once you have successfully selected an exam, including
 </p>
 
 <br>
+
+<div id="addscore"></div>
 
 ### Adding an Exam Score : `addScore`
 
@@ -564,6 +645,8 @@ For more details on the parameter, [click here](#command-parameter-summary).
 
 <br>
 
+<div id="editscore"></div>
+
 ### Editing an Exam Score : `editScore`
 
 Edits a specified person's exam score.
@@ -601,6 +684,8 @@ For more details on the parameter, [click here](#command-parameter-summary).
 
 <br>
 
+<div id="deletescore"></div>
+
 ### Deleting an Exam Score : `deleteScore`
 
 Deletes a specified person's exam score.
@@ -635,6 +720,8 @@ You will see this message once you have successfully deleted a score, including 
 
 <br>
 
+<div id="mean-and-median"></div>
+
 ### Mean and Median of Exam Scores
 
 You can view the mean and median of the scores of the exam currently selected at the bottom right of the application window.
@@ -659,6 +746,8 @@ When an exam is selected, the statistics will show on the bottom right of the ap
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div id="additional-information"></div>
+
 ## Additional Information
 
 ### Saving the Data
@@ -681,6 +770,8 @@ Furthermore, certain edits can cause the Avengers Assemble application to behave
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div id="faq"></div>
+
 ## FAQ
 
 **Q**: How do I transfer my data to another computer?<br>
@@ -689,6 +780,8 @@ Furthermore, certain edits can cause the Avengers Assemble application to behave
 <br>
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div id="known-issues"></div>
 
 ## Known Issues
 
@@ -704,6 +797,8 @@ If this issue occurs, transfer the CSV file you want to import to the same folde
 <br>
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div id="command-summary"></div>
 
 ## Command Summary
 
@@ -725,6 +820,8 @@ Below is a summary of the commands available in Avengers Assemble. Some examples
 <br>
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div id="command-parameter-summary"></div>
 
 ## Command Parameter Summary
 
