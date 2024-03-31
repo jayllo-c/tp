@@ -27,9 +27,9 @@ import seedu.address.model.person.Score;
 /**
  * Imports a CSV file containing details of existing exams into the application.
  */
-public class ImportExamCommand extends Command {
+public class ImportExamScoresCommand extends Command {
 
-    public static final String COMMAND_WORD = "importExam";
+    public static final String COMMAND_WORD = "importExamScores";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports exams from specified filepath."
             + " Must be an absolute CSV file path\n"
             + "[" + PREFIX_IMPORT + "FILEPATH]\n"
@@ -52,7 +52,7 @@ public class ImportExamCommand extends Command {
      * Creates an ImportExamCommand to import exams from the specified file path.
      * @param filePath the path of the file
      */
-    public ImportExamCommand(Path filePath) {
+    public ImportExamScoresCommand(Path filePath) {
         this.errorReport = new StringBuilder();
         this.filepath = filePath;
     }
@@ -245,8 +245,8 @@ public class ImportExamCommand extends Command {
     @Override
     public boolean equals(Object other) {
         return other == this
-                || (other instanceof ImportExamCommand
-                && filepath.equals(((ImportExamCommand) other).filepath));
+                || (other instanceof ImportExamScoresCommand
+                && filepath.equals(((ImportExamScoresCommand) other).filepath));
     }
 
     private boolean isValidScore(String score) {

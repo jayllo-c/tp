@@ -19,14 +19,14 @@ import seedu.address.model.UserPrefs;
 import seedu.address.model.exam.Exam;
 import seedu.address.model.person.Score;
 
-public class ImportExamCommandTest {
+public class ImportExamScoresCommandTest {
     public static final String PATH_VALID = "src/test/data/ImportExamCommandTest/valid.csv";
     public static final String PATH_EXTRA = "src/test/data/ImportExamCommandTest/extra.csv";
     public static final String PATH_EMPTY_CSV = "src/test/data/ImportExamCommandTest/valid_empty_csv.csv";
     public static final String PATH_INVALID = "invalid/path/to/file.csv";
     public static final String PATH_SCORE_NOT_NUMBER = "src/test/data/ImportExamCommandTest/not_number.csv";
     public static final String PATH_DUPLICATE_EXAMS = "src/test/data/ImportExamCommandTest/duplicate_exams.csv";
-    private ImportExamCommand importExamCommand;
+    private ImportExamScoresCommand importExamScoresCommand;
     private Model model;
 
     @BeforeEach
@@ -38,40 +38,40 @@ public class ImportExamCommandTest {
     @Test
     public void execute_validFilePath_success() {
         Path filePath = Paths.get(PATH_EMPTY_CSV);
-        String expectedMessage = String.format(ImportExamCommand.MESSAGE_SUCCESS, filePath);
-        importExamCommand = new ImportExamCommand(filePath);
+        String expectedMessage = String.format(ImportExamScoresCommand.MESSAGE_SUCCESS, filePath);
+        importExamScoresCommand = new ImportExamScoresCommand(filePath);
 
-        assertCommandSuccess(importExamCommand, model, expectedMessage, model);
+        assertCommandSuccess(importExamScoresCommand, model, expectedMessage, model);
     }
 
     @Test
     public void execute_invalidFilePath_throwsCommandException() {
         Path invalidFilePath = Paths.get(PATH_INVALID);
-        importExamCommand = new ImportExamCommand(invalidFilePath);
+        importExamScoresCommand = new ImportExamScoresCommand(invalidFilePath);
 
-        assertThrows(CommandException.class, () -> importExamCommand.execute(model));
+        assertThrows(CommandException.class, () -> importExamScoresCommand.execute(model));
     }
 
     @Test
     public void testGenerateErrorReportEmpty() {
-        String result = new ImportExamCommand(Paths.get(PATH_VALID)).generateErrorReport();
+        String result = new ImportExamScoresCommand(Paths.get(PATH_VALID)).generateErrorReport();
         assertEquals("", result);
     }
 
     @Test
     public void testSuccess() {
         Path filePath = Paths.get(PATH_VALID);
-        ImportExamCommand importExamCommand = new ImportExamCommand(filePath);
-        String expectedMessage = String.format(ImportExamCommand.MESSAGE_SUCCESS, filePath);
-        assertCommandSuccess(importExamCommand, model, expectedMessage, model);
+        ImportExamScoresCommand importExamScoresCommand = new ImportExamScoresCommand(filePath);
+        String expectedMessage = String.format(ImportExamScoresCommand.MESSAGE_SUCCESS, filePath);
+        assertCommandSuccess(importExamScoresCommand, model, expectedMessage, model);
     }
 
     @Test
     public void testEquals() {
         Path filePath = Paths.get(PATH_VALID);
-        ImportExamCommand importExamCommand = new ImportExamCommand(filePath);
-        ImportExamCommand importExamCommandCopy = new ImportExamCommand(filePath);
-        assertEquals(importExamCommand, importExamCommandCopy);
+        ImportExamScoresCommand importExamScoresCommand = new ImportExamScoresCommand(filePath);
+        ImportExamScoresCommand importExamScoresCommandCopy = new ImportExamScoresCommand(filePath);
+        assertEquals(importExamScoresCommand, importExamScoresCommandCopy);
     }
 
     @Test
@@ -79,42 +79,42 @@ public class ImportExamCommandTest {
         Path filePath = Paths.get(PATH_EXTRA);
         Exam midterm = new Exam("MidtermTestFailing", new Score(100));
         model.addExam(midterm);
-        ImportExamCommand importExamCommand = new ImportExamCommand(filePath);
+        ImportExamScoresCommand importExamScoresCommand = new ImportExamScoresCommand(filePath);
 
         String expectedError = buildErrorReport(filePath.toString(),
-                "non@example.com: " + ImportExamCommand.MESSAGE_PERSON_DOES_NOT_EXIST,
-                "johnd@example.com: " + String.format(ImportExamCommand.MESSAGE_GRADE_TOO_HIGH, "Midterm"),
-                "NonExistent: " + ImportExamCommand.MESSAGE_EXAM_DOES_NOT_EXIST);
+                "non@example.com: " + ImportExamScoresCommand.MESSAGE_PERSON_DOES_NOT_EXIST,
+                "johnd@example.com: " + String.format(ImportExamScoresCommand.MESSAGE_GRADE_TOO_HIGH, "Midterm"),
+                "NonExistent: " + ImportExamScoresCommand.MESSAGE_EXAM_DOES_NOT_EXIST);
 
-        assertCommandSuccess(importExamCommand, model, expectedError, model);
+        assertCommandSuccess(importExamScoresCommand, model, expectedError, model);
     }
 
     @Test
     public void test_notNumber() {
         Path filePath = Paths.get(PATH_SCORE_NOT_NUMBER);
-        ImportExamCommand importExamCommand = new ImportExamCommand(filePath);
+        ImportExamScoresCommand importExamScoresCommand = new ImportExamScoresCommand(filePath);
 
         String expectedError = buildErrorReport(filePath.toString(),
                 "alice@example.com: "
-                        + String.format(ImportExamCommand.MESSAGE_SCORE_NOT_NUMBER, "Midterm"));
+                        + String.format(ImportExamScoresCommand.MESSAGE_SCORE_NOT_NUMBER, "Midterm"));
 
-        assertCommandSuccess(importExamCommand, model, expectedError, model);
+        assertCommandSuccess(importExamScoresCommand, model, expectedError, model);
     }
 
     @Test
     public void test_duplicateExamHeaders() {
         Path filePath = Paths.get(PATH_DUPLICATE_EXAMS);
-        ImportExamCommand importExamCommand = new ImportExamCommand(filePath);
+        ImportExamScoresCommand importExamScoresCommand = new ImportExamScoresCommand(filePath);
 
         String expectedError = buildErrorReport(filePath.toString(),
-                "Midterm: " + ImportExamCommand.MESSAGE_DUPLICATE_EXAM);
-        assertCommandSuccess(importExamCommand, model, expectedError, model);
+                "Midterm: " + ImportExamScoresCommand.MESSAGE_DUPLICATE_EXAM);
+        assertCommandSuccess(importExamScoresCommand, model, expectedError, model);
     }
 
     private String buildErrorReport(String filePath, String... errors) {
         StringBuilder errorReport = new StringBuilder();
-        errorReport.append(String.format(ImportExamCommand.MESSAGE_SUCCESS, filePath));
-        errorReport.append(ImportExamCommand.PREFIX_ERROR_REPORT);
+        errorReport.append(String.format(ImportExamScoresCommand.MESSAGE_SUCCESS, filePath));
+        errorReport.append(ImportExamScoresCommand.PREFIX_ERROR_REPORT);
         for (String error : errors) {
             errorReport.append(error + "\n");
         }

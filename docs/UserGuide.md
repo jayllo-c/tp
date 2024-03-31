@@ -508,13 +508,13 @@ Format: `import i/FILEPATH`
 **Important:**<br>
 
 * The file path should be **absolute**.
-* This command will only import persons' particulars. To import exam scores, take a look at [importexam](#importing-exam-scores-from-a-csv-file--importexam)
+* This command will only import persons' particulars. To import exam scores, take a look at [importExamScores](#importing-exam-scores-from-a-csv-file-importexamscores).
 
 </box>
 
 **Example:**
 
-`import i/C:/Users/alk/Downloads/avengersassemble.csv` imports the data from the CSV file located at `C:/Users/alk/Downloads/avengersassemble.csv`.
+`import i/C:/Users/soojo/Desktop/sample_data.csv` imports the data from the CSV file located at `C:/Users/soojo/Desktop/sample_data.csv`.
 
 > You will see this message once you successfully import the data, with the app showing the details of the imported persons:
 >
@@ -524,26 +524,33 @@ Format: `import i/FILEPATH`
 
 For more details on the input parameter, [click here](#command-format-summary).
 
-### Importing Exam Scores from a CSV File : `importExam`
+### Importing Exam Scores from a CSV File : `importExamScores`
 
-Imports all exam results from a CSV file
+Imports all exam results from a CSV file.
 
-Format: `import i/FILEPATH`
+Format: `importExamScores i/FILEPATH`
+
+<box type="info" seamless>
 
 **Important:**<br>
 
 * The file path should be **absolute**.
-* This command will only import persons' exam scores. To import persons' particulars, take a look at [import](#importing-persons-from-a-csv-file--import)
+* This command will only import persons' exam scores. To import persons' particulars, take a look at [import](#importing-persons-from-a-csv-file-import).
 
 </box>
 
 **Example:**
 
-`import i/C:/Users/alk/Downloads/examresults.csv` imports exam results from the CSV file located at `C:/Users/alk/Downloads/examresults.csv`.
+`importExamScores i/C:/Users/soojo/Desktop/sample_exam_data.csv` imports exam results from the CSV file located at `C:/Users/soojo/Desktop/sample_exam_data.csv`.
 
 >You will see this message once you successfully import exam results.
 >
 >![importExam success message](images/success_images/importExam_success.png)
+
+> **Notes:**
+> 
+> 1. Duplicate exam headers in the CSV file will be ignored, with only the first occurrence being used.
+> 2. Erroneous entries in the CSV file will be ignored, and the application will continue to import the rest of the data.
 
 ### Exiting the Program : `exit`
 

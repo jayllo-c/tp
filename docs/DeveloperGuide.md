@@ -812,8 +812,34 @@ into user's clipboard.
     
         Use case ends.
 
+**Use case: UC12 — Import Exam Results**
 
-**Use case: UC12 — Exit application**
+**MSS:**
+1. User requests to import exam results from a csv file.
+2. AddressBook displays a message that all exam results have been imported.
+
+    Use case ends.
+
+**Extensions:**
+
+* 2a. AddressBook cannot find the file specified.
+    * 2a1. AddressBook displays a message indicating that the file is not recognised.
+  
+        Use case ends.
+* 2b. The file to be imported is not a csv file.
+    * 2b1. AddressBook displays an error message indicating that the file type is not recognised and should be a csv file
+
+        Use case ends.
+* 2c. There are duplicate entries in the csv file.
+    * 2c1. AddressBook displays a message indicating that there are duplicate entries in the csv file, and only the first instance has been kept.
+  
+        Use case ends.
+* 2d. The csv file contains invalid entries.
+    * 2d1. AddressBook displays a message indicating that there are invalid entries in the csv file, and all other valid entries have been imported.
+  
+        Use case ends.
+
+**Use case: UC13 — Exit application**
 
 **MSS:**
 
