@@ -10,15 +10,14 @@ Avengers Assemble (AA) is a **desktop app for managing contacts**, meant for use
 while still having the benefits of a Graphical User Interface (GUI).
 
 The application is designed for **Head Tutors** of the NUS CS1101S Programming Methodology course, who intend to simplify their administrative tasks relating to contact management between students, other teaching assistants, and course instructors.
-However, its functions can also be extended to you if you are a head tutor of another course.
 
-Our user guide aims to help you understand how to get started with the application.
+This user guide provides a comprehensive overview of the Avengers Assemble's features and functionalities, and aims to guide you through its setup and usage. We will walk you through each feature in a structured manner:
 
+1. Installation,
+2. Basic commands like adding and editing, and
+3. Advanced commands like filtering and exporting of data.
 
-We will cover the features in a chronological order, from:
-1. Installation, to
-2. Simple commands like adding and editing, followed by
-3. More advanced commands like filtering and exporting data.
+By following this guide, you will be able to gain a thorough understanding of Avengers Assemble and maximize its potential to streamline your administrative tasks.
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -29,7 +28,7 @@ We will cover the features in a chronological order, from:
 
 1. Ensure you have `Java 11` or above installed in your computer.
 
-1. Download the latest `avengersassemble.jar` [here](https://github.com/AY2324S2-CS2103T-T10-1/tp/releases/tag/v1.2).
+1. Download the latest `avengersassemble.jar` [here](https://github.com/AY2324S2-CS2103T-T10-1/tp/releases).
 
 1. Copy the file to the folder you want to use as the _home folder_ for our application.
 
@@ -42,13 +41,11 @@ We will cover the features in a chronological order, from:
 
    ![Ui](images/Ui.png)
 
-
-
-1. Refer to the [Features](#features) below for details of each command.
+1. Refer to the [features](#contact-management-features) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Features
+## Contact Management Features
 
 ### Legend
 These boxes might offer you additional information of different types:
@@ -74,6 +71,7 @@ I provide you with tips to use our app more effectively.
 I provide you with warnings about potential issues you might face.
 </box>
 
+<br>
 
 ### Getting Help : `help`
 
@@ -81,8 +79,10 @@ Shows you a link to guide you on how to use the application. Click on the link t
 
 ![help message](images/helpMessage.png)
 
-Format: `help`
->Note: The application ignores any extraneous parameters as we assume they are typos.
+**Format:** `help`
+> **Note:** The application ignores any extraneous parameters as we assume they are typos.
+
+<br>
 
 Before we proceed with the commands, here are some important points to note on their formatting. These points will also be repeated in the [command format summary](#command-format-summary) for you to refer to easily at any point in time.
 
@@ -90,7 +90,7 @@ Before we proceed with the commands, here are some important points to note on t
 
 **Important:** </br>
 
-* Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
+* Words in `UPPER_CASE` are the parameters to be supplied by you.<br>
   > e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
 
 * Prefixes encased with '[ ]' are optional.
@@ -113,6 +113,44 @@ Before we proceed with the commands, here are some important points to note on t
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 
 </box>
+
+<br>
+
+### Clearing All Entries : `clear`
+
+Deletes **all** entries from your contact list.
+
+**Format:** `clear`
+
+<br>
+
+### Importing Persons from a CSV File : `import`
+
+Imports all persons and their details from a CSV file of your specification.
+
+**Format:** `import i/FILEPATH`
+
+<box type="info" seamless>
+
+**Important:**<br>
+
+* The file path should be **absolute**.
+* This command will only import persons' particulars. To import exam scores, take a look at [importexam](#importing-exam-scores-from-a-csv-file--importexam)
+
+</box>
+
+**Example:**
+`import i/C:/Users/alk/Downloads/avengersassemble.csv` imports the data from the CSV file located at `C:/Users/alk/Downloads/avengersassemble.csv`.
+
+You will see this message once you successfully import the data, with the app showing the details of the imported persons:
+
+<p align="centre">
+  <img src="images/success_images/import_success.png" alt="image of successful import" width="750"/>
+</p>
+
+<br>
+
+For more details on the input parameter, [click here](#command-format-summary).
 
 ### Adding a Person: `add`
 
@@ -459,16 +497,6 @@ Example: `deleteExam 2`
 >
 >![deleteExam success message](images/success_images/deleteExam_success.png)
 
-### Clearing All Entries : `clear`
-
-Deletes **all** entries from your contact list.
-
-Format: `clear`
-
->You will see this message once you successfully delete all contacts from your list, indicating all entries have been cleared:
->
->![clear success message](images/success_images/clear_success.png)
-
 ### Exporting Data to a CSV File : `export`
 
 Exports currently listed persons and their details to a CSV file of your specification.
@@ -496,33 +524,6 @@ When performing an export, the current information will overwrite any existing C
 If you want to preserve the exported data, you should rename it or save it in a separate location.
 
 </box>
-
-### Importing Persons from a CSV File : `import`
-
-Imports all persons and their details from a CSV file of your specification.
-
-Format: `import i/FILEPATH`
-
-<box type="info" seamless>
-
-**Important:**<br>
-
-* The file path should be **absolute**.
-* This command will only import persons' particulars. To import exam scores, take a look at [importexam](#importing-exam-scores-from-a-csv-file--importexam)
-
-</box>
-
-**Example:**
-
-`import i/C:/Users/alk/Downloads/avengersassemble.csv` imports the data from the CSV file located at `C:/Users/alk/Downloads/avengersassemble.csv`.
-
-> You will see this message once you successfully import the data, with the app showing the details of the imported persons:
->
-> ![import success message](images/success_images/import_success.png)
-
-
-
-For more details on the input parameter, [click here](#command-format-summary).
 
 ### Importing Exam Scores from a CSV File : `importExam`
 
