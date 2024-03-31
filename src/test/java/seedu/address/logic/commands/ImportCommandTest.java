@@ -24,11 +24,14 @@ public class ImportCommandTest {
         Path filePath = Paths.get("src/test/data/ImportCommandTest/valid.csv");
         ImportCommand importCommand = new ImportCommand(filePath);
         CommandResult commandResult = importCommand.execute(model);
-        assertEquals(
-                String.format("Imported Contacts from: %s", filePath.toString()), commandResult.getFeedbackToUser());
+        String expected = String.format("Imported Contacts from: %s\n", filePath.toString()) + "\n"
+                + "Successful imports: 7\n"
+                + "Unsuccessful imports: 0\n";
+        String actual = commandResult.getFeedbackToUser();
+        assertEquals(expected , actual);
     }
     @Test
-    public void execute_convertToAddCommandInput_success() {
+    public void convertToAddCommandInput_success() {
         Model model = new ModelManager(new AddressBook(), new UserPrefs());
         Map<String, String> personData = Map.of(
                 "studio", "S1",
@@ -48,14 +51,14 @@ public class ImportCommandTest {
         assertEquals(expected, actual);
     }
     @Test
-    public void execute_import_invalidPathFailure() {
+    public void execute_invalidPath_failure() {
         Model model = new ModelManager(new AddressBook(), new UserPrefs());
         ImportCommand importCommand = new ImportCommand(Paths.get(
                 "src/test/data/ImportCommandTest/nonexistent.csv"));
         assertThrows(CommandException.class, () -> importCommand.execute(model));
     }
     @Test
-    public void equals() {
+    public void equals_success() {
         Path filePath = Paths.get("src/test/data/ImportCommandTest/valid.csv");
         ImportCommand importCommand = new ImportCommand(filePath);
         ImportCommand importCommandCopy = new ImportCommand(filePath);
