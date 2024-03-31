@@ -34,23 +34,41 @@ public class PersonDetailContainsKeywordAndExamPredicate implements Predicate<Pe
     @Override
     public boolean test(Person person) {
         if (PREFIX_LESSTHAN.equals(prefix)) {
-            if (person.getScores().containsKey(exam)) {
-                return Double.parseDouble(person.getScores().get(exam).toString())
-                        < Double.parseDouble(keyword);
-            } else {
-                // Handle case when the selected exam is not found in the person's scores
-                return false;
-            }
+            return trueIfLt(person);
         } else if (PREFIX_MORETHAN.equals(prefix)) {
-            if (person.getScores().containsKey(exam)) {
-                return Double.parseDouble(person.getScores().get(exam).toString())
-                        > Double.parseDouble(keyword);
-            } else {
-                // Handle case when the selected exam is not found in the person's scores
-                return false;
-            }
+            return trueIfMt(person);
         } else {
             // Code should not reach here
+            return false;
+        }
+    }
+
+    /**
+     * Checks if the person's exam score is greater than the keyword.
+     * @param person The person to be checked.
+     * @return True if the person's exam score is greater than the keyword.
+     */
+    private boolean trueIfMt(Person person) {
+        if (person.getScores().containsKey(exam)) {
+            return Double.parseDouble(person.getScores().get(exam).toString())
+                    > Double.parseDouble(keyword);
+        } else {
+            // Handle case when the selected exam is not found in the person's scores
+            return false;
+        }
+    }
+
+    /**
+     * Checks if the person's exam score is less than the keyword.
+     * @param person The person to be checked.
+     * @return True if the person's exam score is less than the keyword.
+     */
+    private boolean trueIfLt(Person person) {
+        if (person.getScores().containsKey(exam)) {
+            return Double.parseDouble(person.getScores().get(exam).toString())
+                    < Double.parseDouble(keyword);
+        } else {
+            // Handle case when the selected exam is not found in the person's scores
             return false;
         }
     }
