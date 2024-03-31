@@ -77,10 +77,13 @@ I provide you with warnings about potential issues you might face.
 
 Shows you a link to guide you on how to use the application. Click on the link to access the user guide.
 
-![help message](images/helpMessage.png)
-
 **Format:** `help`
+
 > **Note:** The application ignores any extraneous parameters as we assume they are typos.
+
+<p align="center">
+  <img src="images/helpMessage.png" alt="image of help window" width="600" />
+</p>
 
 <br>
 
@@ -135,28 +138,28 @@ Imports all persons and their details from a CSV file of your specification.
 **Important:**<br>
 
 * The file path should be **absolute**.
-* This command will only import persons' particulars. To import exam scores, take a look at [importexam](#importing-exam-scores-from-a-csv-file--importexam)
+* This command will only import persons' particulars. To import exam scores, take a look at [importExamScores](#importing-exam-scores-from-a-csv-file--importexam).
 
 </box>
 
 **Example:**
 `import i/C:/Users/alk/Downloads/avengersassemble.csv` imports the data from the CSV file located at `C:/Users/alk/Downloads/avengersassemble.csv`.
 
-You will see this message once you successfully import the data, with the app showing the details of the imported persons:
+You will see this message once you successfully imported the data, with the app showing the details of the imported persons:
 
-<p align="centre">
+<p align="center">
   <img src="images/success_images/import_success.png" alt="image of successful import" width="750"/>
 </p>
 
-<br>
-
 For more details on the input parameter, [click here](#command-format-summary).
+
+<br>
 
 ### Adding a Person: `add`
 
 Adds a person to your contact list. The person's details are now stored in the application.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]… [m/MATRICULATION_NUMBER] [s/STUDIO] [r/REFLECTION]​`
+**Format:** `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]… [m/MATRICULATION_NUMBER] [s/STUDIO] [r/REFLECTION]​`
 
 <box type="info" seamless>
 
@@ -167,72 +170,47 @@ Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]… [m/MATRICULATION
 <box type="tip" seamless>
 
 **Tip:** A person can have any number of tags (including 0)
+
 </box>
 
-**Example:**
-`add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 m/A1234567Z s/S1 r/R2`<br>
-
-
-* Adds a contact John Doe with the respective phone number, email and physical addresses, matriculation number, studio group and recitation group.
-
-
->Note: The following tags will be automatically added to the person if the following conditions are met:
+> **Note:** The following tags will be automatically added to the person if the following conditions are met:
 > 1. `student`: If matriculation number, studio, and reflection fields are present;
 > 2. `TA`: If matriculation number and one of either studio or reflection fields are present;
 > 3. `instructor`: If none of the three fields are present.
 >
-> You are free to edit or remove the tags after the person is added.
+> You are free to edit or remove the tags after the person is added with the [`edit`](#editing-a-person--edit) command.
 
+**Example:**
+`add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 m/A1234567Z s/S1 r/R2`<br>
 
->You will see this message once you successfully add a person, indicating their details:
->
->
->![add success message](images/success_images/add_success.png)
+adds a contact John Doe with the respective phone number, email and physical addresses, matriculation number, studio group and recitation group.
+
+You will see this message once you have successfully added a person, indicating their details:
+
+<p align="center">
+  <img src="images/success_images/add_success.png" alt="image showing the successfull addition of persons" width="750" />
+</p>
 
 For more details on each parameter, [click here](#command-format-summary).
 
-### Listing All Persons : `list`
-
-Displays all the persons in your contact list.
-
-Format: `list`
->Note: The application ignores any extraneous parameters as we assume they are typos.
-
->You will see this message once you successfully list all contacts, with the app showing all existing persons in the contact list:
->
->
->![list success message](images/success_images/list_success.png)
+<br>
 
 ### Editing a Person : `edit`
 
 Edits the details of an existing person in your contact list.
 
-
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]… [m/MATRICULATION_NUMBER] [s/STUDIO] [r/REFLECTION]​`
+**Format:** `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]… [m/MATRICULATION_NUMBER] [s/STUDIO] [r/REFLECTION]​`
 
 <box type="info" seamless>
 
 **Information:** <br>
-* The person at the specified `INDEX` will be edited. The index **must be a positive integer** (1, 2, 3, …)​
+* The person at the specified `INDEX` will be edited. The index **must be a positive integer** (1, 2, 3, …)​.
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the new values.
 * Editing tags will replace all existing tags i.e. adding of tags is **not cumulative**.
 * You can remove optional fields by typing `t/`, `m/`, `r/` or `s/` respectively without any values.
 
 </box>
-
-**Examples:**
-
-1. `edit 2 n/Betsy Crower t/`: <br>
-* Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
-
-2. `edit 1 p/91234567 e/johndoe@example.com`: <br>
-* Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-
->You will see this message once you successfully edit a person, indicating their updated details:
->
->![edit_success_message](images/success_images/edit_success.png)
-
 
 <box type="info" seamless>
 
@@ -242,14 +220,97 @@ Updating a matriculation number, studio, or reflection field will not automatica
 
 </box>
 
+**Examples:**
+
+1. `edit 2 n/Betsy Crower t/`: <br>
+   * Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+
+2. `edit 1 p/91234567 e/johndoe@example.com`: <br>
+   * Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
+
+You will see this message once you have successfully edited a person, indicating their updated details:
+
+<p align="center">
+  <img src="images/success_images/edit_success.png" alt="image showing a successful edit" width="750">
+</p>
+
 For more details on each parameter, [click here](#command-format-summary).
 
+<br>
+
+### Deleting a Person : `delete`
+
+Deletes the specified person from your contact list.
+
+**Format:** `delete INDEX`
+
+<box type="info" seamless>
+
+**Important:** <br>
+
+The person at the specified `INDEX` will be deleted. The index **must be a positive integer** (1, 2, 3, …)​
+
+</box>
+
+**Examples**:
+1. `list` followed by `delete 2` deletes the second person stored in the app.
+2. `find Betsy` followed by `delete 1` deletes the first person in the results of the `find` command.
+
+You will see this message once you successfully delete a person from your list, indicating the details of the deleted person:
+
+<p align="center">
+  <img src="images/success_images/delete_success.png" alt="image showing a successful delete" width="750" />
+</p>
+
+<br>
+
+### Deleting Filtered Persons : `deleteShown`
+
+Deletes the current filtered list of persons. Requires a [`find`](#filtering-persons--find) command to be run first.
+
+**Format:** `deleteShown`
+
+<box type="info" seamless>
+
+**Information:**
+
+* Deletes all persons in the current filtered list of persons.
+* The list of persons is filtered using the most recent [`find`](#filtering-persons--find) command.
+* The remaining list of persons is shown after the [`list`](#listing-all-persons--list) command is executed.
+
+</box>
+
+> **Note:** The application ignores any extraneous parameters as we assume they are typos.
+
+You will see this message once you have successfully deleted the shown persons from your list.
+
+<p align="center">
+  <img src="images/success_images/deleteShown_success.png" alt="image of a successful deleteshown" width="750" />
+</p>
+
+<br>
+
+### Listing All Persons : `list`
+
+Displays all the persons in your contact list.
+
+**Format:** `list`
+
+> **Note:** The application ignores any extraneous parameters as we assume they are typos.
+
+You will see this message once you have successfully listed all contacts, with the app showing all existing persons in the contact list:
+
+<p align="center">
+  <img src="images/success_images/list_success.png" alt="image of a successful list" width="750" />
+</p>
+
+<br>
 
 ### Filtering Persons: `find`
 
 Filters your contacts based on specific criteria you set.
 
-Format: `find PREFIX/KEYWORD`
+**Format:** `find PREFIX/KEYWORD`
 
 <box type="info" seamless>
 
@@ -263,77 +324,42 @@ Format: `find PREFIX/KEYWORD`
 </box>
 
 **Example:**
-
 `find n/John` returns `john` and `John Doe` if they exist in your contact book.
 
->You will see this message once you successfully find a person, with the app showing all persons that match your search criteria:
->
->![find success message](images/success_images/find_success.png)
+You will see this message once you have successfully found a person, with the app showing all persons that match your search criteria:
 
+<p align="center">
+  <img src="images/success_images/find_success.png" alt="image of successful find" width="750" />
+</p>
 
 For more details on each parameter, [click here](#command-format-summary).
+
+<br>
 
 ### Copying Contact Details: `copy`
 
 Copies the emails of currently displayed persons into your clipboard.
 
-Format: `copy`
->Note: The application ignores any extraneous parameters as we assume they are typos.
-
->You will see this message once you successfully copy the contact details shown to you, indicating that they have been copied to the clipboard:
->
->![copy success message](images/success_images/copy_success.png)
+**Format:** `copy`
 
 <box type="tip" seamless>
 
 **Tip:** <br>
 
-* Use `list` or `find` to get the list of people you would like to email.
-* The emails are copied into your clipboard such that you may easily broadcast emails
-  to specific groups of people.
+* Use [`list`](#listing-all-persons--list) or [`find`](#filtering-persons--find) to get the list of people you would like to email.
+* The emails are copied into your clipboard such that you may easily broadcast emails to specific groups of people.
 
 </box>
 
-### Deleting a Person : `delete`
+> **Note:** The application ignores any extraneous parameters as we assume they are typos.
 
-Deletes the specified person from your contact list.
+You will see this message once you have successfully copied the contact details shown to you, indicating that they have been copied to the clipboard:
 
-<box type="info" seamless>
+<p align="center">
+  <img src="images/success_images/copy_success.png" alt="image of successful copy" width="750" />
+</p>
 
-**Important:** <br>
-
-The person at the specified `INDEX` will be deleted. The index **must be a positive integer** (1, 2, 3, …)​
-
-</box>
-
-**Examples**:
-1. `list` followed by `delete 2` deletes the 2nd person stored in the app.
-2. `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
-
->You will see this message once you successfully delete a person from your list, indicating the details of the deleted person:
->
->![delete success message](images/success_images/delete_success.png)
-
-
-### Deleting filtered persons : `deleteshown`
-
-Deletes the current filtered list of persons. Requires a `find` command to be run first.
-
-Format: `deleteshown`
->You will see this message once you successfully delete the shown persons from your list.
->
->![deleteShown success message](images/success_images/deleteShown_success.png)
->Note: The application ignores any extraneous parameters as we assume they are typos.
-
-<box type="info" seamless>
-
-**Information:**
-
-* Deletes all persons in the current filtered list of persons.
-* The list of persons is filtered using the most recent `find` command.
-* The remaining list of persons is shown after the `find` command is executed.
-
-</box>
+<br>
 
 ### Adding an Exam : `addExam`
 
