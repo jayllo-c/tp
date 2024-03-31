@@ -33,6 +33,10 @@ public class ExamListPanel extends UiPart<Region> {
         this.selectedExam = selectedExam;
     }
 
+    public void update() {
+        examListView.refresh();
+    }
+
     /**
      * Custom {@code ListCell} that displays the graphics of a {@code Exam} using a {@code ExamCard}.
      */

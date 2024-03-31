@@ -34,6 +34,10 @@ public class PersonListPanel extends UiPart<Region> {
         this.selectedExam = selectedExam;
     }
 
+    public void update() {
+        personListView.refresh();
+    }
+
     /**
      * Custom {@code ListCell} that displays the graphics of a {@code Person} using a {@code PersonCard}.
      */

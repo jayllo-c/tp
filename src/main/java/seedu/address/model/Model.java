@@ -80,6 +80,13 @@ public interface Model {
     void setPerson(Person target, Person editedPerson);
 
     /**
+     * Returns a read-only observable list of persons with the given email, if any.
+     * @param email The email to get the person by.
+     * @return A read-only observable list of persons with the given email.
+     */
+    ObservableList<Person> getPersonByEmail(String email);
+
+    /**
      * Adds an exam score to the given person {@code target},
      * maintains immutability. A new person is set into the list with the exam score added
      * @param target The person to add the exam score to.
@@ -138,6 +145,18 @@ public interface Model {
      */
     ObservableValue<Exam> getSelectedExam();
 
+    /**
+     * Returns the exam with the given name.
+     * @param examName The name of the exam to get.
+     * @return The exam with the given name.
+     */
+    ObservableList<Exam> getExamByName(String examName);
+
     /** Returns an unmodifiable view of the filtered exam list */
     ObservableList<Exam> getExamList();
+
+    /**
+     * Returns the exam score statistics for the given exam.
+     */
+    ScoreStatistics getExamScoreStatistics(Exam exam);
 }

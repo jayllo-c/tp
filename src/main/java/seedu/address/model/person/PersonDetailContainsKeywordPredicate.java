@@ -54,9 +54,9 @@ public class PersonDetailContainsKeywordPredicate implements Predicate<Person> {
         } else if (PREFIX_MATRIC_NUMBER.equals(prefix)) {
             return StringUtil.containsSubstringIgnoreCase(person.getMatric().matricNumber, keyword);
         } else if (PREFIX_REFLECTION.equals(prefix)) {
-            return StringUtil.containsSubstringIgnoreCase(person.getReflection().reflection, keyword);
+            return StringUtil.equalsIgnoreCase(person.getReflection().reflection, keyword);
         } else if (PREFIX_STUDIO.equals(prefix)) {
-            return StringUtil.containsSubstringIgnoreCase(person.getStudio().studio, keyword);
+            return StringUtil.equalsIgnoreCase(person.getStudio().studio, keyword);
         } else {
             // Code should not reach here
             return false;

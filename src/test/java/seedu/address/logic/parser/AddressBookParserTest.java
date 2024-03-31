@@ -18,10 +18,12 @@ import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.CopyCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DeleteExamCommand;
+import seedu.address.logic.commands.DeleteScoreCommand;
 import seedu.address.logic.commands.DeleteShownCommand;
 import seedu.address.logic.commands.DeselectExamCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
+import seedu.address.logic.commands.EditScoreCommand;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.FindCommand;
@@ -33,6 +35,7 @@ import seedu.address.logic.commands.SelectExamCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.PersonDetailContainsKeywordPredicate;
+import seedu.address.model.person.Score;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.PersonUtil;
@@ -71,11 +74,19 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_editScore() throws Exception {
+        String prefix = "s/";
+        Score score = new Score(17);
+        EditScoreCommand command = (EditScoreCommand) parser.parseCommand(EditScoreCommand.COMMAND_WORD + " "
+                + INDEX_FIRST_PERSON.getOneBased() + " " + prefix + score.getScore());
+        assertEquals(new EditScoreCommand(INDEX_FIRST_PERSON, score), command);
+    }
+
+    @Test
     public void parseCommand_exit() throws Exception {
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD) instanceof ExitCommand);
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD + " 3") instanceof ExitCommand);
     }
-
 
     @Test
     public void parseCommand_find() throws Exception {
@@ -143,6 +154,13 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_deleteExam() throws Exception {
         assertTrue(parser.parseCommand("deleteExam 1") instanceof DeleteExamCommand);
+    }
+
+    @Test
+    public void parseCommand_deleteScore() throws Exception {
+        DeleteScoreCommand command = (DeleteScoreCommand) parser.parseCommand(
+                DeleteScoreCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
+        assertEquals(new DeleteScoreCommand(INDEX_FIRST_PERSON), command);
     }
 
     @Test

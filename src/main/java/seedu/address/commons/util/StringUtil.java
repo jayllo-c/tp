@@ -60,6 +60,28 @@ public class StringUtil {
     }
 
     /**
+     * Returns true if the {@code sentence} is equal to the {@code word}.
+     *  Ignores case.
+     *  <br>examples:<pre>
+     *      equalsIgnoreCase("ABc def", "abc def") == true
+     *      equalsIgnoreCase("ABc def", "DEF") == false
+     *      equalsIgnoreCase("ABc def", "ABc de") == false
+     *      </pre>
+     * @param sentence cannot be null
+     * @param word cannot be null
+     * @return true if the {@code sentence} is equal to the {@code word}
+     */
+    public static boolean equalsIgnoreCase(String sentence, String word) {
+        requireNonNull(sentence);
+        requireNonNull(word);
+
+        String preppedString = word.trim();
+        checkArgument(!preppedString.isEmpty(), "Word parameter cannot be empty");
+
+        return sentence.toLowerCase().equals(preppedString.toLowerCase());
+    }
+
+    /**
      * Returns a detailed message of the t, including the stack trace.
      */
     public static String getDetails(Throwable t) {

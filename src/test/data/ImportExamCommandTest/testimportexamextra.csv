@@ -1,4 +1,6 @@
-email,Midterm,Final
-alexyeoh@example.com,50,20
-epeope@example.com,20,20
-toomanymarks@eg.com,120,120
+email,Midterm,NonExistent
+alice@example.com,89,100
+johnd@example.com,1200,2
+non@example.com,0,0
+
+
