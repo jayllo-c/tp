@@ -106,7 +106,7 @@ public class PersonCard extends UiPart<Region> {
         if (selectedExamValue != null) {
             Score score = person.getScores().get(selectedExamValue);
             if (score != null) {
-                examScore.getChildren().add(new Label("Score: \n" + String.valueOf(score.getScore())));
+                examScore.getChildren().add(new Label("Score: \n" + score.toString()));
             }
         }
     }

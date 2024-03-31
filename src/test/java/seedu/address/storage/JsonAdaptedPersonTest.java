@@ -43,8 +43,8 @@ public class JsonAdaptedPersonTest {
     private static final String VALID_STUDIO = "S1";
 
     private static final String VALID_EXAM_NAME = "Midterm";
-    private static final int VALID_EXAM_MAX_SCORE = 100;
-    private static final int VALID_EXAM_SCORE = 70;
+    private static final String VALID_EXAM_MAX_SCORE = "100";
+    private static final String VALID_EXAM_SCORE = "70";
 
     private static final List<JsonAdaptedExamScore> EMPTY_SCORES = new ArrayList<>();
     private static final List<JsonAdaptedExamScore> VALID_SCORES = new ArrayList<>(List.of(
@@ -177,7 +177,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_invalidScores_throwsIllegalValueException() {
         List<JsonAdaptedExamScore> invalidScores = new ArrayList<>(VALID_SCORES);
-        invalidScores.add(new JsonAdaptedExamScore(VALID_EXAM_NAME, VALID_EXAM_MAX_SCORE, -1));
+        invalidScores.add(new JsonAdaptedExamScore(VALID_EXAM_NAME, VALID_EXAM_MAX_SCORE, "-23.2"));
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
                 VALID_TAGS, VALID_MATRIC, VALID_REFLECTION, VALID_STUDIO, invalidScores);
         assertThrows(IllegalValueException.class, person::toModelType);
