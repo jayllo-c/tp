@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
@@ -41,7 +42,7 @@ public class ImportExamScoresCommandTest {
         String expectedMessage = String.format(ImportExamScoresCommand.MESSAGE_SUCCESS, filePath);
         importExamScoresCommand = new ImportExamScoresCommand(filePath);
 
-        assertCommandSuccess(importExamScoresCommand, model, expectedMessage, model);
+        assertCommandFailure(importExamScoresCommand, model, ImportExamScoresCommand.ERROR_EMAIL_FIRST_VALUE);
     }
 
     @Test
@@ -110,6 +111,7 @@ public class ImportExamScoresCommandTest {
                 "Midterm: " + ImportExamScoresCommand.MESSAGE_DUPLICATE_EXAM);
         assertCommandSuccess(importExamScoresCommand, model, expectedError, model);
     }
+
 
     private String buildErrorReport(String filePath, String... errors) {
         StringBuilder errorReport = new StringBuilder();

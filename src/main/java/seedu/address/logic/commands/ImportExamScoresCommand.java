@@ -26,7 +26,6 @@ public class ImportExamScoresCommand extends Command {
             + " Must be an absolute CSV file path\n"
             + "[" + PREFIX_IMPORT + "FILEPATH]\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_IMPORT + "C:usr/lib/text.csv";
-    public static final String MESSAGE_ERROR_READING_FILE = "Error reading file: ";
     public static final String MESSAGE_SCORE_NOT_NUMBER = "Score for %s is not a number";
     public static final String MESSAGE_PERSON_DOES_NOT_EXIST = "Person does not exist";
     public static final String MESSAGE_SUCCESS = "Imported exams from: %s";
@@ -37,6 +36,8 @@ public class ImportExamScoresCommand extends Command {
     public static final String MESSAGE_EXAM_DOES_NOT_EXIST = "Exam does not exist";
     public static final String MESSAGE_GRADE_TOO_HIGH = "Grade for %s exceeds maximum score";
     public static final String HEADER_EMAIL = "email";
+    public static final String ERROR_EMAIL_FIRST_VALUE =
+            "Please ensure that the email column is the first column in the CSV file.";
     private StringBuilder errorReport;
     private Path filepath;
 
@@ -191,6 +192,9 @@ public class ImportExamScoresCommand extends Command {
         requireNonNull(model);
 
         List<String[]> lst = CsvUtil.readAllLinesForImportExamScores(filepath);
+        if (!isEmailFirstValue(lst)) {
+            throw new CommandException(ERROR_EMAIL_FIRST_VALUE);
+        }
         reverse(lst);
         HashMap<String, HashMap<String, Double>> headers = createExamsMapping(lst);
 
@@ -200,7 +204,6 @@ public class ImportExamScoresCommand extends Command {
         return new CommandResult(
                 String.format(MESSAGE_SUCCESS, filepath.toString()) + generateErrorReport());
     }
-
 
     // Trivial methods
 
@@ -269,6 +272,10 @@ public class ImportExamScoresCommand extends Command {
         for (int j = 1; j < row.length; j++) {
             reversedRow[j] = row[row.length - j];
         }
+    }
+
+    private boolean isEmailFirstValue(List<String[]> lst) {
+        return lst.size() > 0 && lst.get(0).length > 0 && lst.get(0)[0].equals(HEADER_EMAIL);
     }
 
 }
