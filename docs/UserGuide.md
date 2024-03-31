@@ -1,7 +1,6 @@
 ---
   layout: default.md
   title: "User Guide"
-  pageNav: 3
 ---
 
 # Avengers Assemble User Guide
@@ -548,7 +547,7 @@ For more details on each parameter, [click here](#command-parameter-summary).
 
 <br>
 
-<div id="deleteexam></div>
+<div id="deleteexam"></div>
 
 ### Deleting an Exam : `deleteExam`
 
