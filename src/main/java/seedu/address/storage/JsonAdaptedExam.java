@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.logic.parser.ParserUtil;
 import seedu.address.model.exam.Exam;
-import seedu.address.model.person.Score;
 
 class JsonAdaptedExam {
     private final String name;
@@ -42,9 +42,6 @@ class JsonAdaptedExam {
      * @throws IllegalValueException if there were any data constraints violated in the adapted tag.
      */
     public Exam toModelType() throws IllegalValueException {
-        if (!Exam.isValidName(name)) {
-            throw new IllegalValueException(Exam.MESSAGE_CONSTRAINTS);
-        }
-        return new Exam(name, new Score(Integer.parseInt(maxScore)));
+        return new Exam(ParserUtil.parseExamName(name), ParserUtil.parseScore(maxScore));
     }
 }

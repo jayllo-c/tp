@@ -12,19 +12,27 @@ public class ExamTest {
 
     @Test
     public void isValidName() {
-        assertTrue(Exam.isValidName("Midterm")); // alphanumeric characters
-        assertTrue(Exam.isValidName("Midterm Exam")); // alphanumeric characters with spaces
-        assertFalse(Exam.isValidName("")); // empty string
-        assertFalse(Exam.isValidName(" ")); // spaces only
-        assertFalse(Exam.isValidName("^")); // contains non-alphanumeric characters
-        assertFalse(Exam.isValidName("Midterm*")); // contains non-alphanumeric characters
+        assertTrue(Exam.isValidExamName("Midterm")); // alphanumeric characters
+        assertTrue(Exam.isValidExamName("Midterm Exam")); // alphanumeric characters with spaces
+        assertFalse(Exam.isValidExamName("")); // empty string
+        assertFalse(Exam.isValidExamName(" ")); // spaces only
+        assertFalse(Exam.isValidExamName("^")); // contains non-alphanumeric characters
+        assertFalse(Exam.isValidExamName("Midterm*")); // contains non-alphanumeric characters
     }
 
     @Test
-    public void isValidExamScore() {
-        assertTrue(Exam.isValidExamScore(1)); // positive score
-        assertFalse(Exam.isValidExamScore(0)); // zero score
-        assertFalse(Exam.isValidExamScore(-1)); // negative score
+    public void isValidExamScoreString() {
+        assertTrue(Exam.isValidExamScoreString("1")); // positive score
+        assertFalse(Exam.isValidExamScoreString("0")); // zero score
+        assertFalse(Exam.isValidExamScoreString("-1")); // negative score
+        assertFalse(Exam.isValidExamScoreString("")); // empty string
+        assertTrue(Exam.isValidExamScoreString("1.2")); // one decimal place
+        assertTrue(Exam.isValidExamScoreString("1.23")); // two decimal places
+        assertTrue(Exam.isValidExamScoreString("0.1")); // one decimal place w zero
+        assertFalse(Exam.isValidExamScoreString("1.")); // no decimal places but with decimal point
+        assertFalse(Exam.isValidExamScoreString("1.234")); // three decimal places
+        assertFalse(Exam.isValidExamScoreString("1.2345")); // four decimal places
+
     }
 
     @Test

@@ -19,12 +19,27 @@ public class ScoreTest {
     public void isValidScore() {
         // negative score
         assertFalse(Score.isValidScore(-1));
-
         // zero score
         assertTrue(Score.isValidScore(0));
-
         // positive score
         assertTrue(Score.isValidScore(1));
+        // zero with 1 decimal place
+        assertTrue(Score.isValidScore(0.1));
+        // zero with 2 decimal places
+        assertTrue(Score.isValidScore(0.01));
+        // zero with 3 decimal places
+        assertFalse(Score.isValidScore(0.001));
+        // negative with 1 decimal place
+        assertFalse(Score.isValidScore(-0.1));
+        // negative with 2 decimal places
+        assertFalse(Score.isValidScore(-0.01));
+        // 1 with 1 decimal place
+        assertTrue(Score.isValidScore(1.1));
+        // 1 with 2 decimal places
+        assertTrue(Score.isValidScore(1.01));
+        // 1 with 3 decimal places
+        assertFalse(Score.isValidScore(1.001));
+
     }
 
     @Test
@@ -36,9 +51,9 @@ public class ScoreTest {
 
     @Test
     public void testToString() {
-        int scoreValue = 100;
+        double scoreValue = 100;
         Score score = new Score(scoreValue);
-        assertEquals(String.valueOf(scoreValue), score.toString());
+        assertEquals("100", score.toString());
     }
 
     @Test
@@ -65,8 +80,8 @@ public class ScoreTest {
 
     @Test
     public void testHashCode() {
-        int scoreValue = 100;
+        double scoreValue = 100.25;
         Score score = new Score(scoreValue);
-        assertEquals(Integer.hashCode(scoreValue), score.hashCode());
+        assertEquals(Double.hashCode(scoreValue), score.hashCode());
     }
 }
