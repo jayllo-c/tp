@@ -138,12 +138,13 @@ Imports all persons and their details from a CSV file of your specification.
 **Important:**<br>
 
 * The file path should be **absolute**.
-* This command will only import persons' particulars. To import exam scores, take a look at [importExamScores](#importing-exam-scores-from-a-csv-file--importexam).
+* This command will only import persons' particulars. To import exam scores, take a look at [`importExamScores`](#importing-exam-scores-from-a-csv-file--importexamscores).
 
 </box>
 
-**Example:**
-`import i/C:/Users/alk/Downloads/avengersassemble.csv` imports the data from the CSV file located at `C:/Users/alk/Downloads/avengersassemble.csv`.
+**Example:** `import i/C:/Users/alk/Downloads/avengersassemble.csv` 
+
+imports the data from the CSV file located at `C:/Users/alk/Downloads/avengersassemble.csv`.
 
 You will see this message once you successfully imported the data, with the app showing the details of the imported persons:
 
@@ -361,173 +362,11 @@ You will see this message once you have successfully copied the contact details 
 
 <br>
 
-### Adding an Exam : `addExam`
-
-Adds an exam into your exam list.
-
-Format: `addExam n/NAME s/MAX_SCORE`
-
-<box type="info" seamless>
-
-**Important:** Each exam should have a unique name. AA does not allow for exams with duplicate names to be added
-
-</box>
-
-Example: `addExam n/Midterm s/100`
-
-* Adds an exam with the name of "Midterm" and a max score of "100"
-
->You will see this message once you successfully add an exam, including the details of the exam.
->
->![addExam success message](images/success_images/addExam_success.png)
-
-### Selecting an Exam : `selectExam`
-
-Selects an exam in your exam list.
-
-Format: `selectExam INDEX`
-
-<box type="info" seamless>
-
-**Information:**
-
-* Selects the exam at the specified INDEX.
-* On selection, the exam will become highlighted on the user Interface.
-* Selecting an exam will display all scores of persons associated with that exam.
-
-</box>
-
-Example: `selectExam 1`
-
-* Selects the first exam displayed on the exam list.
-
->You will see this message once you successfully select an exam, including the details of the exam.
->
->![addExam success message](images/success_images/selectExam_success.png)
-
-### Adding an Exam Score : `addScore`
-
-Adds an exam score to a person.
-
-Format: `addScore s/SCORE`
-
-<box type="info" seamless>
-
-**Important: An exam must be selected for this command to work!**
-
-</box>
-
-<box type="info" seamless>
-
-**Information:**
-
-* Adds an exam score to the person at the specific INDEX.
-* The exam score added will correspond to the currently selected exam.
-* The exam score added **cannot** be greater than the max score of the currently selected exam.
-* The exam score will be displayed on the user interface only when the corresponding exam is selected.
-
-</box>
-
-Example: `addScore 1 s/34`
-
-* Adds a score of 34 to the person currently displayed at index 1.
-
-
->You will see this message once you successfully add a score, including the name of the person you added the score for.
->
->![addScore success message](images/success_images/addScore_success.png)
-
-### Editing an Exam Score : `editScore`
-
-Edits a person's exam score.
-
-Format: `editScore INDEX s/SCORE`
-
-<box type="info" seamless>
-
-**Important: An exam must be selected for this command to work!**
-
-</box>
-
-<box type="info" seamless>
-
-**Information:**
-
-* Edits the exam score of the person at the specific INDEX.
-* A person **must** have an exam score for the currently selected exam for this command to work.
-* The exam score edited corresponds to the currently selected exam.
-* The exam score **cannot** be edited to be greater than the max score of the currently selected exam.
-
-</box>
-
-
-Example: `editScore 1 s/43`
-
-* Edits the score of the person currently displayed at index 1 to 43.
-
->You will see this message once you successfully edit a score, including some details of the person you added the score for.
->
->![editScore success message](images/success_images/editScore_success.png)
-
-### Deleting an Exam Score : `deleteScore`
-
-Deletes a person's exam score.
-
-Format: `deleteScore INDEX`
-
-<box type="info" seamless>
-
-**Important: An exam must be selected for this command to work!**
-
-</box>
-
-<box type="info" seamless>
-
-**Information:**
-
-* Deletes the exam score of the person at the specific INDEX.
-* A person **must** have an exam score for the currently selected exam for this command to work.
-* The exam score deleted corresponds to the currently selected exam.
-
-</box>
-
-Example: `deleteScore 1`
-
-* deletes the score of the person currently displayed at index 1.
-
->You will see this message once you successfully delete a score, including some details of the person you added the score for.
->
->![deleteScore success message](images/success_images/deleteScore_success.png)
-
-### Deleting an Exam : `deleteExam`
-
-Removes an exam from your exam list.
-
-Format: `deleteExam INDEX`
-
-<box type="info" seamless>
-
-**Information:**
-
-* Deletes the exam at the specified `INDEX`.
-* When an Exam is deleted, all corresponding records of scores associated with that Exam will also be deleted.
-* If the currently selected exam is deleted, it will be deselected.
-
-</box>
-
-Example: `deleteExam 2`
-
-* Removes the 2nd exam displayed in AA.
-
->You will see this message once you successfully delete an exam, including some details of the exam you are deleting
->
->![deleteExam success message](images/success_images/deleteExam_success.png)
-
 ### Exporting Data to a CSV File : `export`
 
-Exports currently listed persons and their details to a CSV file of your specification.
+Exports currently displayed persons and their details to a CSV file of your specification.
 
-Format: `export`
+**Format:** `export`
 
 > By default, the file will be stored in `addressbookdata/avengersassemble.csv`.
 
@@ -535,69 +374,272 @@ Format: `export`
 
 **Tip:**<br>
 You can specify the groups of contacts you want to export using the [`find`](#filtering-persons--find) or [`list`](#listing-all-persons--list) commands before you use this command.
-</box>
 
-> You will see this message once you successfully export the data:
->
-> ![export success message](images/success_images/export_success.png)
+</box>
 
 <box type="warning" seamless>
 
 **Caution:**<br>
 
 When performing an export, the current information will overwrite any existing CSV files with the same name.
-
 If you want to preserve the exported data, you should rename it or save it in a separate location.
 
 </box>
 
-### Importing Exam Scores from a CSV File : `importExam`
+You will see this message once you have successfully exported the data:
 
-Imports all exam results from a CSV file
+<p align="center">
+  <img src="images/success_images/export_success.png" alt="image of successful export" width="750">
+</p>
 
-Format: `import i/FILEPATH`
+<br>
+
+### Exiting the Program : `exit`
+
+Exits the program. The app will close automatically.
+
+**Format:** `exit`
+
+> **Note:** The application ignores any extraneous parameters as we assume they are typos.
+
+<br>
+
+--------------------------------------------------------------------------------------------------------------------
+
+## Exam Management Features
+
+### Importing Exam Scores from a CSV File : `importExamScores`
+
+Imports all exam results from a CSV file.
+
+**Format:** `importExamScores i/FILEPATH`
 
 <box type="info" seamless>
 
 **Important:**<br>
 
 * The file path should be **absolute**.
-* This command will only import persons' exam scores. To import persons' particulars, take a look at [import](#importing-persons-from-a-csv-file--import)
+* This command will only import persons' exam scores. To import persons' particulars, take a look at [`import`](#importing-persons-from-a-csv-file--import)
 
 </box>
 
-**Example:**
+**Example:**`import i/C:/Users/alk/Downloads/examresults.csv` 
 
-`import i/C:/Users/alk/Downloads/examresults.csv` imports exam results from the CSV file located at `C:/Users/alk/Downloads/examresults.csv`.
+imports exam results from the CSV file located at `C:/Users/alk/Downloads/examresults.csv`.
 
->You will see this message once you successfully import exam results.
->
->![importExam success message](images/success_images/importExam_success.png)
+You will see this message once you have successfully imported the exam results:
+
+<p align="center">
+    <img src="images/success_images/importExam_success.png" alt="image of successful importExamScores" width="750" />
+</p>
+
+<br>
+
+### Adding an Exam : `addExam`
+
+Adds an exam into your exam list.
+
+**Format:** `addExam n/NAME s/MAX_SCORE`
+
+<box type="info" seamless>
+
+**Important:** Each exam should have a unique name. Avengers Assemble does not allow for exams with duplicate names to be added.
+
+</box>
+
+**Example:** `addExam n/Midterm s/100`
+
+Adds an exam with the name "Midterm" and a max score of "100" into your exam list.
+
+You will see this message once you successfully add an exam, including the details of the exam:
+
+<p align="center">
+  <img src="images/success_images/addExam_success.png" alt="image of successful addExam" width="750" />
+</p>
+
+<br>
+
+### Deleting an Exam : `deleteExam`
+
+Removes an exam from your exam list.
+
+**Format:** `deleteExam INDEX`
+
+<box type="info" seamless>
+
+**Information:**
+
+* Deletes the exam at the specified `INDEX`.
+* When an exam is deleted, all corresponding records of scores associated with that exam will also be deleted.
+* If the currently selected exam is deleted, it will be deselected.
+
+</box>
+
+**Example:** `deleteExam 2`
+
+Removes the second exam displayed in Avengers Assemble.
+
+You will see this message once you have successfully deleted an exam, including some details of the exam you are deleting:
+
+<p align="center">
+  <img src="images/success_images/deleteExam_success.png" alt="image of successful deleteExam" width="750" />
+</p>
+
+<br>
+
+### Selecting an Exam : `selectExam`
+
+Selects an exam in your exam list.
+
+**Format:** `selectExam INDEX`
+
+<box type="info" seamless>
+
+**Information:**
+
+* Selects the exam at the specified `INDEX`.
+* On selection, the exam will become highlighted on the user interface.
+* Selecting an exam will display all scores of persons associated with that exam.
+
+</box>
+
+**Example:** `selectExam 1`
+
+Selects the first exam displayed on the exam list.
+
+You will see this message once you have successfully selected an exam, including the details of the exam:
+
+<p align="center">
+    <img src="images/success_images/selectExam_success.png" alt="image of successful selectExam" width="750" />
+</p>
+
+<br>
+
+### Adding an Exam Score : `addScore`
+
+Adds an exam score to a person at the specified index.
+
+**Format:** `addScore INDEX s/SCORE`
+
+<box type="info" seamless>
+
+**Important: An exam must be selected for this command to work! You can use the [`selectExam`](#selecting-an-exam--selectexam) command to do so.**
+
+</box>
+
+<box type="info" seamless>
+
+**Information:**
+
+* Adds an exam score to the person at the specific `INDEX`.
+* The exam score added will correspond to the currently selected exam.
+* The exam score added **cannot** be greater than the max score of the currently selected exam.
+* The exam score will be displayed on the user interface only when the corresponding exam is selected.
+
+</box>
+
+**Example:** `addScore 1 s/34`
+
+Adds a score of 34 to the person currently displayed at index 1.
+
+You will see this message once you successfully add a score, including the name of the person you added the score for:
+
+<p align="center">
+    <img src="images/success_images/addScore_success.png" alt="image of successful addScore" width="750" />
+</p>
+
+<br>
+
+### Editing an Exam Score : `editScore`
+
+Edits a specified person's exam score.
+
+**Format:** `editScore INDEX s/SCORE`
+
+<box type="info" seamless>
+
+**Important: An exam must be selected for this command to work! You can use the [`selectExam`](#selecting-an-exam--selectexam) command to do so.**
+
+</box>
+
+<box type="info" seamless>
+
+**Information:**
+
+* Edits the exam score of the person at the specific `INDEX`.
+* A person **must** have an exam score for the currently selected exam for this command to work.
+* The exam score edited corresponds to the currently selected exam.
+* The exam score **cannot** be edited to be greater than the max score of the currently selected exam.
+
+</box>
+
+**Example:** `editScore 1 s/43`
+
+Edits the score of the person currently displayed at index 1 to 43.
+
+You will see this message once you successfully edit a score, including some details of the person you added the score for:
+
+<p align="center">
+    <img src="images/success_images/editScore_success.png" alt="image of successful editScore" width="750" />
+</p>
+
+<br>
+
+### Deleting an Exam Score : `deleteScore`
+
+Deletes a specified person's exam score.
+
+**Format:** `deleteScore INDEX`
+
+<box type="info" seamless>
+
+**Important: An exam must be selected for this command to work! You can use the [`selectExam`](#selecting-an-exam--selectexam) command to do so.**
+
+</box>
+
+<box type="info" seamless>
+
+**Information:**
+
+* Deletes the exam score of the person at the specific `INDEX`.
+* A person **must** have an exam score for the currently selected exam for this command to work.
+* The exam score deleted corresponds to the currently selected exam.
+
+</box>
+
+**Example:** `deleteScore 1`
+
+deletes the score of the person currently displayed at index 1.
+
+You will see this message once you have successfully deleted a score, including some details of the person you added the score for:
+
+<p align="center">
+    <img src="images/success_images/deleteScore_success.png" alt="image of successful deleteScore" width="750" />
+</p>
+
+<br>
 
 ### Mean and Median of Exam Scores
 
-View the Mean and Median of the scores of the exam currently selected
+You can view the mean and median of the scores of the exam currently selected at the bottom right of the application window.
 
 <box type="info" seamless>
 
 **Information:**<br>
 
-* When an exam is selected, the mean and median will automatically show up on the right of the footer of the application
-* The mean and median is calculated based on the currently filtered list of Persons
+* When an exam is selected, the mean and median will automatically show up on the right of the footer of the application.
+* The mean and median is calculated based on the currently filtered list of persons.
 * If a person has no score for the selected exam, he is completely excluded from the calculation of mean and median.
 
 </box>
 
->When an exam is selected, the statistics will show on the bottom right of the application
->
->![mean and median](images/success_images/mean_median_success.png)
+When an exam is selected, the statistics will show on the bottom right of the application:
 
-### Exiting the Program : `exit`
+<p align="center">
+    <img src="images/success_images/mean_median_success.png" alt="image of application window indicating mean and median scores" width="750" />
+</p>
 
-Exits the program. The app will close automatically.
-
-Format: `exit`
->Note: The application ignores any extraneous parameters as we assume they are typos.
+<br>
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -625,11 +667,22 @@ Furthermore, certain edits can cause the Avengers Assemble application to behave
 **Q**: How do I transfer my data to another computer?<br>
 **A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AA home folder.
 
+<br>
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## Known Issues
 
-1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
+### Using Multiple Screens
+
+If you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
+
+### Importing on MacOS
+
+On MacOS computers, due to privacy settings, the application may encounter difficulties accessing and importing CSV files from various locations.
+If this issue occurs, transfer the CSV file you want to import to the same folder where the application's JAR file is located, then try again.
+
+<br>
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -650,8 +703,11 @@ Below is a summary of the commands available in Avengers Assemble. Some examples
 | **Export to CSV** | `export`                                                                                                                                                                                                                                 |
 | **Import**        | `import i/FILEPATH` <br><br>• e.g. `import i/C:/Users/alk/Downloads/avengersassemble.csv`                                                                                                                                                |
 
+<br>
 
-## Command Format Summary
+--------------------------------------------------------------------------------------------------------------------
+
+## Command Parameter Summary
 
 Some commands require you to include parameters. These parameters are identified by prefixes. Here are a list of valid prefixes and what they each refer to.
 
@@ -680,10 +736,9 @@ Some commands require you to include parameters. These parameters are identified
 
 **Caution:** </br>
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
-* Note the same prefix may be used for different purposes such as in the case of `/s` for studios and for scores. In these cases, we ensure no command would have to use the same prefix for multiple purposes.
+* Note the same prefix may be used for different purposes such as in the case of `s/` for studios and for scores. In these cases, we ensure no command would have to use the same prefix for multiple purposes.
 
 </box>
-
 
 | Prefix | What it refers to          | Constraints                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 |--------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -691,9 +746,9 @@ Some commands require you to include parameters. These parameters are identified
 | p/     | Phone Number               | Should only contain numbers, and it should be at least 3 digits long.                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | e/     | Email                      | **Format:** local-part@domain<br/> **Constraints for local part:**<br/> • Should only contain alphanumeric characters, and the characters `+`, `_`, `.` and `-`<br/> • Should not start with special characters<br/> **Constraints for domain:**<br/> • Made up of domain labels followed by periods<br/> • Must end with a domain label of at least 2 characters long<br/> • Should start and end with alphanumeric characters<br/> • Domain label should consists of alphanumeric characters separated only by hyphens, if any |
 | a/     | Address                    | Can take any values.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| i/     | Path of CSV file to import | Should be the absolute file path of the CSV file.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| i/     | Path of CSV file to Import | Should be the absolute file path of the CSV file.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | [m/]   | Matriculation ID           | The first letter must be an uppercase 'A', followed by 7 numbers, and end with an uppercase letter.                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | [r/]   | Recitation Group           | The first letter must be an uppercase 'R', followed by any number.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | [s/]   | Studio Group               | The first letter must be an uppercase 'S', followed by any number.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| [s/]   | Score                      | For Exam Max Scores: the input must be a positive integer <br/> For Persons' Exam Scores: the input must be an integer greater than or equal to zero                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| [s/]   | Score                      | For Exam Max Scores: the input must be a positive integer <br/> For Persons' Exam Scores: the input must be an integer greater than or equal to zero                                                                                                                                                                                                                                                                                                                                                                             |
 | [t/]…  | Tags                       | Should be alphanumeric, and should not contain spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
