@@ -306,10 +306,10 @@ For the `edit` command, the parser will add or update the `Matric` field of the 
 
 ### Automatic Tagging of Persons
 
-Tags are automatically added during the parsing of the `add` command. The tags are based on the `Matric`, `Studio` and `Reflection` fields of the person being added.
+A `student` tag is automatically added during the parsing of the `add` command based on the presence of the `Matric` field of the person being added.
 
 #### Implementation Details
-During the parsing of the `add` command, the parser will check if the `Matric`, `Studio` or `Reflection` fields match a pattern that corresponds to them being a student, teaching assistant (TA), or course instructor.
+During the parsing of the `add` command, the parser will check if the `Matric` field is present, meaning they are a student.
 The parser also generates `Tag` objects based on the user input. The existing tags are updated with the new automatically generated tag.
 
 The activity diagram is as follows:
