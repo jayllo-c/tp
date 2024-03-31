@@ -1,7 +1,9 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -9,6 +11,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -110,6 +113,36 @@ public class ImportExamScoresCommandTest {
         String expectedError = buildErrorReport(filePath.toString(),
                 "Midterm: " + ImportExamScoresCommand.MESSAGE_DUPLICATE_EXAM);
         assertCommandSuccess(importExamScoresCommand, model, expectedError, model);
+    }
+
+    @Test
+    public void testIsEmailFirstValue_validEmailFirstValue_success() {
+        ImportExamScoresCommand importExamScoresCommand = new ImportExamScoresCommand(Paths.get(PATH_VALID));
+
+        String[][] valid = {{"email"}};
+        List<String[]> lst = List.of(valid);
+
+        assertTrue(importExamScoresCommand.isEmailFirstValue(lst));
+    }
+
+    @Test
+    public void testIsEmailFirstValue_listSizeZero_failure() {
+        ImportExamScoresCommand importExamScoresCommand = new ImportExamScoresCommand(Paths.get(PATH_VALID));
+
+        String[][] invalid = {};
+        List<String[]> lst = List.of(invalid);
+
+        assertFalse(importExamScoresCommand.isEmailFirstValue(lst));
+    }
+
+    @Test
+    public void testIsEmailFirstValue_stringArraySizeZero_failure() {
+        ImportExamScoresCommand importExamScoresCommand = new ImportExamScoresCommand(Paths.get(PATH_VALID));
+
+        String[][] invalid = {{}};
+        List<String[]> lst = List.of(invalid);
+
+        assertFalse(importExamScoresCommand.isEmailFirstValue(lst));
     }
 
 

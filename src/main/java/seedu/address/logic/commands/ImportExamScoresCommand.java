@@ -274,7 +274,7 @@ public class ImportExamScoresCommand extends Command {
         }
     }
 
-    private boolean isEmailFirstValue(List<String[]> lst) {
+    boolean isEmailFirstValue(List<String[]> lst) {
         return lst.size() > 0 && lst.get(0).length > 0 && lst.get(0)[0].equals(HEADER_EMAIL);
     }
 
