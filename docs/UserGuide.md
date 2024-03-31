@@ -28,7 +28,7 @@ By following this guide, you will be able to gain a thorough understanding of Av
 
 Click below to navigate the user guide:
 
-<div id="table-of-contents">
+<div id="table-of-contents" style="line-height: 1.75">
 <ol>
     <li><a href="#quick-start">Quick Start</a></li>
     <li><a href="#contact-management-features">Contact Management Features</a></li>
