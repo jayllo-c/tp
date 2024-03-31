@@ -87,7 +87,7 @@ Click below to navigate the user guide:
    You should see this when the app starts up. Note how it contains some sample data.<br>
 
 <p align="center">
-    <img src="images/Ui.png" alt="image of avengers assemble's ui" />
+    <img src="images/Ui.png" alt="image of avengers assemble's ui" width="750"/>
 </p>
 
 1. Refer to the [features](#contact-management-features) below for details of each command.
