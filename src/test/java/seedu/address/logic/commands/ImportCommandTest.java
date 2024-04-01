@@ -1,6 +1,14 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MATRIC_NUMBER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REFLECTION;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDIO;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.nio.file.Path;
@@ -43,8 +51,10 @@ public class ImportCommandTest {
         ImportCommand importCommand = new ImportCommand(Paths.get("src/test/data/ImportCommandTest/valid.csv"));
         String actual = importCommand.convertToAddCommandInput(personData);
         String expected =
-                " n/Alice Pauline p/94351253 "
-                        + "e/alice@example.com a/123, Jurong West Ave 6, #08-111 m/A1111111A r/R1 s/S1 t/friends  ";
+                " " + PREFIX_NAME + "Alice Pauline " + PREFIX_PHONE + "94351253 "
+                        + PREFIX_EMAIL + "alice@example.com " + PREFIX_ADDRESS
+                        + "123, Jurong West Ave 6, #08-111 " + PREFIX_MATRIC_NUMBER + "A1111111A "
+                        + PREFIX_REFLECTION + "R1 " + PREFIX_STUDIO + "S1 " + PREFIX_TAG + "friends  ";
         assertEquals(expected, actual);
     }
     @Test
