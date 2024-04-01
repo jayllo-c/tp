@@ -5,7 +5,6 @@ import static seedu.address.testutil.Assert.assertThrows;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -29,26 +28,6 @@ public class ImportCommandTest {
                 + "Unsuccessful imports: 0\n";
         String actual = commandResult.getFeedbackToUser();
         assertEquals(expected , actual);
-    }
-    @Test
-    public void convertToAddCommandInput_success() {
-        Model model = new ModelManager(new AddressBook(), new UserPrefs());
-        Map<String, String> personData = Map.of(
-                "studio", "S1",
-                "matric", "A1111111A",
-                "address", "123, Jurong West Ave 6, #08-111",
-                "reflection", "R1",
-                "phone", "94351253",
-                "name", "Alice Pauline",
-                "email", "alice@example.com",
-                "tags", "friends"
-                );
-        ImportCommand importCommand = new ImportCommand(Paths.get("src/test/data/ImportCommandTest/valid.csv"));
-        String actual = importCommand.convertToAddCommandInput(personData);
-        String expected =
-                " n/Alice Pauline p/94351253 "
-                        + "e/alice@example.com a/123, Jurong West Ave 6, #08-111 m/A1111111A r/R1 s/S1 t/friends  ";
-        assertEquals(expected, actual);
     }
     @Test
     public void execute_invalidPath_failure() {

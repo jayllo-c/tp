@@ -546,7 +546,7 @@ For more details on each parameter, [click here](#command-parameter-summary).
 
 <br>
 
-<div id="deleteexam></div>
+<div id="deleteexam"></div>
 
 ### Deleting an Exam : `deleteExam`
 

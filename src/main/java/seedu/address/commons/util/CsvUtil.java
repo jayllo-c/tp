@@ -9,9 +9,13 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -40,53 +44,90 @@ public class CsvUtil {
      * where each map represents a row of person's data in the csv file.
      * @throws DataLoadingException
      */
-    public static List<Map<String, String>> readCsvFile(Path filePath, String[] compulsoryParameters)
+    public static List<Map<String, String>> readCsvFile(
+            Path filePath, HashSet<String> compulsoryParameters, HashSet<String> optionalParameters)
             throws DataLoadingException {
+        List<Map<String, String>> data = null;
         try {
             CSVReader reader = new CSVReaderBuilder(new FileReader(filePath.toString())).build();
+            List<String> headers = List.of(reader.readNext()); // first line should be headers
+            Queue<Integer> columnsToSkip = coloumnsToSkip(headers, compulsoryParameters, optionalParameters);
             List<String[]> rows = reader.readAll();
-            return parseData(rows, compulsoryParameters);
+            data = parseData(rows, headers, columnsToSkip);
+            return data;
         } catch (IOException | CsvException e) {
             throw new DataLoadingException(e);
         }
     }
 
     /**
-     * Parses the data from the CSV file into a list of maps. Each map represents a person's data.
-     * @param rows
+     * Returns a list of columns to skip in the CSV file. The columns to skip are the headers that are not in
+     * compulsoryParameters or optionalParameters.
+     * @param headers
      * @param compulsoryParameters
+     * @param optionalParameters
+     * @return coloumnsToSkip
+     * @throws DataLoadingException
+     */
+    public static Queue<Integer> coloumnsToSkip(
+            List<String> headers, HashSet<String> compulsoryParameters, HashSet<String> optionalParameters)
+            throws DataLoadingException {
+        // first check if the compulsory parameters are present in the header
+        checkCompulsoryParameters(compulsoryParameters, headers);
+        return IntStream.range(0, headers.size())
+                .filter(i ->
+                        !compulsoryParameters.contains(headers.get(i)) && !optionalParameters.contains(headers.get(i)))
+                .boxed().collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
+     * Parses the data from the CSV file.
+     * @param rows
+     * @param headers
+     * @param columnsToSkip
      * @return
      */
-    public static List<Map<String, String>> parseData(List<String[]> rows, String[] compulsoryParameters)
-            throws DataLoadingException {
-
+    public static List<Map<String, String>> parseData(
+            List<String[]> rows, List<String> headers, Queue<Integer> columnsToSkip) throws DataLoadingException {
         List<Map<String, String>> data = new ArrayList<>();
-        String[] header = rows.get(0);
-        List<String> headerList = List.of(header);
-        checkCompulsoryParameters(compulsoryParameters, header);
-        for (int i = 1; i < rows.size(); i++) {
+        StringBuilder errorMsgs = new StringBuilder(); // to store which rows do not have the same size as the header
+        for (int i = 0; i < rows.size(); i++) {
             String[] row = rows.get(i);
             Map<String, String> map = new HashMap<>();
-            for (int j = 0; j < header.length; j++) {
-                map.put(header[j], row[j]);
+            if (row.length != headers.size()) {
+                errorMsgs.append(
+                        String.format("Row %d does not have the same number of values as the number of headers."
+                                + "Given: %d, Expected: %d\n", i, row.length, headers.size()));
+                continue;
+            }
+            for (int j = 0; j < row.length; j++) {
+                if (!columnsToSkip.isEmpty() && columnsToSkip.peek() == j) {
+                    columnsToSkip.remove();
+                    continue;
+                }
+                map.put(headers.get(j), row[j]);
             }
             data.add(map);
         }
+
+        if (!errorMsgs.toString().isEmpty()) {
+            throw new DataLoadingException(errorMsgs.toString());
+        }
+
         return data;
     }
 
     /**
      * Checks if the compulsory parameters are present in the header of the csv file.
      * @param compulsoryParameters
-     * @param header
+     * @param headers
      * @throws DataLoadingException
      */
-    public static void checkCompulsoryParameters(String[] compulsoryParameters, String[] header)
+    public static void checkCompulsoryParameters(HashSet<String> compulsoryParameters, List<String> headers)
             throws DataLoadingException {
-        List<String> headerList = List.of(header);
         StringBuilder missingParameters = new StringBuilder();
         for (String compulsoryParameter : compulsoryParameters) {
-            if (!headerList.contains(compulsoryParameter)) {
+            if (!headers.contains(compulsoryParameter)) {
                 missingParameters.append(String.format("Missing compulsory parameter: %s\n", compulsoryParameter));
             }
         }
@@ -132,7 +173,7 @@ public class CsvUtil {
     public CsvSchema buildCsvSchema(JsonNode personsArray, JsonNode examsArray) {
         CsvSchema.Builder csvSchemaBuilder = CsvSchema.builder();
         JsonNode firstObject = personsArray.elements().next();
-        Set<String> addedColumns = new HashSet<>();
+        Set<String> addedColumns = new HashSet<>(); // Should addedColumns be Hashset<String>?
 
         firstObject.fieldNames().forEachRemaining(fieldName -> {
             if (!fieldName.equals("examScores")) {

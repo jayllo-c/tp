@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.commons.util.CsvUtil.readCsvFile;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
@@ -13,6 +14,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDIO;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -45,8 +47,10 @@ public class ImportCommand extends Command {
     /**
      * Represents the order of the data that should be parsed into the addCommandParser
      */
-    private final String[] compulsoryParameters = {"name", "phone", "email", "address"};
-    private final String[] header = {"name", "phone", "email", "address", "matric", "reflection", "studio", "tags"};
+    private final HashSet<String> compulsoryParameters =
+            new HashSet<>(List.of(new String[]{"name", "phone", "email", "address"}));
+    private final HashSet<String> optionalParameters = new HashSet<>(
+            List.of(new String[]{"matric", "reflection", "studio", "tags"}));
 
     private String errorMsgs = "";
 
@@ -93,13 +97,15 @@ public class ImportCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         int[] importResults;
+        List<Map<String, String>> personsData = null;
         try {
-            List<Map<String, String>> personsData = readCsvFile(filePath, compulsoryParameters);
+            personsData = readCsvFile(filePath, compulsoryParameters, optionalParameters);
             importResults = addToModel(model, personsData);
         } catch (DataLoadingException e) {
+            importResults = addToModel(model, personsData);
             throw new CommandException(
                     String.format(MESSAGE_DATA_LOAD_ERROR, filePath)
-                    + e.getMessage());
+                            + e.getMessage());
         }
 
         return new CommandResult(generateReport(importResults));
@@ -111,7 +117,8 @@ public class ImportCommand extends Command {
      * @param personsData
      * @throws CommandException
      */
-    public int[] addToModel(Model model, List<Map<String, String>> personsData) throws CommandException {
+    public int[] addToModel(Model model, List<Map<String, String>> personsData) {
+        requireAllNonNull(model, personsData);
         int successfulImports = 0;
         int unsuccessfulImports = 0;
         for (Map<String, String> personData : personsData) {
@@ -133,11 +140,14 @@ public class ImportCommand extends Command {
      * @param personData
      * @return
      */
-    public String convertToAddCommandInput(Map<String, String> personData) {
+    private String convertToAddCommandInput(Map<String, String> personData) {
+        // Changed this method to private to prevent malicious use
         StringBuilder sb = new StringBuilder();
         sb.append(" ");
-        for (String key : header) {
-            if (personData.get(key).isEmpty()) {
+        for (Map.Entry<String, String> entry : personData.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (value.isEmpty()) {
                 // skip empty values
                 continue;
             }
@@ -159,7 +169,7 @@ public class ImportCommand extends Command {
         return sb.toString();
     }
 
-    public AddCommand parseAddCommandInput(String input) throws ParseException {
+    private AddCommand parseAddCommandInput(String input) throws ParseException {
         return addCommandParser.parse(input);
     }
 
