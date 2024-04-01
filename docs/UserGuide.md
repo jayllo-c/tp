@@ -1,7 +1,6 @@
 ---
   layout: default.md
   title: "User Guide"
-  pageNav: 3
 ---
 
 # Avengers Assemble User Guide
@@ -57,7 +56,7 @@ Click below to navigate the user guide:
         <li><a href="#deletescore">Deleting an Exam Score: <code>deleteScore</code></a></li>
         <li><a href="#mean-and-median">Mean and Median of Exam Scores</a></li>
     </ul>
-    <li><a href="#additional-information">Addtional Information</a></li>
+    <li><a href="#additional-information">Additional Information</a></li>
     <li><a href="#faq">FAQ</a></li>
     <li><a href="known-issues">Known Issues</a></li>
     <li><a href="command-summary">Command Summary</a></li>
@@ -75,11 +74,11 @@ Click below to navigate the user guide:
 
 1. Ensure you have `Java 11` or above installed in your computer.
 
-1. Download the latest `avengersassemble.jar` [here](https://github.com/AY2324S2-CS2103T-T10-1/tp/releases).
+2. Download the latest `avengersassemble.jar` [here](https://github.com/AY2324S2-CS2103T-T10-1/tp/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for our application.
+3. Copy the file to the folder you want to use as the _home folder_ for our application.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar avengersassemble.jar` command to run the application.<br>
+4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar avengersassemble.jar` command to run the application.<br>
    ```dtd
     cd <path_to_the_folder_containing_the_jar_file>
     java -jar avengersassemble.jar
@@ -87,10 +86,10 @@ Click below to navigate the user guide:
    You should see this when the app starts up. Note how it contains some sample data.<br>
 
 <p align="center">
-    <img src="images/Ui.png" alt="image of avengers assemble's ui" />
+    <img src="images/Ui.png" alt="image of avengers assemble's ui" width="750"/>
 </p>
 
-1. Refer to the [features](#contact-management-features) below for details of each command.
+5. Refer to the [features](#contact-management-features) below for details of each command.
 
 <br>
 
@@ -104,24 +103,26 @@ Click below to navigate the user guide:
 These boxes might offer you additional information of different types:
 
 >**Good to know:**
->I provide you with supporting information.
+>Provides you with supporting information.
 
 <box type="info" seamless>
 
 **Important:**
-I provide you with more important information that you should know.
+Provides you with more important information that you should know.
 </box>
 
 <box type="tip" seamless>
 
 **Tip:**
-I provide you with tips to use our app more effectively.
+Provides you with tips to use our app more effectively.
+
 </box>
 
 <box type="warning" seamless>
 
 **Caution:**
-I provide you with warnings about potential issues you might face.
+Provides you with warnings about potential issues you might face.
+
 </box>
 
 <br>
@@ -546,7 +547,7 @@ For more details on each parameter, [click here](#command-parameter-summary).
 
 <br>
 
-<div id="deleteexam></div>
+<div id="deleteexam"></div>
 
 ### Deleting an Exam : `deleteExam`
 
