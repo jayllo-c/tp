@@ -9,6 +9,7 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -30,6 +31,7 @@ public class ImportExamScoresCommandTest {
     public static final String PATH_INVALID = "invalid/path/to/file.csv";
     public static final String PATH_SCORE_NOT_NUMBER = "src/test/data/ImportExamCommandTest/not_number.csv";
     public static final String PATH_DUPLICATE_EXAMS = "src/test/data/ImportExamCommandTest/duplicate_exams.csv";
+    public static final String PATH_MISMATCH_CSV_HEADERS = "src/test/data/ImportExamCommandTest/wrong_headers.csv";
     private ImportExamScoresCommand importExamScoresCommand;
     private Model model;
 
@@ -143,6 +145,14 @@ public class ImportExamScoresCommandTest {
         List<String[]> lst = List.of(invalid);
 
         assertFalse(importExamScoresCommand.isEmailFirstValue(lst));
+    }
+
+    @Test
+    public void testMismatchCsvHeaders_failure() {
+        ImportExamScoresCommand importExamScoresCommand = new ImportExamScoresCommand(
+                Paths.get(PATH_MISMATCH_CSV_HEADERS));
+
+        assertCommandFailure(importExamScoresCommand, model, ImportExamScoresCommand.ERROR_WRONG_CSV_FORMAT);
     }
 
 
