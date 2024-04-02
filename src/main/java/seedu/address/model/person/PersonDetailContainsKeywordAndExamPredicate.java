@@ -33,9 +33,9 @@ public class PersonDetailContainsKeywordAndExamPredicate implements Predicate<Pe
      */
     @Override
     public boolean test(Person person) {
-        if (PREFIX_LESSTHAN.equals(prefix)) {
+        if (PREFIX_LESS_THAN.equals(prefix)) {
             return hasScoreLessThanKeyword(person);
-        } else if (PREFIX_MORETHAN.equals(prefix)) {
+        } else if (PREFIX_MORE_THAN.equals(prefix)) {
             return hasScoreMoreThanKeyword(person);
         } else {
             // Code should not reach here
