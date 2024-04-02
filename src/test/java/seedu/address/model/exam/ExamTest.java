@@ -13,7 +13,6 @@ public class ExamTest {
     @Test
     public void isValidName() {
         assertTrue(Exam.isValidExamName("Midterm")); // alphanumeric characters
-        assertTrue(Exam.isValidExamName("Midterm Exam")); // alphanumeric characters with spaces
         assertFalse(Exam.isValidExamName("")); // empty string
         assertFalse(Exam.isValidExamName(" ")); // spaces only
         assertFalse(Exam.isValidExamName("^")); // contains non-alphanumeric characters

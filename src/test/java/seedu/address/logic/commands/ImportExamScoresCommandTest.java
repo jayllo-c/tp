@@ -77,7 +77,7 @@ public class ImportExamScoresCommandTest {
     @Test
     public void testFailing() {
         Path filePath = Paths.get(PATH_EXTRA);
-        Exam midterm = new Exam("MidtermTestFailing", new Score(100));
+        Exam midterm = new Exam("BadMidterm", new Score(100));
         model.addExam(midterm);
         ImportExamScoresCommand importExamScoresCommand = new ImportExamScoresCommand(filePath);
 

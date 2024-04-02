@@ -9,11 +9,12 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Phone {
 
-
+    // Prevent checkstyle violation
+    public static final String PLUS = "+";
     public static final String MESSAGE_CONSTRAINTS =
             "Phone numbers should only contain numbers, and it should be between 3 and 30 digits long inclusive.\n"
-                    + "It can start with a "+" to represent the country code, but it is not necessary.";
-    public static final String VALIDATION_REGEX = "^\\+?\\d{3,30}";
+                    + "It can start with a '" + PLUS + "' to represent the country code, but it is not necessary.";
+    public static final String VALIDATION_REGEX = "^\\" + PLUS + "?\\d{3,30}";
     public final String value;
 
     /**
