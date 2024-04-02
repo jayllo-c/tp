@@ -35,6 +35,9 @@ public class Score implements Comparable<Score> {
 
     /**
      * Returns true if a given string is a valid score.
+     * IMPT: This method breaks when the score has more than 9 digits as
+     * the string representation of the score will be in scientific notation. However, scores are
+     * limited to 2 decimal places and 9 digits total.
      */
     public static boolean isValidScore(double test) {
         String str = Double.toString(test);
