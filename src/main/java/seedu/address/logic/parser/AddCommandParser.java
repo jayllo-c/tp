@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_MISSING_COMPULSORY_PREFIXES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MATRIC_NUMBER;
@@ -11,9 +12,11 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDIO;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import seedu.address.logic.commands.AddCommand;
@@ -46,9 +49,18 @@ public class AddCommandParser implements Parser<AddCommand> {
                         args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
                         PREFIX_ADDRESS, PREFIX_TAG, PREFIX_MATRIC_NUMBER, PREFIX_REFLECTION, PREFIX_STUDIO);
 
-        if (!arePrefixesPresent(
-                argMultimap, PREFIX_NAME, PREFIX_ADDRESS, PREFIX_PHONE, PREFIX_EMAIL)
-                || !argMultimap.getPreamble().isEmpty()) {
+        List<Prefix> missingCompulsoryPrefixes = findMissingCompulsoryPrefixes(argMultimap, PREFIX_NAME, PREFIX_PHONE,
+                PREFIX_EMAIL, PREFIX_ADDRESS);
+
+        if (missingCompulsoryPrefixes.size() > 0) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                                                    MESSAGE_MISSING_COMPULSORY_PREFIXES
+                                                    + missingCompulsoryPrefixes.stream()
+                                                        .map(Prefix::toString)
+                                                        .collect(Collectors.joining(", "))));
+        }
+
+        if (!argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
 
@@ -140,6 +152,12 @@ public class AddCommandParser implements Parser<AddCommand> {
      */
     private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
         return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
+    }
+
+    private static List<Prefix> findMissingCompulsoryPrefixes(ArgumentMultimap argumentMultimap,
+            Prefix... compulsoryPrefixes) {
+        return Stream.of(compulsoryPrefixes).filter(prefix -> argumentMultimap.getValue(prefix).isEmpty())
+                                            .collect(Collectors.toList());
     }
 
 }

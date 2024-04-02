@@ -82,8 +82,8 @@ class JsonAdaptedPerson {
         studio = source.getStudio().studio;
         examScores.addAll(source.getScores().entrySet().stream()
                 .map(entry -> new JsonAdaptedExamScore(entry.getKey().getName(),
-                                                       entry.getKey().getMaxScore().getScore(),
-                                                       entry.getValue().getScore()))
+                                                       Double.toString(entry.getKey().getMaxScore().getScore()),
+                                                       Double.toString(entry.getValue().getScore())))
                 .collect(Collectors.toList()));
     }
 
