@@ -205,9 +205,9 @@ Imports all persons and their details from a CSV file of your specification.
 
 </box>
 
-**Example:** `import i|C:/Users/soojo/Desktop/sample_data.csv` 
+**Example:** `import i|/Users/johansoo/Desktop/AvengersAssemble/exam_data.csv`
 
-imports the data from the CSV file located at `C:/Users/soojo/Desktop/sample_data.csv`
+imports the data from the CSV file located at `/Users/johansoo/Desktop/AvengersAssemble/exam_data.csv`
 
 You will see this message once you successfully imported the data, with the app showing the details of the imported persons:
 
@@ -239,7 +239,7 @@ Adds a person to your contact list. The person's details are now stored in the a
 
 </box>
 
-> **Note:** 
+> **Note:**
 > For your convenience, a `student` tag will automatically be added to a contact if they are added with a matriculation number.
 > You are free to edit or remove the tags after the person is added with the [`edit`](#editing-a-person--edit) command.
 > For example, a student TA can be added with the `student` tag, and then the `TA` tag can be added to indicate that they are a TA.
@@ -288,15 +288,15 @@ Updating a matriculation number, studio, or reflection field will not automatica
 
 **Examples:**
 
-1. `edit 2 n|Betsy Crower t|`: 
+1. `edit 2 n|Betsy Crower t|`:
    * Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
-<br> 
+<br>
 
-2. `edit 1 p|91234567 e|johndoe@example.com`: 
+2. `edit 1 p|91234567 e|johndoe@example.com`:
    * Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 
-<br> 
+<br>
 
 You will see this message once you have successfully edited a person, indicating their updated details:
 
@@ -520,9 +520,9 @@ Imports all exam results from a CSV file.
 
 </box>
 
-**Example:** `importExamScores i|C:/Users/soojo/Desktop/sample_exam_data.csv` 
+**Example:** `importExamScores i|/Users/johansoo/Desktop/AvengersAssemble/exam_data.csv`
 
-imports exam results from the CSV file located at `C:/Users/soojo/Desktop/sample_exam_data.csv`.
+imports exam results from the CSV file located at `/Users/johansoo/Desktop/AvengersAssemble/exam_data.csv`.
 
 You will see this message once you have successfully imported the exam results:
 
@@ -739,7 +739,7 @@ You will see this message once you have successfully deleted a score, including 
 <div id="mean-and-median"></div>
 
 > **Notes:**
-> 
+>
 > 1. Duplicate exam headers in the CSV file will be ignored, with only the first occurrence being used.
 > 2. Erroneous entries in the CSV file will be ignored, and the application will continue to import the rest of the data.
 
