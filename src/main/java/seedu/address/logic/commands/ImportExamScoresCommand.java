@@ -23,10 +23,9 @@ public class ImportExamScoresCommand extends Command {
 
     public static final String COMMAND_WORD = "importExamScores";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports exams from specified filepath."
-            + " Must be an absolute CSV file path\n"
-            + "[" + PREFIX_IMPORT + "FILEPATH]\n"
+            + " Must be an absolute CSV file path. Parameter: "
+            + PREFIX_IMPORT + "FILEPATH\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_IMPORT + "C:usr/lib/text.csv";
-    public static final String MESSAGE_ERROR_READING_FILE = "Error reading file: ";
     public static final String MESSAGE_SCORE_NOT_NUMBER = "Score for %s is not a number";
     public static final String MESSAGE_PERSON_DOES_NOT_EXIST = "Person does not exist";
     public static final String MESSAGE_SUCCESS = "Imported exams from: %s";
@@ -37,6 +36,11 @@ public class ImportExamScoresCommand extends Command {
     public static final String MESSAGE_EXAM_DOES_NOT_EXIST = "Exam does not exist";
     public static final String MESSAGE_GRADE_TOO_HIGH = "Grade for %s exceeds maximum score";
     public static final String HEADER_EMAIL = "email";
+    public static final String ERROR_EMAIL_FIRST_VALUE =
+            "Please ensure that the email column is the first column in the CSV file.";
+    public static final String ERROR_WRONG_CSV_FORMAT = "Please ensure that the CSV file is in the correct format.\n"
+            + "The first row should contain the headers of the exams and the first column should contain the emails.\n"
+            + "There should be no empty cells in the CSV file.";
     private StringBuilder errorReport;
     private Path filepath;
 
@@ -191,16 +195,28 @@ public class ImportExamScoresCommand extends Command {
         requireNonNull(model);
 
         List<String[]> lst = CsvUtil.readAllLinesForImportExamScores(filepath);
-        reverse(lst);
-        HashMap<String, HashMap<String, Double>> headers = createExamsMapping(lst);
+        System.out.println(lst);
+        if (!isEmailFirstValue(lst)) {
+            throw new CommandException(ERROR_EMAIL_FIRST_VALUE);
+        }
 
-        HashMap<String, HashMap<String, Double>> headersForExams = removeNonExams(headers);
-        addScores(headersForExams, model);
+        try {
+            parseScoresFromRawCsv(model, lst);
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+            throw new CommandException(ERROR_WRONG_CSV_FORMAT);
+        }
 
         return new CommandResult(
                 String.format(MESSAGE_SUCCESS, filepath.toString()) + generateErrorReport());
     }
 
+    private void parseScoresFromRawCsv(Model model, List<String[]> lst) {
+        reverse(lst);
+        HashMap<String, HashMap<String, Double>> headers = createExamsMapping(lst);
+
+        HashMap<String, HashMap<String, Double>> headersForExams = removeNonExams(headers);
+        addScores(headersForExams, model);
+    }
 
     // Trivial methods
 
@@ -269,6 +285,10 @@ public class ImportExamScoresCommand extends Command {
         for (int j = 1; j < row.length; j++) {
             reversedRow[j] = row[row.length - j];
         }
+    }
+
+    boolean isEmailFirstValue(List<String[]> lst) {
+        return lst.size() > 0 && lst.get(0).length > 0 && lst.get(0)[0].equals(HEADER_EMAIL);
     }
 
 }

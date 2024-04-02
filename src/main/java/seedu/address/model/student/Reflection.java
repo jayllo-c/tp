@@ -10,8 +10,8 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Reflection {
     public static final String MESSAGE_CONSTRAINTS = "Reflections in the style of R1.. are accepted."
             + " The first character must be \"R\","
-            + " followed by a number of digits.";
-    public static final String VALIDATION_REGEX = "R\\d+";
+            + " followed by up to 4 digits.";
+    public static final String VALIDATION_REGEX = "R\\d{1,4}";
     public final String reflection;
 
     /**

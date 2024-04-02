@@ -78,7 +78,7 @@ public class AddCommandParser implements Parser<AddCommand> {
 
         // Update the tagList automatically
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
-        tagList = autoTag(tagList, matric, reflection, studio);
+        tagList = autoTag(tagList, matric);
 
         Person person = new Person(name, phone, email, address, tagList, matric, reflection, studio, scores);
 
@@ -89,16 +89,12 @@ public class AddCommandParser implements Parser<AddCommand> {
      * Automatically adds a tag to the tagList based on the presence of matric, reflection and studio.
      * @param tagList the list of tags to be updated
      * @param matric the matric number of the person
-     * @param reflection the reflection of the person
-     * @param studio the studio of the person
      * @return
      */
-    private Set<Tag> autoTag(Set<Tag> tagList, Matric matric, Reflection reflection, Studio studio) {
+    private Set<Tag> autoTag(Set<Tag> tagList, Matric matric) {
         boolean isMatricPresent = !Matric.isEmptyMatric(matric.matricNumber);
-        boolean isReflectionPresent = !Reflection.isEmptyReflection(reflection.reflection);
-        boolean isStudioPresent = !Studio.isEmptyStudio(studio.studio);
 
-        Optional<Tag> autoTag = createTag(isMatricPresent, isReflectionPresent, isStudioPresent);
+        Optional<Tag> autoTag = createTag(isMatricPresent);
         autoTag.ifPresent(tagList::add);
 
         return tagList;
@@ -107,17 +103,11 @@ public class AddCommandParser implements Parser<AddCommand> {
     /**
      * Creates a tag based on the presence of matric, reflection and studio.
      * @param isMatricPresent boolean whether a Matric number is present.
-     * @param isReflectionPresent boolean whether a Reflection is present.
-     * @param isStudioPresent boolean whether a Studio is present.
      * @return an Optional Tag based on the presence of matric, reflection and studio.
      */
-    private Optional<Tag> createTag(boolean isMatricPresent, boolean isReflectionPresent, boolean isStudioPresent) {
-        if (isMatricPresent && isReflectionPresent && isStudioPresent) {
+    private Optional<Tag> createTag(boolean isMatricPresent) {
+        if (isMatricPresent) {
             return Optional.of(new Tag("student"));
-        } else if (isMatricPresent && (isReflectionPresent ^ isStudioPresent)) {
-            return Optional.of(new Tag("TA"));
-        } else if (!isMatricPresent && !isReflectionPresent && !isStudioPresent) {
-            return Optional.of(new Tag("instructor"));
         }
         return Optional.empty();
     }
