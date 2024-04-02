@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_MISSING_COMPULSORY_PREFIXES;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
@@ -294,27 +295,32 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_compulsoryFieldMissing_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE);
 
         // missing name prefix
         assertParseFailure(parser, VALID_NAME_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB,
-                expectedMessage);
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_MISSING_COMPULSORY_PREFIXES
+                        + PREFIX_NAME.toString()));
 
         // missing phone prefix
         assertParseFailure(parser, NAME_DESC_BOB + VALID_PHONE_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB,
-                expectedMessage);
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_MISSING_COMPULSORY_PREFIXES
+                        + PREFIX_PHONE.toString()));
 
         // missing email prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + VALID_EMAIL_BOB + ADDRESS_DESC_BOB,
-                expectedMessage);
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_MISSING_COMPULSORY_PREFIXES
+                        + PREFIX_EMAIL.toString()));
 
         // missing address prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + VALID_ADDRESS_BOB,
-                expectedMessage);
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_MISSING_COMPULSORY_PREFIXES
+                        + PREFIX_ADDRESS.toString()));
 
         // all prefixes missing
         assertParseFailure(parser, VALID_NAME_BOB + VALID_PHONE_BOB + VALID_EMAIL_BOB + VALID_ADDRESS_BOB,
-                expectedMessage);
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_MISSING_COMPULSORY_PREFIXES
+                        + PREFIX_NAME.toString() + ", " + PREFIX_PHONE.toString() + ", "
+                        + PREFIX_EMAIL.toString() + ", " + PREFIX_ADDRESS.toString()));
     }
 
     @Test
