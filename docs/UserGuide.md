@@ -548,9 +548,9 @@ Adds an exam into your exam list.
 
 </box>
 
-**Example:** `addExam n|Midterm s|100`
+**Example:** `addExam n|Practical Exam s|20`
 
-Adds an exam with the name "Midterm" and a max score of "100" into your exam list.
+Adds an exam with the name "Practical Exam" and a max score of "20" into your exam list.
 
 You will see this message once you successfully add an exam, including the details of the exam:
 
@@ -580,11 +580,11 @@ Removes an exam from your exam list.
 
 </box>
 
-**Example:** `deleteExam 2`
+**Example:** `deleteExam 3`
 
-Removes the second exam displayed in Avengers Assemble.
+Removes the third exam displayed in Avengers Assemble.
 
-You will see this message once you have successfully deleted an exam, including some details of the exam you are deleting:
+You will see this message once you have successfully deleted an exam, including the details of the exam you are deleting:
 
 <p align="center">
   <img src="images/success_images/deleteExam_success.png" alt="image of successful deleteExam" width="750" />
@@ -647,9 +647,9 @@ Adds an exam score to a person at the specified index.
 
 </box>
 
-**Example:** `addScore 1 s|34`
+**Example:** `addScore 1 s|42`
 
-Adds a score of 34 to the person currently displayed at index 1.
+Adds a score of 42 to the person currently displayed at index 1.
 
 You will see this message once you successfully add a score, including the name of the person you added the score for:
 
@@ -686,7 +686,7 @@ Edits a specified person's exam score.
 
 </box>
 
-**Example:** `editScore 1 s|43`
+**Example:** `editScore 1 s|25`
 
 Edits the score of the person currently displayed at index 1 to 43.
 
