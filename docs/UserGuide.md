@@ -239,12 +239,10 @@ Adds a person to your contact list. The person's details are now stored in the a
 
 </box>
 
-> **Note:** The following tags will be automatically added to the person if the following conditions are met:
-> 1. `student`: If matriculation number, studio, and reflection fields are present;
-> 2. `TA`: If matriculation number and one of either studio or reflection fields are present;
-> 3. `instructor`: If none of the three fields are present.
->
+> **Note:** 
+> For your convenience, a `student` tag will automatically be added to a contact if they are added with a matriculation number.
 > You are free to edit or remove the tags after the person is added with the [`edit`](#editing-a-person--edit) command.
+> For example, a student TA can be added with the `student` tag, and then the `TA` tag can be added to indicate that they are a TA.
 
 **Example:**
 `add n|John Doe p|98765432 e|johnd@example.com a|John street, block 123, #01-01 m|A1234567Z s|S1 r|R2`<br>
@@ -505,9 +503,19 @@ Imports all exam results from a CSV file.
 
 <box type="info" seamless>
 
-**Important:**<br>
+**Information:**<br>
 
 * The file path should be **absolute**.
+* The `email` header **must** be the first header, with exam names starting with `Exam:`.
+* This command will only import scores if both the person and exam exists.
+
+</box>
+
+<box type="warning" seamless>
+
+**Caution:**<br>
+
+* Erroneous entries will be ignored, and the application will continue to import the rest of the data.
 * This command will only import persons' exam scores. To import persons' particulars, take a look at [`import`](#importing-persons-from-a-csv-file--import)
 
 </box>

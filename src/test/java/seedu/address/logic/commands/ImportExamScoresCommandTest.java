@@ -1,13 +1,17 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +30,7 @@ public class ImportExamScoresCommandTest {
     public static final String PATH_INVALID = "invalid/path/to/file.csv";
     public static final String PATH_SCORE_NOT_NUMBER = "src/test/data/ImportExamCommandTest/not_number.csv";
     public static final String PATH_DUPLICATE_EXAMS = "src/test/data/ImportExamCommandTest/duplicate_exams.csv";
+    public static final String PATH_MISMATCH_CSV_HEADERS = "src/test/data/ImportExamCommandTest/wrong_headers.csv";
     private ImportExamScoresCommand importExamScoresCommand;
     private Model model;
 
@@ -41,7 +46,7 @@ public class ImportExamScoresCommandTest {
         String expectedMessage = String.format(ImportExamScoresCommand.MESSAGE_SUCCESS, filePath);
         importExamScoresCommand = new ImportExamScoresCommand(filePath);
 
-        assertCommandSuccess(importExamScoresCommand, model, expectedMessage, model);
+        assertCommandFailure(importExamScoresCommand, model, ImportExamScoresCommand.ERROR_EMAIL_FIRST_VALUE);
     }
 
     @Test
@@ -110,6 +115,45 @@ public class ImportExamScoresCommandTest {
                 "Midterm: " + ImportExamScoresCommand.MESSAGE_DUPLICATE_EXAM);
         assertCommandSuccess(importExamScoresCommand, model, expectedError, model);
     }
+
+    @Test
+    public void testIsEmailFirstValue_validEmailFirstValue_success() {
+        ImportExamScoresCommand importExamScoresCommand = new ImportExamScoresCommand(Paths.get(PATH_VALID));
+
+        String[][] valid = {{"email"}};
+        List<String[]> lst = List.of(valid);
+
+        assertTrue(importExamScoresCommand.isEmailFirstValue(lst));
+    }
+
+    @Test
+    public void testIsEmailFirstValue_listSizeZero_failure() {
+        ImportExamScoresCommand importExamScoresCommand = new ImportExamScoresCommand(Paths.get(PATH_VALID));
+
+        String[][] invalid = {};
+        List<String[]> lst = List.of(invalid);
+
+        assertFalse(importExamScoresCommand.isEmailFirstValue(lst));
+    }
+
+    @Test
+    public void testIsEmailFirstValue_stringArraySizeZero_failure() {
+        ImportExamScoresCommand importExamScoresCommand = new ImportExamScoresCommand(Paths.get(PATH_VALID));
+
+        String[][] invalid = {{}};
+        List<String[]> lst = List.of(invalid);
+
+        assertFalse(importExamScoresCommand.isEmailFirstValue(lst));
+    }
+
+    @Test
+    public void testMismatchCsvHeaders_failure() {
+        ImportExamScoresCommand importExamScoresCommand = new ImportExamScoresCommand(
+                Paths.get(PATH_MISMATCH_CSV_HEADERS));
+
+        assertCommandFailure(importExamScoresCommand, model, ImportExamScoresCommand.ERROR_WRONG_CSV_FORMAT);
+    }
+
 
     private String buildErrorReport(String filePath, String... errors) {
         StringBuilder errorReport = new StringBuilder();

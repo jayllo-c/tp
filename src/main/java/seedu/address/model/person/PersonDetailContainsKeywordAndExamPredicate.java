@@ -34,9 +34,9 @@ public class PersonDetailContainsKeywordAndExamPredicate implements Predicate<Pe
     @Override
     public boolean test(Person person) {
         if (PREFIX_LESS_THAN.equals(prefix)) {
-            return trueIfLT(person);
+            return hasScoreLessThanKeyword(person);
         } else if (PREFIX_MORE_THAN.equals(prefix)) {
-            return trueIfMT(person);
+            return hasScoreMoreThanKeyword(person);
         } else {
             // Code should not reach here
             return false;
@@ -48,7 +48,7 @@ public class PersonDetailContainsKeywordAndExamPredicate implements Predicate<Pe
      * @param person The person to be checked.
      * @return True if the person's exam score is greater than the keyword.
      */
-    private boolean trueIfMT(Person person) {
+    private boolean hasScoreMoreThanKeyword(Person person) {
         if (person.getScores().containsKey(exam)) {
             return Double.parseDouble(person.getScores().get(exam).toString())
                     > Double.parseDouble(keyword);
@@ -63,7 +63,7 @@ public class PersonDetailContainsKeywordAndExamPredicate implements Predicate<Pe
      * @param person The person to be checked.
      * @return True if the person's exam score is less than the keyword.
      */
-    private boolean trueIfLT(Person person) {
+    private boolean hasScoreLessThanKeyword(Person person) {
         if (person.getScores().containsKey(exam)) {
             return Double.parseDouble(person.getScores().get(exam).toString())
                     < Double.parseDouble(keyword);

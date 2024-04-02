@@ -6,7 +6,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_IMPORT;
 
 import java.nio.file.Path;
 
-import seedu.address.logic.commands.ImportCommand;
 import seedu.address.logic.commands.ImportExamScoresCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -34,7 +33,8 @@ public class ImportExamScoresCommandParser implements Parser<ImportExamScoresCom
 
         Path path = ParserUtil.parseFilePath(argMultimap.getValue(PREFIX_IMPORT).orElse(""));
         if (!isCsvFile(path)) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    ImportExamScoresCommand.MESSAGE_USAGE));
         }
         return new ImportExamScoresCommand(path);
     }
