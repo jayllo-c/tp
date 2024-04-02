@@ -30,15 +30,16 @@ public class ImportCommandTest {
     @Test
     public void execute_import_invalidPathFailure() throws CommandException {
         Model model = new ModelManager(new AddressBook(), new UserPrefs());
-        ImportCommand importCommand = new ImportCommand(Paths.get(
-                "src/test/data/ImportCommandTest/nonexistent.csv"));
+        Path validFilePath = Paths.get("src/test/data/ImportCommandTest/nonExistent.csv");
+        ImportCommand importCommand = new ImportCommand(validFilePath);
         String expected = "Import completed with errors\n\n"
                 + "Errors found from reading csv!\n"
-                + "src\\test\\data\\ImportCommandTest\\nonexistent.csv (The system cannot find the file specified)\n\n"
+                + validFilePath
+                + " (The system cannot find the file specified)\n\n"
                 + "No valid persons were found. Csv file is empty or error occurred reading from csv file\n"
                 + "Successful imports: 0\n"
                 + "Unsuccessful imports: 0\n";
-        assertEquals(new CommandResult(expected), importCommand.execute(model));
+        assertEquals(expected, importCommand.execute(model).getFeedbackToUser());
     }
     @Test
     public void equals_success() {
