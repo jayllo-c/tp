@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDENT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_IMPORT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SCORE;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
@@ -75,7 +77,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_editScore() throws Exception {
-        String prefix = "s/";
+        String prefix = PREFIX_SCORE.toString();
         Score score = new Score(17);
         EditScoreCommand command = (EditScoreCommand) parser.parseCommand(EditScoreCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_PERSON.getOneBased() + " " + prefix + score.getScore());
@@ -90,7 +92,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_find() throws Exception {
-        String prefix = "n/";
+        String prefix = PREFIX_NAME.toString();
         String parameter = "Johan";
         FindCommand command = (FindCommand) parser.parseCommand(
                 FindCommand.COMMAND_WORD + " " + prefix + parameter);
@@ -111,8 +113,8 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_copy() throws Exception {
-        assertTrue(parser.parseCommand("copy") instanceof CopyCommand);
-        assertTrue(parser.parseCommand("copy 3") instanceof CopyCommand);
+        assertTrue(parser.parseCommand(CopyCommand.COMMAND_WORD) instanceof CopyCommand);
+        assertTrue(parser.parseCommand(CopyCommand.COMMAND_WORD + " 3") instanceof CopyCommand);
     }
 
     @Test
@@ -122,33 +124,38 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_import() throws Exception {
-        assertTrue(parser.parseCommand("import i/src.csv") instanceof ImportCommand);
+        assertTrue(parser.parseCommand(ImportCommand.COMMAND_WORD + " "
+                + PREFIX_IMPORT + "src.csv") instanceof ImportCommand);
     }
 
     @Test
     public void parseCommand_importExam() throws Exception {
-        assertTrue(parser.parseCommand("importExamScores i/src.csv") instanceof ImportExamScoresCommand);
+        assertTrue(parser.parseCommand(
+                ImportExamScoresCommand.COMMAND_WORD + " " + PREFIX_IMPORT + "src.csv")
+                instanceof ImportExamScoresCommand);
     }
 
     @Test
     public void parseCommand_deleteShown() throws Exception {
-        assertTrue(parser.parseCommand("deleteshown") instanceof DeleteShownCommand);
+        assertTrue(parser.parseCommand(DeleteShownCommand.COMMAND_WORD) instanceof DeleteShownCommand);
     }
 
     @Test
     public void parseCommand_selectExam() throws Exception {
-        assertTrue(parser.parseCommand("selectExam 1") instanceof SelectExamCommand);
+        assertTrue(parser.parseCommand(SelectExamCommand.COMMAND_WORD + " 1") instanceof SelectExamCommand);
     }
 
     @Test
     public void parseCommand_unrecognisedInput_throwsParseException() {
-        assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE), ()
-            -> parser.parseCommand(""));
+        assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                HelpCommand.MESSAGE_USAGE), () -> parser.parseCommand(""));
     }
 
     @Test
     void parseCommand_addExam() throws Exception {
-        assertTrue(parser.parseCommand("addExam n/Midterm s/100") instanceof AddExamCommand);
+        assertTrue(parser.parseCommand(AddExamCommand.COMMAND_WORD + " "
+                + PREFIX_NAME + "Midterm " + PREFIX_SCORE + "100")
+                instanceof AddExamCommand);
     }
 
     @Test
@@ -170,7 +177,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_addScore() throws Exception {
-        assertTrue(parser.parseCommand("addScore 1 s/100") instanceof AddScoreCommand);
+        assertTrue(parser.parseCommand("addScore 1 " + PREFIX_SCORE + "100") instanceof AddScoreCommand);
     }
 
     @Test

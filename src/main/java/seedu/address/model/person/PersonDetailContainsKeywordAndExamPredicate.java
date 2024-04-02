@@ -1,7 +1,7 @@
 package seedu.address.model.person;
 
-import static seedu.address.logic.parser.CliSyntax.PREFIX_LESSTHAN;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_MORETHAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LESS_THAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MORE_THAN;
 
 import java.util.function.Predicate;
 
@@ -109,7 +109,7 @@ public class PersonDetailContainsKeywordAndExamPredicate implements Predicate<Pe
      * @return True if the prefix is PREFIX_LESSTHAN or PREFIX_GREATERTHAN.
      */
     public boolean isExamRequired() {
-        return prefix.equals(PREFIX_LESSTHAN) || prefix.equals(PREFIX_MORETHAN);
+        return prefix.equals(PREFIX_LESS_THAN) || prefix.equals(PREFIX_MORE_THAN);
     }
 }
 

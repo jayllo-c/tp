@@ -12,7 +12,7 @@ import seedu.address.model.person.Person;
  * Deletes all persons in the shown list.
  */
 public class DeleteShownCommand extends Command {
-    public static final String COMMAND_WORD = "deleteshown";
+    public static final String COMMAND_WORD = "deleteShown";
 
     public static final String MESSAGE_SUCCESS = "Deleted %d shown person(s). Listing %d remaining person(s).";
     public static final String MESSAGE_NO_PERSONS = "No persons to delete.";

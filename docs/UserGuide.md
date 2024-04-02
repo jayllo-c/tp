@@ -58,9 +58,9 @@ Click below to navigate the user guide:
     </ul>
     <li><a href="#additional-information">Additional Information</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><a href="known-issues">Known Issues</a></li>
-    <li><a href="command-summary">Command Summary</a></li>
-    <li><a href="command-parameter-summary">Command Parameter Summary</a></li>
+    <li><a href="#known-issues">Known Issues</a></li>
+    <li><a href="#command-summary">Command Summary</a></li>
+    <li><a href="#command-parameter-summary">Command Parameter Summary</a></li>
 </ol>
 </div>
 
@@ -150,16 +150,19 @@ Before we proceed with the commands, here are some important points to note on t
 **Important:** </br>
 
 * Words in `UPPER_CASE` are the parameters to be supplied by you.<br>
-  > e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
+  > e.g. in `add n|NAME`, `NAME` is a parameter which can be used as `add n|John Doe`.
 
 * Prefixes encased with '[ ]' are optional.
-  > e.g. `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
+  > e.g. `n|NAME [t|TAG]` can be used as `n|John Doe t|friend` or as `n|John Doe`.
+
+* Prefixes encased with '{ }' are meant specifically for the `find` command.
+  > e.g. `{mt|SCORE}` is a prefix that can only be used with `find`.
 
 * Prefixes with '…' after them can be used multiple times.
-  > e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend` (i.e 1 time), `t/friend t/family` etc.
+  > e.g. `[t|TAG]…​` can be used as ` ` (i.e. 0 times), `t|friend` (i.e 1 time), `t|friend t|family` etc.
 
 * Parameters can be in any order.<br>
-  > e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+  > e.g. if the command specifies `n|NAME p|PHONE_NUMBER`, `p|PHONE_NUMBER n|NAME` is also acceptable.
 
 * Extraneous parameters for commands that do not take in parameters (such as `help` , `list`, `exit`, `copy`, `export` and `clear`) will be ignored.<br>
   > e.g. if the command specifies `help 123`, it will be interpreted as `help`.
@@ -191,7 +194,7 @@ Deletes **all** entries from your contact list.
 
 Imports all persons and their details from a CSV file of your specification.
 
-**Format:** `import i/FILEPATH`
+**Format:** `import i|FILEPATH`
 
 <box type="info" seamless>
 
@@ -202,7 +205,7 @@ Imports all persons and their details from a CSV file of your specification.
 
 </box>
 
-**Example:** `import i/C:/Users/soojo/Desktop/sample_data.csv` 
+**Example:** `import i|C:/Users/soojo/Desktop/sample_data.csv` 
 
 imports the data from the CSV file located at `C:/Users/soojo/Desktop/sample_data.csv`
 
@@ -222,7 +225,7 @@ For more details on the input parameter, [click here](#command-parameter-summary
 
 Adds a person to your contact list. The person's details are now stored in the application.
 
-**Format:** `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]… [m/MATRICULATION_NUMBER] [s/STUDIO] [r/REFLECTION]​`
+**Format:** `add n|NAME p|PHONE_NUMBER e|EMAIL a|ADDRESS [t|TAG]… [m|MATRICULATION_NUMBER] [s|STUDIO] [r|REFLECTION]​`
 
 <box type="info" seamless>
 
@@ -244,7 +247,7 @@ Adds a person to your contact list. The person's details are now stored in the a
 > You are free to edit or remove the tags after the person is added with the [`edit`](#editing-a-person--edit) command.
 
 **Example:**
-`add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 m/A1234567Z s/S1 r/R2`<br>
+`add n|John Doe p|98765432 e|johnd@example.com a|John street, block 123, #01-01 m|A1234567Z s|S1 r|R2`<br>
 
 adds a contact John Doe with the respective phone number, email and physical addresses, matriculation number, studio group and recitation group.
 
@@ -264,7 +267,7 @@ For more details on each parameter, [click here](#command-parameter-summary).
 
 Edits the details of an existing person in your contact list.
 
-**Format:** `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]… [m/MATRICULATION_NUMBER] [s/STUDIO] [r/REFLECTION]​`
+**Format:** `edit INDEX [n|NAME] [p|PHONE] [e|EMAIL] [a|ADDRESS] [t|TAG]… [m|MATRICULATION_NUMBER] [s|STUDIO] [r|REFLECTION]​`
 
 <box type="info" seamless>
 
@@ -273,7 +276,7 @@ Edits the details of an existing person in your contact list.
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the new values.
 * Editing tags will replace all existing tags i.e. adding of tags is **not cumulative**.
-* You can remove optional fields by typing `t/`, `m/`, `r/` or `s/` respectively without any values.
+* You can remove optional fields by typing `t|`, `m|`, `r|` or `s|` respectively without any values.
 
 </box>
 
@@ -287,11 +290,15 @@ Updating a matriculation number, studio, or reflection field will not automatica
 
 **Examples:**
 
-1. `edit 2 n/Betsy Crower t/`: <br>
+1. `edit 2 n|Betsy Crower t|`: 
    * Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
-2. `edit 1 p/91234567 e/johndoe@example.com`: <br>
+<br> 
+
+2. `edit 1 p|91234567 e|johndoe@example.com`: 
    * Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
+
+<br> 
 
 You will see this message once you have successfully edited a person, indicating their updated details:
 
@@ -383,21 +390,21 @@ You will see this message once you have successfully listed all contacts, with t
 
 Filters your contacts based on specific criteria you set.
 
-**Format:** `find PREFIX/KEYWORD`
+**Format:** `find PREFIX|KEYWORD`
 
 <box type="info" seamless>
 
 **Information:** <br>
 * Use this command to search for persons using a specific aspect of their details, as specified by the prefix.
 * The search will return any result that contains the keyword you have specified.
-    > e.g. `find e/john` will find any person that contains `john` in their email.
+    > e.g. `find e|john` will find any person that contains `john` in their email.
 * The search is **case-insensitive**.
 * Only one prefix can be used at a time.
 
 </box>
 
 **Example:**
-`find n/John` returns `john` and `John Doe` if they exist in your contact book.
+`find n|John` returns `john` and `John Doe` if they exist in your contact book.
 
 You will see this message once you have successfully found a person, with the app showing all persons that match your search criteria:
 
@@ -494,7 +501,7 @@ Exits the program. The app will close automatically.
 
 Imports all exam results from a CSV file.
 
-**Format:** `importExamScores i/FILEPATH`
+**Format:** `importExamScores i|FILEPATH`
 
 <box type="info" seamless>
 
@@ -505,7 +512,7 @@ Imports all exam results from a CSV file.
 
 </box>
 
-**Example:** `importExamScores i/C:/Users/soojo/Desktop/sample_exam_data.csv` 
+**Example:** `importExamScores i|C:/Users/soojo/Desktop/sample_exam_data.csv` 
 
 imports exam results from the CSV file located at `C:/Users/soojo/Desktop/sample_exam_data.csv`.
 
@@ -525,7 +532,7 @@ For more details on the parameter, [click here](#command-parameter-summary).
 
 Adds an exam into your exam list.
 
-**Format:** `addExam n/NAME s/MAX_SCORE`
+**Format:** `addExam n|NAME s|MAX_SCORE`
 
 <box type="info" seamless>
 
@@ -533,7 +540,7 @@ Adds an exam into your exam list.
 
 </box>
 
-**Example:** `addExam n/Midterm s/100`
+**Example:** `addExam n|Midterm s|100`
 
 Adds an exam with the name "Midterm" and a max score of "100" into your exam list.
 
@@ -613,7 +620,7 @@ You will see this message once you have successfully selected an exam, including
 
 Adds an exam score to a person at the specified index.
 
-**Format:** `addScore INDEX s/SCORE`
+**Format:** `addScore INDEX s|SCORE`
 
 <box type="info" seamless>
 
@@ -632,7 +639,7 @@ Adds an exam score to a person at the specified index.
 
 </box>
 
-**Example:** `addScore 1 s/34`
+**Example:** `addScore 1 s|34`
 
 Adds a score of 34 to the person currently displayed at index 1.
 
@@ -652,7 +659,7 @@ For more details on the parameter, [click here](#command-parameter-summary).
 
 Edits a specified person's exam score.
 
-**Format:** `editScore INDEX s/SCORE`
+**Format:** `editScore INDEX s|SCORE`
 
 <box type="info" seamless>
 
@@ -671,7 +678,7 @@ Edits a specified person's exam score.
 
 </box>
 
-**Example:** `editScore 1 s/43`
+**Example:** `editScore 1 s|43`
 
 Edits the score of the person currently displayed at index 1 to 43.
 
@@ -812,16 +819,16 @@ Below is a summary of the commands available in Avengers Assemble. Some examples
 
 | Action            | Format, Examples                                                                                                                                                                                                                         |
 |-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Add**           | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]… [m/MATRICULATION_NUMBER] [s/STUDIO] [r/REFLECTION]​` <br><br>• e.g. `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague m/A1234567X` |
+| **Add**           | `add n\|NAME p\|PHONE_NUMBER e\|EMAIL a\|ADDRESS [t\|TAG]… [m\|MATRICULATION_NUMBER] [s\|STUDIO] [r\|REFLECTION]​` <br><br>• e.g. `add n\|James Ho p\|22224444 e\|jamesho@example.com a\|123, Clementi Rd, 1234665 t\|friend t\|colleague m\|A1234567X`  |
 | **Clear**         | `clear`                                                                                                                                                                                                                                  |
 | **Delete**        | `delete INDEX` <br><br>• e.g. `delete 3`                                                                                                                                                                                                 |
-| **Edit**          | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]… [m/MATRICULATION_NUMBER] [s/STUDIO] [r/REFLECTION]​` <br><br>• e.g.`edit 2 n/James Lee e/jameslee@example.com m/A1234567X`                                          |
-| **Find**          | `find PREFIX/KEYWORD` <br><br>• e.g. `find n/James`                                                                                                                                                                                      |
+| **Edit**          | `edit INDEX [n\|NAME] [p\|PHONE_NUMBER] [e\|EMAIL] [a\|ADDRESS] [t\|TAG]… [m\|MATRICULATION_NUMBER] [s\|STUDIO] [r\|REFLECTION]​` <br><br>• e.g.`edit 2 n\|James Lee e\|jameslee@example.com m\|A1234567X`                                           |
+| **Find**          | `find PREFIX\|KEYWORD` <br><br>• e.g. `find n\|James`                                                                                                                                                                                      |
 | **Copy**          | `copy`                                                                                                                                                                                                                                   |
 | **List**          | `list`                                                                                                                                                                                                                                   |
 | **Help**          | `help`                                                                                                                                                                                                                                   |
 | **Export to CSV** | `export`                                                                                                                                                                                                                                 |
-| **Import**        | `import i/FILEPATH` <br><br>• e.g. `import i/C:/Users/alk/Downloads/avengersassemble.csv`                                                                                                                                                |
+| **Import**        | `import i\|FILEPATH` <br><br>• e.g. `import i\|C:/Users/alk/Downloads/avengersassemble.csv`                                                                                                                                                |
 
 <br>
 
@@ -837,17 +844,20 @@ Some commands require you to include parameters. These parameters are identified
 
 **Important:** </br>
 
-* Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-    > e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
+* Words in `UPPER_CASE` are the parameters to be supplied by you.<br>
+    > e.g. in `add n|NAME`, `NAME` is a parameter which can be used as `add n|John Doe`.
 
 * Prefixes encased with '[ ]' are optional.
-    > e.g. `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
+    > e.g. `n|NAME [t|TAG]` can be used as `n|John Doe t|friend` or as `n|John Doe`.
+
+* Prefixes encased with '{ }' are meant specifically for the `find` command.
+    > e.g. `{mt|SCORE}` is a prefix that can only be used with `find`.
 
 * Prefixes with '…' after them can be used multiple times.
-    > e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend` (i.e 1 time), `t/friend t/family` etc.
+    > e.g. `[t|TAG]…​` can be used as ` ` (i.e. 0 times), `t|friend` (i.e 1 time), `t|friend t|family` etc.
 
 * Parameters can be in any order.<br>
-    > e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+    > e.g. if the command specifies `n|NAME p|PHONE_NUMBER`, `p|PHONE_NUMBER n|NAME` is also acceptable.
 
 * Extraneous parameters for commands that do not take in parameters (such as `help` , `list`, `exit`, `copy`, `export` and `clear`) will be ignored.<br>
     > e.g. if the command specifies `help 123`, it will be interpreted as `help`.
@@ -858,19 +868,21 @@ Some commands require you to include parameters. These parameters are identified
 
 **Caution:** </br>
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
-* Note the same prefix may be used for different purposes such as in the case of `s/` for studios and for scores. In these cases, we ensure no command would have to use the same prefix for multiple purposes.
+* Note the same prefix may be used for different purposes such as in the case of `s|` for studios and for scores. In these cases, we ensure no command would have to use the same prefix for multiple purposes.
 
 </box>
 
-| Prefix | What it refers to          | Constraints                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-|--------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| n/     | Name                       | Should only contain alphanumeric characters and spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| p/     | Phone Number               | Should only contain numbers, and it should be at least 3 digits long.                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| e/     | Email                      | **Format:** local-part@domain<br/> **Constraints for local part:**<br/> • Should only contain alphanumeric characters, and the characters `+`, `_`, `.` and `-`<br/> • Should not start with special characters<br/> **Constraints for domain:**<br/> • Made up of domain labels followed by periods<br/> • Must end with a domain label of at least 2 characters long<br/> • Should start and end with alphanumeric characters<br/> • Domain label should consists of alphanumeric characters separated only by hyphens, if any |
-| a/     | Address                    | Can take any values.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| i/     | Path of CSV file to Import | Should be the absolute file path of the CSV file.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| [m/]   | Matriculation ID           | The first letter must be an uppercase 'A', followed by 7 numbers, and end with an uppercase letter.                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| [r/]   | Recitation Group           | The first letter must be an uppercase 'R', followed by any number.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| [s/]   | Studio Group               | The first letter must be an uppercase 'S', followed by any number.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| [s/]   | Score                      | For Exam Max Scores: the input must be a positive integer <br/> For Persons' Exam Scores: the input must be an integer greater than or equal to zero                                                                                                                                                                                                                                                                                                                                                                             |
-| [t/]…  | Tags                       | Should be alphanumeric, and should not contain spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| Prefix   | What it refers to          | Constraints                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|----------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| n\|      | Name                       | Should only contain alphanumeric characters and spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| p\|      | Phone Number               | Should only contain numbers, and it should be at least 3 digits long.                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| e\|      | Email                      | **Format:** local-part@domain<br/> **Constraints for local part:**<br/> • Should only contain alphanumeric characters, and the characters `+`, `_`, `.` and `-`<br/> • Should not start with special characters<br/> **Constraints for domain:**<br/> • Made up of domain labels followed by periods<br/> • Must end with a domain label of at least 2 characters long<br/> • Should start and end with alphanumeric characters<br/> • Domain label should consists of alphanumeric characters separated only by hyphens, if any |
+| a\|      | Address                    | Can take any values.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| i\|      | Path of CSV file to Import | Should be the absolute file path of the CSV file.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| [m\|]    | Matriculation ID           | The first letter must be an uppercase 'A', followed by 7 numbers, and end with an uppercase letter.                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| [r\|]    | Recitation Group           | The first letter must be an uppercase 'R', followed by any number.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| [s\|]    | Studio Group               | The first letter must be an uppercase 'S', followed by any number.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| [s\|]    | Score                      | For Exam Max Scores: the input must be a positive integer <br/> For Persons' Exam Scores: the input must be an integer greater than or equal to zero                                                                                                                                                                                                                                                                                                                                                                             |
+| [t\|]…   | Tags                       | Should be alphanumeric, and should not contain spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| \{lt\|\} | Less Than                  | Should be a positive numerical value smaller than the currently selected Exam's Max Score                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| \{mt\|\} | More Than                  | Should be a positive numerical value smaller than the currently selected Exam's Max Score                                                                                                                                                                                                                                                                                                                                                                                                                                        |

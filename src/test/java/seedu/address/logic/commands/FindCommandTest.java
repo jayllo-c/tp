@@ -7,8 +7,8 @@ import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_LESSTHAN;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_MORETHAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LESS_THAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MORE_THAN;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
@@ -91,7 +91,7 @@ public class FindCommandTest {
     @Test
     public void execute_examRequiredNoExamSelected_throwsCommandException() {
         PersonDetailContainsKeywordPredicate predicate =
-                new PersonDetailContainsKeywordPredicate(PREFIX_LESSTHAN, "50");
+                new PersonDetailContainsKeywordPredicate(PREFIX_LESS_THAN, "50");
         FindCommand command = new FindCommand(predicate);
         assertCommandFailure(command, model, Messages.MESSAGE_NO_EXAM_SELECTED);
     }
@@ -100,7 +100,7 @@ public class FindCommandTest {
     public void execute_examRequiredExamSelectedValueTooHigh_throwsCommandException() {
         model.selectExam(new Exam("Final", new Score(100)));
         PersonDetailContainsKeywordPredicate predicate =
-                new PersonDetailContainsKeywordPredicate(PREFIX_MORETHAN, "101");
+                new PersonDetailContainsKeywordPredicate(PREFIX_MORE_THAN, "101");
         FindCommand command = new FindCommand(predicate);
         assertCommandFailure(command, model, FindCommand.MESSAGE_SCORE_GREATER_THAN_MAX);
     }
@@ -110,7 +110,7 @@ public class FindCommandTest {
         model.selectExam(new Exam("Midterm", new Score(100)));
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
         PersonDetailContainsKeywordPredicate predicate =
-                new PersonDetailContainsKeywordPredicate(PREFIX_LESSTHAN, "55");
+                new PersonDetailContainsKeywordPredicate(PREFIX_LESS_THAN, "55");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate.withExam(model.getSelectedExam().getValue()));
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
