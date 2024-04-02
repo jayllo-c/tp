@@ -34,8 +34,7 @@ public class ImportCommandTest {
         ImportCommand importCommand = new ImportCommand(validFilePath);
         String expected = "Import completed with errors\n\n"
                 + "Errors found from reading csv!\n"
-                + validFilePath
-                + " (The system cannot find the file specified)\n\n"
+                + String.format("%s (The system cannot find the file specified)\n\n", validFilePath)
                 + "No valid persons were found. Csv file is empty or error occurred reading from csv file\n"
                 + "Successful imports: 0\n"
                 + "Unsuccessful imports: 0\n";
