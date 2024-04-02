@@ -30,13 +30,9 @@ public class ImportCommand extends Command {
 
     public static final String COMMAND_WORD = "import";
 
-    public static final String MESSAGE_NOT_IMPLEMENTED_YET =
-            "Remark command not implemented yet";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports contacts from specified filepath."
-            + " Must be an absolute CSV file path\n"
-            + "Parameters: filePath\n"
-            + "[" + PREFIX_IMPORT + "import]\n"
-            + "Example: " + COMMAND_WORD + PREFIX_IMPORT + "C:usr/lib/text.csv";
+            + " Must be an absolute CSV file path. Parameter: FILEPATH\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_IMPORT + "C:usr/lib/text.csv";
     private static final String MESSAGE_ARGUMENTS = "filePath: %s";
     private static final String MESSAGE_IMPORT_SUCCESS = "Imported Contacts from: %s";
     private static final String MESSAGE_DATA_LOAD_ERROR = "Unable to load data from %s";
