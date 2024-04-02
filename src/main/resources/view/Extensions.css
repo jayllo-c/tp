@@ -19,9 +19,3 @@
     -fx-text-fill: white;
 }
 
-.label-header-small {
-    -fx-font-size: 16pt;
-    -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
-    -fx-opacity: 1;
-}
