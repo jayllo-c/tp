@@ -24,7 +24,7 @@ public class DeleteScoreCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes the score of the person identified by the index number used in the displayed person list. \n"
-            + "Parameters: INDEX (must be a positive integer)\n"
+            + "Parameter: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted score for %s(%s) for %s.";
