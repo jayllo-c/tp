@@ -325,8 +325,9 @@ The person at the specified `INDEX` will be deleted. The index **must be a posit
 </box>
 
 **Examples**:
-1. `list` followed by `delete 2` deletes the second person stored in the app.
-2. `find Betsy` followed by `delete 1` deletes the first person in the results of the `find` command.
+
+1. `find Betsy` followed by `delete 1` deletes the first person in the results of the `find` command.
+2. `list` followed by `delete 1` deletes the first person stored in the app.
 
 You will see this message once you successfully delete a person from your list, indicating the details of the deleted person:
 
