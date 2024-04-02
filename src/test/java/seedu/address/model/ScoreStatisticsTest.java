@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+
 class ScoreStatisticsTest {
 
     @Test
@@ -23,7 +24,7 @@ class ScoreStatisticsTest {
     @Test
     void testToString() {
         ScoreStatistics stats = new ScoreStatistics(50.0, 50.0);
-        String expected = "Mean: 50.0, Median: 50.0";
+        String expected = "Mean: 50, Median: 50";
         assertEquals(expected, stats.toString());
 
         ScoreStatistics noScoresStats = new ScoreStatistics();
