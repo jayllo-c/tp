@@ -6,14 +6,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -29,6 +22,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 
+import javafx.util.Pair;
 import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.logic.commands.exceptions.CommandException;
 
@@ -40,23 +34,42 @@ public class CsvUtil {
     public static final String MESSAGE_ERROR_READING_FILE = "Error reading file: ";
 
     /**
-     * Reads the CSV file and returns a list of maps,
-     * where each map represents a row of person's data in the csv file.
+     * Reads a CSV file.
+     * Firstly, it checks if the compulsory parameters are present in the header of the csv file (the header
+     * is the first line of the csv file).
+     * Secondly, it only reads the columns that are in compulsoryParameters or optionalParameters.
+     * Values in other headers will be ignored.
+     * Thirdly, it checks if the number of values in each row is the same as the number of headers.
+     * If the check for compulsory parameters fails, the error report will contain the missing compulsory parameters.
+     * If the check for the number of values in each row fails, the error report will contain the rows that do not have
+     * the same number of values as the number of headers. More importantly the rows of data that do not
+     * It is crucial that a dataLoadingException is thrown in the
+     * caller of this method if the error report is not empty.
+     * @param filePath the path of the file
+     * @param compulsoryParameters
+     * @param optionalParameters
+     * @return A pair in which the first value is the data and the second is the error report. Data can be null if
+     * the file is not read successfully or if any compulsory parameters are missing in the header row of csv file.
      * @throws DataLoadingException
      */
-    public static List<Map<String, String>> readCsvFile(
+    public static Pair<Optional<List<Map<String, String>>>, String> readCsvFile(
             Path filePath, HashSet<String> compulsoryParameters, HashSet<String> optionalParameters)
             throws DataLoadingException {
         List<Map<String, String>> data = null;
+        Optional<List<Map<String, String>>> nullableData = Optional.empty();
+        String errorMsgs = "";
         try {
             CSVReader reader = new CSVReaderBuilder(new FileReader(filePath.toString())).build();
             List<String> headers = List.of(reader.readNext()); // first line should be headers
             Queue<Integer> columnsToSkip = coloumnsToSkip(headers, compulsoryParameters, optionalParameters);
             List<String[]> rows = reader.readAll();
-            data = parseData(rows, headers, columnsToSkip);
-            return data;
-        } catch (IOException | CsvException e) {
-            throw new DataLoadingException(e);
+            Pair<List<Map<String, String>>, String> result = parseData(rows, headers, columnsToSkip);
+            data = result.getKey();
+            errorMsgs = result.getValue();
+            nullableData = Optional.of(data);
+            return new Pair<>(nullableData, errorMsgs);
+        } catch (IOException | CsvException | DataLoadingException e) {
+            return new Pair<>(nullableData, e.getMessage());
         }
     }
 
@@ -87,8 +100,8 @@ public class CsvUtil {
      * @param columnsToSkip
      * @return
      */
-    public static List<Map<String, String>> parseData(
-            List<String[]> rows, List<String> headers, Queue<Integer> columnsToSkip) throws DataLoadingException {
+    public static Pair<List<Map<String, String>>, String> parseData(
+            List<String[]> rows, List<String> headers, Queue<Integer> columnsToSkip) {
         List<Map<String, String>> data = new ArrayList<>();
         StringBuilder errorMsgs = new StringBuilder(); // to store which rows do not have the same size as the header
         for (int i = 0; i < rows.size(); i++) {
@@ -110,11 +123,7 @@ public class CsvUtil {
             data.add(map);
         }
 
-        if (!errorMsgs.toString().isEmpty()) {
-            throw new DataLoadingException(errorMsgs.toString());
-        }
-
-        return data;
+        return new Pair<>(data, errorMsgs.toString());
     }
 
     /**

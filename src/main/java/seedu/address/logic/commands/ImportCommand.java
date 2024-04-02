@@ -17,7 +17,9 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import javafx.util.Pair;
 import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.AddCommandParser;
@@ -32,14 +34,12 @@ public class ImportCommand extends Command {
 
     public static final String COMMAND_WORD = "import";
 
-    public static final String MESSAGE_NOT_IMPLEMENTED_YET =
-            "Remark command not implemented yet";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports contacts from specified filepath."
             + " Must be an absolute CSV file path\n"
             + "Parameters: filePath\n"
             + "[" + PREFIX_IMPORT + "import]\n"
             + "Example: " + COMMAND_WORD + PREFIX_IMPORT + "C:usr/lib/text.csv";
-    private static final String MESSAGE_IMPORT_SUCCESS = "Imported Contacts from: %s\n";
+    private static final String MESSAGE_IMPORT_SUCCESS = "Imported Contacts successfully!\n";
     private static final String MESSAGE_DATA_LOAD_ERROR = "Unable to load data from %s \n";
     private final Path filePath;
     private final AddCommandParser addCommandParser = new AddCommandParser();
@@ -52,7 +52,11 @@ public class ImportCommand extends Command {
     private final HashSet<String> optionalParameters = new HashSet<>(
             List.of(new String[]{"matric", "reflection", "studio", "tags"}));
 
-    private String errorMsgs = "";
+    private String errorMsgsFromReadingCsv = "";
+    private String errorMsgsFromAddingPersons = "";
+
+    private int successfulImports = 0;
+    private int unsuccessfulImports = 0;
 
     /**
      * Represents a mapping of String to prefix of the data that should be parsed into the addCommandParser.
@@ -80,35 +84,61 @@ public class ImportCommand extends Command {
     /**
      * Generates a report of the import process.
      */
-    private String generateReport(int[] importResults) {
-        int successfulImports = importResults[0];
-        int unsuccessfulImports = importResults[1];
-        return String.format(MESSAGE_IMPORT_SUCCESS, filePath.toString()) + "\n"
+    private String generateReport() {
+        String importSuccessMsg =
+                !errorMsgsFromReadingCsv.isEmpty() | !errorMsgsFromAddingPersons.isEmpty()
+                        ? "Import completed with errors\n\n"
+                        : successfulImports == 0
+                        ? "No contacts were imported\n\n"
+                        : MESSAGE_IMPORT_SUCCESS + "\n";
+
+        String reportForAddingPersons =
+                (errorMsgsFromAddingPersons.isEmpty()
+                        ? "All valid contacts have been added!\n"
+                        : "Errors found in adding persons!\n")
             + String.format("Successful imports: %d\n", successfulImports)
             + String.format("Unsuccessful imports: %d\n", unsuccessfulImports)
-            + errorMsgs;
+            + errorMsgsFromAddingPersons;
+
+        String reportForReadingCsv =
+                errorMsgsFromReadingCsv.isEmpty()
+                        ? ""
+                        : "Errors found from reading csv!\n" + errorMsgsFromReadingCsv;
+
+        return importSuccessMsg + reportForReadingCsv + reportForAddingPersons;
     }
 
-    private void generateErrorReport(Exception e) {
-        errorMsgs += e.getMessage() + "\n";
+    private void generateErrorReportFromAddingPersons(Exception e) {
+        errorMsgsFromAddingPersons += e.getMessage() + "\n";
+    }
+
+    private void generateErrorReportFromReadingCsv(DataLoadingException e) {
+        errorMsgsFromReadingCsv += e.getMessage() + "\n";
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        int[] importResults;
-        List<Map<String, String>> personsData = null;
+        Pair<Integer, Integer> importResults = new Pair<>(0, 0);
         try {
-            personsData = readCsvFile(filePath, compulsoryParameters, optionalParameters);
-            importResults = addToModel(model, personsData);
+            Pair<Optional<List<Map<String, String>>>, String> result =
+                    readCsvFile(filePath, compulsoryParameters, optionalParameters);
+            Optional<List<Map<String, String>>> personsData = result.getKey();
+            if (personsData.isPresent()) {
+                importResults = addToModel(model, personsData.get());
+                successfulImports = importResults.getKey();
+                unsuccessfulImports = importResults.getValue();
+            }
+            if (!result.getValue().isEmpty()) {
+                generateErrorReportFromReadingCsv(new DataLoadingException(result.getValue()));
+            }
         } catch (DataLoadingException e) {
-            importResults = addToModel(model, personsData);
             throw new CommandException(
                     String.format(MESSAGE_DATA_LOAD_ERROR, filePath)
                             + e.getMessage());
         }
 
-        return new CommandResult(generateReport(importResults));
+        return new CommandResult(generateReport());
     }
 
     /**
@@ -117,7 +147,7 @@ public class ImportCommand extends Command {
      * @param personsData
      * @throws CommandException
      */
-    public int[] addToModel(Model model, List<Map<String, String>> personsData) {
+    public Pair<Integer, Integer> addToModel(Model model, List<Map<String, String>> personsData) {
         requireAllNonNull(model, personsData);
         int successfulImports = 0;
         int unsuccessfulImports = 0;
@@ -129,10 +159,10 @@ public class ImportCommand extends Command {
                 successfulImports++;
             } catch (ParseException | CommandException e) {
                 unsuccessfulImports++;
-                generateErrorReport(e);
+                generateErrorReportFromAddingPersons(e);
             }
         }
-        return new int[]{successfulImports, unsuccessfulImports};
+        return new Pair<>(successfulImports, unsuccessfulImports);
     }
 
     /**
