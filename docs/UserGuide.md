@@ -239,12 +239,10 @@ Adds a person to your contact list. The person's details are now stored in the a
 
 </box>
 
-> **Note:** The following tags will be automatically added to the person if the following conditions are met:
-> 1. `student`: If matriculation number, studio, and reflection fields are present;
-> 2. `TA`: If matriculation number and one of either studio or reflection fields are present;
-> 3. `instructor`: If none of the three fields are present.
->
+> **Note:** 
+> For your convenience, a `student` tag will automatically be added to a contact if they are added with a matriculation number.
 > You are free to edit or remove the tags after the person is added with the [`edit`](#editing-a-person--edit) command.
+> For example, a student TA can be added with the `student` tag, and then the `TA` tag can be added to indicate that they are a TA.
 
 **Example:**
 `add n|John Doe p|98765432 e|johnd@example.com a|John street, block 123, #01-01 m|A1234567Z s|S1 r|R2`<br>
