@@ -1,18 +1,18 @@
 package seedu.address.commons.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
+import javafx.util.Pair;
 import seedu.address.commons.exceptions.DataLoadingException;
-import seedu.address.model.AddressBook;
-import seedu.address.model.Model;
-import seedu.address.model.ModelManager;
-import seedu.address.model.UserPrefs;
 
 public class CsvUtilTest {
     private final HashSet<String> compulsoryParameters =
@@ -21,30 +21,13 @@ public class CsvUtilTest {
     private final HashSet<String> optionalParameters = new HashSet<>(
             List.of(new String[]{"matric", "reflection", "studio", "tags"}));
     @Test
-    public void readCsvFile_missingCompulsoryParameter_failure() {
-        assertThrows(DataLoadingException.class, () ->
-                CsvUtil.readCsvFile(
-                        Paths.get("src/test/data/CsvUtilTest/compulsoryParameterHeaderMissing.csv"),
-                        compulsoryParameters,
-                        optionalParameters));
-    }
-
-    @Test
-    public void readCsvFile_mulitpleMissingCompulsoryParameters_success() throws DataLoadingException {
-        assertThrows(DataLoadingException.class, () ->
-                CsvUtil.readCsvFile(
-                        Paths.get("src/test/data/CsvUtilTest/multipleCompulsoryParameterHeadersMissing.csv"),
-                        compulsoryParameters,
-                        optionalParameters));
-    }
-    @Test
-    public void readCsvFile_fileNotFound_failure() {
-        Model model = new ModelManager(new AddressBook(), new UserPrefs());
-        assertThrows(DataLoadingException.class, () ->
-                CsvUtil.readCsvFile(
-                        Paths.get("src/test/data/CsvUtilTest/nonExistent.csv"),
-                       compulsoryParameters,
-                        optionalParameters));
+    public void readCsvFile_success() throws DataLoadingException {
+        Pair<Optional<List<Map<String, String>>>, String> result = CsvUtil.readCsvFile(
+                Paths.get("src/test/data/ImportCommandTest/valid.csv"),
+                compulsoryParameters,
+                optionalParameters);
+        String expected = "";
+        assertEquals(expected, result.getValue());
     }
 
     @Test

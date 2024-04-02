@@ -1,24 +1,13 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_MATRIC_NUMBER;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_REFLECTION;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDIO;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
-import static seedu.address.testutil.Assert.assertThrows;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -31,18 +20,25 @@ public class ImportCommandTest {
         Path filePath = Paths.get("src/test/data/ImportCommandTest/valid.csv");
         ImportCommand importCommand = new ImportCommand(filePath);
         CommandResult commandResult = importCommand.execute(model);
-        String expected = String.format("Imported Contacts from: %s\n", filePath.toString()) + "\n"
+        String expected = "Imported Persons successfully!\n\n"
+                + "All valid persons have been added!\n"
                 + "Successful imports: 7\n"
                 + "Unsuccessful imports: 0\n";
         String actual = commandResult.getFeedbackToUser();
         assertEquals(expected , actual);
     }
     @Test
-    public void execute_import_invalidPathFailure() {
+    public void execute_import_invalidPathFailure() throws CommandException {
         Model model = new ModelManager(new AddressBook(), new UserPrefs());
         ImportCommand importCommand = new ImportCommand(Paths.get(
                 "src/test/data/ImportCommandTest/nonexistent.csv"));
-        assertThrows(CommandException.class, () -> importCommand.execute(model));
+        String expected = "Import completed with errors\n\n"
+                + "Errors found from reading csv!\n"
+                + "src\\test\\data\\ImportCommandTest\\nonexistent.csv (The system cannot find the file specified)\n\n"
+                + "No valid persons were found. Csv file is empty or error occurred reading from csv file\n"
+                + "Successful imports: 0\n"
+                + "Unsuccessful imports: 0\n";
+        assertEquals(new CommandResult(expected), importCommand.execute(model));
     }
     @Test
     public void equals_success() {

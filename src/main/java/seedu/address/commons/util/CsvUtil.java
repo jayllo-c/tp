@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -49,19 +50,19 @@ public class CsvUtil {
      * Thirdly, it checks if the number of values in each row is the same as the number of headers.
      * If the check for compulsory parameters fails, the error report will contain the missing compulsory parameters.
      * If the check for the number of values in each row fails, the error report will contain the rows that do not have
-     * the same number of values as the number of headers. More importantly the rows of data that do not
+     * the same number of values as the number of headers.
      * It is crucial that a dataLoadingException is thrown in the
      * caller of this method if the error report is not empty.
      * @param filePath the path of the file
      * @param compulsoryParameters
      * @param optionalParameters
-     * @return A pair in which the first value is the data and the second is the error report. Data can be null if
-     * the file is not read successfully or if any compulsory parameters are missing in the header row of csv file.
+     * @return
+     *     A pair in which the first value is the data and the second is the error report. Data can be null if
+     *     the file is not read successfully or if any compulsory parameters are missing in the header row of csv file.
      * @throws DataLoadingException
      */
     public static Pair<Optional<List<Map<String, String>>>, String> readCsvFile(
-            Path filePath, HashSet<String> compulsoryParameters, HashSet<String> optionalParameters)
-            throws DataLoadingException {
+            Path filePath, HashSet<String> compulsoryParameters, HashSet<String> optionalParameters) {
         List<Map<String, String>> data = null;
         Optional<List<Map<String, String>>> nullableData = Optional.empty();
         String errorMsgs = "";

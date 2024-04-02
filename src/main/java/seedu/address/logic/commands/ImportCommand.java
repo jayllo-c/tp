@@ -34,12 +34,12 @@ public class ImportCommand extends Command {
 
     public static final String COMMAND_WORD = "import";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports contacts from specified filepath."
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports persons from specified filepath."
             + " Must be an absolute CSV file path\n"
             + "Parameters: filePath\n"
             + "[" + PREFIX_IMPORT + "import]\n"
             + "Example: " + COMMAND_WORD + PREFIX_IMPORT + "C:usr/lib/text.csv";
-    private static final String MESSAGE_IMPORT_SUCCESS = "Imported Contacts successfully!\n";
+    private static final String MESSAGE_IMPORT_SUCCESS = "Imported Persons successfully!\n";
     private static final String MESSAGE_DATA_LOAD_ERROR = "Unable to load data from %s \n"
             + " Must be an absolute CSV file path. Parameter: FILEPATH\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_IMPORT + "C:usr/lib/text.csv";
@@ -87,16 +87,18 @@ public class ImportCommand extends Command {
      * Generates a report of the import process.
      */
     private String generateReport() {
-        String importSuccessMsg =
+        String importSuccessMsg = (
                 !errorMsgsFromReadingCsv.isEmpty() | !errorMsgsFromAddingPersons.isEmpty()
-                        ? "Import completed with errors\n\n"
+                        ? "Import completed with errors\n"
                         : successfulImports == 0
-                        ? "No contacts were imported\n\n"
-                        : MESSAGE_IMPORT_SUCCESS + "\n";
+                        ? "No persons were imported\n"
+                        : MESSAGE_IMPORT_SUCCESS);
 
-        String reportForAddingPersons =
-                (errorMsgsFromAddingPersons.isEmpty()
-                        ? "All valid contacts have been added!\n"
+        String reportForAddingPersons = "\n" + (
+                errorMsgsFromAddingPersons.isEmpty() && successfulImports > 0
+                        ? "All valid persons have been added!\n"
+                        : successfulImports == 0
+                        ? "No valid persons were found. Csv file is empty or error occurred reading from csv file\n"
                         : "Errors found in adding persons!\n")
             + String.format("Successful imports: %d\n", successfulImports)
             + String.format("Unsuccessful imports: %d\n", unsuccessfulImports)
@@ -105,13 +107,17 @@ public class ImportCommand extends Command {
         String reportForReadingCsv =
                 errorMsgsFromReadingCsv.isEmpty()
                         ? ""
-                        : "Errors found from reading csv!\n" + errorMsgsFromReadingCsv;
+                        : "\nErrors found from reading csv!\n" + errorMsgsFromReadingCsv;
 
         return importSuccessMsg + reportForReadingCsv + reportForAddingPersons;
     }
-
-    private void generateErrorReportFromAddingPersons(Exception e) {
-        errorMsgsFromAddingPersons += e.getMessage() + "\n";
+    /**
+     * Generates an error report from adding persons. The index refers to the index of the person in personsData.
+     * @param e
+     * @param index
+     */
+    private void generateErrorReportFromAddingPersons(Exception e, int index) {
+        errorMsgsFromAddingPersons += String.format("Person %s: ", index) + e.getMessage() + "\n";
     }
 
     private void generateErrorReportFromReadingCsv(DataLoadingException e) {
@@ -121,23 +127,17 @@ public class ImportCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        Pair<Integer, Integer> importResults = new Pair<>(0, 0);
-        try {
-            Pair<Optional<List<Map<String, String>>>, String> result =
-                    readCsvFile(filePath, compulsoryParameters, optionalParameters);
-            Optional<List<Map<String, String>>> personsData = result.getKey();
-            if (personsData.isPresent()) {
-                importResults = addToModel(model, personsData.get());
-                successfulImports = importResults.getKey();
-                unsuccessfulImports = importResults.getValue();
-            }
-            if (!result.getValue().isEmpty()) {
-                generateErrorReportFromReadingCsv(new DataLoadingException(result.getValue()));
-            }
-        } catch (DataLoadingException e) {
-            throw new CommandException(
-                    String.format(MESSAGE_DATA_LOAD_ERROR, filePath)
-                            + e.getMessage());
+        Pair<Integer, Integer> importResults;
+        Pair<Optional<List<Map<String, String>>>, String> result =
+                readCsvFile(filePath, compulsoryParameters, optionalParameters);
+        Optional<List<Map<String, String>>> personsData = result.getKey();
+        if (personsData.isPresent()) {
+            importResults = addToModel(model, personsData.get());
+            successfulImports = importResults.getKey();
+            unsuccessfulImports = importResults.getValue();
+        }
+        if (!result.getValue().isEmpty()) {
+            generateErrorReportFromReadingCsv(new DataLoadingException(result.getValue()));
         }
 
         return new CommandResult(generateReport());
@@ -160,8 +160,8 @@ public class ImportCommand extends Command {
                 addCommand.execute(model);
                 successfulImports++;
             } catch (ParseException | CommandException e) {
+                generateErrorReportFromAddingPersons(e, successfulImports + unsuccessfulImports);
                 unsuccessfulImports++;
-                generateErrorReportFromAddingPersons(e);
             }
         }
         return new Pair<>(successfulImports, unsuccessfulImports);
