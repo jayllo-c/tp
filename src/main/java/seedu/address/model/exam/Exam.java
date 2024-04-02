@@ -3,8 +3,6 @@ package seedu.address.model.exam;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
-import seedu.address.logic.parser.ParserUtil;
-import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Score;
 
 /**
@@ -72,12 +70,14 @@ public class Exam {
      * Returns true if a given string is a valid exam score.
      */
     public static boolean isValidExamScoreString(String test) {
-        try {
-            Score score = ParserUtil.parseScore(test);
-            return score.getScore() > 0;
-        } catch (ParseException e) {
+        if (!test.matches(Score.VALIDATION_REGEX)) {
             return false;
         }
+        Double.parseDouble(test);
+        if (Double.parseDouble(test) <= 0) {
+            return false;
+        }
+        return true;
     }
 
     @Override
