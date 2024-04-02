@@ -36,7 +36,7 @@ public class FindCommandParser implements Parser<FindCommand> {
      */
     private Prefix extractPrefixForFindCommand(ArgumentMultimap argMultimap) throws ParseException {
 
-        if (argMultimap.verifySinglePrefix()) {
+        if (argMultimap.isSinglePrefix()) {
             for (Prefix prefix : FindCommand.ACCEPTED_PREFIXES) {
                 if (argMultimap.getValue(prefix).isPresent()
                     && !argMultimap.getValue(prefix).get().isEmpty()) {
