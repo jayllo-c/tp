@@ -10,13 +10,13 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Address {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Addresses can take any values up to 160 characters, and it should not be blank";
+            "Addresses can take any values up to 100 characters, and it should not be blank";
 
     /*
      * The first character of the address must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.
      */
-    public static final String VALIDATION_REGEX = "[^\\s].{0,160}";
+    public static final String VALIDATION_REGEX = "[^\\s].{0,100}";
 
     public final String value;
 
