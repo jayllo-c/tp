@@ -78,7 +78,7 @@ public class ArgumentMultimap {
     /**
      * Returns true if the ArgumentMultimap contains a single prefix-argument pair and an empty preamble.
      */
-    public boolean verifySinglePrefix() {
+    public boolean isSinglePrefix() {
         return argMultimap.size() == 2 && containsPreamble() && getPreamble().isEmpty()
                || argMultimap.size() == 1 && !containsPreamble();
     }

@@ -10,8 +10,8 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Studio {
     public static final String MESSAGE_CONSTRAINTS = "Studios in the style of S12.. are accepted."
             + "The first character must be \"S\","
-            + "followed by any number of digits.";
-    public static final String VALIDATION_REGEX = "S\\d+";
+            + "followed by up to 4 digits.";
+    public static final String VALIDATION_REGEX = "S\\d{1,4}";
     public final String studio;
 
     /**

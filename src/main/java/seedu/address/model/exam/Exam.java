@@ -3,8 +3,6 @@ package seedu.address.model.exam;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
-import seedu.address.logic.parser.ParserUtil;
-import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Score;
 
 /**
@@ -13,8 +11,8 @@ import seedu.address.model.person.Score;
  */
 public class Exam {
 
-    public static final String MESSAGE_CONSTRAINTS = "Names should only contain alphanumeric characters and spaces, "
-                                                      + "and it should not be blank. "
+    public static final String MESSAGE_CONSTRAINTS = "Names should only contain alphanumeric characters and spaces "
+                                                      + "up to 30 characters, and it should not be blank. "
                                                       + "Exam Score must be greater than zero and "
                                                       + "can have up to 2 decimal places.";
 
@@ -23,7 +21,7 @@ public class Exam {
      * otherwise " " (a blank string) becomes a valid input.
      * The rest of the string can contain any alphanumeric character and spaces.
      */
-    public static final String VALIDATION_REGEX_EXAM_NAME = "[\\p{Alnum}][\\p{Alnum} ]*";
+    public static final String VALIDATION_REGEX_EXAM_NAME = "[\\p{Alnum}][\\p{Alnum} ]{1,29}";
 
     public final String name;
     public final Score maxScore;
@@ -72,12 +70,14 @@ public class Exam {
      * Returns true if a given string is a valid exam score.
      */
     public static boolean isValidExamScoreString(String test) {
-        try {
-            Score score = ParserUtil.parseScore(test);
-            return score.getScore() > 0;
-        } catch (ParseException e) {
+        if (!test.matches(Score.VALIDATION_REGEX)) {
             return false;
         }
+        Double.parseDouble(test);
+        if (Double.parseDouble(test) <= 0) {
+            return false;
+        }
+        return true;
     }
 
     @Override

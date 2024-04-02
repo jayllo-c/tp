@@ -12,55 +12,55 @@ public class ArgumentMultiMapTest {
     private Prefix preamblePrefix = new Prefix("");
 
     @Test
-    public void testVerifySinglePrefix_onePrefix_returnTrue() {
+    public void testisSinglePrefix_onePrefix_returnTrue() {
         testArgumentMultimap = new ArgumentMultimap();
         testArgumentMultimap.put(testPrefix, "Alice");
-        assertEquals(true, testArgumentMultimap.verifySinglePrefix());
+        assertEquals(true, testArgumentMultimap.isSinglePrefix());
     }
 
     @Test
-    public void testVerifySinglePrefix_multiplePrefixes_returnFalse() {
+    public void testisSinglePrefix_multiplePrefixes_returnFalse() {
         testArgumentMultimap = new ArgumentMultimap();
         testArgumentMultimap.put(testPrefix, "Alice");
         testArgumentMultimap.put(testPrefix2, "alice@gmail.com");
-        assertEquals(false, testArgumentMultimap.verifySinglePrefix());
+        assertEquals(false, testArgumentMultimap.isSinglePrefix());
     }
 
     @Test
-    public void testVerifySinglePrefix_emptyMultimap_returnFalse() {
+    public void testisSinglePrefix_emptyMultimap_returnFalse() {
         testArgumentMultimap = new ArgumentMultimap();
-        assertEquals(false, testArgumentMultimap.verifySinglePrefix());
+        assertEquals(false, testArgumentMultimap.isSinglePrefix());
     }
 
     @Test
-    public void testVerifySinglePrefix_onlyPreamble_returnFalse() {
+    public void testisSinglePrefix_onlyPreamble_returnFalse() {
         testArgumentMultimap = new ArgumentMultimap();
         testArgumentMultimap.put(preamblePrefix, "preamble");
-        assertEquals(false, testArgumentMultimap.verifySinglePrefix());
+        assertEquals(false, testArgumentMultimap.isSinglePrefix());
     }
 
     @Test
-    public void testVerifySinglePrefix_preambleAndPrefix_returnFalse() {
+    public void testisSinglePrefix_preambleAndPrefix_returnFalse() {
         testArgumentMultimap = new ArgumentMultimap();
         testArgumentMultimap.put(preamblePrefix, "preamble");
         testArgumentMultimap.put(testPrefix, "Alice");
-        assertEquals(false, testArgumentMultimap.verifySinglePrefix());
+        assertEquals(false, testArgumentMultimap.isSinglePrefix());
     }
 
     @Test
-    public void testVerifySinglePrefix_emptyPreambleAndPrefix_returnTrue() {
+    public void testisSinglePrefix_emptyPreambleAndPrefix_returnTrue() {
         testArgumentMultimap = new ArgumentMultimap();
         testArgumentMultimap.put(preamblePrefix, "");
         testArgumentMultimap.put(testPrefix, "Alice");
-        assertEquals(true, testArgumentMultimap.verifySinglePrefix());
+        assertEquals(true, testArgumentMultimap.isSinglePrefix());
     }
 
     @Test
-    public void testVerifySinglePrefix_emptyPreambleAndMultiplePrefix_returnFalse() {
+    public void testisSinglePrefix_emptyPreambleAndMultiplePrefix_returnFalse() {
         testArgumentMultimap = new ArgumentMultimap();
         testArgumentMultimap.put(preamblePrefix, "");
         testArgumentMultimap.put(testPrefix, "Alice");
         testArgumentMultimap.put(testPrefix2, "alice@gmail.com");
-        assertEquals(false, testArgumentMultimap.verifySinglePrefix());
+        assertEquals(false, testArgumentMultimap.isSinglePrefix());
     }
 }

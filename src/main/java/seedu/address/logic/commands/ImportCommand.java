@@ -40,7 +40,9 @@ public class ImportCommand extends Command {
             + "[" + PREFIX_IMPORT + "import]\n"
             + "Example: " + COMMAND_WORD + PREFIX_IMPORT + "C:usr/lib/text.csv";
     private static final String MESSAGE_IMPORT_SUCCESS = "Imported Contacts successfully!\n";
-    private static final String MESSAGE_DATA_LOAD_ERROR = "Unable to load data from %s \n";
+    private static final String MESSAGE_DATA_LOAD_ERROR = "Unable to load data from %s \n"
+            + " Must be an absolute CSV file path. Parameter: FILEPATH\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_IMPORT + "C:usr/lib/text.csv";
     private final Path filePath;
     private final AddCommandParser addCommandParser = new AddCommandParser();
 

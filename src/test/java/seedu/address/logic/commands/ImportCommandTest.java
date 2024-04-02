@@ -1,6 +1,14 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MATRIC_NUMBER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REFLECTION;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDIO;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.nio.file.Path;
@@ -18,7 +26,7 @@ import seedu.address.model.UserPrefs;
 
 public class ImportCommandTest {
     @Test
-    public void execute_import_success() throws CommandException, ParseException, DataLoadingException {
+    public void execute_import_success() throws CommandException {
         Model model = new ModelManager(new AddressBook(), new UserPrefs());
         Path filePath = Paths.get("src/test/data/ImportCommandTest/valid.csv");
         ImportCommand importCommand = new ImportCommand(filePath);
@@ -30,7 +38,7 @@ public class ImportCommandTest {
         assertEquals(expected , actual);
     }
     @Test
-    public void execute_invalidPath_failure() {
+    public void execute_import_invalidPathFailure() {
         Model model = new ModelManager(new AddressBook(), new UserPrefs());
         ImportCommand importCommand = new ImportCommand(Paths.get(
                 "src/test/data/ImportCommandTest/nonexistent.csv"));

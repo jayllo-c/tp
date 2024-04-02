@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_MISSING_COMPULSORY_PREFIXES;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
@@ -38,9 +39,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_REFLECTION_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_STUDIO_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_INSTRUCTOR;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDENT;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_TA;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MATRIC_NUMBER;
@@ -217,7 +216,7 @@ public class AddCommandParserTest {
     @Test
     public void parse_reflectionMissing_success() {
         // no reflection means TA
-        Person expectedPerson = new PersonBuilder(AMY).withTags(VALID_TAG_FRIEND, VALID_TAG_TA)
+        Person expectedPerson = new PersonBuilder(AMY).withTags(VALID_TAG_FRIEND, VALID_TAG_STUDENT)
                 .withMatric(VALID_MATRIC_NUMBER_AMY).withReflection("").build();
         assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY
                         + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + TAG_DESC_FRIEND + MATRIC_DESC_AMY + STUDIO_DESC_AMY,
@@ -227,7 +226,7 @@ public class AddCommandParserTest {
     @Test
     public void parse_studioMissing_success() {
         // no studio means TA
-        Person expectedPerson = new PersonBuilder(AMY).withTags(VALID_TAG_FRIEND, VALID_TAG_TA)
+        Person expectedPerson = new PersonBuilder(AMY).withTags(VALID_TAG_FRIEND, VALID_TAG_STUDENT)
                 .withMatric(VALID_MATRIC_NUMBER_AMY).withStudio("").build();
         assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY
                         + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + TAG_DESC_FRIEND + MATRIC_DESC_AMY + REFLECTION_DESC_AMY,
@@ -248,7 +247,7 @@ public class AddCommandParserTest {
     @Test
     public void parse_tagAndStudioMissing_success() {
         // zero tags; no studio
-        Person expectedPerson = new PersonBuilder(AMY).withTags(VALID_TAG_TA).withMatric(VALID_MATRIC_NUMBER_AMY)
+        Person expectedPerson = new PersonBuilder(AMY).withTags(VALID_TAG_STUDENT).withMatric(VALID_MATRIC_NUMBER_AMY)
                 .withStudio("").build();
         assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY
                         + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + MATRIC_DESC_AMY + REFLECTION_DESC_AMY,
@@ -285,7 +284,7 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_matricAndStudioAndReflectionMissing_success() {
-        Person expectedPerson = new PersonBuilder(AMY).withTags(VALID_TAG_INSTRUCTOR)
+        Person expectedPerson = new PersonBuilder(AMY).withTags()
                 .withMatric("").withReflection("").withStudio("").build();
         assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY
                         + EMAIL_DESC_AMY + ADDRESS_DESC_AMY,
@@ -294,27 +293,32 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_compulsoryFieldMissing_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE);
 
         // missing name prefix
         assertParseFailure(parser, VALID_NAME_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB,
-                expectedMessage);
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_MISSING_COMPULSORY_PREFIXES
+                        + PREFIX_NAME.toString()));
 
         // missing phone prefix
         assertParseFailure(parser, NAME_DESC_BOB + VALID_PHONE_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB,
-                expectedMessage);
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_MISSING_COMPULSORY_PREFIXES
+                        + PREFIX_PHONE.toString()));
 
         // missing email prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + VALID_EMAIL_BOB + ADDRESS_DESC_BOB,
-                expectedMessage);
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_MISSING_COMPULSORY_PREFIXES
+                        + PREFIX_EMAIL.toString()));
 
         // missing address prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + VALID_ADDRESS_BOB,
-                expectedMessage);
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_MISSING_COMPULSORY_PREFIXES
+                        + PREFIX_ADDRESS.toString()));
 
         // all prefixes missing
         assertParseFailure(parser, VALID_NAME_BOB + VALID_PHONE_BOB + VALID_EMAIL_BOB + VALID_ADDRESS_BOB,
-                expectedMessage);
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_MISSING_COMPULSORY_PREFIXES
+                        + PREFIX_NAME.toString() + ", " + PREFIX_PHONE.toString() + ", "
+                        + PREFIX_EMAIL.toString() + ", " + PREFIX_ADDRESS.toString()));
     }
 
     @Test

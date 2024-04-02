@@ -1,7 +1,7 @@
 package seedu.address.model.person;
 
-import static seedu.address.logic.parser.CliSyntax.PREFIX_LESSTHAN;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_MORETHAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LESS_THAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MORE_THAN;
 
 import java.util.function.Predicate;
 
@@ -33,10 +33,10 @@ public class PersonDetailContainsKeywordAndExamPredicate implements Predicate<Pe
      */
     @Override
     public boolean test(Person person) {
-        if (PREFIX_LESSTHAN.equals(prefix)) {
-            return trueIfLt(person);
-        } else if (PREFIX_MORETHAN.equals(prefix)) {
-            return trueIfMt(person);
+        if (PREFIX_LESS_THAN.equals(prefix)) {
+            return hasScoreLessThanKeyword(person);
+        } else if (PREFIX_MORE_THAN.equals(prefix)) {
+            return hasScoreMoreThanKeyword(person);
         } else {
             // Code should not reach here
             return false;
@@ -48,7 +48,7 @@ public class PersonDetailContainsKeywordAndExamPredicate implements Predicate<Pe
      * @param person The person to be checked.
      * @return True if the person's exam score is greater than the keyword.
      */
-    private boolean trueIfMt(Person person) {
+    private boolean hasScoreMoreThanKeyword(Person person) {
         if (person.getScores().containsKey(exam)) {
             return Double.parseDouble(person.getScores().get(exam).toString())
                     > Double.parseDouble(keyword);
@@ -63,7 +63,7 @@ public class PersonDetailContainsKeywordAndExamPredicate implements Predicate<Pe
      * @param person The person to be checked.
      * @return True if the person's exam score is less than the keyword.
      */
-    private boolean trueIfLt(Person person) {
+    private boolean hasScoreLessThanKeyword(Person person) {
         if (person.getScores().containsKey(exam)) {
             return Double.parseDouble(person.getScores().get(exam).toString())
                     < Double.parseDouble(keyword);
@@ -109,7 +109,7 @@ public class PersonDetailContainsKeywordAndExamPredicate implements Predicate<Pe
      * @return True if the prefix is PREFIX_LESSTHAN or PREFIX_GREATERTHAN.
      */
     public boolean isExamRequired() {
-        return prefix.equals(PREFIX_LESSTHAN) || prefix.equals(PREFIX_MORETHAN);
+        return prefix.equals(PREFIX_LESS_THAN) || prefix.equals(PREFIX_MORE_THAN);
     }
 }
 

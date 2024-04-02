@@ -4,9 +4,9 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.isAnyNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_LESSTHAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LESS_THAN;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MATRIC_NUMBER;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_MORETHAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MORE_THAN;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REFLECTION;
@@ -31,8 +31,8 @@ public class FindCommand extends Command {
 
     public static final Prefix[] ACCEPTED_PREFIXES = {PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
                                                       PREFIX_ADDRESS, PREFIX_TAG, PREFIX_MATRIC_NUMBER,
-                                                      PREFIX_REFLECTION, PREFIX_STUDIO, PREFIX_LESSTHAN,
-                                                      PREFIX_MORETHAN};
+                                                      PREFIX_REFLECTION, PREFIX_STUDIO, PREFIX_LESS_THAN,
+                                                      PREFIX_MORE_THAN};
 
 
     public static final String COMMAND_WORD = "find";
