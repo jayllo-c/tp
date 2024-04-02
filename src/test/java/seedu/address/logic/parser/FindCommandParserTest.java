@@ -3,9 +3,10 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_LESSTHAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LESS_THAN;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SPECIAL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -18,6 +19,7 @@ import seedu.address.model.person.PersonDetailContainsKeywordPredicate;
 public class FindCommandParserTest {
 
     private FindCommandParser parser = new FindCommandParser();
+    private String invalidPrefix = "z" + PREFIX_SPECIAL.toString();
 
     @Test
     public void parse_emptyArg_throwsParseException() {
@@ -29,7 +31,7 @@ public class FindCommandParserTest {
     @Test
     public void parse_invalidPrefix_throwsParseException() {
         // no leading and trailing whitespaces
-        assertParseFailure(parser, " z/Alice",
+        assertParseFailure(parser, " " + invalidPrefix + "Alice",
                            String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
@@ -38,10 +40,10 @@ public class FindCommandParserTest {
         // no leading and trailing whitespaces
         FindCommand expectedFindCommand =
                 new FindCommand(new PersonDetailContainsKeywordPredicate(PREFIX_NAME, "Alice"));
-        assertParseSuccess(parser, " n/Alice", expectedFindCommand);
+        assertParseSuccess(parser, " " + PREFIX_NAME + "Alice", expectedFindCommand);
 
         // whitespace before keyword
-        assertParseSuccess(parser, " n/  Alice", expectedFindCommand);
+        assertParseSuccess(parser, " " + PREFIX_NAME + " Alice", expectedFindCommand);
     }
 
     @Test
@@ -49,10 +51,10 @@ public class FindCommandParserTest {
         // no leading and trailing whitespaces
         FindCommand expectedFindCommand =
                 new FindCommand(new PersonDetailContainsKeywordPredicate(PREFIX_EMAIL, "alice@gmail.com"));
-        assertParseSuccess(parser, " e/alice@gmail.com", expectedFindCommand);
+        assertParseSuccess(parser, " " + PREFIX_EMAIL + "alice@gmail.com", expectedFindCommand);
 
         // whitespace before keyword
-        assertParseSuccess(parser, " e/  alice@gmail.com  ", expectedFindCommand);
+        assertParseSuccess(parser, " " + PREFIX_EMAIL + "  alice@gmail.com  ", expectedFindCommand);
     }
 
     @Test
@@ -60,10 +62,10 @@ public class FindCommandParserTest {
         // no leading and trailing whitespaces
         FindCommand expectedFindCommand =
                 new FindCommand(new PersonDetailContainsKeywordPredicate(PREFIX_PHONE, "91234567"));
-        assertParseSuccess(parser, " p/91234567", expectedFindCommand);
+        assertParseSuccess(parser, " " + PREFIX_PHONE + "91234567", expectedFindCommand);
 
-        // whitespace before keyword
-        assertParseSuccess(parser, " p/  91234567  ", expectedFindCommand);
+        // whitespace before and after keyword
+        assertParseSuccess(parser, " " + PREFIX_PHONE + "  91234567  ", expectedFindCommand);
     }
 
     @Test
@@ -71,10 +73,10 @@ public class FindCommandParserTest {
         // no leading and trailing whitespaces
         FindCommand expectedFindCommand =
                 new FindCommand(new PersonDetailContainsKeywordPredicate(PREFIX_ADDRESS, "123, Jurong West Ave 6"));
-        assertParseSuccess(parser, " a/123, Jurong West Ave 6", expectedFindCommand);
+        assertParseSuccess(parser, " " + PREFIX_ADDRESS + "123, Jurong West Ave 6", expectedFindCommand);
 
         // whitespace before keyword
-        assertParseSuccess(parser, " a/  123, Jurong West Ave 6  ", expectedFindCommand);
+        assertParseSuccess(parser, " " + PREFIX_ADDRESS + "  123, Jurong West Ave 6  ", expectedFindCommand);
     }
 
     @Test
@@ -82,26 +84,26 @@ public class FindCommandParserTest {
         // no leading and trailing whitespaces
         FindCommand expectedFindCommand =
                 new FindCommand(new PersonDetailContainsKeywordPredicate(PREFIX_TAG, "friends"));
-        assertParseSuccess(parser, " t/friends", expectedFindCommand);
+        assertParseSuccess(parser, " " + PREFIX_TAG + "friends", expectedFindCommand);
 
         // whitespace before keyword
-        assertParseSuccess(parser, " t/  friends  ", expectedFindCommand);
+        assertParseSuccess(parser, " " + PREFIX_TAG + "  friends  ", expectedFindCommand);
     }
 
     @Test
     public void parse_validLessThanArg_returnsFindCommand() {
         // no leading and trailing whitespaces
         FindCommand expectedFindCommand =
-                new FindCommand(new PersonDetailContainsKeywordPredicate(PREFIX_LESSTHAN, "50"));
-        assertParseSuccess(parser, " lt/50", expectedFindCommand);
+                new FindCommand(new PersonDetailContainsKeywordPredicate(PREFIX_LESS_THAN, "50"));
+        assertParseSuccess(parser, " " + PREFIX_LESS_THAN + "50", expectedFindCommand);
 
         // whitespace before keyword
-        assertParseSuccess(parser, " lt/  50  ", expectedFindCommand);
+        assertParseSuccess(parser, " " + PREFIX_LESS_THAN + "  50  ", expectedFindCommand);
     }
 
     @Test
     public void parse_invalidLessThanArg_throwsParseException() {
-        assertParseFailure(parser, " lt/abc",
+        assertParseFailure(parser, " " + PREFIX_LESS_THAN + "abc",
                            String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 }
