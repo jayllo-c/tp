@@ -113,8 +113,8 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_copy() throws Exception {
-        assertTrue(parser.parseCommand("copy") instanceof CopyCommand);
-        assertTrue(parser.parseCommand("copy 3") instanceof CopyCommand);
+        assertTrue(parser.parseCommand(CopyCommand.COMMAND_WORD) instanceof CopyCommand);
+        assertTrue(parser.parseCommand(CopyCommand.COMMAND_WORD + " 3") instanceof CopyCommand);
     }
 
     @Test
@@ -124,34 +124,37 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_import() throws Exception {
-        assertTrue(parser.parseCommand("import " + PREFIX_IMPORT + "src.csv") instanceof ImportCommand);
+        assertTrue(parser.parseCommand(ImportCommand.COMMAND_WORD + " "
+                + PREFIX_IMPORT + "src.csv") instanceof ImportCommand);
     }
 
     @Test
     public void parseCommand_importExam() throws Exception {
-        assertTrue(parser.parseCommand("importExamScores " + PREFIX_IMPORT + "src.csv")
+        assertTrue(parser.parseCommand(
+                ImportExamScoresCommand.COMMAND_WORD + " " + PREFIX_IMPORT + "src.csv")
                 instanceof ImportExamScoresCommand);
     }
 
     @Test
     public void parseCommand_deleteShown() throws Exception {
-        assertTrue(parser.parseCommand("deleteshown") instanceof DeleteShownCommand);
+        assertTrue(parser.parseCommand(DeleteShownCommand.COMMAND_WORD) instanceof DeleteShownCommand);
     }
 
     @Test
     public void parseCommand_selectExam() throws Exception {
-        assertTrue(parser.parseCommand("selectExam 1") instanceof SelectExamCommand);
+        assertTrue(parser.parseCommand(SelectExamCommand.COMMAND_WORD + " 1") instanceof SelectExamCommand);
     }
 
     @Test
     public void parseCommand_unrecognisedInput_throwsParseException() {
-        assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE), ()
-            -> parser.parseCommand(""));
+        assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                HelpCommand.MESSAGE_USAGE), () -> parser.parseCommand(""));
     }
 
     @Test
     void parseCommand_addExam() throws Exception {
-        assertTrue(parser.parseCommand("addExam " + PREFIX_NAME + "Midterm " + PREFIX_SCORE + "100")
+        assertTrue(parser.parseCommand(AddExamCommand.COMMAND_WORD + " "
+                + PREFIX_NAME + "Midterm " + PREFIX_SCORE + "100")
                 instanceof AddExamCommand);
     }
 
