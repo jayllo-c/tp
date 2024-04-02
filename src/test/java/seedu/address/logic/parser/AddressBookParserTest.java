@@ -111,8 +111,8 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_copy() throws Exception {
-        assertTrue(parser.parseCommand("copy") instanceof CopyCommand);
-        assertTrue(parser.parseCommand("copy 3") instanceof CopyCommand);
+        assertTrue(parser.parseCommand(CopyCommand.COMMAND_WORD) instanceof CopyCommand);
+        assertTrue(parser.parseCommand(CopyCommand.COMMAND_WORD + " 3") instanceof CopyCommand);
     }
 
     @Test
@@ -122,22 +122,23 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_import() throws Exception {
-        assertTrue(parser.parseCommand("import i/src.csv") instanceof ImportCommand);
+        assertTrue(parser.parseCommand(ImportCommand.COMMAND_WORD + " i/src.csv") instanceof ImportCommand);
     }
 
     @Test
     public void parseCommand_importExam() throws Exception {
-        assertTrue(parser.parseCommand("importExamScores i/src.csv") instanceof ImportExamScoresCommand);
+        assertTrue(parser.parseCommand(
+                ImportExamScoresCommand.COMMAND_WORD + " i/src.csv") instanceof ImportExamScoresCommand);
     }
 
     @Test
     public void parseCommand_deleteShown() throws Exception {
-        assertTrue(parser.parseCommand("deleteshown") instanceof DeleteShownCommand);
+        assertTrue(parser.parseCommand(DeleteShownCommand.COMMAND_WORD) instanceof DeleteShownCommand);
     }
 
     @Test
     public void parseCommand_selectExam() throws Exception {
-        assertTrue(parser.parseCommand("selectExam 1") instanceof SelectExamCommand);
+        assertTrue(parser.parseCommand(SelectExamCommand.COMMAND_WORD + " 1") instanceof SelectExamCommand);
     }
 
     @Test
@@ -148,7 +149,7 @@ public class AddressBookParserTest {
 
     @Test
     void parseCommand_addExam() throws Exception {
-        assertTrue(parser.parseCommand("addExam n/Midterm s/100") instanceof AddExamCommand);
+        assertTrue(parser.parseCommand(AddExamCommand.COMMAND_WORD + " n/Midterm s/100") instanceof AddExamCommand);
     }
 
     @Test
