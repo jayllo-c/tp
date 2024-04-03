@@ -23,10 +23,9 @@ public class ImportExamScoresCommand extends Command {
 
     public static final String COMMAND_WORD = "importExamScores";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports exams from specified filepath."
-            + " Must be an absolute CSV file path\n"
-            + "[" + PREFIX_IMPORT + "FILEPATH]\n"
+            + " Must be an absolute CSV file path. Parameter: "
+            + PREFIX_IMPORT + "FILEPATH\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_IMPORT + "C:usr/lib/text.csv";
-    public static final String MESSAGE_ERROR_READING_FILE = "Error reading file: ";
     public static final String MESSAGE_SCORE_NOT_NUMBER = "Score for %s is not a number";
     public static final String MESSAGE_PERSON_DOES_NOT_EXIST = "Person does not exist";
     public static final String MESSAGE_SUCCESS = "Imported exams from: %s";
@@ -37,6 +36,11 @@ public class ImportExamScoresCommand extends Command {
     public static final String MESSAGE_EXAM_DOES_NOT_EXIST = "Exam does not exist";
     public static final String MESSAGE_GRADE_TOO_HIGH = "Grade for %s exceeds maximum score";
     public static final String HEADER_EMAIL = "email";
+    public static final String ERROR_EMAIL_FIRST_VALUE =
+            "Please ensure that the email column is the first column in the CSV file.";
+    public static final String ERROR_WRONG_CSV_FORMAT = "Please ensure that the CSV file is in the correct format.\n"
+            + "The first row should contain the headers of the exams and the first column should contain the emails.\n"
+            + "There should be no empty cells in the CSV file.";
     private StringBuilder errorReport;
     private Path filepath;
 
@@ -91,8 +95,8 @@ public class ImportExamScoresCommand extends Command {
      * @param lst the list of String arrays representing the lines of the CSV file
      * @return a mapping of exam names to a mapping of student emails to their respective scores
      */
-    private HashMap<String, HashMap<String, Integer>> createExamsMapping(List<String[]> lst) {
-        HashMap<String, HashMap<String, Integer>> map = new HashMap<>();
+    private HashMap<String, HashMap<String, Double>> createExamsMapping(List<String[]> lst) {
+        HashMap<String, HashMap<String, Double>> map = new HashMap<>();
 
         // Check if there is at least a header row within the CSV file.
         if (hasHeader(lst)) {
@@ -103,7 +107,7 @@ public class ImportExamScoresCommand extends Command {
         return map;
     }
 
-    private void createExamNameHeaders(List<String[]> lst, HashMap<String, HashMap<String, Integer>> map) {
+    private void createExamNameHeaders(List<String[]> lst, HashMap<String, HashMap<String, Double>> map) {
         String[] examNames = getExamNames(lst);
 
         for (int i = 1; i < examNames.length; i++) {
@@ -111,7 +115,7 @@ public class ImportExamScoresCommand extends Command {
         }
     }
 
-    private void updateExamResults(List<String[]> lst, HashMap<String, HashMap<String, Integer>> map) {
+    private void updateExamResults(List<String[]> lst, HashMap<String, HashMap<String, Double>> map) {
         String[] examNames = getExamNames(lst);
 
         for (int i = 1; i < lst.size(); i++) {
@@ -120,7 +124,7 @@ public class ImportExamScoresCommand extends Command {
         }
     }
 
-    private void updateExamResult(HashMap<String, HashMap<String, Integer>> map, String[] examNames, String[] row) {
+    private void updateExamResult(HashMap<String, HashMap<String, Double>> map, String[] examNames, String[] row) {
         if (hasEmail(row)) {
             String email = row[0];
             addRows(map, examNames, row, email);
@@ -128,16 +132,16 @@ public class ImportExamScoresCommand extends Command {
     }
 
     private void addRows(
-            HashMap<String, HashMap<String, Integer>> map, String[] examNames, String[] row, String email) {
+            HashMap<String, HashMap<String, Double>> map, String[] examNames, String[] row, String email) {
         for (int j = 1; j < row.length; j++) {
             addRow(map, examNames, row, email, j);
         }
     }
 
     private void addRow(
-            HashMap<String, HashMap<String, Integer>> map, String[] examNames, String[] row, String email, int j) {
-        if (isValidScore(row[j])) {
-            map.get(examNames[j]).put(email, new Score(Integer.parseInt(row[j])).getScore());
+            HashMap<String, HashMap<String, Double>> map, String[] examNames, String[] row, String email, int j) {
+        if (Score.isValidScoreString(row[j])) {
+            map.get(examNames[j]).put(email, new Score(Double.parseDouble(row[j])).getScore());
         } else {
             if (isExam(examNames[j])) {
                 addToErrorReport(email, String.format(MESSAGE_SCORE_NOT_NUMBER, getExamName(examNames[j])));
@@ -145,7 +149,7 @@ public class ImportExamScoresCommand extends Command {
         }
     }
 
-    private void addScores(HashMap<String, HashMap<String, Integer>> headers, Model model) {
+    private void addScores(HashMap<String, HashMap<String, Double>> headers, Model model) {
         Object[] examNames = headers.keySet().toArray();
 
         for (int i = 0; i < examNames.length; i++) {
@@ -160,19 +164,19 @@ public class ImportExamScoresCommand extends Command {
     }
 
     private void insertGrades(
-            HashMap<String, HashMap<String, Integer>> headers, Model model, Exam exam, Object examNames) {
-        HashMap<String, Integer> grades = headers.get((String) examNames);
+            HashMap<String, HashMap<String, Double>> headers, Model model, Exam exam, Object examNames) {
+        HashMap<String, Double> grades = headers.get((String) examNames);
         Object[] emails = grades.keySet().toArray();
 
         for (int j = 0; j < emails.length; j++) {
             String email = (String) emails[j];
-            Integer grade = grades.get(email);
+            Double grade = grades.get(email);
 
             addScoreToPerson(model, email, exam, grade);
         }
     }
 
-    private void addScoreToPerson(Model model, String email, Exam exam, Integer grade) {
+    private void addScoreToPerson(Model model, String email, Exam exam, Double grade) {
         ObservableList<Person> persons = model.getPersonByEmail(email);
         if (persons.size() > 0) {
             Person person = persons.get(0);
@@ -191,16 +195,28 @@ public class ImportExamScoresCommand extends Command {
         requireNonNull(model);
 
         List<String[]> lst = CsvUtil.readAllLinesForImportExamScores(filepath);
-        reverse(lst);
-        HashMap<String, HashMap<String, Integer>> headers = createExamsMapping(lst);
+        System.out.println(lst);
+        if (!isEmailFirstValue(lst)) {
+            throw new CommandException(ERROR_EMAIL_FIRST_VALUE);
+        }
 
-        HashMap<String, HashMap<String, Integer>> headersForExams = removeNonExams(headers);
-        addScores(headersForExams, model);
+        try {
+            parseScoresFromRawCsv(model, lst);
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+            throw new CommandException(ERROR_WRONG_CSV_FORMAT);
+        }
 
         return new CommandResult(
                 String.format(MESSAGE_SUCCESS, filepath.toString()) + generateErrorReport());
     }
 
+    private void parseScoresFromRawCsv(Model model, List<String[]> lst) {
+        reverse(lst);
+        HashMap<String, HashMap<String, Double>> headers = createExamsMapping(lst);
+
+        HashMap<String, HashMap<String, Double>> headersForExams = removeNonExams(headers);
+        addScores(headersForExams, model);
+    }
 
     // Trivial methods
 
@@ -209,14 +225,6 @@ public class ImportExamScoresCommand extends Command {
         return other == this
                 || (other instanceof ImportExamScoresCommand
                 && filepath.equals(((ImportExamScoresCommand) other).filepath));
-    }
-
-    private boolean isValidScore(String score) {
-        try {
-            return Integer.parseInt(score) >= 0;
-        } catch (NumberFormatException e) {
-            return false;
-        }
     }
 
     private boolean hasHeader(List<String[]> lst) {
@@ -245,8 +253,8 @@ public class ImportExamScoresCommand extends Command {
         return examName.substring(EXAM_HEADER.length()).strip();
     }
 
-    private HashMap<String, HashMap<String, Integer>> removeNonExams(HashMap<String, HashMap<String, Integer>> map) {
-        HashMap<String, HashMap<String, Integer>> newMap = new HashMap<>();
+    private HashMap<String, HashMap<String, Double>> removeNonExams(HashMap<String, HashMap<String, Double>> map) {
+        HashMap<String, HashMap<String, Double>> newMap = new HashMap<>();
         for (String key : map.keySet()) {
             if (isExam(key) || isEmailHeader(key)) {
                 newMap.put(getExamName(key), map.get(key));
@@ -277,6 +285,10 @@ public class ImportExamScoresCommand extends Command {
         for (int j = 1; j < row.length; j++) {
             reversedRow[j] = row[row.length - j];
         }
+    }
+
+    boolean isEmailFirstValue(List<String[]> lst) {
+        return lst.size() > 0 && lst.get(0).length > 0 && lst.get(0)[0].equals(HEADER_EMAIL);
     }
 
 }

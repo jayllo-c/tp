@@ -36,7 +36,7 @@ public class FindCommandParser implements Parser<FindCommand> {
      */
     private Prefix extractPrefixForFindCommand(ArgumentMultimap argMultimap) throws ParseException {
 
-        if (argMultimap.verifySinglePrefix()) {
+        if (argMultimap.isSinglePrefix()) {
             for (Prefix prefix : FindCommand.ACCEPTED_PREFIXES) {
                 if (argMultimap.getValue(prefix).isPresent()
                     && !argMultimap.getValue(prefix).get().isEmpty()) {
@@ -54,7 +54,7 @@ public class FindCommandParser implements Parser<FindCommand> {
      * @throws ParseException if the user input does not conform to the expected format
      */
     private String extractValidKeyword(ArgumentMultimap argMultimap, Prefix prefix) throws ParseException {
-        if (prefix.equals(CliSyntax.PREFIX_LESSTHAN) || prefix.equals(CliSyntax.PREFIX_MORETHAN)) {
+        if (prefix.equals(CliSyntax.PREFIX_LESS_THAN) || prefix.equals(CliSyntax.PREFIX_MORE_THAN)) {
             if (!argMultimap.getValue(prefix).get().matches("\\d+")) {
                 throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
             }

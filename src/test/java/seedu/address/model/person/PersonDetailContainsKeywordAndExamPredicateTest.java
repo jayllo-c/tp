@@ -4,8 +4,8 @@ package seedu.address.model.person;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_LESSTHAN;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_MORETHAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LESS_THAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MORE_THAN;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 
 import org.junit.jupiter.api.Test;
@@ -22,16 +22,16 @@ public class PersonDetailContainsKeywordAndExamPredicateTest {
 
         PersonDetailContainsKeywordAndExamPredicate firstPredicate =
                 new PersonDetailContainsKeywordAndExamPredicate(
-                PREFIX_LESSTHAN, firstPredicateKeyword, TypicalPersons.MIDTERM);
+                        PREFIX_LESS_THAN, firstPredicateKeyword, TypicalPersons.MIDTERM);
         PersonDetailContainsKeywordAndExamPredicate secondPredicate =
                 new PersonDetailContainsKeywordAndExamPredicate(
-                PREFIX_LESSTHAN, secondPredicateKeyword, TypicalPersons.MIDTERM);
+                        PREFIX_LESS_THAN, secondPredicateKeyword, TypicalPersons.MIDTERM);
         PersonDetailContainsKeywordAndExamPredicate thirdPredicate =
                 new PersonDetailContainsKeywordAndExamPredicate(
-                PREFIX_MORETHAN, firstPredicateKeyword, TypicalPersons.MIDTERM);
+                        PREFIX_MORE_THAN, firstPredicateKeyword, TypicalPersons.MIDTERM);
         PersonDetailContainsKeywordAndExamPredicate fourthPredicate =
                 new PersonDetailContainsKeywordAndExamPredicate(
-                PREFIX_MORETHAN, secondPredicateKeyword, TypicalPersons.MIDTERM);
+                        PREFIX_MORE_THAN, secondPredicateKeyword, TypicalPersons.MIDTERM);
 
         // same object -> returns true
         assertEquals(firstPredicate, firstPredicate);
@@ -45,7 +45,7 @@ public class PersonDetailContainsKeywordAndExamPredicateTest {
         // same values -> returns true
         PersonDetailContainsKeywordAndExamPredicate firstPredicateCopy =
                 new PersonDetailContainsKeywordAndExamPredicate(
-                PREFIX_LESSTHAN, firstPredicateKeyword, TypicalPersons.MIDTERM);
+                        PREFIX_LESS_THAN, firstPredicateKeyword, TypicalPersons.MIDTERM);
 
         assertEquals(firstPredicate, firstPredicateCopy);
 
@@ -64,11 +64,11 @@ public class PersonDetailContainsKeywordAndExamPredicateTest {
         String keyword = "55";
         PersonDetailContainsKeywordAndExamPredicate predicate =
                 new PersonDetailContainsKeywordAndExamPredicate(
-                PREFIX_LESSTHAN, keyword, TypicalPersons.MIDTERM);
+                        PREFIX_LESS_THAN, keyword, TypicalPersons.MIDTERM);
 
         String expectedString = new ToStringBuilder("seedu.address.model.person."
                 + "PersonDetailContainsKeywordAndExamPredicate")
-                .add("prefix", PREFIX_LESSTHAN)
+                .add("prefix", PREFIX_LESS_THAN)
                 .add("keyword", keyword)
                 .add("exam", TypicalPersons.MIDTERM)
                 .toString();
@@ -81,7 +81,7 @@ public class PersonDetailContainsKeywordAndExamPredicateTest {
         // One keyword
         PersonDetailContainsKeywordAndExamPredicate predicate =
                 new PersonDetailContainsKeywordAndExamPredicate(
-                PREFIX_MORETHAN, "55", TypicalPersons.MIDTERM);
+                        PREFIX_MORE_THAN, "55", TypicalPersons.MIDTERM);
 
         // keyword matches score
         assertTrue(predicate.test(TypicalPersons.FIONA));
@@ -95,7 +95,7 @@ public class PersonDetailContainsKeywordAndExamPredicateTest {
         // One keyword
         PersonDetailContainsKeywordAndExamPredicate predicate =
                 new PersonDetailContainsKeywordAndExamPredicate(
-                PREFIX_MORETHAN, "55", TypicalPersons.QUIZ);
+                        PREFIX_MORE_THAN, "55", TypicalPersons.QUIZ);
 
         // keyword matches score for different exam
         assertFalse(predicate.test(TypicalPersons.FIONA));
@@ -119,7 +119,7 @@ public class PersonDetailContainsKeywordAndExamPredicateTest {
     public void isExamRequired_validPrefixes_returnsTrue() {
         PersonDetailContainsKeywordAndExamPredicate predicate =
                 new PersonDetailContainsKeywordAndExamPredicate(
-                PREFIX_MORETHAN, "55", TypicalPersons.MIDTERM);
+                        PREFIX_MORE_THAN, "55", TypicalPersons.MIDTERM);
 
         assertTrue(predicate.isExamRequired());
     }
