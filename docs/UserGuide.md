@@ -47,7 +47,7 @@ Click below to navigate the user guide:
     </ul>
     <li><a href="#exam-management-features">Exam Management Features</a></li>
     <ul>
-        <li><a href="#importexamscores">Importing Exam Scores from a CSV File<code>importExamScores</code></a></li>
+        <li><a href="#importexamscores">Importing Exam Scores from a CSV File: <code>importExamScores</code></a></li>
         <li><a href="#addexam">Adding an Exam: <code>addExam</code></a></li>
         <li><a href="#deleteexam">Deleting an Exam: <code>deleteExam</code></a></li>
         <li><a href="#selectexam">Selecting an Exam: <code>selectExam</code></a></li>
