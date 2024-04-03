@@ -1,8 +1,8 @@
 {
   "baseUrl": "",
   "titlePrefix": "Avengers Assemble",
-  "titleSuffix": "AddressBook Level-3",
-  "faviconPath": "images/SeEduLogo.png",
+  "titleSuffix": "Avengers Assemble",
+  "faviconPath": "images/AaLogo.png",
   "style": {
     "codeTheme": "light"
   },
