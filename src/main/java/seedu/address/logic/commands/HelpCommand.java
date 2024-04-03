@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
-import java.awt.*;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 
 import seedu.address.model.Model;
