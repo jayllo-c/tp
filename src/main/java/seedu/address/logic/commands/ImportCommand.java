@@ -40,7 +40,7 @@ public class ImportCommand extends Command {
             + "Parameters: filePath\n"
             + "[" + PREFIX_IMPORT + "import]\n"
             + "Example: " + COMMAND_WORD + PREFIX_IMPORT + "C:usr/lib/text.csv";
-    private static final String MESSAGE_IMPORT_SUCCESS = "Imported Persons successfully!\n";
+    private static final String MESSAGE_IMPORT_SUCCESS = "Imported persons successfully!\n";
     private final Path filePath;
     private final AddCommandParser addCommandParser = new AddCommandParser();
 

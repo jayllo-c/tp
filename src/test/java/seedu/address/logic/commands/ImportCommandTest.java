@@ -21,7 +21,7 @@ public class ImportCommandTest {
         Path filePath = Paths.get("src/test/data/ImportCommandTest/valid.csv");
         ImportCommand importCommand = new ImportCommand(filePath);
         CommandResult commandResult = importCommand.execute(model);
-        String expected = "Imported Persons successfully!\n\n"
+        String expected = "Imported persons successfully!\n\n"
                 + "All valid persons have been added!\n"
                 + "Successful imports: 7\n"
                 + "Unsuccessful imports: 0\n";
@@ -42,7 +42,7 @@ public class ImportCommandTest {
         Path filePath = Paths.get("src/test/data/ImportCommandTest/extraHeader.csv");
         ImportCommand importCommand = new ImportCommand(filePath);
         CommandResult commandResult = importCommand.execute(model);
-        String expected = "Imported Persons successfully!\n\n"
+        String expected = "Imported persons successfully!\n\n"
                 + "All valid persons have been added!\n"
                 + "Successful imports: 7\n"
                 + "Unsuccessful imports: 0\n";
@@ -56,7 +56,7 @@ public class ImportCommandTest {
         Path filePath = Paths.get("src/test/data/ImportCommandTest/missingOptionalValue.csv");
         ImportCommand importCommand = new ImportCommand(filePath);
         CommandResult commandResult = importCommand.execute(model);
-        String expected = "Imported Persons successfully!\n\n"
+        String expected = "Imported persons successfully!\n\n"
                 + "All valid persons have been added!\n"
                 + "Successful imports: 7\n"
                 + "Unsuccessful imports: 0\n";
