@@ -22,17 +22,18 @@ import seedu.address.model.person.Score;
 public class ImportExamScoresCommand extends Command {
 
     public static final String COMMAND_WORD = "importExamScores";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports exams from specified filepath."
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports exam scores from specified filepath."
             + " Must be an absolute CSV file path. Parameter: "
             + PREFIX_IMPORT + "FILEPATH\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_IMPORT + "C:usr/lib/text.csv";
     public static final String MESSAGE_SCORE_NOT_NUMBER = "Score for %s is not a number";
     public static final String MESSAGE_PERSON_DOES_NOT_EXIST = "Person does not exist";
-    public static final String MESSAGE_SUCCESS = "Imported exams from: %s";
+    public static final String MESSAGE_SUCCESS = "Imported exam scores from: %s";
     public static final String MESSAGE_DUPLICATE_EXAM =
             "Duplicate exam header. Only the records of the first exam will be imported if present.";
     public static final String EXAM_HEADER = "Exam:";
-    public static final String PREFIX_ERROR_REPORT = "\nBelow are the errors that occurred while importing exams:\n";
+    public static final String PREFIX_ERROR_REPORT =
+            "\nBelow are the errors that occurred while importing exam scores:\n";
     public static final String MESSAGE_EXAM_DOES_NOT_EXIST = "Exam does not exist";
     public static final String MESSAGE_GRADE_TOO_HIGH = "Grade for %s exceeds maximum score";
     public static final String HEADER_EMAIL = "email";

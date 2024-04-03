@@ -32,8 +32,8 @@ public class ImportCommandTest {
         Path filePath = Paths.get("src/test/data/ImportCommandTest/valid.csv");
         ImportCommand importCommand = new ImportCommand(filePath);
         CommandResult commandResult = importCommand.execute(model);
-        assertEquals(
-                String.format("Imported Contacts from: %s", filePath.toString()), commandResult.getFeedbackToUser());
+        assertEquals(String.format(ImportCommand.MESSAGE_IMPORT_SUCCESS, filePath.toString()),
+                commandResult.getFeedbackToUser());
     }
     @Test
     public void execute_convertToAddCommandInput_success() {
