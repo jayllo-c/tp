@@ -134,13 +134,17 @@ Provides you with warnings about potential issues you might face.
 
 ### Getting Help : `help`
 
-Shows you a link to guide you on how to use the application. Click on the link to access the user guide.
+Copies the link of our user guide to your clipboard. Paste it into a browser to view it.
 
 **Format:** `help`
 
+You will see this message when you have successfully copied the link.
+
 <p align="center">
-  <img src="images/helpMessage.png" alt="image of help window" width="500" />
+  <img src="images/success_images/help_success.png" alt="image of help window" width="750" />
 </p>
+
+<div style="page-break-after: always;"></div>
 
 Before we proceed with the commands, here are some important points to note on their formatting. These points will also be repeated in the [command parameter summary](#command-parameter-summary) for you to refer to easily at any point in time.
 
@@ -183,6 +187,8 @@ Deletes **all** entries from your contact list.
 **Format:** `clear`
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="import"></div>
 
@@ -931,12 +937,12 @@ Some commands require you to include parameters. These parameters are identified
 
 </box>
 
-| Prefix | What it refers to          | Max. Length | Constraints    |
+| Prefix | What it refers to           | Max. Length | Constraints    |
 |--------|-----------------------------|-------------|----------------|
-| n\|    | Name                        | 80             | Should only contain alphanumeric characters and spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| n\|    | Name                        | 80             | Should only contain alphanumeric characters, spaces, and the characters `,`, `-`, `.`, `/`, `(` and `)`.                                                                                                                                                                                                                                                                                                                                                                                                       |
 | n\|    | Exam Name                   | 30             | Should only contain alphanumeric characters and spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | p\|    | Phone Number                | 30             | It can start with an optional `+` to indicate the country code, with the rest only containing numbers. It should be at least 3 digits long.                                                                                                                                                                                                                                                                                                                                                                                      |
-| e\|    | Email                       | 100            | **Format:** local-part@domain<br/> **Constraints for local part:**<br/> • Should only contain alphanumeric characters, and the characters `+`, `_`, `.` and `-`<br/> • Should not start with special characters<br/> **Constraints for domain:**<br/> • Made up of domain labels followed by periods<br/> • Must end with a domain label of at least 2 characters long<br/> • Should start and end with alphanumeric characters<br/> • Domain label should consist of alphanumeric characters separated only by hyphens, if any |
+| e\|    | Email                       | 100            | **Format:** local-part@domain<br/> **Constraints for local part:**<br/> • Should only contain alphanumeric characters, and the characters `+`, `_`, `.` and `-`<br/> • Should not start with special characters<br/> **Constraints for domain:**<br/> • Made up of domain labels followed by periods<br/> • Must end with a domain label of at least 2 characters long<br/> • Should start and end with alphanumeric characters<br/> • Domain label should consist of alphanumeric characters separated only by hyphens, if any  |
 | a\|    | Address                     | 100            | Can take any values.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | i\|    | Path of CSV file to Import  | -              | Should be the absolute file path of the CSV file.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | [m\| ] | Matriculation ID            | Fixed at 9     | The first letter must be an uppercase 'A', followed by 7 numbers, and end with an uppercase letter.                                                                                                                                                                                                                                                                                                                                                                                                                              |

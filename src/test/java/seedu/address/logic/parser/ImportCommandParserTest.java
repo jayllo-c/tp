@@ -29,6 +29,13 @@ public class ImportCommandParserTest {
         assertParseFailure(
                 parser, "import go", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportCommand.MESSAGE_USAGE));
     }
+
+    @Test
+    public void parse_notCsvFileGiven_failure() {
+        // filePath left empty
+        assertParseFailure(
+                parser, "import i/notCsv", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportCommand.MESSAGE_USAGE));
+    }
 }
 
 
