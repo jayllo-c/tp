@@ -75,7 +75,14 @@ The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `Re
 
 The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
 
-The `UI` component,
+For the updating of the UI, after each command execution, `MainWindow` runs an update that calls the update method on `PersonListPanel`, `ExamListPanel` and `StatusBarFooter`.
+
+`PersonListPanel` and `ExamListPanel` update themselves by retriving the `filteredPersonList` and `examList` from the `Model` component and updating the displayed lists accordingly.
+
+`StatusBarFooter` contains the mean and median feature, and it updates itself by retriving `ScoreStatistics`
+from the `Model` on update.
+
+In summary, the `UI` component:
 
 * executes user commands using the `Logic` component.
 * listens for changes to `Model` data so that the UI can be updated with the modified data.
