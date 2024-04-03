@@ -108,25 +108,25 @@ public class CsvUtilTest {
     }
 
     @Test
-    public void coloumnsToSkip_success() throws DataLoadingException {
-        CsvUtil.coloumnsToSkip(
+    public void columnsToSkip_success() throws DataLoadingException {
+        CsvUtil.columnsToSkip(
                 List.of(new String[]{"name", "phone", "email", "address"}),
                 compulsoryParameters,
                 optionalParameters);
     }
 
     @Test
-    public void coloumnsToSkip_optionalParameter_success() throws DataLoadingException {
-        CsvUtil.coloumnsToSkip(
+    public void columnsToSkip_optionalParameter_success() throws DataLoadingException {
+        CsvUtil.columnsToSkip(
                 List.of(new String[]{"name", "phone", "email", "address", "matric"}),
                 compulsoryParameters,
                 optionalParameters);
     }
 
     @Test
-    public void coloumnsToSkip_missingCompulsoryParameter_failure() {
+    public void columnsToSkip_missingCompulsoryParameter_failure() {
         assertThrows(DataLoadingException.class, () ->
-                CsvUtil.coloumnsToSkip(
+                CsvUtil.columnsToSkip(
                         List.of(new String[]{"name", "phone", "email"}),
                         compulsoryParameters,
                         optionalParameters));

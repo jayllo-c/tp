@@ -70,7 +70,7 @@ public class CsvUtil {
         try {
             CSVReader reader = new CSVReaderBuilder(new FileReader(filePath.toString())).build();
             List<String> headers = List.of(reader.readNext()); // first line should be headers
-            List<Integer> columnsToSkip = coloumnsToSkip(headers, compulsoryParameters, optionalParameters);
+            List<Integer> columnsToSkip = columnsToSkip(headers, compulsoryParameters, optionalParameters);
             List<String[]> rows = reader.readAll();
             Pair<List<Map<String, String>>, String> result = parseData(rows, headers, columnsToSkip);
             data = result.getKey();
@@ -91,7 +91,7 @@ public class CsvUtil {
      * @return coloumnsToSkip
      * @throws DataLoadingException
      */
-    public static List<Integer> coloumnsToSkip(
+    public static List<Integer> columnsToSkip(
             List<String> headers, HashSet<String> compulsoryParameters, HashSet<String> optionalParameters)
             throws DataLoadingException {
         // first check if the compulsory parameters are present in the header
