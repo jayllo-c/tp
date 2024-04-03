@@ -74,7 +74,6 @@ public class AddScoreCommand extends Command {
         }
 
         model.addExamScoreToPerson(personToEdit, selectedExam, score);
-
         return new CommandResult(String.format("Added score %s for %s", score, personToEdit.getName()));
     }
 
