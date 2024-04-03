@@ -814,7 +814,7 @@ When an exam is selected, the statistics will show on the bottom right of the ap
 
 --------------------------------------------------------------------------------------------------------------------
 
-s<div style="page-break-after: always;"></div>
+<div style="page-break-after: always;"></div>
 
 <div id="additional-information"></div>
 
