@@ -88,7 +88,7 @@ public class CsvUtil {
      * @param headers
      * @param compulsoryParameters
      * @param optionalParameters
-     * @return coloumnsToSkip
+     * @return columnsToSkip
      * @throws DataLoadingException
      */
     public static List<Integer> columnsToSkip(
