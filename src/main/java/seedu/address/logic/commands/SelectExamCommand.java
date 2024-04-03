@@ -23,7 +23,7 @@ public class SelectExamCommand extends Command {
             + "Parameter: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_SELECT_EXAM_SUCCESS = "Selected Exam: %1$s";
+    public static final String MESSAGE_SELECT_EXAM_SUCCESS = "Selected exam: %1$s";
 
     private final Index targetIndex;
 

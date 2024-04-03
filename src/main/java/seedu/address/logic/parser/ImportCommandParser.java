@@ -13,6 +13,8 @@ import seedu.address.logic.parser.exceptions.ParseException;
  * Parses input arguments and creates a new {@code ImportCommand} object
  */
 public class ImportCommandParser implements Parser<ImportCommand> {
+
+    private static final String MESSAGE_NOT_CSV = "File %s is not a csv file \nImport command only accepts csv files";
     /**
      * Parses the given {@code String} of arguments in the context of the {@code RemarkCommand}
      * and returns a {@code RemarkCommand} object for execution.
@@ -29,8 +31,9 @@ public class ImportCommandParser implements Parser<ImportCommand> {
         }
 
         Path path = ParserUtil.parseFilePath(argMultimap.getValue(PREFIX_IMPORT).orElse(""));
+
         if (!isCsvFile(path)) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_NOT_CSV, path.toString()));
         }
         return new ImportCommand(path);
     }
