@@ -80,7 +80,7 @@ The `UI` component,
 * executes user commands using the `Logic` component.
 * listens for changes to `Model` data so that the UI can be updated with the modified data.
 * keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
-* depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
+* depends on some classes in the `Model` component, as the `UI` updates based on items that are stored in `Model`
 
 ### Logic component
 
@@ -135,14 +135,16 @@ The parsing is detailed as follows:
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
-* stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
+* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object) and all `Exam` objects (which are contained in a `UniqueExamList` object).
+* stores the currently filtered `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI can update when the data in the list changes.
+* stores the currently selected `Exam` which is exposed to outsiders as an unmodifiable `ObservableValue<Exam>`. This is used in conjunction with the exam and exam score implementation, and also used to update the highlighted exam on the UI.
+* stores `ScoreStatistics` for the currently selected `Exam`. This statistic is used in conjunction with the mean and median feature. It is also exposed to outsiders as an unmodifiable `ObservableValue<ScoreStatistics>` so that the UI can be bound to this value for updating.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
 <box type="info" seamless>
 
-**Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
+**Note:** An alternative (arguably, a more OOP) model is given below relating to the `Person` class. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br> However, we opted not to use this model. As much as possible, we tried to keep the attributes of `Person` unlinked to other classes to prevent complications in our saving, import and export functionalities.
 
 <puml src="diagrams/BetterModelClassDiagram.puml" width="450" />
 
@@ -176,7 +178,7 @@ The `export` command allows users to export the details of each person currently
 
 #### Implementation Details
 
-The user uses the `find` feature to filter out the relevant persons, which will be displayed in the `PersonListPanel`. 
+The user uses the `find` feature to filter out the relevant persons, which will be displayed in the `PersonListPanel`.
 The `export` feature utilizes the `filteredPersons` list stored in `Model` to retrieve the relavant data displayed in `PersonListPanel`.
 The `export` feature also relies the Jackson Dataformat CSV module and the Jackson Databind module write the details of persons to the CSV file `./addressbookdata/avengersassemble.csv`.
 
@@ -218,7 +220,7 @@ The following sequence diagram shows the interactions within the different class
     * Cons: The extent to which users can filter the persons displayed is highly dependent on the `find` feature.
 
 * **Alternative 2:** Exports **all** contacts stored in the address book.
-    * Pros: 
+    * Pros:
       * Easy to implement.
       * The `export` feature is not reliant on the `find` feature to update the `filteredPersons` list.
     * Cons: Users need to manually filter and sort through the CSV file if they require certain data which may be less efficient.
@@ -231,7 +233,7 @@ This feature is useful when users need to send emails to a group of persons.
 
 #### Implementation Details
 
-The copy command is a child of the `command` class and relies on the `filteredPersons` list in the `Model` component, 
+The copy command is a child of the `command` class and relies on the `filteredPersons` list in the `Model` component,
 as well as the `java.awt` package to copy the emails of all currently displayed persons to the users' clipboard.
 
 #### Parsing User Input
@@ -267,7 +269,7 @@ Due to this dependency, any changes to the `find` command may affect the functio
 
 ##### Extensibility
 
-Due to the simplicity of the `copy` command, there are limited opportunities for extending its functionality. 
+Due to the simplicity of the `copy` command, there are limited opportunities for extending its functionality.
 However, future enhancements could include the ability to copy other details of persons, such as phone numbers or addresses.
 
 ##### Alternative Implementations
@@ -319,7 +321,7 @@ The activity diagram is as follows:
 
 #### Implementation
 
-The `ImportCommand` class is responsible for importing contacts from a CSV file. 
+The `ImportCommand` class is responsible for importing contacts from a CSV file.
 The `ImportCommandParser` class is responsible for parsing the user input and creating an `ImportCommand` object. The `ImportCommand` class then reads the CSV file and add the contacts to the `Model`.
 The import process is done using a series of addCommands, which are executed in the same order as the rows in the CSV file.
 It uses the addCommand so as to take advantage of the validation and error handling that is already implemented in the addCommand.
@@ -329,7 +331,7 @@ The import process is done in the following steps:
 - The addCommand is then executed passing the same model as import command.
 - The addCommand then adds the person to the model.
 
-The sequence diagram below illustrates the interactions within the `Logic` component when the user issues the command `import`. 
+The sequence diagram below illustrates the interactions within the `Logic` component when the user issues the command `import`.
 
 <puml src="diagrams/ImportSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `import` Command" />
 
@@ -340,7 +342,7 @@ Reference Diagram for each addCommand in importCommand
 ### Design Considerations
 
 **Aspect: How to handle duplicate persons**
- 
+
 Handled by addCommand, which will check if the person already exists in the model. If the person already exists, the addCommand will not add the person and will return an error message.
 
 **Aspect: How to handle invalid CSV files**
@@ -804,12 +806,12 @@ into user's clipboard.
 
 * 2a. No persons are listed.
     * 2a1. AddressBook displays a message indicating that there is no persons to delete.
-  
+
         Use case ends.
 
 * 2b. User has a filtered view that contains all existing persons.
      * 2b1. AddressBook displays a message indicating that all persons cannot be deleted at once.
-    
+
         Use case ends.
 
 **Use case: UC12 — Import Exam Results**
@@ -824,7 +826,7 @@ into user's clipboard.
 
 * 2a. AddressBook cannot find the file specified.
     * 2a1. AddressBook displays a message indicating that the file is not recognised.
-  
+
         Use case ends.
 * 2b. The file to be imported is not a csv file.
     * 2b1. AddressBook displays an error message indicating that the file type is not recognised and should be a csv file
@@ -832,11 +834,11 @@ into user's clipboard.
         Use case ends.
 * 2c. There are duplicate entries in the csv file.
     * 2c1. AddressBook displays a message indicating that there are duplicate entries in the csv file, and only the first instance has been kept.
-  
+
         Use case ends.
 * 2d. The csv file contains invalid entries.
     * 2d1. AddressBook displays a message indicating that there are invalid entries in the csv file, and all other valid entries have been imported.
-  
+
         Use case ends.
 
 **Use case: UC13 — Exit application**
