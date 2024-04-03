@@ -30,11 +30,11 @@ public class ImportCommand extends Command {
 
     public static final String COMMAND_WORD = "import";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports contacts from specified filepath."
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports persons from specified filepath."
             + " Must be an absolute CSV file path. Parameter: FILEPATH\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_IMPORT + "C:usr/lib/text.csv";
     private static final String MESSAGE_ARGUMENTS = "filePath: %s";
-    private static final String MESSAGE_IMPORT_SUCCESS = "Imported Contacts from: %s";
+    private static final String MESSAGE_IMPORT_SUCCESS = "Imported persons from: %s";
     private static final String MESSAGE_DATA_LOAD_ERROR = "Unable to load data from %s";
     private static final String MESSAGE_PARSE_ERROR = "Invalid data format in %s";
     private final Path filePath;
