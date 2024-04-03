@@ -32,6 +32,51 @@ public class CsvUtilTest {
     }
 
     @Test
+    public void readCsvFile_multipleMissingCompulsoryParameter_failure() throws IOException {
+        String expected = "Missing compulsory header(s) in Csv file: phone, name,";
+        assertEquals(expected,
+                CsvUtil.readCsvFile(
+                        Paths.get("src/test/data/ImportCommandTest/multipleCompulsoryParameterHeadersMissing.csv"),
+                        compulsoryParameters,
+                        optionalParameters).getValue());
+    }
+
+    @Test
+    public void readCsvFile_inconsistentLengthInRow_failure() throws IOException {
+        String expected = "Row 0 does not have the same number of values as the number of headers.Given: 8, Expected: 7\n"
+                + "Row 1 does not have the same number of values as the number of headers.Given: 8, Expected: 7\n"
+                + "Row 2 does not have the same number of values as the number of headers.Given: 8, Expected: 7\n"
+                + "Row 4 does not have the same number of values as the number of headers.Given: 8, Expected: 7\n"
+                + "Row 5 does not have the same number of values as the number of headers.Given: 8, Expected: 7\n"
+                + "Row 6 does not have the same number of values as the number of headers.Given: 8, Expected: 7\n";
+        assertEquals(expected,
+                CsvUtil.readCsvFile(
+                        Paths.get("src/test/data/ImportCommandTest/inconsistentRowLength.csv"),
+                        compulsoryParameters,
+                        optionalParameters).getValue());
+    }
+
+    @Test
+    public void readCsvFile_missingOptionalHeader_success() throws IOException {
+        Pair<Optional<List<Map<String, String>>>, String> result = CsvUtil.readCsvFile(
+                Paths.get("src/test/data/ImportCommandTest/missingOptionalHeader.csv"),
+                compulsoryParameters,
+                optionalParameters);
+        String expected = "";
+        assertEquals(expected, result.getValue());
+    }
+
+    @Test
+    public void readCsvFile_extraHeader_success() throws IOException {
+        String expected = "";
+        assertEquals(expected,
+                CsvUtil.readCsvFile(
+                        Paths.get("src/test/data/ImportCommandTest/extraHeader.csv"),
+                        compulsoryParameters,
+                        optionalParameters).getValue());
+    }
+
+    @Test
     public void checkCompulsoryParameters_missingCompulsoryParameter_failure() {
         assertThrows(DataLoadingException.class, () ->
                 CsvUtil.checkCompulsoryParameters(

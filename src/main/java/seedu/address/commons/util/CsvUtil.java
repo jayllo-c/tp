@@ -70,7 +70,7 @@ public class CsvUtil {
         try {
             CSVReader reader = new CSVReaderBuilder(new FileReader(filePath.toString())).build();
             List<String> headers = List.of(reader.readNext()); // first line should be headers
-            Queue<Integer> columnsToSkip = coloumnsToSkip(headers, compulsoryParameters, optionalParameters);
+            List<Integer> columnsToSkip = coloumnsToSkip(headers, compulsoryParameters, optionalParameters);
             List<String[]> rows = reader.readAll();
             Pair<List<Map<String, String>>, String> result = parseData(rows, headers, columnsToSkip);
             data = result.getKey();
@@ -91,7 +91,7 @@ public class CsvUtil {
      * @return coloumnsToSkip
      * @throws DataLoadingException
      */
-    public static Queue<Integer> coloumnsToSkip(
+    public static List<Integer> coloumnsToSkip(
             List<String> headers, HashSet<String> compulsoryParameters, HashSet<String> optionalParameters)
             throws DataLoadingException {
         // first check if the compulsory parameters are present in the header
@@ -99,7 +99,7 @@ public class CsvUtil {
         return IntStream.range(0, headers.size())
                 .filter(i ->
                         !compulsoryParameters.contains(headers.get(i)) && !optionalParameters.contains(headers.get(i)))
-                .boxed().collect(Collectors.toCollection(LinkedList::new));
+                .boxed().collect(Collectors.toList());
     }
 
     /**
@@ -110,12 +110,14 @@ public class CsvUtil {
      * @return
      */
     public static Pair<List<Map<String, String>>, String> parseData(
-            List<String[]> rows, List<String> headers, Queue<Integer> columnsToSkip) {
+            List<String[]> rows, List<String> headers, List<Integer> columnsToSkip) {
         List<Map<String, String>> data = new ArrayList<>();
         StringBuilder errorMsgs = new StringBuilder(); // to store which rows do not have the same size as the header
+        Queue<Integer> columnsToSkipQueue;
         for (int i = 0; i < rows.size(); i++) {
             String[] row = rows.get(i);
             Map<String, String> map = new HashMap<>();
+            columnsToSkipQueue = new LinkedList<>(columnsToSkip);
             if (row.length != headers.size()) {
                 errorMsgs.append(
                         String.format("Row %d does not have the same number of values as the number of headers."
@@ -123,8 +125,8 @@ public class CsvUtil {
                 continue;
             }
             for (int j = 0; j < row.length; j++) {
-                if (!columnsToSkip.isEmpty() && columnsToSkip.peek() == j) {
-                    columnsToSkip.remove();
+                if (!columnsToSkipQueue.isEmpty() && columnsToSkipQueue.peek() == j) {
+                    columnsToSkipQueue.remove();
                     continue;
                 }
                 map.put(headers.get(j), row[j]);
@@ -143,13 +145,15 @@ public class CsvUtil {
      */
     public static void checkCompulsoryParameters(HashSet<String> compulsoryParameters, List<String> headers)
             throws DataLoadingException {
-        StringBuilder missingParameters = new StringBuilder();
+        StringBuilder missingParameters = new StringBuilder("Missing compulsory header(s) in Csv file:");
+        boolean hasMissingParameters = false;
         for (String compulsoryParameter : compulsoryParameters) {
             if (!headers.contains(compulsoryParameter)) {
-                missingParameters.append(String.format("Missing compulsory parameter: %s\n", compulsoryParameter));
+                hasMissingParameters = true;
+                missingParameters.append(String.format(" %s,", compulsoryParameter));
             }
         }
-        if (!missingParameters.toString().isEmpty()) {
+        if (hasMissingParameters) {
             throw new DataLoadingException(missingParameters.toString());
         }
     }

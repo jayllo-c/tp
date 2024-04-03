@@ -29,11 +29,39 @@ public class ImportCommandTest {
         assertEquals(expected , actual);
     }
     @Test
-    public void execute_import_invalidPathFailure() throws CommandException {
+    public void execute_invalidPath_failure() {
         Model model = new ModelManager(new AddressBook(), new UserPrefs());
         Path invalidFilePath = Paths.get("src/test/data/ImportCommandTest/nonExistent.csv");
         ImportCommand importCommand = new ImportCommand(invalidFilePath);
         assertThrows(CommandException.class, () -> importCommand.execute(model));
+    }
+
+    @Test
+    public void execute_extraHeaders_success() throws CommandException {
+        Model model = new ModelManager(new AddressBook(), new UserPrefs());
+        Path filePath = Paths.get("src/test/data/ImportCommandTest/extraHeader.csv");
+        ImportCommand importCommand = new ImportCommand(filePath);
+        CommandResult commandResult = importCommand.execute(model);
+        String expected = "Imported Persons successfully!\n\n"
+                + "All valid persons have been added!\n"
+                + "Successful imports: 7\n"
+                + "Unsuccessful imports: 0\n";
+        String actual = commandResult.getFeedbackToUser();
+        assertEquals(expected , actual);
+    }
+
+    @Test
+    public void execute_missingOptionalValues_success() throws CommandException {
+        Model model = new ModelManager(new AddressBook(), new UserPrefs());
+        Path filePath = Paths.get("src/test/data/ImportCommandTest/missingOptionalValue.csv");
+        ImportCommand importCommand = new ImportCommand(filePath);
+        CommandResult commandResult = importCommand.execute(model);
+        String expected = "Imported Persons successfully!\n\n"
+                + "All valid persons have been added!\n"
+                + "Successful imports: 7\n"
+                + "Unsuccessful imports: 0\n";
+        String actual = commandResult.getFeedbackToUser();
+        assertEquals(expected , actual);
     }
     @Test
     public void equals_success() {
