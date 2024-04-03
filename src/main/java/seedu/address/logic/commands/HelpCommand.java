@@ -1,6 +1,6 @@
 package seedu.address.logic.commands;
 
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 
 import seedu.address.model.Model;
@@ -19,6 +19,9 @@ public class HelpCommand extends Command {
             new StringSelection("https://ay2324s2-cs2103t-t10-1.github.io/tp/UserGuide.html");
 
     private void copyToClipboard(StringSelection stringSelection) {
+        if (GraphicsEnvironment.isHeadless()) {
+            return;
+        }
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, stringSelection);
     }
 
