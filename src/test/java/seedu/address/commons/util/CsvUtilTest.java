@@ -43,7 +43,8 @@ public class CsvUtilTest {
 
     @Test
     public void readCsvFile_inconsistentLengthInRow_failure() throws IOException {
-        String expected = "Row 0 does not have the same number of values as the number of headers.Given: 8, Expected: 7\n"
+        String expected =
+                "Row 0 does not have the same number of values as the number of headers.Given: 8, Expected: 7\n"
                 + "Row 1 does not have the same number of values as the number of headers.Given: 8, Expected: 7\n"
                 + "Row 2 does not have the same number of values as the number of headers.Given: 8, Expected: 7\n"
                 + "Row 4 does not have the same number of values as the number of headers.Given: 8, Expected: 7\n"
