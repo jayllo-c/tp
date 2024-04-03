@@ -37,7 +37,7 @@ public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all contacts with a specified aspect "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons with a specified aspect "
             + "containing specified keyword (case-insensitive) or\n"
             + "which meets the criteria with the specified value (positive-integer)\n"
             + "and displays them as a list with index numbers.\n"

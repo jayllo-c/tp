@@ -23,7 +23,7 @@ public class DeleteExamCommand extends Command {
             + "Parameter: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_DELETE_EXAM_SUCCESS = "Deleted Exam: %1$s";
+    public static final String MESSAGE_DELETE_EXAM_SUCCESS = "Deleted exam: %1$s";
 
     private final Index targetIndex;
 
