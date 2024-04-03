@@ -205,8 +205,8 @@ Imports all persons and their details from a CSV file of your specification.
 
 </box>
 
-**Example:** `import i|C:/Users/soojo/Desktop/sample_data.csv` <br>
-imports the data from the CSV file located at `C:/Users/soojo/Desktop/sample_data.csv`
+**Example:** `import i|/Users/johansoo/Desktop/AvengersAssemble/exam_data.csv` <br>
+imports the data from the CSV file located at `/Users/johansoo/Desktop/AvengersAssemble/exam_data.csv`
 
 You will see this message once you successfully imported the data, with the app showing the details of the imported persons:
 
@@ -230,7 +230,7 @@ Adds a person to your contact list. The person's details are now stored in the a
 
 <box type="info" seamless>
 
-**Important:** 
+**Important:**
 
 Each person should have a unique email address. Avengers Assemble does not allow for duplicate email addresses to be added.
 
@@ -238,13 +238,13 @@ Each person should have a unique email address. Avengers Assemble does not allow
 
 <box type="tip" seamless>
 
-**Tip:** 
+**Tip:**
 
 A person can have any number of tags (including 0)
 
 </box>
 
-> **Note:** 
+> **Note:**
 > For your convenience, a `student` tag will automatically be added to a contact if they are added with a matriculation number.
 > You are free to edit or remove the tags after the person is added with the [`edit`](#editing-a-person--edit) command.
 > For example, a student TA can be added with the `student` tag, and then the `TA` tag can be added to indicate that they are a TA.
@@ -294,12 +294,12 @@ Updating a matriculation number, studio, or reflection field will not automatica
 
 **Examples:**
 
-1. `edit 2 n|Betsy Crower t|`: 
+1. `edit 2 n|Betsy Crower t|`:
    * Edits the name of the second person to be `Betsy Crower` and clears all existing tags.
 
-<br> 
+<br>
 
-2. `edit 1 p|91234567 e|johndoe@example.com`: 
+2. `edit 1 p|91234567 e|johndoe@example.com`:
    * Edits the phone number and email address of the first person to be `91234567` and `johndoe@example.com` respectively.
 
 You will see this message once you have successfully edited a person, indicating their updated details:
@@ -331,8 +331,9 @@ The person at the specified `INDEX` will be deleted. The index **must be a posit
 </box>
 
 **Examples**:
-1. `list` followed by `delete 2` deletes the second person stored in the app.
-2. `find n|Betsy` followed by `delete 1` deletes the first person in the results of the `find` command.
+
+1. `find n|Betsy` followed by `delete 1` deletes the first person in the results of the `find` command.
+2. `list` followed by `delete 1` deletes the first person stored in the app.
 
 You will see this message once you successfully delete a person from your list, indicating the details of the deleted person:
 
@@ -541,8 +542,8 @@ Imports all exam results from a CSV file.
 
 </box>
 
-**Example:** `importExamScores i|C:/Users/soojo/Desktop/sample_exam_data.csv` <br>
-imports exam results from the CSV file located at `C:/Users/soojo/Desktop/sample_exam_data.csv`.
+**Example:** `importExamScores i|/Users/johansoo/Desktop/AvengersAssemble/exam_data.csv` <br>
+imports exam results from the CSV file located at `/Users/johansoo/Desktop/AvengersAssemble/exam_data.csv`.
 
 You will see this message once you have successfully imported the exam results:
 
@@ -566,7 +567,7 @@ Adds an exam into your exam list.
 
 <box type="info" seamless>
 
-**Important:** 
+**Important:**
 
 Each exam should have a unique name. Avengers Assemble does not allow for exams with duplicate names to be added.
 
@@ -605,10 +606,10 @@ Removes an exam from your exam list.
 
 </box>
 
-**Example:** `deleteExam 2` <br>
-Removes the second exam displayed in Avengers Assemble.
+**Example:** `deleteExam 3` <br>
+Removes the third exam displayed in Avengers Assemble.
 
-You will see this message once you have successfully deleted an exam, including some details of the exam you are deleting:
+You will see this message once you have successfully deleted an exam, including the details of the exam you are deleting:
 
 <p align="center">
   <img src="images/success_images/deleteExam_success.png" alt="image of successful deleteExam" width="750" />
@@ -692,8 +693,8 @@ Adds an exam score to a person at the specified index.
 
 </box>
 
-**Example:** `addScore 1 s|34` <br>
-Adds a score of 34 to the person currently displayed at index 1.
+**Example:** `addScore 1 s|42` <br>
+Adds a score of 42 to the person currently displayed at index 1.
 
 You will see this message once you successfully add a score, including the name of the person you added the score for:
 
@@ -734,8 +735,8 @@ An exam must be selected for this command to work! You can use the [`selectExam`
 
 </box>
 
-**Example:** `editScore 1 s|43` <br>
-Edits the score of the person currently displayed at index 1 to 43.
+**Example:** `editScore 1 s|25` <br>
+Edits the score of the person currently displayed at index 1 to 25.
 
 You will see this message once you successfully edit a score, including some details of the person you added the score for:
 
@@ -769,7 +770,7 @@ Deletes a specified person's exam score.
 
 <box type="info" seamless>
 
-**Important:** 
+**Important:**
 
 An exam must be selected for this command to work! You can use the [`selectExam`](#selecting-an-exam--selectexam) command to do so.
 
