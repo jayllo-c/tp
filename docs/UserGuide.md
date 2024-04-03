@@ -134,12 +134,14 @@ Provides you with warnings about potential issues you might face.
 
 ### Getting Help : `help`
 
-Shows you a link to guide you on how to use the application. Click on the link to access the user guide.
+Copies the link of our user guide to your clipboard. Paste it into a browser to view it.
 
 **Format:** `help`
 
+You will see this message when you have successfully copied the link.
+
 <p align="center">
-  <img src="images/helpMessage.png" alt="image of help window" width="500" />
+  <img src="images/success_images/help_success.png" alt="image of help window" width="750" />
 </p>
 
 Before we proceed with the commands, here are some important points to note on their formatting. These points will also be repeated in the [command parameter summary](#command-parameter-summary) for you to refer to easily at any point in time.
