@@ -7,5 +7,8 @@ public class DataLoadingException extends Exception {
     public DataLoadingException(Exception cause) {
         super(cause);
     }
+    public DataLoadingException(String message) {
+        super(message);
+    }
 
 }
