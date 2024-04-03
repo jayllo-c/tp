@@ -28,7 +28,6 @@
       <site-nav>
 * [Home]({{ baseUrl }}/index.html)
 * [User Guide]({{ baseUrl }}/UserGuide.html) :expanded:
-  * [Table of Contents]({{ baseUrl }}/UserGuide.html#table-of-contents)
   * [Quick Start]({{ baseUrl }}/UserGuide.html#quick-start)
   * [Contact Management Features]({{ baseUrl }}/UserGuide.html#contact-management-features)
   * [Exam Management Features]({{ baseUrl }}/UserGuide.html#exam-management-features)

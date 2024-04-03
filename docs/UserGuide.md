@@ -51,7 +51,6 @@ Click below to navigate the user guide:
         <li><a href="#addexam">Adding an Exam: <code>addExam</code></a></li>
         <li><a href="#deleteexam">Deleting an Exam: <code>deleteExam</code></a></li>
         <li><a href="#selectexam">Selecting an Exam: <code>selectExam</code></a></li>
-        <li><a href="#deselectexam">Deselecting an Exam: <code>deselectExam</code></a></li>
         <li><a href="#addscore">Adding an Exam Score: <code>addScore</code></a></li>
         <li><a href="#editscore">Editing an Exam Score: <code>editScore</code></a></li>
         <li><a href="#deletescore">Deleting an Exam Score: <code>deleteScore</code></a></li>
@@ -96,8 +95,6 @@ Click below to navigate the user guide:
 
 --------------------------------------------------------------------------------------------------------------------
 
-<div style="page-break-after: always;"></div>
-
 <div id="contact-management-features"></div>
 
 ## Contact Management Features
@@ -138,21 +135,28 @@ Shows you a link to guide you on how to use the application. Click on the link t
 
 **Format:** `help`
 
+> **Note:** The application ignores any extraneous parameters as we assume they are typos.
+
 <p align="center">
-  <img src="images/helpMessage.png" alt="image of help window" width="500" />
+  <img src="images/helpMessage.png" alt="image of help window" width="600" />
 </p>
 
-Before we proceed with the commands, here are some important points to note on their formatting. These points will also be repeated in the [command parameter summary](#command-parameter-summary) for you to refer to easily at any point in time.
+<br>
+
+Before we proceed with the commands, here are some important points to note on their formatting. These points will also be repeated in the [command format summary](#command-parameter-summary) for you to refer to easily at any point in time.
 
 <box type="info" seamless>
 
 **Important:** </br>
 
-* Words in `UPPER_CASE` are the parameters to be supplied by you.
+* Words in `UPPER_CASE` are the parameters to be supplied by you.<br>
   > e.g. in `add n|NAME`, `NAME` is a parameter which can be used as `add n|John Doe`.
 
 * Prefixes encased with '[ ]' are optional.
   > e.g. `n|NAME [t|TAG]` can be used as `n|John Doe t|friend` or as `n|John Doe`.
+
+* Prefixes encased with '{ }' are meant specifically for the `find` command.
+  > e.g. `{mt|SCORE}` is a prefix that can only be used with `find`.
 
 * Prefixes with '…' after them can be used multiple times.
   > e.g. `[t|TAG]…​` can be used as ` ` (i.e. 0 times), `t|friend` (i.e 1 time), `t|friend t|family` etc.
@@ -198,14 +202,11 @@ Imports all persons and their details from a CSV file of your specification.
 
 * The file path should be **absolute**.
 * This command will only import persons' particulars. To import exam scores, take a look at [`importExamScores`](#importing-exam-scores-from-a-csv-file--importexamscores).
-* All compulsory parameters **must** be present in the column headings (i.e. the first row) of the CSV file you are importing i.e. `name`, `email`, `phone` and `address`.
-* Only values under accepted column headings are read i.e. `name`, `email`, `phone`, `address`, `tags`, `matric`, `reflection` and `studio`
-* The number of headers must match the number of cells for each row.
-* Invalid rows will be skipped and will not be imported!
 
 </box>
 
-**Example:** `import i|C:/Users/soojo/Desktop/sample_data.csv` <br>
+**Example:** `import i|C:/Users/soojo/Desktop/sample_data.csv` 
+
 imports the data from the CSV file located at `C:/Users/soojo/Desktop/sample_data.csv`
 
 You will see this message once you successfully imported the data, with the app showing the details of the imported persons:
@@ -218,8 +219,6 @@ For more details on the input parameter, [click here](#command-parameter-summary
 
 <br>
 
-<div style="page-break-after: always;"></div>
-
 <div id="add"></div>
 
 ### Adding a Person : `add`
@@ -230,17 +229,13 @@ Adds a person to your contact list. The person's details are now stored in the a
 
 <box type="info" seamless>
 
-**Important:** 
-
-Each person should have a unique email address. Avengers Assemble does not allow for duplicate email addresses to be added.
+**Important:** Each person should have a unique email address. AA does not allow for duplicate email addresses to be added.
 
 </box>
 
 <box type="tip" seamless>
 
-**Tip:** 
-
-A person can have any number of tags (including 0)
+**Tip:** A person can have any number of tags (including 0)
 
 </box>
 
@@ -251,6 +246,7 @@ A person can have any number of tags (including 0)
 
 **Example:**
 `add n|John Doe p|98765432 e|johnd@example.com a|John street, block 123, #01-01 m|A1234567Z s|S1 r|R2`<br>
+
 adds a contact John Doe with the respective phone number, email and physical addresses, matriculation number, studio group and recitation group.
 
 You will see this message once you have successfully added a person, indicating their details:
@@ -262,8 +258,6 @@ You will see this message once you have successfully added a person, indicating 
 For more details on each parameter, [click here](#command-parameter-summary).
 
 <br>
-
-<div style="page-break-after: always;"></div>
 
 <div id="edit"></div>
 
@@ -295,12 +289,14 @@ Updating a matriculation number, studio, or reflection field will not automatica
 **Examples:**
 
 1. `edit 2 n|Betsy Crower t|`: 
-   * Edits the name of the second person to be `Betsy Crower` and clears all existing tags.
+   * Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
 <br> 
 
 2. `edit 1 p|91234567 e|johndoe@example.com`: 
-   * Edits the phone number and email address of the first person to be `91234567` and `johndoe@example.com` respectively.
+   * Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
+
+<br> 
 
 You will see this message once you have successfully edited a person, indicating their updated details:
 
@@ -311,8 +307,6 @@ You will see this message once you have successfully edited a person, indicating
 For more details on each parameter, [click here](#command-parameter-summary).
 
 <br>
-
-<div style="page-break-after: always;"></div>
 
 <div id="delete"></div>
 
@@ -332,7 +326,7 @@ The person at the specified `INDEX` will be deleted. The index **must be a posit
 
 **Examples**:
 1. `list` followed by `delete 2` deletes the second person stored in the app.
-2. `find n|Betsy` followed by `delete 1` deletes the first person in the results of the `find` command.
+2. `find Betsy` followed by `delete 1` deletes the first person in the results of the `find` command.
 
 You will see this message once you successfully delete a person from your list, indicating the details of the deleted person:
 
@@ -341,8 +335,6 @@ You will see this message once you successfully delete a person from your list, 
 </p>
 
 <br>
-
-<div style="page-break-after: always;"></div>
 
 <div id="deleteshown"></div>
 
@@ -372,8 +364,6 @@ You will see this message once you have successfully deleted the shown persons f
 
 <br>
 
-<div style="page-break-after: always;"></div>
-
 <div id="list"></div>
 
 ### Listing All Persons : `list`
@@ -391,8 +381,6 @@ You will see this message once you have successfully listed all contacts, with t
 </p>
 
 <br>
-
-<div style="page-break-after: always;"></div>
 
 <div id="find"></div>
 
@@ -413,8 +401,8 @@ Filters your contacts based on specific criteria you set.
 
 </box>
 
-**Example:** `find n|John` <br>
-returns `john` and `John Doe` if they exist in your contact book.
+**Example:**
+`find n|John` returns `john` and `John Doe` if they exist in your contact book.
 
 You will see this message once you have successfully found a person, with the app showing all persons that match your search criteria:
 
@@ -425,8 +413,6 @@ You will see this message once you have successfully found a person, with the ap
 For more details on each parameter, [click here](#command-parameter-summary).
 
 <br>
-
-<div style="page-break-after: always;"></div>
 
 <div id="copy"></div>
 
@@ -455,8 +441,6 @@ You will see this message once you have successfully copied the contact details 
 
 <br>
 
-<div style="page-break-after: always;"></div>
-
 <div id="export"></div>
 
 ### Exporting Data to a CSV File : `export`
@@ -469,15 +453,14 @@ Exports currently displayed persons and their details to a CSV file of your spec
 
 <box type="tip" seamless>
 
-**Tip:**
-
+**Tip:**<br>
 You can specify the groups of contacts you want to export using the [`find`](#filtering-persons--find) or [`list`](#listing-all-persons--list) commands before you use this command.
 
 </box>
 
 <box type="warning" seamless>
 
-**Caution:**
+**Caution:**<br>
 
 When performing an export, the current information will overwrite any existing CSV files with the same name.
 If you want to preserve the exported data, you should rename it or save it in a separate location.
@@ -506,8 +489,6 @@ Exits the program. The app will close automatically.
 
 --------------------------------------------------------------------------------------------------------------------
 
-<div style="page-break-after: always;"></div>
-
 <div id="exam-management-features"></div>
 
 ## Exam Management Features
@@ -525,10 +506,8 @@ Imports all exam results from a CSV file.
 **Information:**<br>
 
 * The file path should be **absolute**.
-* The `email` header **must** be the first column header.
-* exam names starting with `Exam:` e.g. if your exam is named `Midterms`, the column heading containing the scores for `Midterms` should be named `Exam:Midterms`.
-* This command will only import scores if both the person and exam exists currently in Avengers Assemble. Use [`add`](#add) and [`addExam`](#addexam) to add persons and exams respectively.
-* Duplicate exam headers in the CSV file will be ignored, with only the first occurrence being used.
+* The `email` header **must** be the first header, with exam names starting with `Exam:`.
+* This command will only import scores if both the person and exam exists.
 
 </box>
 
@@ -541,7 +520,8 @@ Imports all exam results from a CSV file.
 
 </box>
 
-**Example:** `importExamScores i|C:/Users/soojo/Desktop/sample_exam_data.csv` <br>
+**Example:** `importExamScores i|C:/Users/soojo/Desktop/sample_exam_data.csv` 
+
 imports exam results from the CSV file located at `C:/Users/soojo/Desktop/sample_exam_data.csv`.
 
 You will see this message once you have successfully imported the exam results:
@@ -554,8 +534,6 @@ For more details on the parameter, [click here](#command-parameter-summary).
 
 <br>
 
-<div style="page-break-after: always;"></div>
-
 <div id="addexam"></div>
 
 ### Adding an Exam : `addExam`
@@ -566,13 +544,12 @@ Adds an exam into your exam list.
 
 <box type="info" seamless>
 
-**Important:** 
-
-Each exam should have a unique name. Avengers Assemble does not allow for exams with duplicate names to be added.
+**Important:** Each exam should have a unique name. Avengers Assemble does not allow for exams with duplicate names to be added.
 
 </box>
 
-**Example:** `addExam n|Midterm s|100` <br>
+**Example:** `addExam n|Midterm s|100`
+
 Adds an exam with the name "Midterm" and a max score of "100" into your exam list.
 
 You will see this message once you successfully add an exam, including the details of the exam:
@@ -584,8 +561,6 @@ You will see this message once you successfully add an exam, including the detai
 For more details on each parameter, [click here](#command-parameter-summary).
 
 <br>
-
-<div style="page-break-after: always;"></div>
 
 <div id="deleteexam"></div>
 
@@ -605,7 +580,8 @@ Removes an exam from your exam list.
 
 </box>
 
-**Example:** `deleteExam 2` <br>
+**Example:** `deleteExam 2`
+
 Removes the second exam displayed in Avengers Assemble.
 
 You will see this message once you have successfully deleted an exam, including some details of the exam you are deleting:
@@ -615,8 +591,6 @@ You will see this message once you have successfully deleted an exam, including 
 </p>
 
 <br>
-
-<div style="page-break-after: always;"></div>
 
 <div id="selectexam"></div>
 
@@ -636,7 +610,8 @@ Selects an exam in your exam list.
 
 </box>
 
-**Example:** `selectExam 1` <br>
+**Example:** `selectExam 1`
+
 Selects the first exam displayed on the exam list.
 
 You will see this message once you have successfully selected an exam, including the details of the exam:
@@ -646,26 +621,6 @@ You will see this message once you have successfully selected an exam, including
 </p>
 
 <br>
-
-<div style="page-break-after: always;"></div>
-
-<div id="deselectexam"></div>
-
-### Deselecting an Exam : `deselectExam`
-
-Deselects your currently selected exam.
-
-**Format:** `deselectExam`
-
-You will see this message once you have successfully deselected an exam:
-
-<p align="center">
-    <img src="images/success_images/deselectExam_success.png" alt="image of successful deselectExam" width="750" />
-</p>
-
-<br>
-
-<div style="page-break-after: always;"></div>
 
 <div id="addscore"></div>
 
@@ -677,7 +632,7 @@ Adds an exam score to a person at the specified index.
 
 <box type="info" seamless>
 
-**Important: An exam must be selected for this command to work! You can use the [`selectExam`](#selectexam) command to do so.**
+**Important: An exam must be selected for this command to work! You can use the [`selectExam`](#selecting-an-exam--selectexam) command to do so.**
 
 </box>
 
@@ -692,7 +647,8 @@ Adds an exam score to a person at the specified index.
 
 </box>
 
-**Example:** `addScore 1 s|34` <br>
+**Example:** `addScore 1 s|34`
+
 Adds a score of 34 to the person currently displayed at index 1.
 
 You will see this message once you successfully add a score, including the name of the person you added the score for:
@@ -705,8 +661,6 @@ For more details on the parameter, [click here](#command-parameter-summary).
 
 <br>
 
-<div style="page-break-after: always;"></div>
-
 <div id="editscore"></div>
 
 ### Editing an Exam Score : `editScore`
@@ -714,6 +668,12 @@ For more details on the parameter, [click here](#command-parameter-summary).
 Edits a specified person's exam score.
 
 **Format:** `editScore INDEX s|SCORE`
+
+<box type="info" seamless>
+
+**Important: An exam must be selected for this command to work! You can use the [`selectExam`](#selecting-an-exam--selectexam) command to do so.**
+
+</box>
 
 <box type="info" seamless>
 
@@ -726,15 +686,8 @@ Edits a specified person's exam score.
 
 </box>
 
-<box type="info" seamless>
+**Example:** `editScore 1 s|43`
 
-**Important:**
-
-An exam must be selected for this command to work! You can use the [`selectExam`](#selecting-an-exam--selectexam) command to do so.
-
-</box>
-
-**Example:** `editScore 1 s|43` <br>
 Edits the score of the person currently displayed at index 1 to 43.
 
 You will see this message once you successfully edit a score, including some details of the person you added the score for:
@@ -747,8 +700,6 @@ For more details on the parameter, [click here](#command-parameter-summary).
 
 <br>
 
-<div style="page-break-after: always;"></div>
-
 <div id="deletescore"></div>
 
 ### Deleting an Exam Score : `deleteScore`
@@ -756,6 +707,12 @@ For more details on the parameter, [click here](#command-parameter-summary).
 Deletes a specified person's exam score.
 
 **Format:** `deleteScore INDEX`
+
+<box type="info" seamless>
+
+**Important: An exam must be selected for this command to work! You can use the [`selectExam`](#selecting-an-exam--selectexam) command to do so.**
+
+</box>
 
 <box type="info" seamless>
 
@@ -767,15 +724,8 @@ Deletes a specified person's exam score.
 
 </box>
 
-<box type="info" seamless>
+**Example:** `deleteScore 1`
 
-**Important:** 
-
-An exam must be selected for this command to work! You can use the [`selectExam`](#selecting-an-exam--selectexam) command to do so.
-
-</box>
-
-**Example:** `deleteScore 1` <br>
 deletes the score of the person currently displayed at index 1.
 
 You will see this message once you have successfully deleted a score, including some details of the person you added the score for:
@@ -786,9 +736,12 @@ You will see this message once you have successfully deleted a score, including 
 
 <br>
 
-<div style="page-break-after: always;"></div>
-
 <div id="mean-and-median"></div>
+
+> **Notes:**
+> 
+> 1. Duplicate exam headers in the CSV file will be ignored, with only the first occurrence being used.
+> 2. Erroneous entries in the CSV file will be ignored, and the application will continue to import the rest of the data.
 
 ### Mean and Median of Exam Scores
 
@@ -796,7 +749,7 @@ You can view the mean and median of the scores of the exam currently selected at
 
 <box type="info" seamless>
 
-**Information:**
+**Information:**<br>
 
 * When an exam is selected, the mean and median will automatically show up on the right of the footer of the application.
 * The mean and median is calculated based on the currently filtered list of persons.
@@ -813,8 +766,6 @@ When an exam is selected, the statistics will show on the bottom right of the ap
 <br>
 
 --------------------------------------------------------------------------------------------------------------------
-
-s<div style="page-break-after: always;"></div>
 
 <div id="additional-information"></div>
 
@@ -868,8 +819,6 @@ If this issue occurs, transfer the CSV file you want to import to the same folde
 
 --------------------------------------------------------------------------------------------------------------------
 
-<div style="page-break-after: always;"></div>
-
 <div id="command-summary"></div>
 
 ## Command Summary
@@ -893,8 +842,6 @@ Below is a summary of the commands available in Avengers Assemble. Some examples
 
 --------------------------------------------------------------------------------------------------------------------
 
-<div style="page-break-after: always;"></div>
-
 <div id="command-parameter-summary"></div>
 
 ## Command Parameter Summary
@@ -910,6 +857,9 @@ Some commands require you to include parameters. These parameters are identified
 
 * Prefixes encased with '[ ]' are optional.
     > e.g. `n|NAME [t|TAG]` can be used as `n|John Doe t|friend` or as `n|John Doe`.
+
+* Prefixes encased with '{ }' are meant specifically for the `find` command.
+    > e.g. `{mt|SCORE}` is a prefix that can only be used with `find`.
 
 * Prefixes with '…' after them can be used multiple times.
     > e.g. `[t|TAG]…​` can be used as ` ` (i.e. 0 times), `t|friend` (i.e 1 time), `t|friend t|family` etc.
@@ -930,18 +880,18 @@ Some commands require you to include parameters. These parameters are identified
 
 </box>
 
-| Prefix | What it refers to          | Max. Length | Constraints                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-|--------|-----------------------------|-------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| n\|    | Name                        | 80          | Should only contain alphanumeric characters and spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| n\|    | Exam Name                   | 30          | Should only contain alphanumeric characters and spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| p\|    | Phone Number                | 30          | It can start with an optional `+` to indicate the country code, with the rest only containing numbers. It should be at least 3 digits long.                                                                                                                                                                                                                                                                                                                                                                                      |
-| e\|    | Email                       | 50 before and after `@` | **Format:** local-part@domain<br/> **Constraints for local part:**<br/> • Should only contain alphanumeric characters, and the characters `+`, `_`, `.` and `-`<br/> • Should not start with special characters<br/> **Constraints for domain:**<br/> • Made up of domain labels followed by periods<br/> • Must end with a domain label of at least 2 characters long<br/> • Should start and end with alphanumeric characters<br/> • Domain label should consist of alphanumeric characters separated only by hyphens, if any |
-| a\|    | Address                     | 100         | Can take any values.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| i\|    | Path of CSV file to Import  | -           | Should be the absolute file path of the CSV file.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| [m\| ] | Matriculation ID            | Fixed at 9  | The first letter must be an uppercase 'A', followed by 7 numbers, and end with an uppercase letter.                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| [r\| ] | Recitation Group            | 4           | The first letter must be an uppercase 'R', followed by any number.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| [s\| ] | Studio Group                | 4           | The first letter must be an uppercase 'S', followed by any number.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| [s\| ] | Score                       | 7 + 2 decimals | For Exam Max Scores: the input must be a positive integer <br/> For Persons' Exam Scores: the input must be an integer greater than or equal to zero                                                                                                                                                                                                                                                                                                                                                                             |
-| [t\| ]…| Tags                        | 100         | Should be alphanumeric, and should not contain spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| [lt\| ]| Less Than                   | 7 + 2 decimals | Should be a positive numerical value smaller than the currently selected Exam's Max Score                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| [mt\| ]| More Than                   | 7 + 2 decimals | Should be a positive numerical value smaller than the currently selected Exam's Max Score                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| Prefix | What it refers to          | Max. Length             | Constraints                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|--------|----------------------------|-------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| n/     | Name                       | 80                      | Should only contain alphanumeric characters and spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| n/     | Exam Name                  | 30                      | Should only contain alphanumeric characters and spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| p/     | Phone Number               | 30                      | It can start with an optional `+` to indicate the country code, with the rest only containing numbers. It should be at least 3 digits long.                                                                                                                                                                                                                                                                                                                                                                                      |
+| e/     | Email                      | 50 before and after `@` | **Format:** local-part@domain<br/> **Constraints for local part:**<br/> • Should only contain alphanumeric characters, and the characters `+`, `_`, `.` and `-`<br/> • Should not start with special characters<br/> **Constraints for domain:**<br/> • Made up of domain labels followed by periods<br/> • Must end with a domain label of at least 2 characters long<br/> • Should start and end with alphanumeric characters<br/> • Domain label should consists of alphanumeric characters separated only by hyphens, if any |
+| a/     | Address                    | 100                     | Can take any values.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| i/     | Path of CSV file to Import | -                       | Should be the absolute file path of the CSV file.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| [m/]   | Matriculation ID           | Fixed at 9              | The first letter must be an uppercase 'A', followed by 7 numbers, and end with an uppercase letter.                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| [r/]   | Recitation Group           | 4                       | The first letter must be an uppercase 'R', followed by any number.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| [s/]   | Studio Group               | 4                       | The first letter must be an uppercase 'S', followed by any number.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| [s/]   | Score                      | 7 + 2 decimals          | For Exam Max Scores: the input must be a positive integer <br/> For Persons' Exam Scores: the input must be an integer greater than or equal to zero                                                                                                                                                                                                                                                                                                                                                                             |
+| [t/]…  | Tags                       | 100                     | Should be alphanumeric, and should not contain spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| \{lt\|\} | Less Than                | 7 + 2 decimals | Should be a positive numerical value smaller than the currently selected Exam's Max Score                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| \{mt\|\} | More Than                | 7 + 2 decimals | Should be a positive numerical value smaller than the currently selected Exam's Max Score                                                                                                                                                                                                                                                                                                                                                                                                                                        |
