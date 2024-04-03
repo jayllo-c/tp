@@ -549,9 +549,9 @@ Adds an exam into your exam list.
 
 </box>
 
-**Example:** `addExam n|Practical Exam s|20`
+**Example:** `addExam n|Midterm s|100`
 
-Adds an exam with the name "Practical Exam" and a max score of "20" into your exam list.
+Adds an exam with the name "Midterm" and a max score of "100" into your exam list.
 
 You will see this message once you successfully add an exam, including the details of the exam:
 
