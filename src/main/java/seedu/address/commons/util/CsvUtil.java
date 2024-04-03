@@ -59,10 +59,11 @@ public class CsvUtil {
      * @return
      *     A pair in which the first value is the data and the second is the error report. Data can be null if
      *     the file is not read successfully or if any compulsory parameters are missing in the header row of csv file.
-     * @throws DataLoadingException
+     * @throws IOException
      */
     public static Pair<Optional<List<Map<String, String>>>, String> readCsvFile(
-            Path filePath, HashSet<String> compulsoryParameters, HashSet<String> optionalParameters) {
+            Path filePath, HashSet<String> compulsoryParameters, HashSet<String> optionalParameters)
+            throws IOException {
         List<Map<String, String>> data = null;
         Optional<List<Map<String, String>>> nullableData = Optional.empty();
         String errorMsgs = "";
@@ -76,7 +77,7 @@ public class CsvUtil {
             errorMsgs = result.getValue();
             nullableData = Optional.of(data);
             return new Pair<>(nullableData, errorMsgs);
-        } catch (IOException | CsvException | DataLoadingException e) {
+        } catch (DataLoadingException | CsvException e) {
             return new Pair<>(nullableData, e.getMessage());
         }
     }

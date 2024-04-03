@@ -3,6 +3,7 @@ package seedu.address.commons.util;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.address.testutil.Assert.assertThrows;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +22,7 @@ public class CsvUtilTest {
     private final HashSet<String> optionalParameters = new HashSet<>(
             List.of(new String[]{"matric", "reflection", "studio", "tags"}));
     @Test
-    public void readCsvFile_success() throws DataLoadingException {
+    public void readCsvFile_success() throws IOException {
         Pair<Optional<List<Map<String, String>>>, String> result = CsvUtil.readCsvFile(
                 Paths.get("src/test/data/ImportCommandTest/valid.csv"),
                 compulsoryParameters,

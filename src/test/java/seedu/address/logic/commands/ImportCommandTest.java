@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static seedu.address.testutil.Assert.assertThrows;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,15 +31,9 @@ public class ImportCommandTest {
     @Test
     public void execute_import_invalidPathFailure() throws CommandException {
         Model model = new ModelManager(new AddressBook(), new UserPrefs());
-        Path validFilePath = Paths.get("src/test/data/ImportCommandTest/nonExistent.csv");
-        ImportCommand importCommand = new ImportCommand(validFilePath);
-        String expected = "Import completed with errors\n\n"
-                + "Errors found from reading csv!\n"
-                + String.format("%s (The system cannot find the file specified)\n\n", validFilePath)
-                + "No valid persons were found. Csv file is empty or error occurred reading from csv file\n"
-                + "Successful imports: 0\n"
-                + "Unsuccessful imports: 0\n";
-        assertEquals(expected, importCommand.execute(model).getFeedbackToUser());
+        Path invalidFilePath = Paths.get("src/test/data/ImportCommandTest/nonExistent.csv");
+        ImportCommand importCommand = new ImportCommand(invalidFilePath);
+        assertThrows(CommandException.class, () -> importCommand.execute(model));
     }
     @Test
     public void equals_success() {

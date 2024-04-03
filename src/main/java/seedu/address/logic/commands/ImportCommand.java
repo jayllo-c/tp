@@ -13,6 +13,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_REFLECTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDIO;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
@@ -125,16 +126,20 @@ public class ImportCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         Pair<Integer, Integer> importResults;
-        Pair<Optional<List<Map<String, String>>>, String> result =
-                readCsvFile(filePath, compulsoryParameters, optionalParameters);
-        Optional<List<Map<String, String>>> personsData = result.getKey();
-        if (personsData.isPresent()) {
-            importResults = addToModel(model, personsData.get());
-            successfulImports = importResults.getKey();
-            unsuccessfulImports = importResults.getValue();
-        }
-        if (!result.getValue().isEmpty()) {
-            generateErrorReportFromReadingCsv(new DataLoadingException(result.getValue()));
+        try {
+            Pair<Optional<List<Map<String, String>>>, String> result =
+                    readCsvFile(filePath, compulsoryParameters, optionalParameters);
+            Optional<List<Map<String, String>>> personsData = result.getKey();
+            if (personsData.isPresent()) {
+                importResults = addToModel(model, personsData.get());
+                successfulImports = importResults.getKey();
+                unsuccessfulImports = importResults.getValue();
+            }
+            if (!result.getValue().isEmpty()) {
+                generateErrorReportFromReadingCsv(new DataLoadingException(result.getValue()));
+            }
+        } catch (IOException e) {
+            throw new CommandException(e.getMessage());
         }
 
         return new CommandResult(generateReport());
