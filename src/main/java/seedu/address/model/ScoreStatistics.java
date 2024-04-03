@@ -1,5 +1,7 @@
 package seedu.address.model;
 
+import java.text.DecimalFormat;
+
 /**
  * Represents the statistics of a list of scores.
  */
@@ -36,7 +38,8 @@ public class ScoreStatistics {
         if (mean == -1) {
             return "No scores available";
         }
-        return "Mean: " + mean
-                + ", Median: " + median;
+        DecimalFormat df = new DecimalFormat("0.##");
+        return "Mean: " + df.format(mean)
+                + ", Median: " + df.format(median);
     }
 }
