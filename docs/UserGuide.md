@@ -144,6 +144,8 @@ You will see this message when you have successfully copied the link.
   <img src="images/success_images/help_success.png" alt="image of help window" width="750" />
 </p>
 
+<div style="page-break-after: always;"></div>
+
 Before we proceed with the commands, here are some important points to note on their formatting. These points will also be repeated in the [command parameter summary](#command-parameter-summary) for you to refer to easily at any point in time.
 
 <box type="info" seamless>
@@ -185,6 +187,8 @@ Deletes **all** entries from your contact list.
 **Format:** `clear`
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="import"></div>
 
