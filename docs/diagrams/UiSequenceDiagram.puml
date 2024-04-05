@@ -50,4 +50,10 @@ activate StatusBarFooter
 
 StatusBarFooter --> MainWindow
 deactivate StatusBarFooter
+
+MainWindow --> CommandBox
+deactivate MainWindow
+
+[<-- CommandBox
+deactivate CommandBox
 @enduml

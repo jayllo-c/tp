@@ -170,7 +170,28 @@ The `Model` component,
 
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
-The `Storage` component,
+#### Saving of data
+
+The `Storage` component uses the `Jackson` library to convert objects to JSON format. The conversion methods are predefined in the `JsonAdapted*` classes for their corresponding objects.
+
+The `Logic` class stores a `StorageManager` object that implements the methods in the `Storage` class. For **every** command that is executed, `Logic` uses `StorageManager` to save the updated `AddressBook` through the `saveAddressBook` method.
+
+The `StorageManager` class calls on the `JsonAddressBookStorage` class to convert all objects in the `AddressBook` to JSON formatting. The converted JSON objects are consolidated in the `JsonSerializableAddressBook` class and it is seraliazed to JSON format and saved using the `saveJsonToFile` method.
+
+The sequence diagram below illustrates how data is saved within the `Storage` component when the user issues a command.
+
+<puml src="diagrams/StorageSequenceDiagram.puml" alt="Sequence Diagram for the `Storage` Component" />
+
+#### Loading of data
+
+When the application is initialised, the `Storage` component reads the JSON objects from the save file and converts them back to objects that can be used to initialise the `Model` component. This is done using the `readJsonFile` method of the `JsonUtil` class which utilises the methods defined in the `JsonAdapted*` classes to convert the saved JSON data back to objects that can be used by the `Model` component.
+
+The sequence diagram below illustrates how data is loaded within the `Storage` component when the application is initialised.
+
+<puml src="diagrams/StorageLoadSequenceDiagram.puml" alt="Sequence Diagram for the `Storage` Component" />
+
+
+In summary, the `Storage` component:
 * can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
 * inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
