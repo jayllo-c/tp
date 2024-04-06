@@ -9,18 +9,39 @@ end box
 box Storage STORAGE_COLOR_T1
 participant ":StorageManager" as StorageManager STORAGE_COLOR
 participant ":JsonAddressBookStorage" as JsonAddressBookStorage STORAGE_COLOR
-participant "j:JsonSerializableAddressBook" as JsonSerializableAddressBook STORAGE_COLOR
 participant "<<class>>\nJsonUtil" as JsonUtil STORAGE_COLOR
 end box
 
-
-MainApp -> StorageManager : readAddressBook()
+[-> MainApp : init()
 activate MainApp
 
-StorageManager -> JsonAddressBookStorage : readAddressBook()
+MainApp -> MainApp : initModelManager(...)
+activate MainApp
 
-[<-- StorageManager
+MainApp -> StorageManager : readAddressBook()
+activate StorageManager
+
+StorageManager -> JsonAddressBookStorage : readAddressBook(filePath)
+activate JsonAddressBookStorage
+
+JsonAddressBookStorage -> JsonUtil : readJsonFile(filePath)
+activate JsonUtil
+
+JsonUtil --> JsonAddressBookStorage : Optional<JsonSerializableAddressBook>
+deactivate JsonUtil
+
+JsonAddressBookStorage --> StorageManager : Optional<AddressBook>
+deactivate JsonAddressBookStorage
+
+StorageManager --> MainApp : Optional<AddressBook>
 deactivate StorageManager
 
+MainApp -> MainApp : model
+deactivate MainApp
+
+[<-- MainApp
+deactivate StorageManager
+
+deactivate MainApp
 
 @enduml
