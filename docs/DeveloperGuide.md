@@ -116,8 +116,11 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 <puml src="diagrams/ParserClasses.puml" width="600"/>
 
 How the parsing works:
-* When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
+
+* When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`)
+* The `XYZCommandParser` [uses the other classes](#specificParsing) shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
+
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking a simple `execute("delete 1")` API call as an example.
 
@@ -126,8 +129,21 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </box>
 
-The sequence diagram below illustrates a more in-depth view of the interactions within the 'Logic' component.
-It takes a user input into the UI, `add n|Dohn Joe p|98765432 a|123 e|dohn@gm.com m|A1234567X s|S1 r|R1`, as an example.
+<div id="specificParsing"></div>
+
+The following is a more detailed explaination on how user input is parsed into a `Command` object (Not mentioned above for simplicity).
+
+* After the `XYZCommandParser` is instantiated by the `AddressBookParser`, it uses the `ArgumentTokenizer` class to tokenize the user input string into the arguments.
+* It then uses the `ArgumentMultimap` class to extract the arguments based on the prefixes present in the user input string.
+* For some commands, some arguments are mandatory and the `ArgumentMultimap` class is used to check if these mandatory arguments are present. If not, an exception is thrown.
+* For some commands, multiple arguments under the same category (e.g. two name arguments for an AddCommand) are not allowed. The `ArgumentMultimap` class is used to check for undesirable multiple arguments. If multiple arguments are present, an exception is thrown.
+* Validation of each extracted argument is done using the methods defined in the `ParserUtil` class. This class contains methods to validate different arguments extracted by the `ArgumentMultimap` class based on the `VALIDATION_REGEX` defined in component classes (`Name.java`, `Score.java`, etc.).
+* The parsed arguments are then used to create a `XYZCommand` object to be executed.
+
+**Note:** Some commands do not require any arguments (e.g., `help`, `clear`, `list`, `exit`). In such cases, the `XYZCommand` class is directly instantiated by the `AddressBookParser` class without the parsing of arguments. As such, any arguments passed to these commands are ignored.
+
+The sequence diagram below illustrates a more in-depth view of the interactions regarding the parsing of user input.
+It takes an add command: `execute(add n|Dohn Joe p|98765432 a|123 e|dohn@gm.com m|A1234567X s|S1 r|R1)` as an example.
 
 <puml src="diagrams/AddSequenceDiagram.puml" alt="Detailed Interactions Inside the Logic Component for the `add n/Dohn Joe p/98765432 a/123 e/dohn@gm.com m/A1234567X s/S1 r/R1` User Input" />
 
