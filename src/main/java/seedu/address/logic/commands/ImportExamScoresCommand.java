@@ -48,7 +48,6 @@ public class ImportExamScoresCommand extends Command {
     private Path filepath;
 
     /**
-    /**
      * Creates an ImportExamCommand to import exams from the specified file path.
      * @param filePath the path of the file
      */
@@ -259,7 +258,7 @@ public class ImportExamScoresCommand extends Command {
         return examName.substring(EXAM_CSV_HEADER.length()).strip();
     }
 
-    private HashMap<String, HashMap<String, Double>> removeNonExams(HashMap<String, HashMap<String, Double>> map) throws CommandException {
+    private HashMap<String, HashMap<String, Double>> removeNonExams(HashMap<String, HashMap<String, Double>> map) {
         HashMap<String, HashMap<String, Double>> newMap = new HashMap<>();
         for (String key : map.keySet()) {
             if (isExam(key) || isEmailHeader(key)) {
