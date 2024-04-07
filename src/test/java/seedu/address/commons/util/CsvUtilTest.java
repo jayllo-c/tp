@@ -88,6 +88,16 @@ public class CsvUtilTest {
     }
 
     @Test
+    public void readCsvFile_duplicateHeader_success() throws IOException {
+        String expected = "";
+        assertEquals(expected,
+                CsvUtil.readCsvFile(
+                        Paths.get("src/test/data/ImportCommandTest/duplicateHeaders.csv"),
+                        compulsoryParameters,
+                        optionalParameters).getValue());
+    }
+
+    @Test
     public void checkCompulsoryParameters_missingCompulsoryParameter_failure() {
         assertThrows(DataLoadingException.class, () ->
                 CsvUtil.checkCompulsoryParameters(

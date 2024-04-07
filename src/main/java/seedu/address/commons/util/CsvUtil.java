@@ -100,10 +100,20 @@ public class CsvUtil {
             throws DataLoadingException {
         // first check if the compulsory parameters are present in the header
         checkCompulsoryParameters(compulsoryParameters, headers);
-        return IntStream.range(0, headers.size())
-                .filter(i ->
-                        !compulsoryParameters.contains(headers.get(i)) && !optionalParameters.contains(headers.get(i)))
-                .boxed().collect(Collectors.toList());
+        List<Integer> columnsToSkip = new ArrayList<>();
+        HashSet<String> uniqueHeaders = new HashSet<>();
+        for (int i = 0; i < headers.size(); i++) {
+            if ((!compulsoryParameters.contains(headers.get(i))
+                    && !optionalParameters.contains(headers.get(i)))
+                    | uniqueHeaders.contains(headers.get(i))) {
+                columnsToSkip.add(i);
+            } else {
+                uniqueHeaders.add(headers.get(i));
+            }
+
+        }
+
+        return columnsToSkip;
     }
 
     /**
