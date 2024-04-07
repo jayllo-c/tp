@@ -177,7 +177,8 @@ public class ModelManagerTest {
         Exam midterm = MIDTERM;
 
         // Calculate statistics
-        ScoreStatistics stats = modelManager.getExamScoreStatistics(midterm);
+        modelManager.selectExam(midterm);
+        ScoreStatistics stats = modelManager.getSelectedExamStatistics().getValue();
 
         // Verify the statistics
         assertEquals(55, stats.getMean());
@@ -204,7 +205,8 @@ public class ModelManagerTest {
         Exam midterm = MIDTERM;
 
         // Calculate statistics
-        ScoreStatistics stats = modelManager.getExamScoreStatistics(midterm);
+        modelManager.selectExam(midterm);
+        ScoreStatistics stats = modelManager.getSelectedExamStatistics().getValue();
 
         // Verify the statistics
         assertEquals(50, stats.getMean());
@@ -219,7 +221,8 @@ public class ModelManagerTest {
         Exam midterm = MIDTERM;
 
         // Calculate statistics
-        ScoreStatistics stats = modelManager.getExamScoreStatistics(midterm);
+        modelManager.selectExam(midterm);
+        ScoreStatistics stats = modelManager.getSelectedExamStatistics().getValue();
 
         // Verify the statistics
         assertEquals(50, stats.getMean());
@@ -240,7 +243,8 @@ public class ModelManagerTest {
         Exam midterm = MIDTERM;
 
         // Calculate statistics
-        ScoreStatistics stats = modelManager.getExamScoreStatistics(midterm);
+        modelManager.selectExam(midterm);
+        ScoreStatistics stats = modelManager.getSelectedExamStatistics().getValue();
 
         // Verify the statistics
         assertEquals(-1, stats.getMean());
@@ -254,7 +258,8 @@ public class ModelManagerTest {
         Exam midterm = MIDTERM;
 
         // Calculate statistics
-        ScoreStatistics stats = modelManager.getExamScoreStatistics(midterm);
+        modelManager.selectExam(midterm);
+        ScoreStatistics stats = modelManager.getSelectedExamStatistics().getValue();
 
         // Verify the statistics
         assertEquals(-1, stats.getMean());
