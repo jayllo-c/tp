@@ -79,9 +79,9 @@ The `CommandBox` takes in user input which is passed onto the `Logic` component 
 
 For the updating of other components in the UI, after each command execution, `MainWindow` runs an update that calls the update method on `PersonListPanel`, `ExamListPanel` and `StatusBarFooter`.
 
-`PersonListPanel` and `ExamListPanel` update themselves by retriving the `filteredPersonList` and `examList` from the `Model` component and updating the displayed lists accordingly.
+`PersonListPanel` and `ExamListPanel` update themselves by retrieving the `filteredPersonList` and `examList` from the `Model` component and updating the displayed lists accordingly.
 
-`StatusBarFooter` contains the mean and median feature, and it updates itself by retriving `ScoreStatistics`
+`StatusBarFooter` contains the mean and median feature, and it updates itself by retrieving `ScoreStatistics`
 from the `Model` on update.
 
 In summary, the `UI` component:
