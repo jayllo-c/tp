@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.exam.Exam;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.PersonDetailContainsKeywordPredicate;
+import seedu.address.model.person.PersonDetailPredicate;
 import seedu.address.model.person.Score;
 import seedu.address.testutil.AddressBookBuilder;
 
@@ -291,7 +291,7 @@ public class ModelManagerTest {
 
         // different filteredList -> returns false
         modelManager.updateFilteredPersonList(
-            new PersonDetailContainsKeywordPredicate(PREFIX_NAME, ALICE.getName().fullName));
+            new PersonDetailPredicate(PREFIX_NAME, ALICE.getName().fullName));
         assertFalse(modelManager.equals(new ModelManager(addressBook, userPrefs)));
 
         // resets modelManager to initial state for upcoming tests
