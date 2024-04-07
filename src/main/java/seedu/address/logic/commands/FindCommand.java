@@ -41,7 +41,7 @@ public class FindCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons with a specified aspect "
             + "containing specified keyword (case-insensitive) or\n"
-            + "which meets the criteria with the specified value (positive-integer)\n"
+            + "which meets the criteria with the specified value (positive decimal up to 2 decimal places)\n"
             + "and displays them as a list with index numbers.\n"
             + "The currently supported prefixes are: "
             + Arrays.toString(ACCEPTED_PREFIXES) + "\n"
@@ -87,7 +87,7 @@ public class FindCommand extends Command {
         if (!isAnyNonNull(selectedExam)) {
             throw new CommandException(Messages.MESSAGE_NO_EXAM_SELECTED);
         }
-        if (selectedExam.getMaxScore().getScore() < Integer.parseInt(keyword)) {
+        if (selectedExam.getMaxScore().getScore() < Double.parseDouble(keyword)) {
             throw new CommandException(MESSAGE_SCORE_GREATER_THAN_MAX);
         }
         model.updateFilteredPersonList(new ExamPredicate(prefix, keyword, selectedExam));

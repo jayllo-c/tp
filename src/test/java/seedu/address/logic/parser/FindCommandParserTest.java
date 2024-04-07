@@ -4,6 +4,7 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LESS_THAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MORE_THAN;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SPECIAL;
@@ -14,6 +15,7 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSucces
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
+import seedu.address.model.person.Score;
 
 public class FindCommandParserTest {
 
@@ -101,8 +103,25 @@ public class FindCommandParserTest {
     }
 
     @Test
+    public void parse_validMoreThanArg_returnsFindCommand() {
+        // no leading and trailing whitespaces
+        FindCommand expectedFindCommand =
+                new FindCommand(PREFIX_MORE_THAN, "50.55");
+        assertParseSuccess(parser, " " + PREFIX_MORE_THAN + "50.55", expectedFindCommand);
+
+        // whitespace before keyword
+        assertParseSuccess(parser, " " + PREFIX_MORE_THAN + "  50.55  ", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_invalidMoreThanArg_throwsParseException() {
+        assertParseFailure(parser, " " + PREFIX_MORE_THAN + "20.201",
+                Score.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
     public void parse_invalidLessThanArg_throwsParseException() {
         assertParseFailure(parser, " " + PREFIX_LESS_THAN + "abc",
-                           String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+                Score.MESSAGE_CONSTRAINTS);
     }
 }

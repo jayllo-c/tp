@@ -88,13 +88,4 @@ public class PersonDetailPredicate implements Predicate<Person> {
         return new ToStringBuilder(this).add("prefix", prefix.getPrefix())
                                         .add("keyword", keyword).toString();
     }
-
-    /**
-     * Gets the keyword of the PersonDetailContainsKeywordPredicate.
-     * @return The keyword of the PersonDetailContainsKeywordPredicate.
-     */
-    public String getKeyword() {
-        return keyword;
-    }
 }
-

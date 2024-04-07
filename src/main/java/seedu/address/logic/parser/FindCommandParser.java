@@ -5,6 +5,7 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.Score;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -46,14 +47,14 @@ public class FindCommandParser implements Parser<FindCommand> {
     }
 
     /**
-     * Checks if the value of the given {@code ArgumentMultimap} is a positive integer
+     * Checks if the value of the given {@code ArgumentMultimap} is a positive decimal number
      * if the prefix is PREFIX_LESSTHAN or PREFIX_GREATERTHAN.
      * @throws ParseException if the user input does not conform to the expected format
      */
     private String extractValidKeyword(ArgumentMultimap argMultimap, Prefix prefix) throws ParseException {
         if (prefix.equals(CliSyntax.PREFIX_LESS_THAN) || prefix.equals(CliSyntax.PREFIX_MORE_THAN)) {
-            if (!argMultimap.getValue(prefix).get().matches("\\d+")) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            if (!Score.isValidScoreString(argMultimap.getValue(prefix).get())) {
+                throw new ParseException(Score.MESSAGE_CONSTRAINTS);
             }
         }
         return argMultimap.getValue(prefix).get();
