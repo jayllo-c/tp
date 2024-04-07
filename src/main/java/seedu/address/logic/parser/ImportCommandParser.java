@@ -41,7 +41,7 @@ public class ImportCommandParser implements Parser<ImportCommand> {
 
 
         if (!isCsvFile(path)) {
-            throw new ParseException(String.format(MESSAGE_NOT_CSV, path.toString()));
+            throw new ParseException(String.format(MESSAGE_NOT_CSV, path));
         }
         return new ImportCommand(path);
     }

@@ -68,6 +68,16 @@ public class CsvUtilTest {
     }
 
     @Test
+    public void readCsvFile_emptyCsv_success() throws IOException {
+        Optional<List<Map<String, String>>> expected = Optional.empty();
+        assertEquals(expected,
+                CsvUtil.readCsvFile(
+                        Paths.get("src/test/data/ImportCommandTest/empty.csv"),
+                        compulsoryParameters,
+                        optionalParameters).getKey());
+    }
+
+    @Test
     public void readCsvFile_extraHeader_success() throws IOException {
         String expected = "";
         assertEquals(expected,

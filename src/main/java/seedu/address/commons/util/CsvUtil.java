@@ -69,13 +69,17 @@ public class CsvUtil {
         String errorMsgs = "";
         try {
             CSVReader reader = new CSVReaderBuilder(new FileReader(filePath.toString())).build();
-            List<String> headers = List.of(reader.readNext()); // first line should be headers
-            List<Integer> columnsToSkip = columnsToSkip(headers, compulsoryParameters, optionalParameters);
-            List<String[]> rows = reader.readAll();
-            Pair<List<Map<String, String>>, String> result = parseData(rows, headers, columnsToSkip);
-            data = result.getKey();
-            errorMsgs = result.getValue();
-            nullableData = Optional.of(data);
+            Optional<String[]> headers = Optional.ofNullable(reader.readNext()); // first line should be headers
+            if (headers.isPresent()) {
+                List<String> headersList = List.of(headers.get());
+                List<Integer> columnsToSkip = columnsToSkip(headersList, compulsoryParameters, optionalParameters);
+                List<String[]> rows = reader.readAll();
+                Pair<List<Map<String, String>>, String> result = parseData(rows, headersList, columnsToSkip);
+                data = result.getKey();
+                errorMsgs = result.getValue();
+                nullableData = Optional.of(data);
+            }
+
             return new Pair<>(nullableData, errorMsgs);
         } catch (DataLoadingException | CsvException e) {
             return new Pair<>(nullableData, e.getMessage());
