@@ -38,6 +38,16 @@ deactivate Model
 SelectExamCommand -> ObservableList : get(targetIndex.getZeroBased())
 activate ObservableList
 
+ObservableList --> SelectExamCommand : exam
+deactivate ObservableList
 
+SelectExamCommand -> Model : selectExam(exam)
+activate Model
+
+Model --> SelectExamCommand :
+deactivate Model
+
+[<-- SelectExamCommand : CommandResult
+deactivate SelectExamCommand
 
 @enduml

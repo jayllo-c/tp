@@ -246,10 +246,10 @@ public class ModelManager implements Model {
             selectedExamStatistics.set(null);
             return;
         }
-        selectedExamStatistics.set(getExamScoreStatistics(selectedExam.getValue()));
+        selectedExamStatistics.set(calculateExamScoreStatistics(selectedExam.getValue()));
     }
 
-    private ScoreStatistics getExamScoreStatistics(Exam exam) {
+    private ScoreStatistics calculateExamScoreStatistics(Exam exam) {
         // Get all scores for the exam that exist in the filtered persons
         List<Score> scores = filteredPersons.stream()
             .map(person -> person.getScores().get(exam))

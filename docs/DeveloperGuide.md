@@ -95,6 +95,21 @@ The sequence diagram below illustrates a more in-depth view of the interactions 
 
 <puml src="diagrams/UiSequenceDiagram.puml" alt="Sequence Diagram of UI Component"/>
 
+#### **Considerations for UI**
+
+##### Dynamic UI Updates
+
+The UI is designed to update dynamically based on changes in the `Model`. We narrowed down to two design choices for updating the UI components. They are:
+
+1. **Update using listeners embeded into UI components** - This design choice would involve embedding listeners into the UI components that would listen for changes in the `Model` (e.g. adding a listener to filteredPersons in ExamListPanel). This would allow for a more loosely coupled system, but would involve more complex implementation which could get messy as the number of listeners increase.
+2. **Update using a centralized update method** - This design choice involves having a centralized `update` method in the `MainWindow` that would call an `update` method in all other UI components after every command. This would involve a more tightly coupled system and may involve unnecessary updates, but would be easier to implement and maintain.
+
+We chose the second design choice as having a centralized update method would allow for easier maintenance, as there is a clear indicator of how UI components are updated from `MainWindow`. Adding extensions would also be more straightforward as future developers would know where to look for the update logic.
+
+With listeners, the update logic would be scattered across multiple UI component classes, making it much harder to search and add upon the update logic.
+
+One of our main goals was to make our codebase easy to understand and maintain, and we felt that the centralized update method would be more in line with this goal despite the slight increase in coupling and inefficiency.
+
 ### Logic component
 
 **API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
@@ -478,7 +493,7 @@ All exams are stored in the `UniqueExamList` object in `AddressBook` of the `Mod
 
 #### **Add Exam Command** : `addExam`
 
-The `addExam` command allows users to add an exam to the application. The user can specify the name of the exam, the date of the exam, and the weightage of the exam. The exam is then added to the `UniqueExamList`.
+The `addExam` command allows users to add an exam to the application. The user can specify the name of the exam and the maximum score of the exam. The exam is then added to the `UniqueExamList`.
 
 ##### Parsing User Input
 
@@ -556,7 +571,9 @@ The following sequence diagram illustrates the interactions between the Logic an
 
 <puml src="diagrams/SelectExamSequenceDiagram.puml" alt="Sequence Diagram for the parsing of `selectExam` Command" />
 
-Note: `deselectExam` follows a similar structure, differing in the arguments parsed and the methods called on the `Model` component (i.e. calling `deselectExam` on `Model` instead of `selectExam`).
+Notes:
+- The `ObservableList<Exam>` object is what is returned when retrieving the `UniqueExamList`. This prevents unwanted modifications to the `UniqueExamList` when retrieving the selected exam.
+- `deselectExam` follows a similar structure as the diagram above, differing in the arguments parsed and the methods called on the `Model` component (i.e. calling `deselectExam` on `Model` instead of `selectExam`).
 
 <br>
 
@@ -576,6 +593,48 @@ We decided to allow users to deselect exams as the exam scores and score statist
 
 ##### Extensibility
 The design of the exam feature allows for easy extension to accommodate future enhancements or additional functionalities. Methods for managing exams are implemented in the `Model` component, and the updating of UI for Exams is abstracted into the UI component, Making it easy to add new commands or features related to exams.
+
+<br>
+
+#### **Exam Statistics Feature**
+
+The exam statistics feature allows users to view the mean and median scores of the selected exam. The statistics are displayed in the `StatusBarFooter` element of the UI on the right side.
+
+The statistics are automatically updated whenever the selected exam is changed or when there are potential modifications to the scores of the selected exam.
+
+When there are no scores for the selected exam, the statistics are displayed as `No scores available`. When no exam is selected, the statistics are not displayed at all.
+
+##### Storage of Exam Statistics
+
+The `ScoreStatistics` class is used to store the mean and median scores of the selected exam. The `Model` component stores the `ScoreStatistics` object for the currently selected exam as a `SimpleObjectProperty<ScoreStatistics>`.
+
+##### Updating of Exam Statistics
+
+the `ModelManager` class implements a `updateSelectedExamStatistics` and `getSelectedExamStatistics` method to update the statistics.
+
+`updateSelectedExamStatistics` is called whenever the selected exam is changed or when there are potential modifications to the scores of the selected exam (deletion of a Person, adding of Score, etc.). This ensures that the `selectedExamStatistics` object is always kept up-to-date with the scores of the selected exam.
+
+The sequence diagram below illustrates the interactions within the `Model` component when the score statistics are updated using the `selectExam` command as an example.
+
+<puml src="diagrams/StatisticsSequenceDiagram.puml" alt="Sequence Diagram for Statistics Updating" />
+
+##### User Interface Interaction
+
+The `StatusBarFooter` element of the UI is initialised with an `ObservableValue<ScoreStatistics>` object. This object is bound to the `selectedExamStatistics` object in the `Model` component and is retrieved using the `getSelectedExamStatistics` method.
+
+Whenever a command is executed, the `StatusBarFooter` retrieves the updated statistics and displays them on the right side of the footer which can be seen at the bottom of the UI.
+
+#### Considerations for Exam Statistics Feature
+
+##### Storage of Exam Statistics
+
+There were considerations to just avoid the storage of the statistics and calculate them on the fly whenever needed. However, this would have been inefficient as the statistics would have to be recalculated every time the selected exam is changed or when there are potential modifications to the scores of the selected exam. By storing the statistics, we can limit recalculations to only when necessary.
+
+Furthermore, storing the statistics allows us to maintain the code structure of our UI component, which is designed to observe and retrieve data from the `Model` component. If the statistics were to be calculated on the fly, the UI component would have to either calculate the statistics itself or request the `Model` component to calculate the statistics, which would have complicated the code structure by introducing more dependencies between the UI and Model components.
+
+##### Using `ScoreStatistics` Class
+
+The `ScoreStatistics` class was used to store the mean and median scores of the selected exam. This class was chosen as it provides a clean and structured way to store the statistics. The class also provides extensibility, as additional statistics can easily be added in the future by extending the class.
 
 <br>
 
