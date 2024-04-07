@@ -21,7 +21,7 @@ public class Exam {
      * otherwise " " (a blank string) becomes a valid input.
      * The rest of the string can contain any alphanumeric character and spaces.
      */
-    public static final String VALIDATION_REGEX_EXAM_NAME = "[\\p{Alnum}][\\p{Alnum} ]{1,29}";
+    public static final String VALIDATION_REGEX_EXAM_NAME = "[\\p{Alnum}][\\p{Alnum} ]{0,29}";
 
     public final String name;
     public final Score maxScore;
