@@ -13,8 +13,8 @@ public class Exam {
 
     public static final String MESSAGE_CONSTRAINTS = "Names should only contain alphanumeric characters and spaces "
                                                       + "up to 30 characters, and it should not be blank. "
-                                                      + "Exam Score must be greater than zero and "
-                                                      + "can have up to 2 decimal places.";
+                                                      + Score.MESSAGE_CONSTRAINTS + " "
+                                                      + "Exam Scores must also be greater than zero.";
 
     /*
      * The first character of the name must not be a whitespace,

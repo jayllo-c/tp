@@ -21,7 +21,7 @@ public class Email {
             + "    - not contain two consecutive special characters\n"
             + "2. This is followed by a '@' and then a domain name. "
             + "The domain name is made up of domain labels "
-            + "separated by periods.\n"
+            + "which may be separated by periods.\n"
             + "The domain name must:\n"
             + "    - have at least one domain label\n"
             + "    - seperate domain labels by periods\n"

@@ -43,8 +43,8 @@ public class FindCommand extends Command {
             + "and displays them as a list with index numbers.\n"
             + "The currently supported prefixes are: "
             + Arrays.toString(ACCEPTED_PREFIXES) + "\n"
-            + "Parameters: PREFIX/KEYWORD\n"
-            + "Example: " + COMMAND_WORD + " n/Alice";
+            + "Parameters: PREFIX|KEYWORD\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "Alice";
 
     public static final String MESSAGE_SCORE_GREATER_THAN_MAX = "Value cannot be greater than the maximum score.";
 
