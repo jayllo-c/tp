@@ -464,6 +464,121 @@ As the `Model` class was built prior to the implementation of this feature, we d
 
 This design allows for easy extension to accommodate future enhancements or additional search criteria. New prefixes can be added to support additional search criteria without significant changes as we merely need to update our `Predicate` logic. This ensures that the implementation remains adaptable to evolving requirements and we can upgrade and improve the feature whenever required.
 
+<br>
+
+----------------------------------------------------------------------------------------------------
+
+### **Exam Features**
+
+There are 4 main commands that are used to interact with the exam feature: `addExam`, `deleteExam`, `selectExam` and `deselectExam`.
+
+All exams are stored in the `UniqueExamList` object in `AddressBook` of the `Model` component. The `Model` component also stores the currently selected exam in the `selectedExam` field.
+
+<br>
+
+#### **Add Exam Command** : `addExam`
+
+The `addExam` command allows users to add an exam to the application. The user can specify the name of the exam, the date of the exam, and the weightage of the exam. The exam is then added to the `UniqueExamList`.
+
+##### Parsing User Input
+
+The `addExam` command takes in two arguments from the user: the name of the exam and the maximum score of the exam. `AddExamCommandParser` checks that the user has provided both arguments and that both arguments are valid.
+
+##### Executing the Command
+
+On execution, the `AddExamCommand` class creates a new `Exam` object with the parsed arguments and adds it to the `UniqueExamList` stored in the `AddressBook` of the `Model` component. If the exam already exists in the list, a `CommandException` is thrown.
+
+<br>
+
+#### **Delete Exam Command** : `deleteExam`
+
+The `deleteExam` command allows users to delete an exam from the application. The user can specify the index of the exam to be deleted. The exam is then removed from the `UniqueExamList`.
+
+##### Parsing User Input
+
+The `deleteExam` command takes in one argument from the user: the index of the exam to be deleted. `DeleteExamCommandParser` checks that the user has provided the index and that the index is valid.
+
+##### Executing the Command
+
+On execution, the `DeleteExamCommand` class deletes the exam at the specified index from the `UniqueExamList` stored in the `AddressBook` of the `Model` component. If the index is invalid (e.g. the index is greater than the size of the exam), a `CommandException` is thrown.
+
+<br>
+
+#### **Sequence diagrams illustrating exam modification**
+
+The following two sequence diagram illustrates the interactions between the Logic and Model when an exam is modified. This diagram uses the `addExam` command as an example.
+
+**Parsing**
+
+<puml src="diagrams/AddExamParsingSequenceDiagram.puml" alt="Sequence Diagram for the parsing of `addExam` Command" />
+
+**Execution**
+
+<puml src="diagrams/AddExamExecutionSequenceDiagram.puml" alt="Sequence Diagram for the execution of `addExam` Command" />
+
+Note: `deleteExam` follows a similar structure, differing in the arguments parsed and the methods called on the `Model` component (e.g. deleteting from `UniqueExamList` instead of adding to it).
+
+<br>
+
+#### **Select Exam Command** : `selectExam`
+
+The `selectExam` command allows users to select an exam from the ``UniqueExamList`. The selection of exams is heavily used in conjunction with our exam score features.
+
+##### Parsing User Input
+
+The `selectExam` command takes in one argument from the user: the index of the exam to be selected. `SelectExamCommandParser` checks that the user has provided the index and that the index is valid.
+
+##### Executing the Command
+
+On execution, the `SelectExamCommand` retrieves the the selected exam from the `UniqueExamList` based on the user input index. The selected exam is then stored in `Model` under the `selectedExam` field.
+
+If the index is invalid (e.g. the index is greater than the size of the exam), a `CommandException` is thrown.
+
+<br>
+
+#### **Deselect Exam Command** : `deselectExam`
+
+The `deselectExam` command allows users to deselect the currently selected exam.
+
+##### Parsing User Input
+
+The `deselectExam` command does not take any arguments from the user. Hence, a `DeselectExamCommandParser` is not required. `AddressBookParser` directly creates a `DeselectExamCommand` object.
+
+##### Executing the Command
+
+On execution, the `DeselectExamCommand` sets the `selectedExam` in `ModelManger` to null. If there is no exam currently selected, a `CommandException` is thrown.
+
+<br>
+
+#### **Sequence diagrams illustrating exam selection**
+
+The following sequence diagram illustrates the interactions between the Logic and Model when the `SelectExamCommand` is executed.
+
+<puml src="diagrams/SelectExamSequenceDiagram.puml" alt="Sequence Diagram for the parsing of `selectExam` Command" />
+
+Note: `deselectExam` follows a similar structure, differing in the arguments parsed and the methods called on the `Model` component (i.e. calling `deselectExam` on `Model` instead of `selectExam`).
+
+<br>
+
+#### **Considerations for Exam Features**
+
+##### Using a selection system for exams
+
+We decided to implement a selection system for exams to complement the exam score feature. The application would only display the scores of the selected exam, making it easier for users to manage and view the scores.
+
+Our alternative design was to display the scores of all exams at once on every person. However, this alternative design would have made the UI cluttered and less user-friendly. The selection system allows users to focus on the scores of a specific exam, making it easier to view and manage the scores.
+
+##### Using index for exam selection
+We were initially torn between the selection of exams using the exam name or the index. We eventually settled on using the index as it is easier for users to type and remember short numeric codes rather than potentially long and complex exam names which are more prone to typographical errors.
+
+##### Allowing deselection of exams
+We decided to allow users to deselect exams as the exam scores and score statistics are displayed based on the selected exam. Deselecting the exam allows users to get rid of the displayed scores and statistics when they are no longer needed.
+
+##### Extensibility
+The design of the exam feature allows for easy extension to accommodate future enhancements or additional functionalities. Methods for managing exams are implemented in the `Model` component, and the updating of UI for Exams is abstracted into the UI component, Making it easy to add new commands or features related to exams.
+
+<br>
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
