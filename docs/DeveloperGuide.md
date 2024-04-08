@@ -406,6 +406,38 @@ The validities checked are:
 
 If the file is not valid, an error message will be returned.
 
+### **Import Exam Scores feature**
+
+The `importExamScores` command lets users import exam scores corresponding to existing exams and persons from a CSV file.
+
+#### Implementation 
+The `ImportExamScoresCommand` class is responsible for import exam scores from a CSV file.
+The `ImportExamScoresParser` class is responsible for parsing the user input, namely the filepath of the CSV file to be imported, and creating an `ImportExamScoresCommand` object.
+
+##### Parsing CSV File
+The CSV file is parsed with the `OpenCSV` library and a `List<String[]>` is created, with each `String[]` representing a row in the CSV file.
+
+##### Validation
+After parsing, a mapping of `Exam` objects to an inner mapping of an `email` string to a `Double` score is created. This mapping is used to validate the data in the CSV file. 
+If the **file** is invalid, an error message is returned.
+
+The validation process for the **file** is as follows:
+
+If the file is valid, any invalid **rows** of the CSV file are ignored, with only valid rows being successfully processed.
+
+The validation process for each **row** is as follows:
+
+##### Adding Exam Scores
+For every valid row:
+
+The `Double` is parsed into a `Score` object.
+
+The `Model` object is then used to:
+* Get the `Exam` object corresponding to the exam name in the row;
+* Get the `Person` object corresponding to the email in the row; 
+* And finally add the `Score` object to the correct `Person` for the correct `Exam`.
+
+
 ### **Find feature**
 
 The `find` command lets users search for persons by substring matching. The user can select any parameter to search under: `NAME`, `EMAIL`, `TAG`, `MATRIC`, `REFLECTION`, `STUDIO`, and `TAGS` can all be used. E.g. to search for all persons under studio `S2`, the user can use `find s|s2`. The user can also use two other prefixes: `lt` and `mt` to search for persons with scores less than or more than a certain value respectively. E.g. `find mt|50` will return all persons with scores more than 50.
@@ -464,7 +496,7 @@ As the `Model` class was built prior to the implementation of this feature, we d
 
 This design allows for easy extension to accommodate future enhancements or additional search criteria. New prefixes can be added to support additional search criteria without significant changes as we merely need to update our `Predicate` logic. This ensures that the implementation remains adaptable to evolving requirements and we can upgrade and improve the feature whenever required.
 
-### **deleteShown Feature**
+### **deleteShown feature**
 
 #### Implementation Details
 
