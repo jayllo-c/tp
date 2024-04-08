@@ -518,6 +518,10 @@ If the list shows between 0 and the total number of existing persons, the `delet
 ##### Updating Filtered Person List
 After deleting all persons currently displayed in the `PersonListPanel`, the `filteredPersons` list in the `Model` component is updated to show all remaining persons in the address book.
 
+The following activity diagram illustrates the execution of the `deleteShown` command:
+
+<puml src="diagrams/DeleteShownActivityDiagram.puml" alt="Activity Diagram for the `deleteShown` Command" />
+
 #### Considerations
 ##### Reliance on `find` Command
 Similarly to the `copy` command, the `deleteShown` command is designed to be used with the find command, which filters the persons displayed in the `PersonListPanel`. Consequently, the flexibility of the `deleteShown` command relies heavily on the implementation of the `find` command. Due to this dependency, any changes to the `find` command may affect the functionality of the `deleteShown` command.
