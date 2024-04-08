@@ -144,6 +144,8 @@ The following is a more detailed explaination on how user input is parsed into a
 
 **Note:** Some commands do not require any arguments (e.g., `help`, `clear`, `list`, `exit`). In such cases, the `XYZCommand` class is directly instantiated by the `AddressBookParser` class without the parsing of arguments. As such, any arguments passed to these commands are ignored.
 
+#### Example of Parsing User Input: `add` Command
+
 The sequence diagram below illustrates a more in-depth view of the interactions regarding the parsing of user input.
 It takes an add command: `execute(add n|Dohn Joe p|98765432 a|123 e|dohn@gm.com m|A1234567X s|S1 r|R1)` as an example.
 
@@ -226,6 +228,65 @@ This section describes some noteworthy details on how certain features are imple
 
 ### **Add Person Command** : `add`
 
+The `add` command allows users to add a person to the address book. 
+
+The user can specify the person's:
+* name (`Name`), 
+* phone number (`Phone`), 
+* address (`Address`), 
+* email (`Email`), 
+
+and optionally provide additional information such as their: 
+* matriculation number (`Matric`), 
+* reflection (`Reflection`), 
+* studio (`Studio`), 
+* and tags (`Tag`).
+
+#### Implementation Details
+
+##### Parsing User Input
+The `AddCommandParser` class is responsible for parsing user input to extract the details of the person to be added. It uses the `ArgumentTokenizer` to tokenize the input string, extracting prefixes and their associated values. It ensures that all mandatory fields are present and that there are no duplicate prefixes in the user input.
+
+##### Executing the Command
+A `AddCommand` is created by the `AddressBookParser` class and passed to the `Logic` component for execution. The `LogicManager` then calls the `execute` method in the `AddCommand` class.
+
+For more details on the implementation of the `add` command, refer to the [Add Command Sequence Diagram](#add-command-sequence-diagram).
+
+#### Design Considerations
+
+##### Use of `Email` field as Unique Identifier
+We have chosen to use the `Email` field as a unique identifier. Due to the real-world implementation of email addresses, and specifically in NUS, email addresses are unique to each person. This allows for easy identification of persons and prevents the creation of duplicate persons with the same email address.
+
+This is opposed to using the `Name` field as a unique identifier, as an app with our proposed scale will likely be handling a large number of persons with the same name. This would make it difficult to identify or keep track of persons with the same name.
+
+##### Compulsory and Non-compulsory Fields
+We have chosen to make the following fields compulsory as they are essentials and most likely available to the head TA:
+* `Name`
+* `Email`
+* `Phone`
+* `Address`
+
+The following fields are optional as they may not be available for all persons:
+* `Matric`
+* `Reflection`
+* `Studio`
+* `Tag`
+
+### Delete Person Command : `delete`
+
+#### Implementation Details
+
+##### Parsing User Input
+
+##### Executing the Command
+
+### **Edit Person Command** : `edit`
+
+#### Implementation Details
+
+##### Parsing User Input
+
+##### Executing the Command
 
 ### **Export Feature** : `export`
 
