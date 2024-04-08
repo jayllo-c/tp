@@ -4,16 +4,16 @@ start
 :Filepath input is parsed;
 if () is ([file is a .csv file]) then
   :importExamScores command is executed with the filepath;
-  if () is ([IO or CSV Exceptions are thrown]) then
-    :Reject;
+  if () is ([no exception is thrown]) then
+  :Read the rows of the CSV file;
+      if () is ([email header exists only in the first column]) then
+        :Start adding scores;
+      else ([else])
+        :Reject;
+      endif
   else ([else])
-    :Read the rows of the CSV file;
-    if () is ([email header exists only in the first column]) then
-      :Start adding scores;
-    else ([else])
-      :Reject;
-    endif
-    endif
+    :Reject;
+  endif
 else ([else])
   :Reject;
 endif

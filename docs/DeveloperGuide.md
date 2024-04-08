@@ -123,6 +123,7 @@ How the parsing works:
 * The `XYZCommandParser` [uses the other classes](#specificParsing) shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
+#### Example of Parsing User Input: `delete` Command
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking a simple `execute("delete 1")` API call as an example.
 
@@ -143,22 +144,6 @@ The following is a more detailed explaination on how user input is parsed into a
 * The parsed arguments are then used to create a `XYZCommand` object to be executed.
 
 **Note:** Some commands do not require any arguments (e.g., `help`, `clear`, `list`, `exit`). In such cases, the `XYZCommand` class is directly instantiated by the `AddressBookParser` class without the parsing of arguments. As such, any arguments passed to these commands are ignored.
-
-#### Example of Parsing User Input: `add` Command
-
-The sequence diagram below illustrates a more in-depth view of the interactions regarding the parsing of user input.
-It takes an add command: `execute(add n|Dohn Joe p|98765432 a|123 e|dohn@gm.com m|A1234567X s|S1 r|R1)` as an example.
-
-<puml src="diagrams/AddSequenceDiagram.puml" alt="Detailed Interactions Inside the Logic Component for the `add n/Dohn Joe p/98765432 a/123 e/dohn@gm.com m/A1234567X s/S1 r/R1` User Input" />
-
-<box type="info" seamless>
-
-**Note:** Similar to the above sequence diagram, the lifeline for `AddCommandParser` and `AddCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
-</box>
-
-The parsing is detailed as follows:
-<puml src="diagrams/AddCommandParsing.puml" alt="Detailed Interactions for Parsing Fields of the Add command." />
-
 
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
@@ -250,7 +235,21 @@ The `AddCommandParser` class is responsible for parsing user input to extract th
 ##### Executing the Command
 A `AddCommand` is created by the `AddressBookParser` class and passed to the `Logic` component for execution. The `LogicManager` then calls the `execute` method in the `AddCommand` class.
 
-For more details on the implementation of the `add` command, refer to the [Add Command Sequence Diagram](#add-command-sequence-diagram).
+##### Sequence Diagram
+
+The sequence diagram below illustrates a more in-depth view of the interactions regarding the parsing of user input.
+It takes an add command: `execute(add n|Dohn Joe p|98765432 a|123 e|dohn@gm.com m|A1234567X s|S1 r|R1)` as an example.
+
+<puml src="diagrams/AddSequenceDiagram.puml" alt="Detailed Interactions Inside the Logic Component for the `add n/Dohn Joe p/98765432 a/123 e/dohn@gm.com m/A1234567X s/S1 r/R1` User Input" />
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `AddCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+</box>
+
+The parsing is detailed as follows:
+<puml src="diagrams/AddCommandParsing.puml" alt="Detailed Interactions for Parsing Fields of the Add command." />
+#
 
 #### Design Considerations
 
@@ -274,19 +273,49 @@ The following fields are optional as they may not be available for all persons:
 
 ### Delete Person Command : `delete`
 
+The `delete` command allows a user to delete a person with the specified index.
+
 #### Implementation Details
 
 ##### Parsing User Input
 
+The `DeleteCommandParser` class is responsible for parsing user input to extract the index of the person to be deleted. It uses the `ArgumentTokenizer` to tokenize the input string, extracting the index of the person to be deleted and ensures that the index is valid.
+
 ##### Executing the Command
+
+The `DeleteCommandParser` object creates a `DeleteCommand` object upon successful parsing. The `LogicManager` then calls the `execute` method in the `DeleteCommand` class, which then interacts with the `Model` component to remove the person.
+
+##### Sequence Diagram
+
+For more details on the implementation of the `delete` command, refer to the [Delete Command Sequence Diagram](#example-of-parsing-user-input-delete-command).
+
+#### Design Considerations
+
+We have chosen to implement the `delete` command to accept the index of the person to be deleted to maximize convenience for the user. The numbering of the lists will be displayed to the user, making indexing very intuitive.
 
 ### **Edit Person Command** : `edit`
 
+The `edit` command allows a user to edit the details of an existing person.
+
 #### Implementation Details
+
+The `EditCommandParser` class is responsible for parsing user input to extract the index of the person to be edited and the new details of the person.
+After that, the `EditCommand` class is created and executed by the `Logic` component.
 
 ##### Parsing User Input
 
+An `EditCommandParser` object is instantiated by the `AddressBookParser` object when the user inputs the `edit` command. The `EditCommandParser` object uses the `ArgumentTokenizer` class to tokenize the user input string, extracting the index of the person to be edited and the new details of the person. It ensures that the index is valid and that there are no duplicate prefixes in the user input.
+
 ##### Executing the Command
+
+The `EditCommand` object is created by the `EditCommandParser` object and its `execute` method is called.
+After that, it interacts with the `Model` component to edit the details of the person.
+
+##### Activity Diagram
+
+The activity diagram below illustrates the steps involved in executing the `edit` command. In practice, a `Reject` activity will result in a `CommandException` being thrown.
+
+<puml src="diagrams/EditCommandActivityDiagram.puml" alt="Activity Diagram for the `edit` Command" />
 
 ### **Export Feature** : `export`
 
@@ -296,7 +325,7 @@ The `export` command allows users to export the details of each person currently
 
 The user uses the `find` feature to filter out the relevant persons, which will be displayed in the `PersonListPanel`.
 The `export` feature utilizes the `filteredPersons` list stored in `Model` to retrieve the relavant data displayed in `PersonListPanel`.
-The `export` feature also relies the Jackson Dataformat CSV module and the Jackson Databind module write the details of persons to the CSV file `./addressbookdata/avengersassemble.csv`.
+The `export` feature also relies on the Jackson Dataformat CSV module and the Jackson Databind module write the details of persons to the CSV file `./addressbookdata/avengersassemble.csv`.
 
 #### Parsing User Input
 
