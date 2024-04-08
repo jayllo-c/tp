@@ -464,6 +464,23 @@ As the `Model` class was built prior to the implementation of this feature, we d
 
 This design allows for easy extension to accommodate future enhancements or additional search criteria. New prefixes can be added to support additional search criteria without significant changes as we merely need to update our `Predicate` logic. This ensures that the implementation remains adaptable to evolving requirements and we can upgrade and improve the feature whenever required.
 
+### **deleteShown Feature**
+
+#### Implementation Details
+
+The `deleteShown` command is a child of the `Command` class and relies on the `filteredPersons` list in the `Model` component to delete the persons currently displayed in the `PersonListPanel`.
+
+##### Executing the Command
+If the list shows between 0 and the total number of existing persons, the `deleteShown` command will delete the persons currently displayed in the `PersonListPanel`.
+
+##### Updating Filtered Person List
+After deleting all persons currently displayed in the `PersonListPanel`, the `filteredPersons` list in the `Model` component is updated to show all remaining persons in the address book.
+
+#### Considerations
+##### Reliance on `find` Command
+Similarly to the `copy` command, the `deleteShown` command is designed to be used with the find command, which filters the persons displayed in the `PersonListPanel`. Consequently, the flexibility of the `deleteShown` command relies heavily on the implementation of the `find` command. Due to this dependency, any changes to the `find` command may affect the functionality of the `deleteShown` command.
+
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
