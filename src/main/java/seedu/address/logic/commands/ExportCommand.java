@@ -12,11 +12,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema.Builder;
 
 import javafx.collections.ObservableList;
+import seedu.address.commons.util.CsvUtil;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
@@ -29,6 +27,7 @@ import seedu.address.storage.JsonAddressBookStorage;
 public class ExportCommand extends Command {
 
     public static final String COMMAND_WORD = "export";
+
     public static final String MESSAGE_SUCCESS = "Exported all currently listed person(s)'s information to a "
             + "CSV file. \n"
             + "CSV file can be found in addressbookdata file.";
@@ -160,6 +159,17 @@ public class ExportCommand extends Command {
     }
 
     /**
+     * Reads the exams array in the JSON file and returns the contents as a JSON tree.
+     *
+     * @param jsonTree The JSON file where the exams array should be read from.
+     * @return The JSON tree representing the content of the exams array in the release file.
+     */
+    public JsonNode readExamsArray(JsonNode jsonTree) {
+        JsonNode examsArray = jsonTree.get("exams");
+        return examsArray;
+    }
+
+    /**
      * Creates the directory for the CSV file if it does not exist.
      *
      * @param csvFile The CSV file for which the directory needs to be created.
@@ -173,40 +183,6 @@ public class ExportCommand extends Command {
                 throw new CommandException(MESSAGE_CREATE_CSV_DIRECTORY_FAILURE);
             }
         }
-    }
-
-    /**
-     * Builds the CSV schema from the JSON array.
-     *
-     * @param jsonTree The JSON array to derive the schema from.
-     * @return The CSV schema.
-     */
-    public CsvSchema buildCsvSchema(JsonNode jsonTree) {
-        Builder csvSchemaBuilder = CsvSchema.builder();
-        JsonNode firstObject = jsonTree.elements().next();
-        firstObject.fieldNames().forEachRemaining(fieldName -> {
-            csvSchemaBuilder.addColumn(fieldName);
-        });
-        CsvSchema csvSchema = csvSchemaBuilder
-                .build()
-                .withHeader();
-        return csvSchema;
-    }
-
-    /**
-     * Writes JSON data to a CSV file.
-     *
-     * @param csvFile The CSV file to write to.
-     * @param jsonTree The JSON array to be written to CSV.
-     * @throws IOException If an I/O error occurs during file writing.
-     */
-    public void writeToCsvFile(File csvFile, JsonNode jsonTree) throws IOException {
-        CsvSchema csvSchema = buildCsvSchema(jsonTree);
-
-        CsvMapper csvMapper = new CsvMapper();
-        csvMapper.writerFor(JsonNode.class)
-                .with(csvSchema)
-                .writeValue(csvFile, jsonTree);
     }
 
     @Override
@@ -223,15 +199,20 @@ public class ExportCommand extends Command {
             JsonAddressBookStorage jsonAddressBookStorage = new JsonAddressBookStorage(filteredJsonFilePath);
             writeToJsonFile(jsonAddressBookStorage, filteredPersonAddressBook);
 
-            File jsonFile = filteredJsonFilePath.toFile();
+            File filteredJsonFile = filteredJsonFilePath.toFile();
+            File unfilteredJsonFile = model.getAddressBookFilePath().toFile();
             File csvFile = new File(csvFilePath);
 
-            JsonNode jsonTree = readJsonFile(jsonFile);
-            JsonNode personsArray = readPersonsArray(jsonTree);
+            JsonNode filteredJsonTree = readJsonFile(filteredJsonFile);
+            JsonNode unfilteredJsonTree = readJsonFile(unfilteredJsonFile);
+
+            JsonNode personsArray = readPersonsArray(filteredJsonTree);
+            JsonNode examsArray = readExamsArray(unfilteredJsonTree);
 
             createCsvDirectory(csvFile);
 
-            writeToCsvFile(csvFile, personsArray);
+            CsvUtil csvUtil = new CsvUtil();
+            csvUtil.writeToCsvFile(csvFile, personsArray, examsArray);
 
             return new CommandResult(MESSAGE_SUCCESS);
 

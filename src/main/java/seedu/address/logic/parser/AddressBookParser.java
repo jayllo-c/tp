@@ -16,13 +16,17 @@ import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CopyCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DeleteExamCommand;
+import seedu.address.logic.commands.DeleteScoreCommand;
+import seedu.address.logic.commands.DeleteShownCommand;
+import seedu.address.logic.commands.DeselectExamCommand;
 import seedu.address.logic.commands.EditCommand;
-import seedu.address.logic.commands.EditExamCommand;
+import seedu.address.logic.commands.EditScoreCommand;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ImportCommand;
+import seedu.address.logic.commands.ImportExamScoresCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.SelectExamCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -70,14 +74,14 @@ public class AddressBookParser {
         case EditCommand.COMMAND_WORD:
             return new EditCommandParser().parse(arguments);
 
-        case EditExamCommand.COMMAND_WORD:
-            return new EditExamCommandParser().parse(arguments);
-
         case DeleteCommand.COMMAND_WORD:
             return new DeleteCommandParser().parse(arguments);
 
         case DeleteExamCommand.COMMAND_WORD:
             return new DeleteExamCommandParser().parse(arguments);
+
+        case DeleteScoreCommand.COMMAND_WORD:
+            return new DeleteScoreCommandParser().parse(arguments);
 
         case ClearCommand.COMMAND_WORD:
             return new ClearCommand();
@@ -103,11 +107,23 @@ public class AddressBookParser {
         case HelpCommand.COMMAND_WORD:
             return new HelpCommand();
 
+        case DeleteShownCommand.COMMAND_WORD:
+            return new DeleteShownCommand();
+
         case SelectExamCommand.COMMAND_WORD:
             return new SelectExamCommandParser().parse(arguments);
 
+        case DeselectExamCommand.COMMAND_WORD:
+            return new DeselectExamCommand();
+
         case AddScoreCommand.COMMAND_WORD:
             return new AddScoreCommandParser().parse(arguments);
+
+        case EditScoreCommand.COMMAND_WORD:
+            return new EditScoreCommandParser().parse(arguments);
+
+        case ImportExamScoresCommand.COMMAND_WORD:
+            return new ImportExamScoresCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);

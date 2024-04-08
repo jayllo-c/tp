@@ -181,6 +181,48 @@ public class StringUtilTest {
         assertTrue(StringUtil.containsSubstringIgnoreCase("AAA bBb ccc  bbb", "bbB"));
     }
 
+    //---------------- Tests for equalsIgnoreCase --------------------------------------
+
+    @Test
+    public void equalsIgnoreCase_nullSentence_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, ()
+            -> StringUtil.equalsIgnoreCase(null, "abc"));
+    }
+
+    @Test
+    public void equalsIgnoreCase_nullWord_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, ()
+            -> StringUtil.equalsIgnoreCase("typical sentence", null));
+    }
+
+    @Test
+    public void equalsIgnoreCase_emptyWord_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class,
+                     "Word parameter cannot be empty", ()
+                        -> StringUtil.equalsIgnoreCase("typical sentence", "  "));
+    }
+
+    /*
+     * Scenarios returning true:
+     *  query word matches the whole sentence
+     *  query word matches the whole sentence, different upper/lower case letters
+     *
+     * The test method below tries to verify all above with a reasonably low number of test cases.
+     */
+    @Test
+    public void equalsIgnoreCase_validInputs_correctResult() {
+
+        // Empty sentence
+        assertFalse(StringUtil.equalsIgnoreCase("", "abc")); // Boundary case
+        assertFalse(StringUtil.equalsIgnoreCase("    ", "123"));
+
+        // Matches the whole word in the sentence
+        assertTrue(StringUtil.equalsIgnoreCase("aaa bbb ccc", "aaa bbb ccc")); // First word (boundary case)
+        assertTrue(StringUtil.equalsIgnoreCase("aaa bbb ccc@1", "aaa bbb ccc@1")); // Last word (boundary case)
+        assertTrue(StringUtil.equalsIgnoreCase("Aa", "aa")); // Only one word in sentence (boundary case)
+        assertTrue(StringUtil.equalsIgnoreCase("aaa bbb ccc", "  aaa bbb ccc  ")); // Leading/trailing spaces
+    }
+
     //---------------- Tests for getDetails --------------------------------------
 
     /*

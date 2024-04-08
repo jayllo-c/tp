@@ -60,6 +60,28 @@ public class StringUtil {
     }
 
     /**
+     * Returns true if the {@code sentence} is equal to the {@code word}.
+     *  Ignores case.
+     *  <br>examples:<pre>
+     *      equalsIgnoreCase("ABc def", "abc def") == true
+     *      equalsIgnoreCase("ABc def", "DEF") == false
+     *      equalsIgnoreCase("ABc def", "ABc de") == false
+     *      </pre>
+     * @param sentence cannot be null
+     * @param word cannot be null
+     * @return true if the {@code sentence} is equal to the {@code word}
+     */
+    public static boolean equalsIgnoreCase(String sentence, String word) {
+        requireNonNull(sentence);
+        requireNonNull(word);
+
+        String preppedString = word.trim();
+        checkArgument(!preppedString.isEmpty(), "Word parameter cannot be empty");
+
+        return sentence.toLowerCase().equals(preppedString.toLowerCase());
+    }
+
+    /**
      * Returns a detailed message of the t, including the stack trace.
      */
     public static String getDetails(Throwable t) {
@@ -82,6 +104,25 @@ public class StringUtil {
         try {
             int value = Integer.parseInt(s);
             return value > 0 && !s.startsWith("+"); // "+1" is successfully parsed by Integer#parseInt(String)
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+    }
+
+    /**
+     * Returns true if {@code s} represents a non-negative unsigned double
+     * e.g. 0.0, 1.0, 2.0, 3.0, ..., {@code Double.MAX_VALUE} <br>
+     * Will return false for any other non-null string input
+     * e.g. empty string, "-1.0", "+1.0", and " 2.0 " (untrimmed),
+     * "3.0 0.0" (contains whitespace), "1.0 a" (contains letters)
+     * @throws NullPointerException if {@code s} is null.
+     */
+    public static boolean isNonNegativeUnsignedDouble(String s) {
+        requireNonNull(s);
+
+        try {
+            double value = Double.parseDouble(s);
+            return value >= 0 && !s.startsWith("+"); // "+1.0" is successfully parsed by Double#parseDouble(String)
         } catch (NumberFormatException nfe) {
             return false;
         }

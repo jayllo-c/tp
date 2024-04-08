@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static seedu.address.commons.util.CollectionUtil.isAnyNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SCORE;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,14 +28,15 @@ public class AddScoreCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds a score to the person identified by the index number used in the last person listing. "
             + "Parameters: INDEX (must be a positive integer) "
-            + "s/SCORE\n"
+            + PREFIX_SCORE + "SCORE\n"
             + "Example: " + COMMAND_WORD + " 1 "
-            + "s/85";
+            + PREFIX_SCORE + "85";
 
     public static final String MESSAGE_ADD_SCORE_SUCCESS = "Added score %s for %s";
     public static final String MESSAGE_SCORE_EXISTS = "This person already has a score for this exam."
             + " Use editScore instead.";
-    public static final String MESSAGE_SCORE_GREATER_THAN_MAX = "Score cannot be greater than the maximum score.";
+    public static final String MESSAGE_SCORE_GREATER_THAN_MAX =
+            "Score for %s cannot be greater than the maximum score.";
 
     private final Index targetIndex;
     private final Score score;
@@ -42,6 +45,7 @@ public class AddScoreCommand extends Command {
      * Creates an AddScoreCommand to add the specified {@code Score} to the person at the specified {@code Index}.
      */
     public AddScoreCommand(Index targetIndex, Score score) {
+        requireAllNonNull(targetIndex, score);
         this.targetIndex = targetIndex;
         this.score = score;
     }
@@ -63,36 +67,23 @@ public class AddScoreCommand extends Command {
         }
 
         if (selectedExam.getMaxScore().getScore() < score.getScore()) {
-            throw new CommandException(MESSAGE_SCORE_GREATER_THAN_MAX);
+            throw new CommandException(String.format(MESSAGE_SCORE_GREATER_THAN_MAX, selectedExam.getName()));
         }
 
         if (updatedScores.containsKey(selectedExam)) {
             throw new CommandException(MESSAGE_SCORE_EXISTS);
         }
 
-        updatedScores.put(selectedExam , score);
-
-        Person editedPerson = createEditedPerson(personToEdit, updatedScores);
-
-        model.setPerson(personToEdit, editedPerson);
-        return new CommandResult(String.format("Added score %s for %s", score, editedPerson.getName()));
+        model.addExamScoreToPerson(personToEdit, selectedExam, score);
+        return new CommandResult(String.format("Added score %s for %s", score, personToEdit.getName()));
     }
 
-    /**
-     * Creates and returns a {@code Person} with the details of {@code personToEdit}
-     * and the updated scores map.
-     */
-    private static Person createEditedPerson(Person personToEdit, Map<Exam, Score> updatedScores) {
-        return new Person(
-                personToEdit.getName(),
-                personToEdit.getPhone(),
-                personToEdit.getEmail(),
-                personToEdit.getAddress(),
-                personToEdit.getTags(),
-                personToEdit.getMatric(),
-                personToEdit.getReflection(),
-                personToEdit.getStudio(),
-                updatedScores
-        );
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this
+                || (other instanceof AddScoreCommand
+                && targetIndex.equals(((AddScoreCommand) other).targetIndex)
+                && score.equals(((AddScoreCommand) other).score));
     }
 }

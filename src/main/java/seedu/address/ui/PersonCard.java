@@ -91,28 +91,24 @@ public class PersonCard extends UiPart<Region> {
             classes.getChildren().add(new Label(person.getStudio().toString()));
         }
 
-        // Update exam score whenever updated
-        Exam selectedExamValue = selectedExam.getValue();
-        if (selectedExamValue != null) {
-            Score score = person.getScores().get(selectedExamValue);
-            if (score != null) {
-                examScore.getChildren().add(new Label("Score: \n" + String.valueOf(score.getScore())));
-            }
-        }
+        // Update exam score whenever new personcard is created
+        populateExamScore(selectedExam.getValue());
 
-
-        // Add a listener to the selectedExam observable to swtich scores whenever the selected exam changes
-        selectedExam.addListener((observable, oldValue, newValue) -> {
-            examScore.getChildren().clear(); // Clear the old score
-            if (newValue != null) {
-                Score score = person.getScores().get(newValue);
-                if (score != null) {
-                    examScore.getChildren().add(new Label("Score: \n" + String.valueOf(score.getScore())));
-                }
-            }
-        });
         phoneicon.setImage(phoneIcon);
         emailicon.setImage(emailIcon);
         addressicon.setImage(addressIcon);
     }
+
+    /**
+     * Populates the exam score of the person.
+     */
+    public void populateExamScore(Exam selectedExamValue) {
+        if (selectedExamValue != null) {
+            Score score = person.getScores().get(selectedExamValue);
+            if (score != null) {
+                examScore.getChildren().add(new Label("Score: \n" + score.toString()));
+            }
+        }
+    }
+
 }

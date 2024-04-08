@@ -30,7 +30,12 @@ public class PersonListPanel extends UiPart<Region> {
         super(FXML);
         personListView.setItems(personList);
         personListView.setCellFactory(listView -> new PersonListViewCell());
+        personListView.setSelectionModel(new NoSelectionModel<Person>());
         this.selectedExam = selectedExam;
+    }
+
+    public void update() {
+        personListView.refresh();
     }
 
     /**

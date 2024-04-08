@@ -67,6 +67,12 @@ public class EmailTest {
     }
 
     @Test
+    public void testEmailLength_fail() {
+        String test = "a".repeat(101) + "@example.com";
+        assertFalse(Email.isValidEmail(test));
+    }
+
+    @Test
     public void equals() {
         Email email = new Email("valid@email");
 

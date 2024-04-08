@@ -11,15 +11,17 @@ import seedu.address.model.person.Score;
  */
 public class Exam {
 
-    public static final String MESSAGE_CONSTRAINTS = "Names should only contain alphanumeric characters and spaces, "
-                                                      + "and it should not be blank";
+    public static final String MESSAGE_CONSTRAINTS = "Names should only contain alphanumeric characters and spaces "
+                                                      + "up to 30 characters, and it should not be blank. "
+                                                      + Score.MESSAGE_CONSTRAINTS + " "
+                                                      + "Exam Scores must also be greater than zero.";
 
     /*
      * The first character of the name must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.
      * The rest of the string can contain any alphanumeric character and spaces.
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ]*";
+    public static final String VALIDATION_REGEX_EXAM_NAME = "[\\p{Alnum}][\\p{Alnum} ]{0,29}";
 
     public final String name;
     public final Score maxScore;
@@ -31,7 +33,7 @@ public class Exam {
      */
     public Exam(String name, Score maxScore) {
         requireNonNull(name);
-        checkArgument(isValidName(name), MESSAGE_CONSTRAINTS);
+        checkArgument(isValidExamName(name), MESSAGE_CONSTRAINTS);
         this.name = name;
         this.maxScore = maxScore;
     }
@@ -60,12 +62,22 @@ public class Exam {
     /**
      * Returns if a given string is a valid name.
      */
-    public static boolean isValidName(String test) {
-        return test.matches(VALIDATION_REGEX);
+    public static boolean isValidExamName(String test) {
+        return test.matches(VALIDATION_REGEX_EXAM_NAME);
     }
 
-    public static boolean isValidScore(int test) {
-        return test >= 0;
+    /**
+     * Returns true if a given string is a valid exam score.
+     */
+    public static boolean isValidExamScoreString(String test) {
+        if (!test.matches(Score.VALIDATION_REGEX)) {
+            return false;
+        }
+        Double.parseDouble(test);
+        if (Double.parseDouble(test) <= 0) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -90,6 +102,6 @@ public class Exam {
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return name.hashCode() + maxScore.hashCode();
     }
 }

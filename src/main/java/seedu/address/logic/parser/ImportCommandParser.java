@@ -13,6 +13,8 @@ import seedu.address.logic.parser.exceptions.ParseException;
  * Parses input arguments and creates a new {@code ImportCommand} object
  */
 public class ImportCommandParser implements Parser<ImportCommand> {
+
+    private static final String MESSAGE_NOT_CSV = "File %s is not a csv file \nImport command only accepts csv files";
     /**
      * Parses the given {@code String} of arguments in the context of the {@code RemarkCommand}
      * and returns a {@code RemarkCommand} object for execution.
@@ -21,7 +23,7 @@ public class ImportCommandParser implements Parser<ImportCommand> {
     public ImportCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_IMPORT);
-
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_IMPORT);
         if (!isPrefixPresent(
                 argMultimap)
                 || !argMultimap.getPreamble().isEmpty()) {
@@ -29,6 +31,10 @@ public class ImportCommandParser implements Parser<ImportCommand> {
         }
 
         Path path = ParserUtil.parseFilePath(argMultimap.getValue(PREFIX_IMPORT).orElse(""));
+
+        if (!isCsvFile(path)) {
+            throw new ParseException(String.format(MESSAGE_NOT_CSV, path.toString()));
+        }
         return new ImportCommand(path);
     }
 
@@ -38,5 +44,14 @@ public class ImportCommandParser implements Parser<ImportCommand> {
      */
     private static boolean isPrefixPresent(ArgumentMultimap argumentMultimap) {
         return argumentMultimap.getValue(CliSyntax.PREFIX_IMPORT).isPresent();
+    }
+
+    /**
+     * Returns true if the file is a CSV file.
+     * @param path the path of the file
+     * @return true if the file is a CSV file
+     */
+    private static boolean isCsvFile(Path path) {
+        return path.toString().endsWith(".csv");
     }
 }

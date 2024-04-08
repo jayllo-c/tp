@@ -25,7 +25,7 @@ import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
     private static final String INVALID_NAME = "R@chel";
-    private static final String INVALID_PHONE = "+651234";
+    private static final String INVALID_PHONE = "]651234";
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
@@ -215,6 +215,16 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseMatricForEdit_invalidMatric_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseMatricForEdit(INVALID_MATRIC));
+    }
+
+    @Test
+    public void parseMatric_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseMatric(null));
+    }
+
+    @Test
     public void parseReflection_validReflection_success() throws ParseException {
         Reflection expected = new Reflection(VALID_REFLECTION);
         assertEquals(expected, ParserUtil.parseReflection(VALID_REFLECTION));
@@ -237,8 +247,8 @@ public class ParserUtilTest {
     }
 
     @Test
-    public void parseMatric_null_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> ParserUtil.parseMatric(null));
+    public void parseReflectionForEdit_invalidReflection_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseReflectionForEdit(INVALID_REFLECTION));
     }
 
     @Test
@@ -261,5 +271,10 @@ public class ParserUtilTest {
     public void parseStudio_optionalFieldMissing_returnsEmptyStudio() throws ParseException {
         seedu.address.model.student.Studio expected = new Studio("");
         assertThrows(ParseException.class, () -> ParserUtil.parseStudio(""));
+    }
+
+    @Test
+    public void parseStudioForEdit_invalidStudio_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseStudioForEdit(INVALID_STUDIO));
     }
 }

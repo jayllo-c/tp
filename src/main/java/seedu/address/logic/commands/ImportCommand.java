@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.commons.util.CsvUtil.readCsvFile;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_IMPORT;
@@ -11,18 +13,14 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_REFLECTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDIO;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-import com.opencsv.exceptions.CsvException;
-
+import javafx.util.Pair;
 import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.AddCommandParser;
@@ -37,24 +35,28 @@ public class ImportCommand extends Command {
 
     public static final String COMMAND_WORD = "import";
 
-    public static final String MESSAGE_NOT_IMPLEMENTED_YET =
-            "Remark command not implemented yet";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports contacts from specified filepath."
-            + " Must be an absolute filePath\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports persons from specified filepath."
+            + " Must be an absolute CSV file path\n"
             + "Parameters: filePath\n"
             + "[" + PREFIX_IMPORT + "import]\n"
             + "Example: " + COMMAND_WORD + PREFIX_IMPORT + "C:usr/lib/text.csv";
-    private static final String MESSAGE_ARGUMENTS = "filePath: %s";
-    private static final String MESSAGE_IMPORT_SUCCESS = "Imported Contacts from: %s";
-    private static final String MESSAGE_DATA_LOAD_ERROR = "Unable to load data from %s";
-    private static final String MESSAGE_PARSE_ERROR = "Invalid data format in %s";
+    private static final String MESSAGE_IMPORT_SUCCESS = "Imported persons successfully!\n";
     private final Path filePath;
     private final AddCommandParser addCommandParser = new AddCommandParser();
 
     /**
      * Represents the order of the data that should be parsed into the addCommandParser
      */
-    private final String[] header = {"name", "phone", "email", "address", "matric", "reflection", "studio", "tags"};
+    private final HashSet<String> compulsoryParameters =
+            new HashSet<>(List.of(new String[]{"name", "phone", "email", "address"}));
+    private final HashSet<String> optionalParameters = new HashSet<>(
+            List.of(new String[]{"matric", "reflection", "studio", "tags"}));
+
+    private String errorMsgsFromReadingCsv = "";
+    private String errorMsgsFromAddingPersons = "";
+
+    private int successfulImports = 0;
+    private int unsuccessfulImports = 0;
 
     /**
      * Represents a mapping of String to prefix of the data that should be parsed into the addCommandParser.
@@ -79,50 +81,92 @@ public class ImportCommand extends Command {
         this.filePath = filePath;
     }
 
+    /**
+     * Generates a report of the import process.
+     */
+    private String generateReport() {
+        String importSuccessMsg = (
+                !errorMsgsFromReadingCsv.isEmpty() | !errorMsgsFromAddingPersons.isEmpty()
+                        ? "Import completed with errors\n"
+                        : successfulImports == 0
+                        ? "No persons were imported\n"
+                        : MESSAGE_IMPORT_SUCCESS);
+
+        String reportForAddingPersons = "\n" + (
+                errorMsgsFromAddingPersons.isEmpty() && successfulImports > 0
+                        ? "All valid persons have been added!\n"
+                        : successfulImports == 0
+                        ? "No valid persons were found. Csv file is empty or error occurred reading from csv file\n"
+                        : "Errors found in adding persons!\n")
+            + String.format("Successful imports: %d\n", successfulImports)
+            + String.format("Unsuccessful imports: %d\n", unsuccessfulImports)
+            + errorMsgsFromAddingPersons;
+
+        String reportForReadingCsv =
+                errorMsgsFromReadingCsv.isEmpty()
+                        ? ""
+                        : "\nErrors found from reading csv!\n" + errorMsgsFromReadingCsv;
+
+        return importSuccessMsg + reportForReadingCsv + reportForAddingPersons;
+    }
+    /**
+     * Generates an error report from adding persons. The index refers to the index of the person in personsData.
+     * @param e
+     * @param index
+     */
+    private void generateErrorReportFromAddingPersons(Exception e, int index) {
+        errorMsgsFromAddingPersons += String.format("Person %s: ", index) + e.getMessage() + "\n";
+    }
+
+    private void generateErrorReportFromReadingCsv(DataLoadingException e) {
+        errorMsgsFromReadingCsv += e.getMessage() + "\n";
+    }
+
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        Pair<Integer, Integer> importResults;
         try {
-            List<Map<String, String>> data = readCsvFile();
-            for (Map<String, String> personData : data) {
-                try {
-                    String addCommandInput = convertToAddCommandInput(personData);
-                    AddCommand addCommand = parseAddCommand(addCommandInput);
-                    addCommand.execute(model);
-                } catch (ParseException e) {
-                    throw new CommandException(String.format(MESSAGE_PARSE_ERROR, personData));
-                }
+            Pair<Optional<List<Map<String, String>>>, String> result =
+                    readCsvFile(filePath, compulsoryParameters, optionalParameters);
+            Optional<List<Map<String, String>>> personsData = result.getKey();
+            if (personsData.isPresent()) {
+                importResults = addToModel(model, personsData.get());
+                successfulImports = importResults.getKey();
+                unsuccessfulImports = importResults.getValue();
             }
-        } catch (DataLoadingException e) {
-            throw new CommandException(String.format(MESSAGE_DATA_LOAD_ERROR, filePath));
+            if (!result.getValue().isEmpty()) {
+                generateErrorReportFromReadingCsv(new DataLoadingException(result.getValue()));
+            }
+        } catch (IOException e) {
+            throw new CommandException(e.getMessage());
         }
 
-        return new CommandResult(String.format(MESSAGE_IMPORT_SUCCESS, filePath.toString()));
+        return new CommandResult(generateReport());
     }
 
     /**
-     * Reads the csv file and returns a list of maps,
-     * where each map represents a row of person's data in the csv file.
-     * @throws DataLoadingException
+     * Adds the persons data to the model using a series of addCommands.
+     * @param model
+     * @param personsData
+     * @throws CommandException
      */
-    public List<Map<String, String>> readCsvFile() throws DataLoadingException {
-        try {
-            CSVReader reader = new CSVReaderBuilder(new FileReader(filePath.toString())).build();
-            List<String[]> rows = reader.readAll();
-            List<Map<String, String>> data = new ArrayList<>();
-            String[] header = rows.get(0);
-            for (int i = 1; i < rows.size(); i++) {
-                String[] row = rows.get(i);
-                Map<String, String> map = new HashMap<>();
-                for (int j = 0; j < header.length; j++) {
-                    map.put(header[j], row[j]);
-                }
-                data.add(map);
+    public Pair<Integer, Integer> addToModel(Model model, List<Map<String, String>> personsData) {
+        requireAllNonNull(model, personsData);
+        int successfulImports = 0;
+        int unsuccessfulImports = 0;
+        for (Map<String, String> personData : personsData) {
+            try {
+                String addCommandInput = convertToAddCommandInput(personData);
+                AddCommand addCommand = parseAddCommandInput(addCommandInput);
+                addCommand.execute(model);
+                successfulImports++;
+            } catch (ParseException | CommandException e) {
+                generateErrorReportFromAddingPersons(e, successfulImports + unsuccessfulImports);
+                unsuccessfulImports++;
             }
-            return data;
-        } catch (IOException | CsvException e) {
-            throw new DataLoadingException(e);
         }
+        return new Pair<>(successfulImports, unsuccessfulImports);
     }
 
     /**
@@ -130,13 +174,14 @@ public class ImportCommand extends Command {
      * @param personData
      * @return
      */
-    public String convertToAddCommandInput(Map<String, String> personData) {
+    private String convertToAddCommandInput(Map<String, String> personData) {
+        // Changed this method to private to prevent malicious use
         StringBuilder sb = new StringBuilder();
         sb.append(" ");
-        for (String key : header) {
-            // Maybe in the future, I can add a check to see if the value is empty
-            // Maybe in the future, I make CliSyntax an enum class?
-            if (personData.get(key).isEmpty()) {
+        for (Map.Entry<String, String> entry : personData.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (value.isEmpty()) {
                 // skip empty values
                 continue;
             }
@@ -158,7 +203,7 @@ public class ImportCommand extends Command {
         return sb.toString();
     }
 
-    public AddCommand parseAddCommand(String input) throws ParseException {
+    private AddCommand parseAddCommandInput(String input) throws ParseException {
         return addCommandParser.parse(input);
     }
 

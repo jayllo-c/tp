@@ -1,0 +1,10 @@
+@startuml
+start
+:User adds a new person;
+
+if () then ([has Matric])
+    :Add new "student" tag;
+else ([else])
+endif
+stop
+@enduml
