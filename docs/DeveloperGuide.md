@@ -423,9 +423,19 @@ If the **file** is invalid, an error message is returned.
 
 The validation process for the **file** is as follows:
 
-If the file is valid, any invalid **rows** of the CSV file are ignored, with only valid rows being successfully processed.
+<puml src="diagrams/ImportExamScoresFileActivityDiagram.puml" alt="Activity Diagram for Import Exam Scores File Validation" />
 
-The validation process for each **row** is as follows:
+If the file is valid, any invalid entries will be ignored, with the rest being successfully processed.
+
+A **column** will be ignored if:
+1. The column header is not the `email` column, but does not start with `Exam:`.
+2. The column header's name does not correspond to an existing `Exam` object. (i.e. Anything after `Exam:` is not an existing exam name.)
+
+A **row** will be ignored if:
+1. The `email` value does not correspond to an existing `Person`.
+
+A **cell** will be ignored if:
+1. The `Double` representing the score for an existing `Person` and `Exam` is not a valid `Score`.
 
 ##### Adding Exam Scores
 For every valid row:
