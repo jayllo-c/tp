@@ -15,6 +15,8 @@ pageNav: 3
 
 This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
 
+Features related to the creation and reading of CSV files were made possible through the use of the [OpenCSV](http://opencsv.sourceforge.net/) library.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
@@ -420,7 +422,9 @@ The `ImportExamScoresParser` class is responsible for parsing the user input, na
 ##### Parsing CSV File
 The CSV file is parsed with the `OpenCSV` library and a `List<String[]>` is created, with each `String[]` representing a row in the CSV file.
 
-##### Validation
+#### Validation
+
+##### File Validation
 After parsing, a mapping of `Exam` objects to an inner mapping of an `email` string to a `Double` score is created. This mapping is used to validate the data in the CSV file. 
 If the **file** is invalid, an error message is returned.
 
@@ -440,7 +444,7 @@ A **row** will be ignored if:
 A **cell** will be ignored if:
 1. The `Double` representing the score for an existing `Person` and `Exam` is not a valid `Score`.
 
-##### Adding Exam Scores
+##### Value Validation
 For every valid row:
 
 The `Double` is parsed into a `Score` object.
