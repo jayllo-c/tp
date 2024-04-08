@@ -222,7 +222,10 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### **Export Feature**
+### **Add Person Command** : `add`
+
+
+### **Export Feature** : `export`
 
 The `export` command allows users to export the details of each person currently displayed in the `PersonListPanel` to a CSV file. The CSV file is generated in the file `./addressbookdata/avengersassemble.csv`.
 
@@ -275,7 +278,7 @@ The following sequence diagram shows the interactions within the different class
       * The `export` feature is not reliant on the `find` feature to update the `filteredPersons` list.
     * Cons: Users need to manually filter and sort through the CSV file if they require certain data which may be less efficient.
 
-### **Copy feature**
+### **Copy feature** : `copy`
 
 The `copy` command enables users to quickly copy the email addresses of the persons currently displayed to them in the
 `PersonListPanel`. The copied emails are stored in the users' clipboard and can be pasted into an email client.
@@ -367,7 +370,7 @@ The parser also generates `Tag` objects based on the user input. The existing ta
 The activity diagram is as follows:
 <puml src="diagrams/AutomaticTaggingActivityDiagram.puml" alt="Activity Diagram for Auto Tagging Feature" />
 
-### Import contacts from CSV file
+### Import contacts from CSV file : `import`
 
 #### Implementation
 
@@ -389,7 +392,7 @@ Reference Diagram for each addCommand in importCommand
 
 <puml src="diagrams/ImportSequenceDiagramRef.puml" alt="Interactions Inside the Add Component for the `import` Command" />
 
-### Design Considerations
+#### Design Considerations
 
 **Aspect: How to handle duplicate persons**
 
@@ -406,7 +409,7 @@ The validities checked are:
 
 If the file is not valid, an error message will be returned.
 
-### **Import Exam Scores feature**
+### **Import Exam Scores feature** : `importExamScores`
 
 The `importExamScores` command lets users import exam scores corresponding to existing exams and persons from a CSV file.
 
@@ -448,7 +451,7 @@ The `Model` object is then used to:
 * And finally add the `Score` object to the correct `Person` for the correct `Exam`.
 
 
-### **Find feature**
+### **Find feature** : `find`
 
 The `find` command lets users search for persons by substring matching. The user can select any parameter to search under: `NAME`, `EMAIL`, `TAG`, `MATRIC`, `REFLECTION`, `STUDIO`, and `TAGS` can all be used. E.g. to search for all persons under studio `S2`, the user can use `find s|s2`. The user can also use two other prefixes: `lt` and `mt` to search for persons with scores less than or more than a certain value respectively. E.g. `find mt|50` will return all persons with scores more than 50.
 
@@ -506,7 +509,7 @@ As the `Model` class was built prior to the implementation of this feature, we d
 
 This design allows for easy extension to accommodate future enhancements or additional search criteria. New prefixes can be added to support additional search criteria without significant changes as we merely need to update our `Predicate` logic. This ensures that the implementation remains adaptable to evolving requirements and we can upgrade and improve the feature whenever required.
 
-### **deleteShown feature**
+### **Delete Shown feature** : `deleteShown`
 
 #### Implementation Details
 
