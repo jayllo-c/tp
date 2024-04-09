@@ -546,6 +546,9 @@ The `Model` object is then used to:
 * Get the `Person` object corresponding to the email in the row; 
 * And finally add the `Score` object to the correct `Person` for the correct `Exam`.
 
+##### Concrete Examples of Validation
+
+For concrete examples of the validation process, [refer to the manual testing section of the `importExamScores` command](#importing-exam-scores-importexamscores).
 
 ### **Find feature** : `find`
 
@@ -630,7 +633,15 @@ Similarly to the `copy` command, the `deleteShown` command is designed to be use
 
 ### `find` Command: Enhance input validation for prefixes other than `lt` and `mt`
 
+Currently, the `find` command only validates the `lt` and `mt` prefixes, where other prefixes are not validated. This means that users may search for persons with fields that do not exist to begin with, which is guaranteed to return no results.
 
+#### Planned Implementation
+
+We plan to enhance the `find` command to validate all prefixes other than `lt` and `mt`. This will ensure that users are not able to search for persons with fields that do not exist in the `Person` object.
+
+However, we need to be careful about overzealous input validation where users may still want to search for fields using incomplete parts of a field, and hence we have to balance these two considerations.
+
+For example, an extreme case will be to search for persons with the `Name` field with `~`, which is disallowed to begin with as `~` is not a valid character for a name. We plan to inform the user outright that the search is invalid and will not return any results.
 
 ### UI: Wrap text on result box so only 1 scrollbar is needed
 
