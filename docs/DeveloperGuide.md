@@ -1004,6 +1004,72 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
+### Adding an exam
+
+1. Adding an exam with valid data
+
+    1. Prerequisites: No exams in the address book.
+
+    1. Test case: `addExam n|Midterm d|2021-10-10`<br>
+       Expected: New exam is added to the address book. Status message shows the exam added.
+
+    1. Test case: `addExam n|Final d|2021-12-12`<br>
+       Expected: New exam is added to the address book. Status message shows the exam added.
+
+    1. Test case: `addExam n|Final d|2021-12-12` (exam already exists)<br>
+       Expected: Error message shown in the error report. No change in the address book.
+
+    1. Test case: `addExam n|Final` (missing date)<br>
+       Expected: Error message shown in the error report. No change in the address book.
+
+### Deleting an exam
+
+1. Deleting an exam
+
+    1. Prerequisites: At least one exam in the address book.
+
+    1. Test case: `deleteExam 1`<br>
+       Expected: First exam is deleted from the address book. Status message shows the exam deleted.
+
+    1. Test case: `deleteExam 0`<br>
+       Expected: No exam is deleted. Error message shown. No change in the address book.
+
+    1. Test case: `deleteExam 2` (index out of bounds)<br>
+       Expected: No exam is deleted. Error message shown. No change in the address book.
+
+    1. Test case: `deleteExam` (no index)<br>
+       Expected: No exam is deleted. Error message shown. No change in the address book.
+
+### Selecting an exam
+
+1. Selecting an exam
+
+    1. Prerequisites: At least one exam in the address book.
+
+    1. Test case: `selectExam 1`<br>
+       Expected: First exam is selected. Status message shows the exam selected.
+
+    1. Test case: `selectExam 0`<br>
+       Expected: No exam is selected. Error message shown. No change in the address book.
+
+    1. Test case: `selectExam 2` (index out of bounds)<br>
+       Expected: No exam is selected. Error message shown. No change in the address book.
+
+    1. Test case: `selectExam` (no index)<br>
+       Expected: No exam is selected. Error message shown. No change in the address book.
+
+### Deselecting an exam
+
+1. Deselecting an exam
+
+    1. Prerequisites: An exam has been selected.
+
+    1. Test case: `deselectExam`<br>
+       Expected: Selected exam is deselected. Status message shows the exam deselected.
+
+    1. Test case: `deselectExam` (no exam selected)<br>
+       Expected: No exam is deselected. Error message shown. No change in the address book.
+
 ### Importing persons
 
 1. Importing data from a CSV file
