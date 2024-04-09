@@ -978,3 +978,90 @@ testers are expected to do more *exploratory* testing.
     1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
 1. _{ more test cases …​ }_
+
+--------------------------------------------------------------------------------------------------------------------
+
+<div id="appendix-effort"></div>
+
+## **Appendix: Effort**
+
+This sections aims to showcase the effort put into Avengers Assemble by our team. 
+We will highlight the difficulty level, challenges faced, and effort required in this project.
+
+<br>
+
+### Difficulty Level
+
+On top of the `Person` entity originally implemented by AB3, Avengers Assemble also incorporates an additional entity of 
+`Exam`, with `Score` serving as a connection between the two entities.
+With this additional entity added, considerations had to be made regarding the implementation of  
+different features, interactions between each entity, and the management and storage of these 
+entities.
+
+Moreover, in addition to enhancing the original features of AB3 to cater to our target users, Avengers Assemble also introduces
+many new commands to improve the usability of our application, as well as to handle the diverse behaviours and interactions
+of `Person` and `Exam`.
+
+<br>
+
+### Challenges Faced
+
+#### Considerations for Exam Features
+
+**Limited User Interface Space for Score Interaction**<br>
+With the introduction of exam scores, we were presented with the challenge of designing a user-friendly interface for score
+interaction within the limited screen space. We had to devise intuitive methods for users to view, input and manage the scores
+of various exams, without overwhelming the interface.
+
+**Selection System for Exams**<br>
+A key consideration in the development of Avengers Assemble was the implementation of the selection system for exams.
+This feature was introduced to complement the exam score functionality. With this feature, users are able to focus on scores
+for a specific exam, instead of viewing all scores simultaneously. This decision was made to prevent over-cluttering the 
+user interface and to enhance user experience.
+
+**Data Management for Exams and Scores**<br>
+Integrating the `Exam` entity into Avengers Assemble...(might need some input on this part).
+`Exam` entity required additional and separate handling storage
+
+<br>
+
+### Effort Required
+
+#### Enhancements to Existing Features
+
+**Addition of New Fields to Persons**<br>
+New fields such as recitation, studio, matriculation number, was added to persons to align with the context of our application.
+
+**Find**<br>
+Our team improved on the existing `find` command of AB3 to allow for more flexibility. With the new improvements, users
+can now find not only based on the name field of persons, but also specify their search based on other fields such as 
+`email` and `recitation`. With the addition of the exam score features, we also adapted our `find` command to allow users 
+to filter out persons less than or more than a specified score, revamping the way `find` is used and handled.
+
+**Automatic Tagging of Persons**<br>
+In the context of our application, it is mainly used to store students', instructors' and teaching assistants' contacts.
+Hence, on top of the original behaviour of the tag feature, we adapted it to automatically tag contacts with a 
+matriculation number as students.
+
+**User Interface**<br>
+Enhancements were made to the user interface...(johan can add here?)
+
+#### New Features
+
+**Copy**<br>
+Our team introduced a new copy command which allows for users to copy the email addresses of the currently displayed persons. 
+This is to cater to the context of our application, assisting head tutors with the task of making mass announcements.
+
+**Import and Export**<br>
+To facilitate the handling and managing of large amounts of information, our group introduced the import and export feature to
+allow for flexible data movement externally and internally.
+
+**Exams and Exams Scores**<br>
+The implementation of the exam and exam score features was the most significant addition to our application, requiring adjustments to existing features and the 
+introduction of many new commands to handle and manage the addition of exams and exam features.
+
+<br>
+
+### Achievements
+Overall, our group successfully implemented the planned features while addressing bugs and managing potential feature flaws. 
+Despite initial hesitations about implementing significant new features like exams and exam scores, we overcame the challenge and achieved our goals.
