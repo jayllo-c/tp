@@ -971,6 +971,207 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
+<br>
+
+### Exporting Data to a CSV File
+
+**Command:** `export`<br>
+**More information on usage:** <a href="UserGuide.md#export">Exporting Data to a CSV File</a>
+
+1. Exporting data while all persons are displayed.
+   
+   * **Prerequisites:** 
+     * Start with the provided sample data.
+     * List all persons using the `list` command.
+<br><br>
+   * **Test case:** `export`<br>
+     **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file.
+<br><br>
+
+2. Exporting data while person list is filtered.
+
+   * **Prerequisites:**
+       * Start with the provided sample data.
+       * Filter the person list using the `find` command.
+<br><br>
+   * **Test case:** Similar to previous.<br>
+     **Expected:** Similar to previous.
+<br><br>
+
+3. Exporting data with exams and exam scores added.
+
+    * **Prerequisites:**
+        * Start with the provided sample data.
+        * Add an exam using the `addExam` command. For this example, we shall add an exam with name `Test Exam`.
+        * List all persons using the `list` command.
+<br><br>
+    * **Test case:** `export`<br>
+      **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file. A column with column heading `Exam:Test Exam` is present in the same CSV file, but no values present in that column.
+<br><br>
+    * **Test case:** Add exam scores to persons in displayed list using `addScore`, then `export`<br>
+      **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file. A column with column heading `Exam:Test Exam` is present in the same CSV file, with corresponding exam scores for each person included in that column.
+
+<br>
+
+### Adding a Persons's Exam Score
+
+**Command:** `addScore`<br>
+**More information on usage:** <a href="UserGuide.md#addscore">Adding an Exam Score</a>
+
+1. Adding a score to a person while all persons are displayed.
+
+    * **Prerequisites:** 
+      * Ensure at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
+      * Ensure an exam is selected using the `selectExam` command. For this example, we shall select `test exam` from above.
+      * Ensure all persons are displayed using the `list` command.
+<br><br>
+   * **Test case:** `addScore 1 s|100`<br>
+     **Expected:** A score of `100` is added to the first person in the list of displayed persons. The score and the name of the corresponding person will be shown in the status message.
+<br><br>
+   * **Test case:** `addScore 2 s|50.25`<br>
+     **Expected:** A score of `50.25` is added to the second person in the list of displayed persons.The score and the name of the corresponding person will be shown in the status message.
+<br><br>
+   * **Test case (invalid index input):** `addScore 0 s|100`<br>
+     **Expected:** No score is added to any persons. Error details are shown in the status message.
+<br><br>
+   * **Test case (no index input):** `addScore s|100`<br>
+     **Expected:** No score is added to any persons. Error details are shown in the status message.
+<br><br>
+   * **Test case (no score input):** `addScore 3 s|`<br>
+     **Expected:** No score is added to any persons. Error details are shown in the status message.
+<br><br>
+   * **Test case (score larger than maximum score is input):** `addScore 3 s|101`<br>
+     **Expected:** No score is added to any persons. Error details are shown in the status message.
+<br><br>
+   * **Test case (negative score input):** `addScore 3 s|-50`<br>
+     **Expected:** No score is added to any persons. Error details are shown in the status message.
+<br><br>
+   * **Test case (person already contains a score):** `addScore 1 s|50.25`<br>
+     **Expected:** No score is added to any persons. Error details are shown in the status message.
+<br><br>
+   * **Other incorrect `addScore` commands to try:** `addScore`, `addScore INDEX s|100` (where `INDEX` is larger than the list size), `addScore 3 s|SCORE` (where `SCORE` is non-numeric, is less than 0, more than the maximum score of the selected exams, and/or has more than 2 digits in its fractional part)<br>
+     **Expected:** No score is added to any persons. Error details are shown in the status message.
+<br><br>
+
+2. Adding a score to a person while person list is filtered.
+
+   * **Prerequisites:** 
+     * Ensure at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
+     * Ensure an exam is selected using the `selectExam` command. For this example, we shall select `test exam` from above.
+     * Filter the person list using the `find` command.
+<br><br>
+   * **Test case:** Similar to previous.<br>
+     **Expected:** Similar to previous.
+
+<br>
+
+### Editing a Person's Exam Score
+
+**Command:** `editScore`<br>
+**More information on usage:** <a href="UserGuide.md#editscore">Editing an Exam Score</a>
+
+1. Editing a score of a person while all persons are displayed.
+
+    * **Prerequisites:**
+      * Ensure at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
+      * Ensure an exam is selected using the `selectExam` command. For this example, we shall select `test exam` from above.
+      * Ensure all persons are displayed using the `list` command.
+      * Ensure that one person in the list has a score for the selected exam using the `addScore` command. For this example, we shall add a score of `100` to the first person in the list.
+<br><br>
+    * **Test case:** `editScore 1 s|90`<br>
+      **Expected:** The score of `100` is edited to `90` for the first person in the list of displayed persons. The score and the details of the corresponding person will be shown in the status message.
+<br><br>
+    * **Test case (invalid index input):** `editScore 0 s|90`<br>
+      **Expected:** No person's score is edited. Error details are shown in the status message.
+<br><br>
+    * **Test case (no index input):** `editScore s|90`<br>
+      **Expected:** No person's score is edited. Error details are shown in the status message.
+<br><br>
+    * **Test case (no score input):** `editScore 1 s|`<br>
+      **Expected:** No person's score is edited. Error details are shown in the status message.
+<br><br>
+   * **Test case (score larger than maximum score is input):** `editScore 1 s|101`<br>
+     **Expected:** No score is added to any persons. Error details are shown in the status message.
+<br><br>
+   * **Test case (person does not contain any score):** `editScore 2 s|90`<br>
+     **Expected:** No score is added to any persons. Error details are shown in the status message.
+<br><br>
+   * **Other incorrect `editScore` commands to try:** `editScore`, `editScore INDEX s|90` (where `INDEX` is larger than the list size), `editScore 1 s|SCORE` (where `SCORE` is non-numeric, is less than 0, more than the maximum score of the selected exams, and/or has more than 2 digits in its fractional part)<br>
+     **Expected:** No score is added to any persons. Error details are shown in the status message.
+<br><br>
+
+2. Editing a score of a person while person list is filtered.
+   
+   * **Prerequisites:**
+     * Ensure at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
+     * Ensure an exam is selected using the `selectExam` command. For this example, we shall select `test exam` from above.
+     * Filter the person list using the `find` command.
+     * Ensure that one person in the list has a score for the selected exam using the `addScore` command. For this example, we shall add a score of `100` to the first person in the list.
+<br><br>
+   * **Test case:** Similar to previous.<br>
+     **Expected:** Similar to previous.
+
+<br>
+
+### Deleting a Person's Exam Score
+
+**Command:** `deleteScore`<br>
+**More information on usage:** <a href="UserGuide.md#deletescore">Deleting an Exam Score</a>
+
+1. Deleting a score of a person while all persons are displayed.
+
+   * **Prerequisites:**
+       * Ensure at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
+       * Ensure an exam is selected using the `selectExam` command. For this example, we shall select `test exam` from above.
+       * Ensure all persons are displayed using the `list` command.
+       * Ensure that one person in the list has a score for the selected exam using the `addScore` command. For this example, we shall add a score of `100` to the first person in the list.
+<br><br>
+   * **Test case:** `deleteScore`<br>
+     **Expected:** The score of `100` is deleted from the first person in the list of displayed persons. The details of the corresponding person will be shown in the status message.
+<br><br>
+   * **Test case (invalid index input):** `deleteScore 0`<br>
+     **Expected:** No person's score is deleted. Error details are shown in the status message.
+<br><br>
+   * **Test case (person does not contain any score):** `deleteScore 2`<br>
+     **Expected:** No person's score is deleted. Error details are shown in the status message.
+<br><br>
+   * **Other incorrect `deleteScore` commands to try:** `deleteScore`, `deleteScore INDEX` (where `INDEX` is larger than the list size)<br>
+     **Expected:** No person's score is deleted. Error details are shown in the status message.
+<br><br>
+
+2. Deleting a score of a person while person list is filtered.
+   
+   * **Prerequisites:**
+     * Ensure at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
+     * Ensure an exam is selected using the `selectExam` command. For this example, we shall select `test exam` from above.
+     * Filter the person list using the `find` command.
+     * Ensure that one person in the list has a score for the selected exam using the `addScore` command. For this example, we shall add a score of `100` to the first person in the list.
+<br><br>
+   * **Test case:** Similar to previous.<br>
+     **Expected:** Similar to previous.
+
+<br>
+
+### Mean and Median of Exam Scores
+
+**More information on usage:** <a href="UserGuide.md#mean-and-median">Mean and Median of Exam Scores</a>
+
+1. Mean and median of exam scores while all persons are displayed.
+   
+   * **Prerequisites:**
+     * Ensure at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
+     * Ensure an exam is selected using the `selectExam` command. For this example, we shall select `test exam` from above.
+     * Ensure all persons are displayed using the `list` command.
+<br><br>
+   * **Initially, no scores added to any persons in the list**<br>
+     **Expected:** "No scores available" is displayed at the bottom, right corner of the GUI.
+<br><br>
+   * **Use `addScore` to add a score of `50` to the first person in the list**<br>
+     **Expected:** A mean score of `50` and a median score of `50` is displayed at the bottom, right corner of the GUI.
+<br><br>
+   * **Use `addScore` to add a score of `25` to the second person in the list and a score of `27.7` to the third person in the list**<br>
+     **Expected:** the calculated mean value of the three scores (rounded to two decimal places), `50`, `25` and `27.7`, and the median of the three scores, are displayed at the bottom, right corner of the GUI.
+
 ### Saving data
 
 1. Dealing with missing/corrupted data files
