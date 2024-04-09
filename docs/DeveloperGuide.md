@@ -271,28 +271,6 @@ The following fields are optional as they may not be available for all persons:
 * `Studio`
 * `Tag`
 
-### Delete Person Command : `delete`
-
-The `delete` command allows a user to delete a person with the specified index.
-
-#### Implementation Details
-
-##### Parsing User Input
-
-The `DeleteCommandParser` class is responsible for parsing user input to extract the index of the person to be deleted. It uses the `ArgumentTokenizer` to tokenize the input string, extracting the index of the person to be deleted and ensures that the index is valid.
-
-##### Executing the Command
-
-The `DeleteCommandParser` object creates a `DeleteCommand` object upon successful parsing. The `LogicManager` then calls the `execute` method in the `DeleteCommand` class, which then interacts with the `Model` component to remove the person.
-
-##### Sequence Diagram
-
-For more details on the implementation of the `delete` command, refer to the [Delete Command Sequence Diagram](#example-of-parsing-user-input-delete-command).
-
-#### Design Considerations
-
-We have chosen to implement the `delete` command to accept the index of the person to be deleted to maximize convenience for the user. The numbering of the lists will be displayed to the user, making indexing very intuitive.
-
 ### **Edit Person Command** : `edit`
 
 The `edit` command allows a user to edit the details of an existing person.
@@ -316,6 +294,30 @@ After that, it interacts with the `Model` component to edit the details of the p
 The activity diagram below illustrates the steps involved in executing the `edit` command. In practice, a `Reject` activity will result in a `CommandException` being thrown.
 
 <puml src="diagrams/EditCommandActivityDiagram.puml" alt="Activity Diagram for the `edit` Command" />
+
+
+### Delete Person Command : `delete`
+
+The `delete` command allows a user to delete a person with the specified index.
+
+#### Implementation Details
+
+##### Parsing User Input
+
+The `DeleteCommandParser` class is responsible for parsing user input to extract the index of the person to be deleted. It uses the `ArgumentTokenizer` to tokenize the input string, extracting the index of the person to be deleted and ensures that the index is valid.
+
+##### Executing the Command
+
+The `DeleteCommandParser` object creates a `DeleteCommand` object upon successful parsing. The `LogicManager` then calls the `execute` method in the `DeleteCommand` class, which then interacts with the `Model` component to remove the person.
+
+##### Sequence Diagram
+
+For more details on the implementation of the `delete` command, refer to the [Delete Command Sequence Diagram](#example-of-parsing-user-input-delete-command).
+
+#### Design Considerations
+
+We have chosen to implement the `delete` command to accept the index of the person to be deleted to maximize convenience for the user. The numbering of the lists will be displayed to the user, making indexing very intuitive.
+
 
 ### **Export Feature** : `export`
 
@@ -1099,37 +1101,396 @@ testers are expected to do more *exploratory* testing.
 
 ### Launch and shutdown
 
-1. Initial launch
+#### Initial launch
 
-    1. Download the jar file and copy into an empty folder
+1. Download the jar file and copy into an empty folder.
+2. Open Terminal and type the following:
 
-    1. Double-click the jar file Expected: Shows the GUI with a set of sample persons. The window size may not be optimum.
+   ```bash
+   java -jar avengersassemble.jar
+   ```
 
-1. Saving window preferences
+Expected: Shows the GUI with a set of sample persons. The window size may not be optimal.
 
-    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
+#### Saving window preferences
 
-    1. Re-launch the app by double-clicking the jar file.<br>
-       Expected: The most recent window size and location is retained.
+1. Resize the window to an optimal size. 
 
-1. _{ more test cases …​ }_
+2. Move the window to a different location. 
 
-### Deleting a person
+3. Close the window. 
 
-1. Deleting a person while all persons are being shown
+4. Re-launch the app.<br>
 
-    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+Expected: The most recent window size and location is retained.
 
-    1. Test case: `delete 1`<br>
-       Expected: First person is deleted from the list. Details of the deleted person shown in the status message. Timestamp in the status bar is updated.
+#### Shutdown
 
-    1. Test case: `delete 0`<br>
-       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+1. Type `exit` in the command box and press Enter.
 
-    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-       Expected: Similar to previous.
+Expected: The GUI closes and the application exits.
 
-1. _{ more test cases …​ }_
+### Adding a person: `add`
+
+#### Adding a person with all fields
+
+1. Prerequisites: No persons in the list.
+
+2. Test case: 
+
+    ```
+   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
+   ``` 
+   
+   Expected: A person with the following fields is added to the list:
+
+   * Name: `Alice`
+   * Phone: `98765432`
+   * Address: `King Edward VII Hall E106`
+   * Email: `e09123456@u.nus.edu`
+   * Matric: `A1234567X`
+   * Reflection: `R2`
+   * Studio: `S1`
+   * Tags: `excelling`, `student`
+
+<box type="info" seamless>
+
+**Note:** If a `Matric` number is provided, the person is automatically tagged as a `student`.
+
+</box>
+
+3. Test case: (Missing compulsory `Email` and `Address` fields)
+
+    ```
+   add n|Alice e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
+   ``` 
+   
+    Expected: An error message is shown indicating that the `Address` and `Email` fields are missing.
+
+4. Other incorrect test cases to try: `add`, any other command that misses out a combination of compulsory fields.
+
+    Expected: Similar to previous.
+
+#### Adding a person with repeated prefixes
+
+1. Prerequisites: No persons in the list.
+
+2. Test case: (Repeated `n|` prefix)
+
+
+    ```
+    add n|Alice n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
+    ``` 
+   
+    Expected: An error message is shown indicating that the `Name` field is repeated.
+
+3. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|` prefixes.
+
+    Expected: Similar to previous.
+
+#### Adding a person whose `Email` already exists
+
+1. Prerequisites: A person with email `e1234567@u.nus.edu` already exists in the list.
+
+2. Test case:
+
+    ```
+   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e1234567@u.nus.edu
+   ``` 
+   
+    Expected: An error message is shown indicating that the email already exists.
+
+#### Adding a person with only compulsory fields
+
+1. Prerequisites: No persons in the list.
+
+2. Test case:
+
+    ```
+   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu
+   ``` 
+   
+    Expected: A person with the following fields is added to the list:
+
+    * Name: `Alice`
+    * Phone: `98765432`
+    * Address: `King Edward VII Hall E106`
+    * Email: `e09123456@u.nus.edu`
+
+3. Other successful test cases include adding a person with only some optional fields.
+
+#### Adding a person with Matriculation number
+
+1. Prerequisites: No persons in the list.
+
+2. Test case:
+
+    ```
+   add n|Alice p|98765432 a|King Edward VII Hall E106 e|alice@example.com m|A1234567X
+    ```
+   
+    Expected: A person with the following fields is added to the list:
+    * Name: `Alice`
+    * Phone: `98765432`
+    * Address: `King Edward VII Hall E106`
+    * Email: `alice@example.com`
+    * Matric: `A1234567X`
+    * Tags: `student`
+
+    Note that the `student` tag is automatically added to the new person.
+
+3. Test case:
+
+    ```
+   add n|Alice p|98765432 a|King Edward VII Hall E106 e|alice@example.com
+    ```
+   
+    Expected: A person with the following fields is added to the list:
+   * Name: `Alice`
+   * Phone: `98765432`
+   * Address: `King Edward VII Hall E106`
+   * Email: `alice@example.com`
+
+    Note that there is no automatic tagging.
+
+### Editing a person: `edit`
+
+#### Editing a person with all fields
+
+1. Prerequisites: Start with the provided sample data.
+
+2. Test case:
+
+    ```
+    edit 1 n|new name p|123 a|new address e|newemail@example.com m|A0000000X r|R1 s|S1 t|tag1 t|tag2
+    ```
+
+   Expected: The first person’s details are updated with all the new values.
+
+3. Other successful test cases include a combination of updating some fields and not updating others.
+
+   Expected: Similar to previous.
+
+#### Editing a person with repeated prefixes
+
+1. Prerequisites: Start with the provided sample data.
+
+2. Test case: (Repeated `n|` prefix)
+
+    ```
+    edit 1 n|new name n|new name 2 p|123 a|new address
+    ```
+
+   Expected: An error message is shown indicating that the `Name` field is repeated.
+
+3. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|` prefixes.
+
+   Expected: Similar to previous.
+
+#### Editing a person whose `Email` already exists
+
+1. Prerequisites: Start with the provided sample data. Note the emails of the first and second person.
+
+2. Test case:
+
+    ```
+    edit 1 e|berniceyu@example.com
+    ```
+
+   Expected: An error message is shown indicating that the email already exists.
+
+### Deleting a person: `delete`
+
+#### Deleting a person while all persons are being shown
+
+1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+
+2. Test case: `delete 1`<br>
+
+   Expected: First person is deleted from the list. Details of the deleted person shown in the status message.
+
+3. Test case: `delete 0`<br>
+
+   Expected: No person is deleted. Error details shown in the status message.
+
+4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+
+   Expected: Similar to previous.
+
+#### Deleting a person while some persons are being shown
+
+1. Prerequisites: Filter persons using the `find` command. Multiple but not all persons in the list.
+
+2. Test case: `delete 1`<br>
+
+    Expected: First person in the filtered list is deleted. Details of the deleted person shown in the status message.
+
+3. Test case: `delete 0`<br>
+
+    Expected: No person is deleted. Error details shown in the status message.
+
+4. Other incorrect delete commands to try: `delete`, `delete x`<br>
+
+    Expected: Similar to previous.
+
+#### Deleting a person while no persons are being shown
+
+1. Prerequisites: Filter persons using the `find` command such that there are no persons in the list, or delete all persons with `clear`.
+
+2. Test case: `delete 1`<br>
+
+    Expected: No person is deleted. Error details shown in the status message.
+
+
+### Deleting shown persons: `deleteShown`
+
+#### Deleting a proper subset of all persons
+
+1. Prerequisites: Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
+
+2. Test case: `deleteShown`
+
+    Expected: All persons currently shown are deleted, and the list is updated to show all remaining persons.
+
+3. Other successful test cases: `deleteShown x`
+
+    Expected: Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
+
+#### Deleting all persons
+
+1. Prerequisites: Filter persons using the `find` command such that all persons are shown, or list all persons with `list`.
+
+2. Test case: `deleteShown`
+
+    Expected: An error is shown indicating that all persons cannot be deleted at once.
+
+3. Other incorrect test cases to try: `deleteShown x`
+
+    Expected: Similar to previous.
+
+### Listing all persons: `list`
+
+#### Starting with sample data
+
+1. Prerequisites: Start with the provided sample data.
+
+2. Test case: `list`
+
+    Expected: All persons are shown in the list.
+
+3. Other successful test cases: `list x`
+
+    Expected: Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
+
+#### Starting with a filtered list
+
+1. Prerequisites: Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
+
+2. Test case: `list`
+
+    Expected: All persons in the overall list are shown.
+
+### Importing Exam Scores: `importExamScores`
+
+#### Importing exam scores from a CSV file
+
+1. Prerequisites: Start with sample data. 
+
+2. Add an `Exam` to the sample data:
+
+    ```
+    addExam n|Midterm s|100
+    ```
+
+3. Create a CSV file with the following content:
+
+    Contents of `/path/to/file.csv`:
+    
+    ```
+    email,Exam:Midterm
+    alexyeoh@example.com,50
+    ```
+
+4. Test case: `importExamScores /path/to/file.csv`
+
+    Expected: The person with the email of `alexyeoh@example.com` now has a `Midterm` score of `50`.
+
+#### Importing an invalid file
+
+1. Prerequisites: Start with sample data and the `Midterm` exam.
+
+2. Create a file named `invalid.json`.
+
+3. Test case: `importExamScores invalid.json`
+
+    Expected: An error message is shown indicating that the file is not a CSV file.
+
+#### Importing a CSV file with incorrect formatting
+
+1. Prerequisites: Start with sample data and the `Midterm` exam.
+
+2. Create a CSV file with the following content:
+
+    Contents of `/path/to/file.csv`:
+    
+    ```
+    email,Exam:Midterm,email
+    alexyeoh@example.com,50,alexyeoh@example.com
+    ```
+   
+3. Test case: `importExamScores /path/to/file.csv`
+
+    Expected: An error message is shown indicating that the email header should exist only in the first column.
+
+4. Other incorrect test cases to try: CSV files where email is not the first header.
+
+    Expected: Similar to previous.
+
+#### Importing a CSV file with duplicate entries
+
+1. Prerequisites: Start with sample data and the `Midterm` exam.
+
+2. Create a CSV file with the following content:
+
+    Contents of `/path/to/file.csv`:
+    
+    ```
+    email,Exam:Midterm,Exam:Midterm
+   alexyeoh@example.com,50,60
+    ```
+   
+3. Test case: `importExamScores /path/to/file.csv`
+
+    Expected: A message is shown indicating that there are duplicate entries in the CSV file, and only the first instance has been kept. The `Midterm` score for the person with the email of `alexyeoh@example.com` is `50`.
+
+#### Importing a CSV file with invalid entries
+
+1. Prerequisites: Start with sample data and the `Midterm` exam.
+
+2. Create a CSV file with the following content:
+
+    Contents of `/path/to/file.csv`:
+    
+    ```
+    email,Exam:Midterm,Exam:Finals
+    alexyeoh@example.com,101,50
+    berniceyu@example.com,50,60
+    nonexistent@example.com,100,100
+    ```
+   
+3. Test case: `importExamScores /path/to/file.csv`
+
+    Expected: A message is shown indicating that there are invalid entries in the CSV file, and all other valid entries have been imported. The errors shown are as follows:
+
+    * The score for `alexyeoh@example.com` for the `Midterm` exam is invalid.
+    * The person with the email `nonexistent@example.com` does not exist in the given list.
+    * The `Finals` exam does not exist.
+
+    Note that the `Midterm` score for the person with the email of `berniceyu@example.com` is `50`.
+
+4. Other incorrect test cases to try: CSV files with a mix of invalid scores, nonexistent emails, and nonexistent exams.
+
+    Expected: Similar to previous.
 
 ### Saving data
 
