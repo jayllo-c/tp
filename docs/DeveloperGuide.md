@@ -1130,6 +1130,27 @@ Expected: The most recent window size and location is retained.
 
 Expected: The GUI closes and the application exits.
 
+### Saving data
+
+#### Dealing with missing or corrupted data files
+
+1. Prerequisites: The app is a clean state.
+
+2. Launch the app.
+
+3. Exit the app.
+
+4. Note the new `data/avengersassemble.json` file that is created. This is the storage file.
+
+5. Test case: Delete the `data/avengersassemble.json` file.
+
+    Expected: The app should create a new `data/avengersassemble.json` file populated with sample data when launched and exited.
+
+6. Test case: Corrupt the `data/avengersassemble.json` file by adding random text to it.
+
+    Expected: The app should ignore the corrupted file and create a new empty `data/avengersassemble.json` file when launched and interacted with.
+
+
 ### Adding a person: `add`
 
 #### Adding a person with all fields
@@ -1165,7 +1186,7 @@ Expected: The GUI closes and the application exits.
    add n|Alice e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
    ``` 
    
-    Expected: An error message is shown indicating that the `Address` and `Email` fields are missing.
+    Expected: An error message is shown indicating that the `Address` and `Phone` fields are missing.
 
 4. Other incorrect test cases to try: `add`, any other command that misses out a combination of compulsory fields.
 
@@ -1492,10 +1513,3 @@ Expected: The GUI closes and the application exits.
 
     Expected: Similar to previous.
 
-### Saving data
-
-1. Dealing with missing/corrupted data files
-
-    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
-
-1. _{ more test cases …​ }_
