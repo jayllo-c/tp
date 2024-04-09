@@ -626,103 +626,43 @@ The following activity diagram illustrates the execution of the `deleteShown` co
 Similarly to the `copy` command, the `deleteShown` command is designed to be used with the find command, which filters the persons displayed in the `PersonListPanel`. Consequently, the flexibility of the `deleteShown` command relies heavily on the implementation of the `find` command. Due to this dependency, any changes to the `find` command may affect the functionality of the `deleteShown` command.
 
 
-### \[Proposed\] Undo/redo feature
+## Planned Enhancements
 
-#### Proposed Implementation
-
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
-
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
-
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
-
-Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
-
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
-
-<puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
-
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
-
-<puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
-
-Step 3. The user executes `add n|David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
-
-<puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
-
-<box type="info" seamless>
-
-**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
-
-</box>
-
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
-
-<puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
+### `find` Command: Enhance input validation for prefixes other than `lt` and `mt`
 
 
-<box type="info" seamless>
 
-**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
+### UI: Wrap text on result box so only 1 scrollbar is needed
 
-</box>
+Currently, the `ResultDisplay` box does not wrap text, which means that long lines of text will extend beyond the width of the box. This results in the need for two scrollbars, a horizontal one for the result box and a vertical one for the currently shown list of persons. This is not ideal as it makes the UI less optimized for the target audience, who prefer using a CLI-optimized application and prefer not to use mouse controls to scroll through scrollboxes.
 
-The following sequence diagram shows how an undo operation goes through the `Logic` component:
+#### Planned Implementation
 
-<puml src="diagrams/UndoSequenceDiagram-Logic.puml" alt="UndoSequenceDiagram-Logic" />
+We plan to modify the `ResultDisplay` box to wrap text so that there is no longer a need for the horizontal scrollbar in the `ResultDisplay` box.
 
-<box type="info" seamless>
+In the case where the wrapped text still exceeds the height of the `ResultDisplay` box, we plan to enable it to dynamically adjust its height as needed.
 
-**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+### Primary key: Use both `Matric` and `Email`
 
-</box>
+Currently, only `Email` is used as a unique identifier for `Person` objects. However, this means that two `Person` objects can have different `Email`s but the same `Matric` number. This clashes with the real-life constraint that NUS students, in particular CS1101S students, are put under, where Matriculation numbers are supposed to be unique for each student. Our planned enhancement hence aims to better reflect real-life constraints.
 
-Similarly, how an undo operation goes through the `Model` component is shown below:
+#### Planned Implementation
 
-<puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
+Currently, the `hasPerson` method in the `Model` class checks for the existence of a `Person` object based on the `Email` field. We plan to modify this method to check for the existence of a `Person` object based on both the `Email` and `Matric` fields. This will ensure that two `Person` objects cannot have the same `Matric` number.
 
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
+However, more checking needs to be done to ensure persons cannot have different overall unique identifiers, but the same `Email` or `Matric` field. (E.g. two persons cannot have the same `Email` but different `Matric` numbers.)
 
-<box type="info" seamless>
+Additionally, some persons such as staff members and course instructors may not have a `Matric` field. Hence, careful consideration needs to be made to implement this new method of checking for unique identifiers.
 
-**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+### UX: Make sample data tags more relevant and helpful to the user
 
-</box>
+Currently, the sample data tags are not very helpful to the user, having tags like `friends`, `neighbours` and `family`. This may pose confusion to users about the context of the application, which is the head TA's management of persons related to CS1101S.
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+#### Planned Implementation
 
-<puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
+Remove all `Tag` objects that are in the sample data that border on irrelevancy. This can be done by modifying the `SampleDataUtil` class to not add these tags to the sample data.
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n|David …​` command. This is the behavior that most modern desktop applications follow.
-
-<puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
-
-The following activity diagram summarizes what happens when a user executes a new command:
-
-<puml src="diagrams/CommitActivityDiagram.puml" width="250" />
-
-#### Design considerations:
-
-**Aspect: How undo & redo executes:**
-
-* **Alternative 1 (current choice):** Saves the entire address book.
-    * Pros: Easy to implement.
-    * Cons: May have performance issues in terms of memory usage.
-
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
-    * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-    * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
-
+Retain all other relevant `Tag` objects like `colleagues` and `student` to better reflect the context of the application.
 
 --------------------------------------------------------------------------------------------------------------------
 
