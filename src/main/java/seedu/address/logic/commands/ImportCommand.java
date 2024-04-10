@@ -37,9 +37,8 @@ public class ImportCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports persons from specified filepath."
             + " Must be an absolute CSV file path\n"
-            + "Parameters: filePath\n"
-            + "[" + PREFIX_IMPORT + "import]\n"
-            + "Example: " + COMMAND_WORD + PREFIX_IMPORT + "C:usr/lib/text.csv";
+            + "Parameters: " + PREFIX_IMPORT + "FILEPATH\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_IMPORT + "C:usr/lib/text.csv";
     private static final String MESSAGE_IMPORT_SUCCESS = "Imported persons successfully!\n";
     private final Path filePath;
     private final AddCommandParser addCommandParser = new AddCommandParser();
