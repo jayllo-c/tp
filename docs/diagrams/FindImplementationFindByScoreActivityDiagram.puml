@@ -1,0 +1,21 @@
+@startuml
+
+skin rose
+skinparam ActivityFontSize 15
+skinparam ArrowFontSize 12
+title Activity: find by score
+start
+
+if () then ([else])
+    :Show no exam selected as error message;
+else ([exam selected])
+    if () then ([else])
+        :Show score is invalid as error message;
+    else ([score is valid])
+        :Displays the students that match the search criteria;
+    endif
+endif
+stop
+
+
+@enduml
