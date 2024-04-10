@@ -353,7 +353,7 @@ We have chosen to implement the `delete` command to accept the index of the pers
 
 <br>
 
-#### **Find feature** : `find`
+#### **Find Feature** : `find`
 
 The `find` command lets users search for persons by substring matching. The user can select any parameter to search under: `NAME`, `EMAIL`, `TAG`, `MATRIC`, `REFLECTION`, `STUDIO`, and `TAGS` can all be used. E.g. to search for all persons under studio `S2`, the user can use `find s|s2`.
 
@@ -414,7 +414,7 @@ This design allows for easy extension to accommodate future enhancements or addi
 
 <br>
 
-#### **Delete Shown feature** : `deleteShown`
+#### **Delete Shown Feature** : `deleteShown`
 
 The `deleteShown` command relies on the `filteredPersons` list in the `Model` component to delete the persons currently displayed in the `PersonListPanel`.
 
@@ -440,7 +440,7 @@ Similarly to the `copy` command, the `deleteShown` command is designed to be use
 
 <br>
 
-#### **Import Contacts feature** : `import`
+#### **Import Contacts Feature** : `import`
 
 ##### Parsing User Input
 
@@ -488,7 +488,7 @@ The main concern in the increased coupling between `ImportCommand` and `AddComma
 
 <br>
 
-#### **Copy feature** : `copy`
+#### **Copy Feature** : `copy`
 
 The `copy` command enables users to quickly copy the email addresses of the persons currently displayed to them in the
 `PersonListPanel`. The copied emails are stored in the users' clipboard and can be pasted into an email client.
@@ -597,11 +597,11 @@ The following sequence diagram shows the interactions within the different class
 
 <br>
 
-#### **Addition of Matriculation Number (Matric)**
+#### **Feature: Addition of Optional Fields (Matric)**
 
 The optional `Matric` field enables the user to store the matriculation number of a person. The field is stored as a `Matric` in the `Person` object.
 
-Note: The `Studio` and `Reflection` fields are similarly implemented.
+Note: The optional `Studio` and `Reflection` fields are similarly implemented.
 
 ##### Implementation Details
 
@@ -622,7 +622,7 @@ For the `edit` command, the parser will add or update the `Matric` field of the 
 
 <br>
 
-#### **Automatic Tagging of Persons**
+#### **Feature: Automatic Tagging of Persons**
 
 A `student` tag is automatically added during the parsing of the `add` command based on the presence of the `Matric` field of the person being added.
 
@@ -850,7 +850,7 @@ It removes the score for the selected exam in the person's existing `scores` has
 
 <br>
 
-#### **Import Exam Scores feature** : `importExamScores`
+#### **Import Exam Scores Feature** : `importExamScores`
 
 The `importExamScores` command lets users import exam scores corresponding to existing exams and persons from a CSV file.
 
