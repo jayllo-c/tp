@@ -615,65 +615,96 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
+#### General
+
 | Priority | As a …​                                      | I want to …​                            | So that I can…​                                                          |
 |----------|---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------|
 | `* * *`  | potential user exploring the app            | see the app populated with sample data | immediately see an example of the app in use                            |
-| `* * *`  | new user                                    | easily clear the example data          | start using the app with real-life data                                 |
 | `* * *`  | new user                                    | see usage instructions                 | refer to instructions when I forget how to use the App                  |
-| `* * *`  | new user                                    | add persons with their details         | start populating the address book                                       |
-| `* * *`  | new user                                    | save the data I input into the app     | don't lose the information I've entered                                 |
-| `* * *`  | user                                        | add a new person                       |                                                                         |
-| `* * *`  | user                                        | delete a person                        | remove entries that I no longer need                                    |
-| `* * *`  | user                                        | update and edit person details         | keep my address book accurate                                           |
-| `* * *`  | user                                        | find a person by name                  | locate details of persons without having to go through the entire list  |
-| `* * *`  | user                                        | find a person by name                  | locate details of persons without having to go through the entire list  |
-| `* * *`  | head tutor using the app                    | categorise my persons into groups      | manage different tutorial groups effectively                            |
-| `* * *`  | head tutor using the app                    | copy email addresses of a group        | effectively communicate with target groups                              |
-| `* * *`  | user                                        | find a person by name                  | locate details of persons without having to go through the entire list  |
-| `* *`    | user                                        | hide private person details            | minimize chance of someone else seeing them by accident                 |
+| `* * *`  | new user                                    | easily clear the example data          | start using the app with real-life data                                 |
 | `* *`    | experienced user                            | use the address book offline           | update and interact with it anywhere                                    |
-| `*`      | user with many persons in the address book  | sort persons by name                   | locate a person easily                                                  |
 
-*{More to be added}*
+#### For Contact Management
+
+| Priority | As a …​                                      | I want to …​                            | So that I can…​                                                          |
+|----------|---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------|
+| `* * *`  | head tutor using the app                    | import persons from a csv file         | easily add a large number of persons to the address book                |
+| `* * *`  | new user                                    | save the data I input into the app     | don't lose the information I've entered                                 |
+| `* * *`  | user                                        | add a new person                       | make minor additions to the persons in the addrress book                |
+| `* * *`  | user                                        | update and edit person details         | keep my address book accurate                                           |
+| `* * *`  | user                                        | delete a person                        | remove entries that I no longer need                                    |
+| `* * *`  | user                                        | delete a specific group of entries     | remove multiple entries that I no longer need more efficiently          |
+| `* * *`  | user                                        | view all saved contacts                | oversee the data stored within my app                                   |
+| `* * *`  | user                                        | find a person by any param             | locate details of persons without having to go through the entire list  |
+| `* * *`  | head tutor using the app                    | categorise my persons into groups      | manage different groups of students effectively                         |
+| `* * *`  | head tutor using the app                    | copy email addresses of a group        | effectively communicate with target groups                              |
+| `* * *`  | head tutor using the app                    | export the details of persons to a csv | easily share the details of a group with others                         |
+
+#### For Exam and Score Management
+
+| Priority | As a …​                                      | I want to …​                            | So that I can…​                                                          |
+|----------|---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------|
+| `* * *`  | head tutor using the app                    | import assesment scores from a csv file| easily add a large number of scores to the address book                 |
+| `* * *`  | head tutor using the app                    | add exams to the app                   | keep track of student performance                                       |
+| `* * *`  | head tutor using the app                    | delete exams from the app              | remove exams that are no longer relevant                                |
+| `* * *`  | head tutor using the app                    | select an exam in the app              | view the scores of a specific exam                                      |
+| `* * *`  | head tutor using the app                    | deselect exam                          | view student data without the scores                                    |
+| `* * *`  | head tutor using the app                    | add scores to the app                  | keep track of student performance                                       |
+| `* * *`  | head tutor using the app                    | edit scores in the app                 | correct errors in the scores                                            |
+| `* * *`  | head tutor using the app                    | delete scores from the app             | remove scores that are no longer relevant                               |
+| `* * *`  | head tutor using the app                    | export scores to a csv file            | easily share the scores with others                                     |
+| `* * *`  | head tutor using the app                    | view statistics of scores              | analyse student performance                                             |
+
 
 ### Use cases
 
 (For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: UC01 — Delete a person**
+#### Use case: UC01 — Getting Help
 
 **MSS:**
 
-1.  User !!requests to list persons (UC04)!!
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+1.  User requests help information.
+2.  AddressBook copies the link to the user guide to the user's clipboard.
+3.  User pastes the link into a browser to access the user guide.
+
+    Use case ends.
+
+#### Use case: UC02 — Clearing Sample Data
+
+**MSS:**
+
+1.  User requests to clear the sample data.
+2.  AddressBook clears the sample data.
+3.  AddressBook displays a message indicating that the sample data has been cleared.
+
+    Use case ends.
+
+#### Use case: UC03 — Importing person details from a CSV file
+
+**MSS:**
+
+1.  User requests to import person details from a CSV file.
+2.  AddressBook imports the person details from the CSV file.
+3.  AddressBook displays a message indicating that the person details have been imported.
 
     Use case ends.
 
 **Extensions:**
 
-* 2a. The list is empty.
+*  1a. The file to be imported is not a CSV file.
 
-  Use case ends.
+    *  1a1. AddressBook displays an error message indicating that the file type is not recognised and should be a csv file.
 
-* 3a. The given index is invalid.
+       Use case ends.
 
-    * 3a1. AddressBook shows an error message.
+*  1b. AddressBook cannot find the file to be imported.
+    
+    *  1b1. AddressBook displays a message indicating that the file is not recognised.
+    
+       Use case ends.
 
-      Use case resumes at step 2.
-
-**Use case: UC02 — Help**
-
-**MSS:**
-
-1.  User requests help information.
-2.  AddressBook displays help information.
-3.  User reads the help information.
-
-    Use case ends.
-
-**Use case: UC03 — Add a person**
+#### Use case: UC04 — Adding a person
 
 **MSS:**
 
@@ -689,37 +720,19 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     *  1a1. AddressBook prompts the user on the proper usage of the command.
 
-        Step 1a1 is repeated until the data entered is correct.
+       Step 1a1 is repeated until the data entered is correct.
 
-        Use case resumes at step 2.
+       Use case resumes at step 2.
 
 *  1b. User tries to add a person with an existing email address.
 
     *  1b1. AddressBook displays an error message informing the user that the email address already exists.
 
-        Step 1b1 is repeated until a valid email address is entered.
+       Step 1b1 is repeated until a valid email address is entered.
 
-        Use case resumes at step 2.
+       Use case resumes at step 2.
 
-**Use case: UC04 — List all persons**
-
-**MSS:**
-
-1.  User requests to list persons.
-2.  AddressBook shows the list of persons.
-3.  User views the list of persons.
-
-    Use case ends.
-
-**Extensions:**
-
-* 2a. The list is empty.
-
-    * 2a1. AddressBook displays a message indicating that the list is empty.
-
-      Use case ends.
-
-**Use case: UC05 — Edit a person's details**
+#### Use case: UC05 — Editing a person's details
 
 **MSS:**
 
@@ -737,54 +750,98 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
        Step 1a1 is repeated until the data entered is correct.
 
+       Use case resumes at step 2.
+
 *   1b. The selected person does not exist.
 
     *  1b1. AddressBook displays an error message indicating that the person does not exist.
 
-      Use case ends.
+       Use case ends.
 
-**Use case: UC06 — Find persons**
+#### Use case: UC06 — Deleting a person
 
 **MSS:**
 
-1.  User requests to find a specific person matching the search criteria.
+1.  User !!requests to list persons (UC08)!!
+2.  AddressBook shows a list of persons
+3.  User requests to delete a specific person in the list
+4.  AddressBook deletes the person
+
+    Use case ends.
+
+**Extensions:**
+
+*   2a. The list is empty.
+
+    Use case ends.
+
+*   3a. The given index is invalid.
+
+    *  3a1. AddressBook shows an error message.
+
+       Use case resumes at step 2.
+
+#### Use case: UC07 — Deleting all shown persons 
+
+**MSS:**
+
+1. User !!requests to find group of persons (UC09)!! by desired requirements
+2. User requests to delete all listed persons.
+3. AddressBook deletes all listed persons.
+4. AddressBook displays a message to confirm that all listed persons have been deleted.
+
+    Use case ends.
+
+**Extensions:**
+
+*   2a. No persons are listed.
+
+    *  2a1. AddressBook displays a message indicating that there is no persons to delete.
+
+       Use case ends.
+
+*   2b. User has a filtered view that contains all existing persons.
+
+    *  2b1. AddressBook displays a message indicating that all persons cannot be deleted at once.
+
+       Use case ends.
+       
+#### Use case: UC08 — Listing all persons
+
+**MSS:**
+
+1.  User requests to list persons.
+2.  AddressBook shows the list of persons.
+3.  User views the list of persons.
+
+    Use case ends.
+
+**Extensions:**
+
+*   2a. The list is empty.
+
+    *  2a1. AddressBook displays a message indicating that the list is empty.
+
+       Use case ends.
+
+#### Use case: UC09 — Finding persons
+
+**MSS:**
+
+1.  User requests to find a specific group of persons matching the search criteria.
 2.  AddressBook displays a list of persons matching the criteria.
 
     Use case ends.
 
 **Extensions:**
 
-*    1a. No persons match the search criteria.
+*   1a. No persons match the search criteria.
 
-     *   1a1. AddressBook displays a message indicating that no persons match the criteria.
+    *  1a1. AddressBook displays a message indicating that no persons match the search criteria.
 
-     Use case ends.
+       Use case ends.
 
-
-**Use case: UC07 — Import persons**
-
-**MSS**
-1. User requests to import persons from a csv file.
-2. AddressBook displays a message that all persons have been imported.
-3. User is able to see all the persons imported when a list of persons is requested.
-   Use case ends.
-
-**Extension**
-
-*   1a. AddressBook cannot find file to be imported.
-
-    *   1a1. AddressBook displays a message indicating that the file is not recognised.
-
-    Use case ends.
-
-*   1b. The file to be imported is not a csv file.
-
-    *  1b1. AddressBook displays an error message indicating that the file type is not recognised and should be a csv file
-
-    Use case ends.
-
-
-**Use case: UC08 — Copy email addresses**
+#### Use case: UC10 — Copying email addresses
 
 **MSS:**
 
@@ -800,34 +857,15 @@ into user's clipboard.
 
 *   2a. No persons currently displayed.
 
-    * 2a1. AddressBook displays a message indicating that
-    no persons are currently displayed.
+    *  2a1. AddressBook displays a message indicating that no persons are currently displayed.
 
-    Use case ends.
+       Use case ends.
 
-**Use case: UC09 — Clear all persons**
-
-**MSS:**
-
-1.  User requests to clear all persons.
-2.  AddressBook clears all persons.
-3.  AddressBook displays a message indicating that all persons have been cleared.
-
-    Use case ends.
-
-**Extensions:**
-
-*    1a. User inputs extraneous parameters.
-
-     *   1a1. AddressBook displays a message indicating that an extraneous parameter was found, and confirms User's intention.
-
-         Use case ends.
-
-**Use case: UC10 — Export listed persons to CSV**
+#### Use case: UC11 — Exporting persons to CSV
 
 **MSS:**
 
-1.  User !!requests to filter persons (UC06)!! by desired requirements
+1. User !!requests to filter persons (UC09)!! by desired requirements
 2. User requests to export all listed persons and details to a CSV file.
 3. AddressBook exports the persons to a CSV file.
 4. AddressBook displays a message to confirm that all listed persons have been exported to a CSV file.
@@ -836,37 +874,16 @@ into user's clipboard.
 
 **Extensions:**
 
-* 2a. No persons are listed.
-  * 2a2. AddressBook displays a message indicating that there is no persons to export.
+*   2a. No persons are listed.
 
-    Use case ends.
+    *  2a2. AddressBook displays a message indicating that there is no persons to export.
 
-**Use case: UC11 - Delete shown persons**
+       Use case ends.
 
-**MSS:**
-
-1. User !!requests to filter persons (UC06)!! by desired requirements
-2. User requests to delete all listed persons.
-3. AddressBook deletes all listed persons.
-4. AddressBook displays a message to confirm that all listed persons have been deleted.
-
-    Use case ends.
-
-**Extensions:**
-
-* 2a. No persons are listed.
-    * 2a1. AddressBook displays a message indicating that there is no persons to delete.
-
-        Use case ends.
-
-* 2b. User has a filtered view that contains all existing persons.
-     * 2b1. AddressBook displays a message indicating that all persons cannot be deleted at once.
-
-        Use case ends.
-
-**Use case: UC12 — Import Exam Results**
+#### Use case: UC12 — Importing exam results from a CSV file
 
 **MSS:**
+
 1. User requests to import exam results from a csv file.
 2. AddressBook displays a message that all exam results have been imported.
 
@@ -874,24 +891,220 @@ into user's clipboard.
 
 **Extensions:**
 
-* 2a. AddressBook cannot find the file specified.
-    * 2a1. AddressBook displays a message indicating that the file is not recognised.
+*   2a. AddressBook cannot find the file specified.
 
-        Use case ends.
-* 2b. The file to be imported is not a csv file.
-    * 2b1. AddressBook displays an error message indicating that the file type is not recognised and should be a csv file
+    *  2a1. AddressBook displays a message indicating that the file is not recognised.
 
-        Use case ends.
-* 2c. There are duplicate entries in the csv file.
-    * 2c1. AddressBook displays a message indicating that there are duplicate entries in the csv file, and only the first instance has been kept.
+       Use case ends.
 
-        Use case ends.
+*   2b. The file to be imported is not a csv file.
+
+    *  2b1. AddressBook displays an error message indicating that the file type is not recognised and should be a csv file
+
+       Use case ends.
+
+*   2c. There are duplicate entries in the csv file.
+
+    *  2c1. AddressBook displays a message indicating that there are duplicate entries in the csv file, and only the first instance has been kept.
+
+       Use case ends.
+
 * 2d. The csv file contains invalid entries.
-    * 2d1. AddressBook displays a message indicating that there are invalid entries in the csv file, and all other valid entries have been imported.
 
+    *  2d1. AddressBook displays a message indicating that there are invalid entries in the csv file, and all other valid entries have been imported.
+
+       Use case ends.
+
+#### Use case: UC13 — Adding an exam
+
+**MSS:**
+
+1. User requests to add an exam.
+2. AddressBook displays a message that the exam has been added.
+
+    Use case ends.
+
+**Extensions:**
+
+*   1a. User does not input all compulsory parameters along with the exam.
+
+    *  1a1. AddressBook prompts the user on the proper usage of the command.
+
+       Step 1a1 is repeated until the data entered is correct.
+
+       Use case resumes at step 2.
+
+*   1b. User tries to add an exam with an existing name.
+    
+    *  1b1. AddressBook displays an error message informing the user that the exam name already exists.
+    
+       Step 1b1 is repeated until a valid exam name is entered.
+    
+       Use case resumes at step 2.
+
+*   1c. User tries to add an exam with an invalid score.
+    
+    *  1c1. AddressBook displays an error message informing the user that the score is invalid.
+    
+       Step 1c1 is repeated until a valid score is entered.
+    
+       Use case resumes at step 2.
+
+*   1d. User tries to add an exam with an invalid name.
+        
+    *  1d1. AddressBook displays an error message informing the user that the name is invalid.
+        
+       Step 1d1 is repeated until a valid name is entered.
+    
+       Use case resumes at step 2.
+
+#### Use case: UC14 — Deleting an exam
+
+**MSS:**
+
+1. User requests to delete an exam.
+2. AddressBook displays a message that the exam has been deleted.
+
+    Use case ends.
+
+**Extensions:**
+
+*   1a. The exam does not exist.
+
+    *  1a1. AddressBook displays an error message indicating that the exam does not exist.
+
+       Use case ends.
+
+#### Use case: UC15 — Selecting an exam
+
+**MSS:**
+
+1. User requests to select an exam.
+2. AddressBook displays the scores of the selected exam.
+
+    Use case ends.
+
+**Extensions:**
+
+*   1a. The exam does not exist.
+
+    *  1a1. AddressBook displays an error message indicating that the exam does not exist.
+
+       Use case ends.
+
+#### Use case: UC16 — Deselecting an exam
+
+**MSS:**
+
+1. User requests to deselect an exam.
+2. AddressBook displays the persons without the scores of the selected exam.
+
+    Use case ends.
+
+**Extensions:**
+
+*   1a. The exam does not exist.
+
+    *  1a1. AddressBook displays an error message indicating that the exam does not exist.
+
+       Use case ends.
+
+#### Use case: UC17 — Adding scores to a student for an exam
+
+**MSS:**
+
+1. User !!requests to select an exam (UC15)!! to add scores to.
+2. User requests to add scores to a student for the selected exam.
+3. AddressBook displays a message that the scores have been added.
+
+    Use case ends.
+
+**Extensions:**
+
+*   2a. The student does not exist.
+
+    *  2a1. AddressBook displays an error message indicating that the student does not exist.
+
+       Use case ends.
+
+*   2b. The student already has a score for the exam.
+
+    *  2b1. AddressBook displays an error message indicating that the student already has a score for the exam.
+
+       Use case ends.
+
+#### Use case: UC18 — Editing scores for a student for an exam
+
+**MSS:**
+
+1. User !!requests to select an exam (UC15)!! to edit scores for.
+2. User requests to edit scores for a student for the selected exam.
+3. AddressBook displays a message that the scores have been edited.
+
+    Use case ends.
+
+**Extensions:**
+
+*   2a. The student does not exist.
+
+    *  2a1. AddressBook displays an error message indicating that the student does not exist.
+
+       Use case ends.
+
+*   2b. The student does not have a score for the exam.
+    
+        *  2b1. AddressBook displays an error message indicating that the student does not have a score for the exam.
+    
         Use case ends.
 
-**Use case: UC13 — Exit application**
+*   2c. The score is invalid.
+    
+        *  2c1. AddressBook displays an error message indicating that the score is invalid.
+    
+        Use case ends.
+
+#### Use case: UC19 — Deleting scores for a student for an exam
+
+**MSS:**
+
+1. User !!requests to select an exam (UC15)!! to delete scores for.
+2. User requests to delete scores for a student for the selected exam.
+3. AddressBook displays a message that the scores have been deleted.
+
+    Use case ends.
+
+**Extensions:**
+
+*   2a. The student does not exist.
+
+    *  2a1. AddressBook displays an error message indicating that the student does not exist.
+
+       Use case ends.
+
+*   2b. The student does not have a score for the exam.
+    
+        *  2b1. AddressBook displays an error message indicating that the student does not have a score for the exam.
+    
+        Use case ends.
+
+#### Use case: UC20 — Viewing statistics of scores
+
+**MSS:**
+
+1. User !!requests to select an exam (UC15)!! to view statistics of scores for.
+2. AddressBook displays the statistics of scores for the selected exam.
+
+    Use case ends.
+
+**Extensions:**
+
+*  2a. There are no scores for the exam.
+
+    *  2a1. AddressBook does not display any statistics.
+
+       Use case ends.
+
+#### Use case: UC21 — Exit application
 
 **MSS:**
 
@@ -900,22 +1113,13 @@ into user's clipboard.
 
     Use case ends.
 
-**Extensions:**
-
-*    1a. User inputs extraneous parameters.
-
-     *   1a1. AddressBook displays a message indicating that an extraneous parameter was found, and confirms User's intention.
-
-         Use case ends.
-
 ### Non-Functional Requirements
 
 1.   Should work on any _mainstream OS_ as long as it has Java `11` or above installed.
-2.   Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
+2.   Should be able to hold up to 2000 persons without a noticeable sluggishness in performance for typical usage.
 3.   A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-4.   A user should be able to import up to 1000 persons from an external source without a noticeable sluggishness in performance for typical usage.
+4.   A user should be able to import up to 2000 persons from an external source without a noticeable sluggishness in performance for typical usage.
 5.   The application should provide comprehensive documentation and help resources to assist users in understanding how to use the software effectively.
-
 
 *{More to be added}*
 
