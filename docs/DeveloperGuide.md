@@ -263,7 +263,7 @@ The `AddCommandParser` class is responsible for parsing user input to extract th
 
 ##### Executing the Command
 The `AddCommand` class creates a new `Person` object with the parsed details.
-The `Person` object is then added to the ``UniquePersonList` through the `addPerson` method in the `Model` component.
+The `Person` object is then added to the `UniquePersonList` through the `addPerson` method in the `Model` component.
 
 ##### Sequence Diagram
 
