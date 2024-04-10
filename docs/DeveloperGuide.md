@@ -873,7 +873,9 @@ It then fetches the person to delete the score for based on the target index.
 It also retrieves the currently selected exam from the `Model`.
 It removes the score for the selected exam in the person's existing `scores` hashmap using the `removeExamScoreFromPerson` method in `Model`.
 
-
+<p align="center">
+    <puml src="diagrams/DeleteScoreExecutionSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
+</p>
 
 <br>
 
