@@ -1,4 +1,4 @@
-@startuml
+›@startuml
 !include style.puml
 skinparam ArrowFontStyle plain
 
@@ -23,6 +23,9 @@ activate CsvUtil
 CsvUtil --> ImportCommand : personsData
 deactivate CsvUtil
 
+ImportCommand -> ImportCommand : addToModel(personsData)
+activate ImportCommand
+
 loop personData in personsData
 
 ImportCommand -> ImportCommand : convertToAddCommandInput(personData)
@@ -30,10 +33,10 @@ activate ImportCommand
 ImportCommand --> ImportCommand : addCommandInput
 deactivate ImportCommand
 
-ImportCommand -> AddCommandParser : parseAddCommandInput(addCommandInput)
+ImportCommand -> AddCommandParser : parse(addCommandInput)
 activate AddCommandParser
 create AddCommand
-AddCommandParser -> AddCommand : parse(addCommandInput)
+AddCommandParser -> AddCommand : new AddCommand()
 activate AddCommand
 AddCommand --> AddCommandParser
 deactivate AddCommand
@@ -45,12 +48,10 @@ activate AddCommand
 ref over AddCommand, Person, Model : Add Command Execution
 AddCommand --> ImportCommand
 deactivate AddCommand
-
-end
-
 destroy AddCommand
-destroy AddCommandParser
-
+end
+ImportCommand --> ImportCommand
+deactivate ImportCommand
 
 create CommandResult
 ImportCommand -> CommandResult

@@ -159,7 +159,7 @@ public class ImportCommand extends Command {
         for (Map<String, String> personData : personsData) {
             try {
                 String addCommandInput = convertToAddCommandInput(personData);
-                AddCommand addCommand = parseAddCommandInput(addCommandInput);
+                AddCommand addCommand = addCommandParser.parse(addCommandInput);
                 addCommand.execute(model);
                 successfulImports++;
             } catch (ParseException | CommandException e) {
@@ -202,10 +202,6 @@ public class ImportCommand extends Command {
             sb.append(" ");
         }
         return sb.toString();
-    }
-
-    private AddCommand parseAddCommandInput(String input) throws ParseException {
-        return addCommandParser.parse(input);
     }
 
     @Override
