@@ -762,9 +762,87 @@ The parser also generates `Tag` objects based on the user input. The existing ta
 The activity diagram is as follows:
 <puml src="diagrams/AutomaticTaggingActivityDiagram.puml" alt="Activity Diagram for Auto Tagging Feature" />
 
+<br>
 
-<br>
-<br>
+### Import contacts from CSV file : `import`
+
+The `import` command allows users to import contacts from a CSV file. Users can specify the file path of the CSV file to
+import contacts from and with the validation and checking of the CSV rows, person objects can be added to the addressbook.
+
+#### Implementation
+
+The `ImportCommand` class is responsible for importing contacts from a CSV file.
+
+The `ImportCommandParser` class is responsible for parsing the user input and creating an `ImportCommand` object.
+
+The `ImportCommand` class then reads the CSV file using a `readCsvFile` utility function in `CsvUtil` found in
+`seedu.address.commons.util` and returns a pair where the key is the `personsData` and value is the error report.
+The error report is to concatenate all the errors that occur during the process of reading the csv file. Only
+valid rows are added to the `personsData` list. Then, every iterable in `personsData` is added to the `Model`.
+Errors may still occur during the process of adding the person to the model and these errors are also concatenated with
+the error report from reading the csv file to finally show a full error report to the user.
+The adding of persons is done using a series of addCommands, which are executed in the same order as the rows in the CSV file.
+It uses the addCommand to take advantage of the validation and error handling that is already implemented in the addCommand.
+
+The import process is done in the following steps:
+1. ImportCommand reads the CSV file with the given file path.
+2. The CSV file is parsed and converts each row into the input a user would give to add the person (uses addCommand).
+3. The addCommand is then executed passing the same model as import command.
+4. The addCommand then adds the person to the model.
+
+The sequence diagram below illustrates the interactions within the `Logic` component when the user issues the command `import`.
+
+**Parsing**
+
+<puml src="diagrams/ImportParserSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `import` Command for parsing" />
+
+**Execution**
+
+<puml src="diagrams/ImportSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `import` Command" />
+
+Reference Diagram for each addCommand in importCommand
+
+<puml src="diagrams/ImportSequenceDiagramRef.puml" alt="Interactions Inside the Add Component for the `import` Command" />
+
+##### Parsing User Input
+
+The `ImportCommandParser` class is responsible for parsing user input to extract the file path of the CSV file to be imported. It uses the `ArgumentTokenizer` to tokenize the input string, extracting the file path of the CSV file to be imported.
+
+
+#### Design Considerations
+
+**Usage of `AddCommand`** <br>
+
+The main concern in the increased coupling between `ImportCommand` and `AddCommand`. However, we established that this coupling was actually a good thing, as the incoporation of the `AddCommand` allowed us to reuse the validation and error handling that was already implemented in the `AddCommand`. Furthermore, should we ever need to change the validation and error handling in the `AddCommand`, the `ImportCommand` would automatically inherit these changes. By making `AddCommand` the gate in which all persons are added to the model, we ensure that all persons added to the model are validated and handled in the same way.
+
+**Aspect: How to handle duplicate persons**
+
+Duplicate records in the imported CSV file is handled by `AddCommand`, which will check if the person already exists in the model. If the person already exists, the `AddCommand` throws a `CommandException` which is caught by the `ImportCommand` and added to an error report.
+
+**Aspect: How to handle invalid CSV files**
+
+Handled by ImportCommand, with the help of ImportCommandParser and CsvUtil. ImportCommandParser will check if  is a CSV file.
+CsvUtil will check if the CSV file is valid and will return a list of persons and an error report. The error report will be displayed to the user if there are any errors.
+
+Overall, the conditions checked are:
+- The file exists
+- The file is a CSV file
+- **The first row of the file is the header row**. In which all compulsory fields for creating a persons object
+  (ie `name`, `email`, `address`, `phone`)are present. Optional headers will be read if present. Headers in the csv that are not a field in `Person` will be ignored.
+
+**Aspect: How to handle invalid rows in the CSV file**
+
+Handled by CsvUtil.
+
+CsvUtil will check if the rows in the CSV file are valid. If the row is invalid, the row will not be added to `personsData` and an error message will be added to the error report
+
+The conditions checked are:
+- The row has the correct number of fields as the number of headers in the header row
+- No compulsory fields are not empty
+
+**Aspect: How to handle duplicate headers in the CSV file**
+
+Handled by CsvUtil. The first occurrence of the header will be used and the rest will be ignored.
 
 <div id="exam-management"></div>
 
@@ -2234,6 +2312,181 @@ Expected: The GUI closes and the application exits.
 * If no persons are displayed, an error message is shown.
 
 </box>
+
+<br>
+
+### Adding an exam: `addExam`
+
+#### Adding an exam with valid data
+
+1. Prerequisites: No exams in the address book.
+
+2. Test case: `addExam n|Midterm d|2021-10-10`<br>
+   Expected: New exam is added to the address book. Status message shows the exam added.
+
+3. Other test cases to try: `addExam n|Final d|2021-12-12`<br>
+   Expected: New exam is added to the address book. Status message shows the exam added.
+
+#### Adding an exam that already exists
+
+1. Prerequisites: An exam of name: Final, date: 2021-12-12 exists in the address book.
+
+2. . Test case: `addExam n|Final d|2021-12-12`<br>
+     Expected: Error message shown in the error report. No change in the address book.
+
+#### Adding an exam with missing fields
+
+1. Pre-requisite: No exams in the address book.
+
+2. Test case: `addExam n|Final` (missing date)<br>
+     Expected: Error message shown in the error report. No change in the address book.
+
+<br>
+
+### Deleting an exam: `deleteExam`
+
+1. Prerequisites: Exactly one exam in the address book. Hence, exam has an index of 1.
+
+2. Test case: `deleteExam 1`<br>
+   Expected: First exam is deleted from the address book. Status message shows the exam deleted.
+
+3. Test case: `deleteExam 0`<br>
+   Expected: No exam is deleted. Error message shown. No change in the address book.
+
+4. Test case: `deleteExam 2` (index out of bounds)<br>
+   Expected: No exam is deleted. Error message shown. No change in the address book.
+
+5. Test case: `deleteExam` (no index)<br>
+   Expected: No exam is deleted. Error message shown. No change in the address book.
+
+<br>
+
+### Selecting an exam: `selectExam`
+
+1. Prerequisites: Exactly one exam in the address book. Hence, exam has an index of 1.
+
+2. Test case: `selectExam 1`<br>
+   Expected: First exam is selected. Status message shows the exam selected.
+
+3. Test case: `selectExam 0`<br>
+   Expected: No exam is selected. Error message shown. No change in the address book.
+
+4. Test case: `selectExam 2` (index out of bounds)<br>
+   Expected: No exam is selected. Error message shown. No change in the address book.
+
+5. Test case: `selectExam` (no index)<br>
+   Expected: No exam is selected. Error message shown. No change in the address book.
+
+### Deselecting an exam: `deselectExam`
+
+1. Prerequisites: An exam has been selected.
+
+2. Test case: `deselectExam`<br>
+   Expected: Selected exam is deselected. Status message shows the exam deselected.
+
+3. Test case: `deselectExam` (no exam selected)<br>
+   Expected: No exam is deselected. Error message shown. No change in the address book.
+
+<br>
+
+### Importing persons: `import`
+
+#### Importing data from a CSV file
+
+1. Prerequisites: Prepare a CSV file with a few persons. There isa file at path C:file.csv with the following content:
+
+    ```
+    name,email,address,phone
+    alice,alice@gmail,wonderland,123
+    ```
+
+2. Test case: `import i|file.csv`<br>
+        Expected: Persons from the CSV file are added to the address book. Status message shows the number of persons imported.
+
+#### Importing data from a CSV file that does not exist
+
+1. Prerequisites: No CSV file at the path C:file.csv
+
+2. Test case: `import i|file.csv` <br>
+   Expected: Error message shown in the error report. No change in the address book.
+
+#### Importing data from a CSV file that is not a CSV file
+
+1. Prerequisites: A file at the path C:file.txt with the following content:
+
+    ```
+    name,email,address,phone
+    alice,alice@gmail,wonderland,123
+    ```
+
+2. Test case: `import i|file.txt` (file is not a CSV file)<br>
+       Expected: Error message shown in the error report. No change in the address book.
+
+#### Importing data from a CSV file with duplicate compulsory headers in header row
+
+1. Prerequisites: A CSV file with duplicate compulsory headers (e.g. 2 header columns named 'name') at the path C:file.csv with the following content:
+
+    ```
+    name,email,address,phone,name
+    alice,alice@gmail.com,123,123,bob
+    ```
+
+2. Test case: `import i|file.csv` (file has duplicate headers)<br>
+       Expected: First occurrence in the CSV file is added to the address book. Duplicate entries are ignored.
+
+#### Importing data from a CSV file with missing compulsory headers in header row
+
+1. Prerequisites: A CSV file with missing compulsory headers at the path C:file.csv with the following content:
+    ```
+    email,address,phone
+    Alice@gmail.com,123,123
+    ```
+
+2. Test case: `import i|file.csv` (file has missing headers)<br>
+       Expected: Error message shown in the error report. No change in the address book.
+
+#### Importing data from a CSV file with missing compulsory values in a row
+
+1. Prerequisites: A CSV file with missing compulsory values in a row at the path C:file.csv with the following content:
+
+        ```
+        name,email,address,phone
+        Alice,,123,123
+        ```
+
+2. Test case: `import i|file.csv` <br>
+       Expected: All valid rows are added to the address book. Error message shown in the error report for invalid rows.
+
+#### Importing data from a CSV file with extra headers in header row
+
+1. Prerequisites: A CSV file with extra headers in header row at the path C:file.csv with the following content:
+
+        ```
+        name,email,address,phone,extra
+        Alice,alice@gmail.com,123,123,extra
+        ```
+
+2. Test case: `import i|file.csv` (file has extra headers)<br>
+   Expected: Only the compulsory headers are read. Optional headers are read if present. Extra headers are ignored.
+
+#### Importing data from a CSV file with unequal number of values in a row as the number of headers
+
+1. Prerequisites: A CSV file with extra values in a row at the path C:file.csv with the following content:
+
+        ```
+        name,email,address,phone,matric
+        Alice,alice@gmail.com,123,123
+        ```
+
+2. Test case: `import i|file.csv` (file has extra values in a row)<br>
+       Expected: All valid rows are added to the address book. Error message shown in the error report for invalid rows.
+
+#### Importing data from an empty CSV file
+
+1. Prerequisites: An empty CSV file at the path C:file.csv
+
+2. Test case: `import i|file.csv` (file is empty CSV file)<br>
+  Expected: Error message shown in the error report. No change in the address book.
 
 <br>
 
