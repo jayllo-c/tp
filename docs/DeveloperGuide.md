@@ -7,7 +7,94 @@ pageNav: 4
 # Avengers Assemble Developer Guide
 
 <!-- * Table of Contents -->
-<page-nav-print />
+## Table of Contents
+
+<div id="table-of-contents" style="line-height: 2.0">
+<ol>
+    <li><a href="#acknowledgements">Acknowledgements</a></li>
+    <li><a href="#setting-up">Setting Up, Getting Started</a></li>
+    <li><a href="#design">Design</a>
+        <ol>
+            <li><a href="#Architecture">Architecture</a></li>
+            <li><a href="#ui-component">UI Component</a></li>
+            <li><a href="#logic-component">Logic Component</a></li>
+            <li><a href="#model-component">Model Component</a></li>
+            <li><a href="#storage-component">Storage Component</a></li>
+            <li><a href="#common-classes">Common Classes</a></li>
+        </ol>
+    </li>
+    <li><a href="#implementation">Implementation</a>
+        <ol>
+            <li><a href="#contact-management">Contact Management Features</a>
+                <ol>
+                    <li><a href="#add-person">Add Person Command</a></li>
+                    <li><a href="#edit-person">Edit Person Command</a></li>
+                    <li><a href="#delete-person">Delete Person Command</a></li>
+                    <li><a href="#find">Find Feature</a></li>
+                    <li><a href="#deleteshown">Delete Shown Feature</a></li>
+                    <li><a href="#import">Import Contacts Feature</a></li>
+                    <li><a href="#copy">Copy Feature</a></li>
+                    <li><a href="#export">Export Feature</a></li>
+                    <li><a href="#optional-fields">Feature: Addition of Optional Fields (Matric)</a></li>
+                    <li><a href="#tagging">Tag Feature</a></li>
+                </ol>
+            </li>
+            <li><a href="#exam-management">Exam Management Features</a>
+                <ol>
+                    <li><a href="#addexam">Add Exam Command</a></li>
+                    <li><a href="#deleteexam">Delete Exam Command</a></li>
+                    <li><a href="#exam-modification-diagram">Sequence Diagrams Illustrating Exam Modification</a></li>
+                    <li><a href="#exam-selection">Select Exam Command</a></li>
+                    <li><a href="#exam-deselection">Deselect Exam Command</a></li>
+                    <li><a href="#exam-selection-diagram">Sequence Diagrams Illustrating Exam Selection</a></li>
+                    <li><a href="#exam-considerations">Considerations for Exam Features</a></li>
+                </ol>
+            </li>
+            <li><a href="#score-management">Exam Score Features</a>
+                <ol>
+                    <li><a href="#addscore">Add Score Command</a></li>
+                    <li><a href="#editscore">Edit Score Command</a></li>
+                    <li><a href="#deletescore">Delete Score Command</a></li>
+                    <li><a href="#importexamscores">Import Exam Scores Feature</a></li>
+                    <li><a href="#scorestatistics">Score Statistics Feature</a></li>
+                </ol>
+            </li>
+        </ol>
+    </li>
+    <li><a href="#planned-enhancements">Planned Enhancements</a></li>
+    <li><a href="#documentation">Documentation, Logging, Testing, Configuration, Dev-ops</a></li>
+    <li><a href="#appendix">Appendix</a>
+        <ol>
+            <li><a href="#appendix_a">Appendix A: Product Scope</a></li>
+            <li><a href="#appendix_b">Appendix B: User Stories</a></li>
+            <li><a href="#appendix_c">Appendix C: Use Cases</a></li>
+            <li><a href="#appendix_d">Appendix D: Non-Functional Requirements</a></li>
+            <li><a href="#appendix_e">Appendix E: Glossary</a></li>
+            <li><a href="#appendix_f">Appendix F: Instructions for Manual Testing</a></li>
+                <ol>
+                    <li><a href="#test_launch">Launching the App</a></li>
+                    <li><a href="#test_save">Save Command</a></li>
+                    <li><a href="#test_help">Help Command</a></li>
+                    <li><a href="#test_clear">Clear Command</a></li>
+                    <li><a href="#test_add">Adding a Person</a></li>
+                    <li><a href="#test_edit">Editing a Person</a></li>
+                    <li><a href="#test_delete">Deleting a Person</a></li>
+                    <li><a href="#test_deleteshown">Deleting Shown Persons</a></li>
+                    <li><a href="#test_list">Listing all Persons</a></li>
+                    <li><a href="#test_find">Finding a Person</a></li>
+                    <li><a href="#test_copy">Copying a Person</a></li>
+                    <li><a href="#test_export">Exporting Contacts</a></li>
+                    <li><a href="#test_importexam">Importing Exam Scores</a></li>
+                    <li><a href="#test_addscore">Adding a Score</a></li>
+                    <li><a href="#test_editscore">Editing a Score</a></li>
+                    <li><a href="#test_deletescore">Deleting a Score</a></li>
+                    <li><a href="#test_statistics">Selecting an Exam</a></li>
+                </ol>
+            <li><a href="#appendix_g">Appendix G: Effort</a></li>
+        </ol>
+    </li>
+
+
 
 --------------------------------------------------------------------------------------------------------------------
 <div id="acknowledgements"></div>
@@ -161,8 +248,6 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </box>
-
-<div id="specificParsing"></div>
 
 The following is a more detailed explaination on how user input is parsed into a `Command` object (Not mentioned above for simplicity).
 
@@ -741,7 +826,7 @@ Using the retrieved exam, it then deletes the exam from the `UniqueExamList` thr
 
 <div id="exam-modification-diagram"></div>
 
-#### **Sequence diagrams illustrating exam modification**
+#### **Sequence Diagrams Illustrating Exam Modification**
 
 The following two sequence diagram illustrates the interactions between the Logic and Model when an exam is modified. This diagram uses the `addExam` command as an example.
 
@@ -801,7 +886,7 @@ If there is no exam selected, a `CommandException` is thrown.
 
 <div id="exam-selection-diagram"></div>
 
-#### **Sequence diagrams illustrating exam selection**
+#### **Sequence Diagrams Illustrating Exam Selection**
 
 The following sequence diagram illustrates the interactions between the Logic and Model when the `SelectExamCommand` is executed.
 
@@ -812,6 +897,8 @@ Notes:
 - `deselectExam` follows a similar structure as the diagram above, differing in the arguments parsed and the methods called on the `Model` component (i.e. calling `deselectExam` on `Model` instead of `selectExam`).
 
 <br>
+
+<div id="exam-considerations"></div>
 
 #### **Considerations for Exam Features**
 
@@ -867,7 +954,7 @@ It adds the score to the person's existing `scores` hashmap using the `addExamSc
 
 <div id="editscore"></div>
 
-#### **Editing Score Command** : `editScore`
+#### **Edit Score Command** : `editScore`
 
 The `editScore` command allows users to edit a score for an exam of a person displayed in the application.
 The user should select the exam they want to edit the score for, then specify the index of the person they want to edit the score for, and the new score they want to edit to.
@@ -892,7 +979,7 @@ It updates the score for the selected exam in the person's existing `scores` has
 
 <div id="deletescore"></div>
 
-#### **Deleting Score Command** : `deleteScore`
+#### **Delete Score Command** : `deleteScore`
 
 The `deleteScore` command allows users to delete a score for an exam from a person displayed in the application.
 The user should select the exam they want to delete the score for, then specify the index of the person they want to delete the score for.
@@ -1017,6 +1104,8 @@ The `ScoreStatistics` class was used to store the mean and median scores of the 
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div id="planned-enhancements"></div>
+
 ## **Planned Enhancements**
 
 <br>
@@ -1074,6 +1163,7 @@ Retain all other relevant `Tag` objects like `colleagues` and `student` to bette
 <br>
 
 --------------------------------------------------------------------------------------------------------------------
+<div id="documentation"></div>
 
 ## **Documentation, Logging, Testing, Configuration, Dev-ops**
 
@@ -1085,7 +1175,11 @@ Retain all other relevant `Tag` objects like `colleagues` and `student` to bette
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div id="appendix"></div>
+
 ## **Appendix**
+
+<div id="appendix_a"></div>
 
 ### Appendix A: Product Scope
 
@@ -1120,6 +1214,7 @@ Retain all other relevant `Tag` objects like `colleagues` and `student` to bette
 * The CS1101S Head Tutor will face challenges in effectively organising and managing contact information within the department due to the large scale the course has to operate on. Existing methods, such as paper-based lists or basic digital spreadsheets, lack the necessary functionality to efficiently handle the diverse needs of proper contact management. There is a need for a user-friendly and offline-capable address book solution tailored specifically to the needs of a single user. This address book system should provide features such as easy contact entry and editing, quick search functionality, customizable categorization options, and the ability to add notes for each contact. Additionally, it should operate offline without requiring an internet connection and should not rely on complex database management systems.
 * While the address book system will greatly improve contact management and organisation for the CS1101S Head Tutor, it will not address broader departmental communication or collaboration needs beyond individual contact management since the address book is designed to be a single-user system. It will not facilitate communication between users or provide collaboration tools for group projects or tasks. Additionally, the address book system will not handle complex data analysis or reporting functions beyond basic contact information management. Finally, while the system will provide offline functionality, it will not offer real-time synchronisation with online databases or cloud storage solutions.
 
+<div id="appendix_b"></div>
 
 ### Appendix B: User Stories
 
@@ -1164,6 +1259,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | head tutor using the app                    | export scores to a csv file            | easily share the scores with others                                     |
 | `* * *`  | head tutor using the app                    | view statistics of scores              | analyse student performance                                             |
 
+
+<div id="appendix_c"></div>
+
+--------------------------------------------------------------------------------------------------------------------
 
 ### Appendix C: Use Cases
 
@@ -1622,6 +1721,10 @@ into user's clipboard.
 
     Use case ends.
 
+--------------------------------------------------------------------------------------------------------------------
+
+<div id="appendix_d"></div>
+
 ### Appendix D: Non-Functional Requirements
 
 1.   Should work on any _mainstream OS_ as long as it has Java `11` or above installed.
@@ -1629,6 +1732,10 @@ into user's clipboard.
 3.   A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 4.   A user should be able to import up to 2000 persons from an external source without a noticeable sluggishness in performance for typical usage.
 5.   The application should provide comprehensive documentation and help resources to assist users in understanding how to use the software effectively.
+
+--------------------------------------------------------------------------------------------------------------------
+
+<div id="appendix_e"></div>
 
 ### Appendix E: Glossary
 
@@ -1644,6 +1751,8 @@ into user's clipboard.
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div id="appendix_f"></div>
+
 ### Appendix F: Instructions for Manual Testing
 
 Given below are instructions to test the app manually.
@@ -1654,6 +1763,8 @@ Given below are instructions to test the app manually.
 testers are expected to do more *exploratory* testing.
 
 </box>
+
+<div id="test_launch"></div>
 
 #### Launch and Shutdown
 
@@ -1688,6 +1799,8 @@ Expected: The GUI closes and the application exits.
 
 <br>
 
+<div id="test_save"></div>
+
 #### Saving data
 
 ##### Dealing with Missing or Corrupted Data Files
@@ -1708,11 +1821,15 @@ Expected: The GUI closes and the application exits.
 
     Expected: The app should ignore the corrupted file and create a new empty `data/avengersassemble.json` file when launched and interacted with.
 
+<div id="test_help"></div>
+
 #### Getting Help
 
 1. Test case: `help`<br>
 
    Expected: Link to the user guide is copied to the clipboard. Status message shows that the link has been copied. The link should be accessible from a browser.
+
+<div id="test_clear"></div>
 
 #### Clearing all Persons and Exams: `clear`
 
@@ -1723,6 +1840,8 @@ Expected: The GUI closes and the application exits.
    Expected: All persons are deleted from the list. Status message shows the number of persons deleted.
 
 <br>
+
+<div id="test_add"></div>
 
 #### Adding a Person: `add`
 
@@ -1847,6 +1966,8 @@ Expected: The GUI closes and the application exits.
 
     Note that there is no automatic tagging.
 
+<div id="test_edit"></div>
+
 #### Editing a Person: `edit`
 
 ##### Editing a Person with all fields
@@ -1893,6 +2014,8 @@ Expected: The GUI closes and the application exits.
 
    Expected: An error message is shown indicating that the email already exists.
 
+<div id="test_delete"></div>
+
 #### Deleting a Person: `delete`
 
 ##### Deleting a Person while all persons are being shown
@@ -1936,6 +2059,8 @@ Expected: The GUI closes and the application exits.
     Expected: No person is deleted. Error details shown in the status message.
 
 
+<div id="test_deleteshown"></div>
+
 #### Deleting shown Persons: `deleteShown`
 
 ##### Deleting a proper subset of all Persons
@@ -1962,6 +2087,8 @@ Expected: The GUI closes and the application exits.
 
     Expected: Similar to previous.
 
+<div id="test_list"></div>
+
 #### Listing all Persons: `list`
 
 ##### Starting with sample data
@@ -1983,6 +2110,8 @@ Expected: The GUI closes and the application exits.
 2. Test case: `list`
 
     Expected: All persons in the overall list are shown.
+
+<div id="test_find"></div>
 
 #### Finding a Person: `find`
 
@@ -2079,6 +2208,8 @@ Expected: The GUI closes and the application exits.
 
     Expected: Similar to previous.
 
+<div id="test_copy"></div>
+
 #### Copying emails: `copy`
 
 ##### Copying emails of all Persons
@@ -2105,6 +2236,8 @@ Expected: The GUI closes and the application exits.
 </box>
 
 <br>
+
+<div id="test_export"></div>
 
 #### Exporting Data to a CSV File: `export`
 
@@ -2146,6 +2279,8 @@ Expected: The GUI closes and the application exits.
 
 <br>
 
+
+<div id="test_importexam"></div>
 
 #### Importing Exam Scores: `importExamScores`
 
@@ -2251,6 +2386,8 @@ Expected: The GUI closes and the application exits.
 
 <br>
 
+<div id="test_addscore"></div>
+
 #### Adding a Persons's Exam Score: `addScore`
 
 **Command:** `addScore`<br>
@@ -2303,6 +2440,8 @@ Expected: The GUI closes and the application exits.
 
 <br>
 
+<div id="test_editscore"></div>
+
 #### Editing a Person's Exam Score: `editScore`
 
 **Command:** `editScore`<br>
@@ -2351,6 +2490,8 @@ Expected: The GUI closes and the application exits.
 
 <br>
 
+<div id="test_deletescore"></div>
+
 #### Deleting a Person's Exam Score: `deleteScore`
 
 **Command:** `deleteScore`<br>
@@ -2390,6 +2531,8 @@ Expected: The GUI closes and the application exits.
 
 <br>
 
+<div id="test_statistics"></div>
+
 #### Mean and Median of Exam Scores
 
 **More information on usage:** <a href="UserGuide.md#mean-and-median">Mean and Median of Exam Scores</a>
@@ -2412,7 +2555,9 @@ Expected: The GUI closes and the application exits.
 
 <br>
 
-<div id="appendix-effort"></div>
+--------------------------------------------------------------------------------------------------------------------
+
+<div id="appendix_g"></div>
 
 ### Appendix G: Effort
 
