@@ -807,6 +807,10 @@ The following sequence diagram illustrates the parsing of an `addScore` command 
     <puml src="diagrams/AddScoreParsingSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
 </p>
 
+> **Note:** <br>
+> The parsing of an `editScore` command follows a similar structure, differing in the object instantiated at the end of the `parser` method.
+> `EditScoreCommandParser` instantiates an `EditScoreCommand` object.
+
 ##### Executing the Command
 
 The `execute` method in `AddScoreCommand` retrieves the `filteredPersons` list in `Model`, and validates the target index against the list of filtered persons to ensure it is not out of bounds.
@@ -819,6 +823,9 @@ The following sequence diagram illustrates the execution of an `addScore` comman
 <p align="center">
     <puml src="diagrams/AddScoreExecutionSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
 </p>
+
+> **Note:** <br>
+> The execution of an `editScore` command follows a similar structure to the execution of an `addScore` command.
 
 <br>
 
