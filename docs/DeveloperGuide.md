@@ -291,7 +291,7 @@ After that, it interacts with the `Model` component to edit the details of the p
 
 ##### Activity Diagram
 
-The activity diagram below illustrates the steps involved in executing the `edit` command. In practice, a `Reject` activity will result in a `CommandException` being thrown.
+The activity diagram below illustrates the workflow involved in executing the `edit` command. In practice, a `Reject` activity will result in a `CommandException` being thrown.
 
 <puml src="diagrams/EditCommandActivityDiagram.puml" alt="Activity Diagram for the `edit` Command" />
 
@@ -520,7 +520,7 @@ The CSV file is parsed with the `OpenCSV` library and a `List<String[]>` is crea
 After parsing, a mapping of `Exam` objects to an inner mapping of an `email` string to a `Double` score is created. This mapping is used to validate the data in the CSV file. 
 If the **file** is invalid, an error message is returned.
 
-The validation process for the **file** is as follows:
+The validation workflow for the **file** is as follows:
 
 <puml src="diagrams/ImportExamScoresFileActivityDiagram.puml" alt="Activity Diagram for Import Exam Scores File Validation" />
 
@@ -620,7 +620,7 @@ If the list shows between 0 and the total number of existing persons, the `delet
 ##### Updating Filtered Person List
 After deleting all persons currently displayed in the `PersonListPanel`, the `filteredPersons` list in the `Model` component is updated to show all remaining persons in the address book.
 
-The following activity diagram illustrates the execution of the `deleteShown` command:
+The following activity diagram illustrates the workflow of the execution of the `deleteShown` command:
 
 <puml src="diagrams/DeleteShownActivityDiagram.puml" alt="Activity Diagram for the `deleteShown` Command" />
 
