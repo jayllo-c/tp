@@ -33,7 +33,7 @@ deactivate ImportCommand
 ImportCommand -> AddCommandParser : parseAddCommandInput(addCommandInput)
 activate AddCommandParser
 create AddCommand
-AddCommandParser --> AddCommand : parse(addCommandInput)
+AddCommandParser -> AddCommand : parse(addCommandInput)
 deactivate AddCommandParser
 activate AddCommand
 AddCommand --> ImportCommand

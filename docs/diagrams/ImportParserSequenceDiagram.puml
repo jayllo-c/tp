@@ -15,8 +15,8 @@ participant "m:Model" as Model MODEL_COLOR
 end box
 
 create ImportCommandParser
-[-> ImportCommandParser : parse(...)
 activate ImportCommandParser
+[-> ImportCommandParser : parse(...)
 
 'Tokenizer and ParserUtil dont have constructors, how?
 
@@ -47,3 +47,6 @@ ImportCommandParser -> ParserUtil : parseFilePath(...)
 activate ParserUtil
 ParserUtil --> ImportCommandParser : filePath
 deactivate ParserUtil
+
+<-- ImportCommandParser : ImportCommand(filePath)
+deactivate ImportCommandParser
