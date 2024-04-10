@@ -34,6 +34,8 @@ import seedu.address.logic.commands.exceptions.CommandException;
 
 /**
  * Utility class for processing CSV files.
+ * Acknowledgement: The methods in this class were made possible with the help of
+ * the [OpenCSV](http://opencsv.sourceforge.net/) library.
  */
 public class CsvUtil {
 
