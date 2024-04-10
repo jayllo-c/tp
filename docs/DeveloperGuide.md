@@ -814,6 +814,12 @@ It then fetches the person to add the score for based on the target index.
 It also retrieves the currently selected exam from the `Model`, and validates that the score to be added is not more than the maximum score of the selected exam.
 It adds the score to the person's existing `scores` hashmap using the `addExamScoreToPerson` method in the `Model`.
 
+The following sequence diagram illustrates the execution of an `addScore` command:
+
+<p align="center">
+    <puml src="diagrams/AddScoreExecutionSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
+</p>
+
 <br>
 
 #### **Editing Score Command** : `editScore`
