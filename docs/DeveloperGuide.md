@@ -1,7 +1,6 @@
 ---
 layout: default.md
 title: "Developer Guide"
-pageNav: 4
 ---
 
 # Avengers Assemble Developer Guide
@@ -245,6 +244,8 @@ How the parsing works:
 * The `XYZCommandParser` [uses the other classes](#specificParsing) shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
+<br>
+
 #### Example of Parsing User Input: `delete` Command
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking a simple `execute("delete 1")` API call as an example.
@@ -274,7 +275,7 @@ The `Logic` component is designed to be the central component that executes all 
 <div id="model-component"></div>
 
 ### Model component
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+**API** : [`Model.java`](https://github.com/AY2324S2-CS2103T-T10-1/tp/master/src/main/java/seedu/address/model/Model.java)
 
 <puml src="diagrams/ModelClassDiagram.puml" width="450" />
 
@@ -306,6 +307,9 @@ The `Model` component,
 
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
+<br>
+<br>
+
 #### Saving of Data
 
 The `Storage` component uses the `Jackson` library to convert objects to JSON format. The conversion methods are predefined in the `JsonAdapted*` classes for their corresponding objects.
@@ -317,6 +321,9 @@ The `StorageManager` class calls on the `JsonAddressBookStorage` class to conver
 The sequence diagram below illustrates how data is saved within the `Storage` component when the user issues a command.
 
 <puml src="diagrams/StorageSequenceDiagram.puml" alt="Sequence Diagram for the `Storage` Component" />
+
+<br>
+<br>
 
 #### Loading of Data
 
@@ -372,6 +379,8 @@ and optionally provide additional information such as their:
 * reflection (`Reflection`),
 * studio (`Studio`),
 * and tags (`Tag`).
+
+<br>
 
 ##### Parsing User Input
 The `AddCommandParser` class is responsible for parsing user input to extract the details of the person to be added. It uses the `ArgumentTokenizer` to tokenize the input string, extracting prefixes and their associated values. It ensures that all mandatory fields are present and that there are no duplicate prefixes in the user input.
@@ -610,7 +619,7 @@ If the file is not valid, an error message will be returned.
 
 Handled by CsvUtil. The first occurrence of the header will be used and the rest will be ignored.
 
-The sequence diagram below illustrates the interactions within the `Logic` component when the user issues the command `import`.
+The sequence diagrams below illustrates the interactions within the `Logic` component when the user issues the command `import`.
 
 **Parsing**
 
@@ -620,9 +629,12 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 <puml src="diagrams/ImportSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `import` Command" />
 
-Reference Diagram for each addCommand in importCommand
+**Reference Diagram for each addCommand in importCommand**
 
 <puml src="diagrams/ImportSequenceDiagramRef.puml" alt="Interactions Inside the Add Component for the `import` Command" />
+
+<br>
+<br>
 
 ##### Design Considerations
 
@@ -730,6 +742,7 @@ The following sequence diagram shows the interactions within the different class
 <puml src="diagrams/ExportSequenceDiagram.puml" alt="Sequence Diagram for the `export` Command" />
 
 <br>
+<br>
 
 ##### Alternative Implementations
 
@@ -789,6 +802,8 @@ The activity diagram is as follows:
 <br>
 
 <div id="exam-management"></div>
+
+--------------------------------------------------------------------------------------------------------------------
 
 ### **Exam Features**
 
@@ -941,6 +956,8 @@ The design of the exam feature allows for easy extension to accommodate future e
 
 <br>
 
+--------------------------------------------------------------------------------------------------------------------
+
 <div id="score-management"></div>
 
 ### **Exam Score Features**
@@ -1072,6 +1089,8 @@ The `Model` object is then used to:
 * Get the `Exam` object corresponding to the exam name in the row;
 * Get the `Person` object corresponding to the email in the row;
 * And finally add the `Score` object to the correct `Person` for the correct `Exam`.
+
+<br>
 
 ##### Concrete Examples of Validation
 
