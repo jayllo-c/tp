@@ -164,6 +164,10 @@ The following is a more detailed explaination on how user input is parsed into a
 
 **Note:** Some commands do not require any arguments (e.g., `help`, `clear`, `list`, `exit`). In such cases, the `XYZCommand` class is directly instantiated by the `AddressBookParser` class without the parsing of arguments. As such, any arguments passed to these commands are ignored.
 
+#### Considerations for Logic
+
+The `Logic` component is designed to be the central component that executes all user commands. This design choice was made to ensure that all commands are executed in a consistent manner, and to prevent the duplication of command execution logic across different components. By centralizing the command execution logic in the `Logic` component, we ensure that all commands are executed in the same way, regardless of the component that initiates the command execution. This design choice also allows for easier maintenance and extensibility, as any changes to the command execution logic can be made in a single location.
+
 <br>
 
 ### Model component
