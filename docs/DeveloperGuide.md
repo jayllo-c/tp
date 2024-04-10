@@ -15,6 +15,8 @@ pageNav: 3
 
 This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
 
+Features related to the creation and reading of CSV files were made possible through the use of the [OpenCSV](http://opencsv.sourceforge.net/) library.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
@@ -136,6 +138,7 @@ How the parsing works:
 * The `XYZCommandParser` [uses the other classes](#specificParsing) shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
+#### Example of Parsing User Input: `delete` Command
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking a simple `execute("delete 1")` API call as an example.
 
@@ -156,20 +159,6 @@ The following is a more detailed explaination on how user input is parsed into a
 * The parsed arguments are then used to create a `XYZCommand` object to be executed.
 
 **Note:** Some commands do not require any arguments (e.g., `help`, `clear`, `list`, `exit`). In such cases, the `XYZCommand` class is directly instantiated by the `AddressBookParser` class without the parsing of arguments. As such, any arguments passed to these commands are ignored.
-
-The sequence diagram below illustrates a more in-depth view of the interactions regarding the parsing of user input.
-It takes an add command: `execute(add n|Dohn Joe p|98765432 a|123 e|dohn@gm.com m|A1234567X s|S1 r|R1)` as an example.
-
-<puml src="diagrams/AddSequenceDiagram.puml" alt="Detailed Interactions Inside the Logic Component for the `add n/Dohn Joe p/98765432 a/123 e/dohn@gm.com m/A1234567X s/S1 r/R1` User Input" />
-
-<box type="info" seamless>
-
-**Note:** Similar to the above sequence diagram, the lifeline for `AddCommandParser` and `AddCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
-</box>
-
-The parsing is detailed as follows:
-<puml src="diagrams/AddCommandParsing.puml" alt="Detailed Interactions for Parsing Fields of the Add command." />
-
 
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
@@ -237,7 +226,134 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### **Export Feature**
+### **Add Person Command** : `add`
+
+The `add` command allows users to add a person to the address book.
+
+The user can specify the person's:
+* name (`Name`),
+* phone number (`Phone`),
+* address (`Address`),
+* email (`Email`),
+
+and optionally provide additional information such as their:
+* matriculation number (`Matric`),
+* reflection (`Reflection`),
+* studio (`Studio`),
+* and tags (`Tag`).
+
+#### Implementation Details
+
+##### Parsing User Input
+The `AddCommandParser` class is responsible for parsing user input to extract the details of the person to be added. It uses the `ArgumentTokenizer` to tokenize the input string, extracting prefixes and their associated values. It ensures that all mandatory fields are present and that there are no duplicate prefixes in the user input.
+
+##### Executing the Command
+A `AddCommand` is created by the `AddressBookParser` class and passed to the `Logic` component for execution. The `LogicManager` then calls the `execute` method in the `AddCommand` class.
+
+##### Sequence Diagram
+
+The sequence diagram below illustrates a more in-depth view of the interactions regarding the parsing of user input.
+It takes an add command: `execute(add n|Dohn Joe p|98765432 a|123 e|dohn@gm.com m|A1234567X s|S1 r|R1)` as an example.
+
+<puml src="diagrams/AddSequenceDiagram.puml" alt="Detailed Interactions Inside the Logic Component for the `add n/Dohn Joe p/98765432 a/123 e/dohn@gm.com m/A1234567X s/S1 r/R1` User Input" />
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `AddCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+</box>
+
+The parsing is detailed as follows:
+<puml src="diagrams/AddCommandParsing.puml" alt="Detailed Interactions for Parsing Fields of the Add command." />
+#
+
+#### Design Considerations
+
+##### Use of `Email` field as Unique Identifier
+We have chosen to use the `Email` field as a unique identifier. Due to the real-world implementation of email addresses, and specifically in NUS, email addresses are unique to each person. This allows for easy identification of persons and prevents the creation of duplicate persons with the same email address.
+
+This is opposed to using the `Name` field as a unique identifier, as an app with our proposed scale will likely be handling a large number of persons with the same name. This would make it difficult to identify or keep track of persons with the same name.
+
+##### Compulsory and Non-compulsory Fields
+We have chosen to make the following fields compulsory as they are essentials and most likely available to the head TA:
+* `Name`
+* `Email`
+* `Phone`
+* `Address`
+
+The following fields are optional as they may not be available for all persons:
+* `Matric`
+* `Reflection`
+* `Studio`
+* `Tag`
+
+### **Edit Person Command** : `edit`
+
+The `edit` command allows a user to edit the details of an existing person.
+
+#### Implementation Details
+
+The `EditCommandParser` class is responsible for parsing user input to extract the index of the person to be edited and the new details of the person.
+After that, the `EditCommand` class is created and executed by the `Logic` component.
+
+##### Parsing User Input
+
+An `EditCommandParser` object is instantiated by the `AddressBookParser` object when the user inputs the `edit` command. The `EditCommandParser` object uses the `ArgumentTokenizer` class to tokenize the user input string, extracting the index of the person to be edited and the new details of the person. It ensures that the index is valid and that there are no duplicate prefixes in the user input.
+
+##### Executing the Command
+
+The `EditCommand` object is created by the `EditCommandParser` object and its `execute` method is called.
+After that, it interacts with the `Model` component to edit the details of the person.
+
+##### Activity Diagram
+
+The activity diagram below illustrates the workflow involved in executing the `edit` command. In practice, a `Reject` activity will result in a `CommandException` being thrown.
+
+<puml src="diagrams/EditCommandActivityDiagram.puml" alt="Activity Diagram for the `edit` Command" />
+
+
+### Delete Person Command : `delete`
+
+The `delete` command allows a user to delete a person with the specified index.
+
+#### Implementation Details
+
+##### Parsing User Input
+
+The `DeleteCommandParser` class is responsible for parsing user input to extract the index of the person to be deleted. It uses the `ArgumentTokenizer` to tokenize the input string, extracting the index of the person to be deleted and ensures that the index is valid.
+
+##### Executing the Command
+
+The `DeleteCommandParser` object creates a `DeleteCommand` object upon successful parsing. The `LogicManager` then calls the `execute` method in the `DeleteCommand` class, which then interacts with the `Model` component to remove the person.
+
+##### Sequence Diagram
+
+For more details on the implementation of the `delete` command, refer to the [Delete Command Sequence Diagram](#example-of-parsing-user-input-delete-command).
+
+#### Design Considerations
+
+We have chosen to implement the `delete` command to accept the index of the person to be deleted to maximize convenience for the user. The numbering of the lists will be displayed to the user, making indexing very intuitive.
+
+### **Delete Shown feature** : `deleteShown`
+
+#### Implementation Details
+
+The `deleteShown` command is a child of the `Command` class and relies on the `filteredPersons` list in the `Model` component to delete the persons currently displayed in the `PersonListPanel`.
+
+##### Executing the Command
+If the list shows between 0 and the total number of existing persons, the `deleteShown` command will delete the persons currently displayed in the `PersonListPanel`.
+
+##### Updating Filtered Person List
+After deleting all persons currently displayed in the `PersonListPanel`, the `filteredPersons` list in the `Model` component is updated to show all remaining persons in the address book.
+
+The following activity diagram illustrates the workflow of the execution of the `deleteShown` command:
+
+<puml src="diagrams/DeleteShownActivityDiagram.puml" alt="Activity Diagram for the `deleteShown` Command" />
+
+#### Considerations
+##### Reliance on `find` Command
+Similarly to the `copy` command, the `deleteShown` command is designed to be used with the find command, which filters the persons displayed in the `PersonListPanel`. Consequently, the flexibility of the `deleteShown` command relies heavily on the implementation of the `find` command. Due to this dependency, any changes to the `find` command may affect the functionality of the `deleteShown` command.
+
+### **Export Feature** : `export`
 
 The `export` command allows users to export the details of each person currently displayed in the `PersonListPanel` to a CSV file. The CSV file is generated in the file `./addressbookdata/avengersassemble.csv`.
 
@@ -245,7 +361,7 @@ The `export` command allows users to export the details of each person currently
 
 The user uses the `find` feature to filter out the relevant persons, which will be displayed in the `PersonListPanel`.
 The `export` feature utilizes the `filteredPersons` list stored in `Model` to retrieve the relavant data displayed in `PersonListPanel`.
-The `export` feature also relies the Jackson Dataformat CSV module and the Jackson Databind module write the details of persons to the CSV file `./addressbookdata/avengersassemble.csv`.
+The `export` feature also relies on the Jackson Dataformat CSV module and the Jackson Databind module write the details of persons to the CSV file `./addressbookdata/avengersassemble.csv`.
 
 #### Parsing User Input
 
@@ -290,7 +406,7 @@ The following sequence diagram shows the interactions within the different class
       * The `export` feature is not reliant on the `find` feature to update the `filteredPersons` list.
     * Cons: Users need to manually filter and sort through the CSV file if they require certain data which may be less efficient.
 
-### **Copy feature**
+### **Copy feature** : `copy`
 
 The `copy` command enables users to quickly copy the email addresses of the persons currently displayed to them in the
 `PersonListPanel`. The copied emails are stored in the users' clipboard and can be pasted into an email client.
@@ -382,7 +498,7 @@ The parser also generates `Tag` objects based on the user input. The existing ta
 The activity diagram is as follows:
 <puml src="diagrams/AutomaticTaggingActivityDiagram.puml" alt="Activity Diagram for Auto Tagging Feature" />
 
-### Import contacts from CSV file
+### Import contacts from CSV file : `import`
 
 #### Implementation
 
@@ -404,7 +520,7 @@ Reference Diagram for each addCommand in importCommand
 
 <puml src="diagrams/ImportSequenceDiagramRef.puml" alt="Interactions Inside the Add Component for the `import` Command" />
 
-### Design Considerations
+#### Design Considerations
 
 **Aspect: How to handle duplicate persons**
 
@@ -421,7 +537,54 @@ The validities checked are:
 
 If the file is not valid, an error message will be returned.
 
-### **Find feature**
+### **Import Exam Scores feature** : `importExamScores`
+
+The `importExamScores` command lets users import exam scores corresponding to existing exams and persons from a CSV file.
+
+#### Implementation
+The `ImportExamScoresCommand` class is responsible for import exam scores from a CSV file.
+The `ImportExamScoresParser` class is responsible for parsing the user input, namely the filepath of the CSV file to be imported, and creating an `ImportExamScoresCommand` object.
+
+##### Parsing CSV File
+The CSV file is parsed with the `OpenCSV` library and a `List<String[]>` is created, with each `String[]` representing a row in the CSV file.
+
+#### Validation
+
+##### File Validation
+After parsing, a mapping of `Exam` objects to an inner mapping of an `email` string to a `Double` score is created. This mapping is used to validate the data in the CSV file.
+If the **file** is invalid, an error message is returned.
+
+The validation workflow for the **file** is as follows:
+
+<puml src="diagrams/ImportExamScoresFileActivityDiagram.puml" alt="Activity Diagram for Import Exam Scores File Validation" />
+
+If the file is valid, any invalid entries will be ignored, with the rest being successfully processed.
+
+A **column** will be ignored if:
+1. The column header is not the `email` column, but does not start with `Exam:`.
+2. The column header's name does not correspond to an existing `Exam` object. (i.e. Anything after `Exam:` is not an existing exam name.)
+
+A **row** will be ignored if:
+1. The `email` value does not correspond to an existing `Person`.
+
+A **cell** will be ignored if:
+1. The `Double` representing the score for an existing `Person` and `Exam` is not a valid `Score`.
+
+##### Value Validation
+For every valid row:
+
+The `Double` is parsed into a `Score` object.
+
+The `Model` object is then used to:
+* Get the `Exam` object corresponding to the exam name in the row;
+* Get the `Person` object corresponding to the email in the row;
+* And finally add the `Score` object to the correct `Person` for the correct `Exam`.
+
+##### Concrete Examples of Validation
+
+For concrete examples of the validation process, [refer to the manual testing section of the `importExamScores` command](#importing-exam-scores-importexamscores).
+
+### **Find feature** : `find`
 
 The `find` command lets users search for persons by substring matching. The user can select any parameter to search under: `NAME`, `EMAIL`, `TAG`, `MATRIC`, `REFLECTION`, `STUDIO`, and `TAGS` can all be used. E.g. to search for all persons under studio `S2`, the user can use `find s|s2`. The user can also use two other prefixes: `lt` and `mt` to search for persons with scores less than or more than a certain value respectively. E.g. `find mt|50` will return all persons with scores more than 50.
 
@@ -662,103 +825,51 @@ The `ScoreStatistics` class was used to store the mean and median scores of the 
 
 <br>
 
-### \[Proposed\] Undo/redo feature
+## Planned Enhancements
 
-#### Proposed Implementation
+### `find` Command: Enhance input validation for prefixes other than `lt` and `mt`
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
+Currently, the `find` command only validates the `lt` and `mt` prefixes, where other prefixes are not validated. This means that users may search for persons with fields that do not exist to begin with, which is guaranteed to return no results.
 
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
+#### Planned Implementation
 
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
+We plan to enhance the `find` command to validate all prefixes other than `lt` and `mt`. This will ensure that users are not able to search for persons with fields that do not exist in the `Person` object.
 
-Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
+However, we need to be careful about overzealous input validation where users may still want to search for fields using incomplete parts of a field, and hence we have to balance these two considerations.
 
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+For example, an extreme case will be to search for persons with the `Name` field with `~`, which is disallowed to begin with as `~` is not a valid character for a name. We plan to inform the user outright that the search is invalid and will not return any results.
 
-<puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
+### UI: Wrap text on result box so only 1 scrollbar is needed
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Currently, the `ResultDisplay` box does not wrap text, which means that long lines of text will extend beyond the width of the box. This results in the need for two scrollbars, a horizontal one for the result box and a vertical one for the currently shown list of persons. This is not ideal as it makes the UI less optimized for the target audience, who prefer using a CLI-optimized application and prefer not to use mouse controls to scroll through scrollboxes.
 
-<puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
+#### Planned Implementation
 
-Step 3. The user executes `add n|David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+We plan to modify the `ResultDisplay` box to wrap text so that there is no longer a need for the horizontal scrollbar in the `ResultDisplay` box.
 
-<puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
+In the case where the wrapped text still exceeds the height of the `ResultDisplay` box, we plan to enable it to dynamically adjust its height as needed.
 
-<box type="info" seamless>
+### Primary key: Use both `Matric` and `Email`
 
-**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+Currently, only `Email` is used as a unique identifier for `Person` objects. However, this means that two `Person` objects can have different `Email`s but the same `Matric` number. This clashes with the real-life constraint that NUS students, in particular CS1101S students, are put under, where Matriculation numbers are supposed to be unique for each student. Our planned enhancement hence aims to better reflect real-life constraints.
 
-</box>
+#### Planned Implementation
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+Currently, the `hasPerson` method in the `Model` class checks for the existence of a `Person` object based on the `Email` field. We plan to modify this method to check for the existence of a `Person` object based on both the `Email` and `Matric` fields. This will ensure that two `Person` objects cannot have the same `Matric` number.
 
-<puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
+However, more checking needs to be done to ensure persons cannot have different overall unique identifiers, but the same `Email` or `Matric` field. (E.g. two persons cannot have the same `Email` but different `Matric` numbers.)
 
+Additionally, some persons such as staff members and course instructors may not have a `Matric` field. Hence, careful consideration needs to be made to implement this new method of checking for unique identifiers.
 
-<box type="info" seamless>
+### UX: Make sample data tags more relevant and helpful to the user
 
-**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
+Currently, the sample data tags are not very helpful to the user, having tags like `friends`, `neighbours` and `family`. This may pose confusion to users about the context of the application, which is the head TA's management of persons related to CS1101S.
 
-</box>
+#### Planned Implementation
 
-The following sequence diagram shows how an undo operation goes through the `Logic` component:
+Remove all `Tag` objects that are in the sample data that border on irrelevancy. This can be done by modifying the `SampleDataUtil` class to not add these tags to the sample data.
 
-<puml src="diagrams/UndoSequenceDiagram-Logic.puml" alt="UndoSequenceDiagram-Logic" />
-
-<box type="info" seamless>
-
-**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
-
-</box>
-
-Similarly, how an undo operation goes through the `Model` component is shown below:
-
-<puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
-
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
-
-<box type="info" seamless>
-
-**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
-
-</box>
-
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
-
-<puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
-
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n|David …​` command. This is the behavior that most modern desktop applications follow.
-
-<puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
-
-The following activity diagram summarizes what happens when a user executes a new command:
-
-<puml src="diagrams/CommitActivityDiagram.puml" width="250" />
-
-#### Design considerations:
-
-**Aspect: How undo & redo executes:**
-
-* **Alternative 1 (current choice):** Saves the entire address book.
-    * Pros: Easy to implement.
-    * Cons: May have performance issues in terms of memory usage.
-
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
-    * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-    * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
-
+Retain all other relevant `Tag` objects like `colleagues` and `student` to better reflect the context of the application.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -813,65 +924,96 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
+#### General
+
 | Priority | As a …​                                      | I want to …​                            | So that I can…​                                                          |
 |----------|---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------|
 | `* * *`  | potential user exploring the app            | see the app populated with sample data | immediately see an example of the app in use                            |
-| `* * *`  | new user                                    | easily clear the example data          | start using the app with real-life data                                 |
 | `* * *`  | new user                                    | see usage instructions                 | refer to instructions when I forget how to use the App                  |
-| `* * *`  | new user                                    | add persons with their details         | start populating the address book                                       |
-| `* * *`  | new user                                    | save the data I input into the app     | don't lose the information I've entered                                 |
-| `* * *`  | user                                        | add a new person                       |                                                                         |
-| `* * *`  | user                                        | delete a person                        | remove entries that I no longer need                                    |
-| `* * *`  | user                                        | update and edit person details         | keep my address book accurate                                           |
-| `* * *`  | user                                        | find a person by name                  | locate details of persons without having to go through the entire list  |
-| `* * *`  | user                                        | find a person by name                  | locate details of persons without having to go through the entire list  |
-| `* * *`  | head tutor using the app                    | categorise my persons into groups      | manage different tutorial groups effectively                            |
-| `* * *`  | head tutor using the app                    | copy email addresses of a group        | effectively communicate with target groups                              |
-| `* * *`  | user                                        | find a person by name                  | locate details of persons without having to go through the entire list  |
-| `* *`    | user                                        | hide private person details            | minimize chance of someone else seeing them by accident                 |
+| `* * *`  | new user                                    | easily clear the example data          | start using the app with real-life data                                 |
 | `* *`    | experienced user                            | use the address book offline           | update and interact with it anywhere                                    |
-| `*`      | user with many persons in the address book  | sort persons by name                   | locate a person easily                                                  |
 
-*{More to be added}*
+#### For Contact Management
+
+| Priority | As a …​                                      | I want to …​                            | So that I can…​                                                          |
+|----------|---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------|
+| `* * *`  | head tutor using the app                    | import persons from a csv file         | easily add a large number of persons to the address book                |
+| `* * *`  | new user                                    | save the data I input into the app     | don't lose the information I've entered                                 |
+| `* * *`  | user                                        | add a new person                       | make minor additions to the persons in the addrress book                |
+| `* * *`  | user                                        | update and edit person details         | keep my address book accurate                                           |
+| `* * *`  | user                                        | delete a person                        | remove entries that I no longer need                                    |
+| `* * *`  | user                                        | delete a specific group of entries     | remove multiple entries that I no longer need more efficiently          |
+| `* * *`  | user                                        | view all saved contacts                | oversee the data stored within my app                                   |
+| `* * *`  | user                                        | find a person by any param             | locate details of persons without having to go through the entire list  |
+| `* * *`  | head tutor using the app                    | categorise my persons into groups      | manage different groups of students effectively                         |
+| `* * *`  | head tutor using the app                    | copy email addresses of a group        | effectively communicate with target groups                              |
+| `* * *`  | head tutor using the app                    | export the details of persons to a csv | easily share the details of a group with others                         |
+
+#### For Exam and Score Management
+
+| Priority | As a …​                                      | I want to …​                            | So that I can…​                                                          |
+|----------|---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------|
+| `* * *`  | head tutor using the app                    | import assesment scores from a csv file| easily add a large number of scores to the address book                 |
+| `* * *`  | head tutor using the app                    | add exams to the app                   | keep track of student performance                                       |
+| `* * *`  | head tutor using the app                    | delete exams from the app              | remove exams that are no longer relevant                                |
+| `* * *`  | head tutor using the app                    | select an exam in the app              | view the scores of a specific exam                                      |
+| `* * *`  | head tutor using the app                    | deselect exam                          | view student data without the scores                                    |
+| `* * *`  | head tutor using the app                    | add scores to the app                  | keep track of student performance                                       |
+| `* * *`  | head tutor using the app                    | edit scores in the app                 | correct errors in the scores                                            |
+| `* * *`  | head tutor using the app                    | delete scores from the app             | remove scores that are no longer relevant                               |
+| `* * *`  | head tutor using the app                    | export scores to a csv file            | easily share the scores with others                                     |
+| `* * *`  | head tutor using the app                    | view statistics of scores              | analyse student performance                                             |
+
 
 ### Use cases
 
 (For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: UC01 — Delete a person**
+#### Use case: UC01 — Getting Help
 
 **MSS:**
 
-1.  User !!requests to list persons (UC04)!!
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+1.  User requests help information.
+2.  AddressBook copies the link to the user guide to the user's clipboard.
+3.  User pastes the link into a browser to access the user guide.
+
+    Use case ends.
+
+#### Use case: UC02 — Clearing Sample Data
+
+**MSS:**
+
+1.  User requests to clear the sample data.
+2.  AddressBook clears the sample data.
+3.  AddressBook displays a message indicating that the sample data has been cleared.
+
+    Use case ends.
+
+#### Use case: UC03 — Importing person details from a CSV file
+
+**MSS:**
+
+1.  User requests to import person details from a CSV file.
+2.  AddressBook imports the person details from the CSV file.
+3.  AddressBook displays a message indicating that the person details have been imported.
 
     Use case ends.
 
 **Extensions:**
 
-* 2a. The list is empty.
+*  1a. The file to be imported is not a CSV file.
 
-  Use case ends.
+    *  1a1. AddressBook displays an error message indicating that the file type is not recognised and should be a csv file.
 
-* 3a. The given index is invalid.
+       Use case ends.
 
-    * 3a1. AddressBook shows an error message.
+*  1b. AddressBook cannot find the file to be imported.
 
-      Use case resumes at step 2.
+    *  1b1. AddressBook displays a message indicating that the file is not recognised.
 
-**Use case: UC02 — Help**
+       Use case ends.
 
-**MSS:**
-
-1.  User requests help information.
-2.  AddressBook displays help information.
-3.  User reads the help information.
-
-    Use case ends.
-
-**Use case: UC03 — Add a person**
+#### Use case: UC04 — Adding a person
 
 **MSS:**
 
@@ -887,37 +1029,19 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     *  1a1. AddressBook prompts the user on the proper usage of the command.
 
-        Step 1a1 is repeated until the data entered is correct.
+       Step 1a1 is repeated until the data entered is correct.
 
-        Use case resumes at step 2.
+       Use case resumes at step 2.
 
 *  1b. User tries to add a person with an existing email address.
 
     *  1b1. AddressBook displays an error message informing the user that the email address already exists.
 
-        Step 1b1 is repeated until a valid email address is entered.
+       Step 1b1 is repeated until a valid email address is entered.
 
-        Use case resumes at step 2.
+       Use case resumes at step 2.
 
-**Use case: UC04 — List all persons**
-
-**MSS:**
-
-1.  User requests to list persons.
-2.  AddressBook shows the list of persons.
-3.  User views the list of persons.
-
-    Use case ends.
-
-**Extensions:**
-
-* 2a. The list is empty.
-
-    * 2a1. AddressBook displays a message indicating that the list is empty.
-
-      Use case ends.
-
-**Use case: UC05 — Edit a person's details**
+#### Use case: UC05 — Editing a person's details
 
 **MSS:**
 
@@ -935,54 +1059,98 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
        Step 1a1 is repeated until the data entered is correct.
 
+       Use case resumes at step 2.
+
 *   1b. The selected person does not exist.
 
     *  1b1. AddressBook displays an error message indicating that the person does not exist.
 
-      Use case ends.
+       Use case ends.
 
-**Use case: UC06 — Find persons**
+#### Use case: UC06 — Deleting a person
 
 **MSS:**
 
-1.  User requests to find a specific person matching the search criteria.
+1.  User !!requests to list persons (UC08)!!
+2.  AddressBook shows a list of persons
+3.  User requests to delete a specific person in the list
+4.  AddressBook deletes the person
+
+    Use case ends.
+
+**Extensions:**
+
+*   2a. The list is empty.
+
+    Use case ends.
+
+*   3a. The given index is invalid.
+
+    *  3a1. AddressBook shows an error message.
+
+       Use case resumes at step 2.
+
+#### Use case: UC07 — Deleting all shown persons
+
+**MSS:**
+
+1. User !!requests to find group of persons (UC09)!! by desired requirements
+2. User requests to delete all listed persons.
+3. AddressBook deletes all listed persons.
+4. AddressBook displays a message to confirm that all listed persons have been deleted.
+
+    Use case ends.
+
+**Extensions:**
+
+*   2a. No persons are listed.
+
+    *  2a1. AddressBook displays a message indicating that there is no persons to delete.
+
+       Use case ends.
+
+*   2b. User has a filtered view that contains all existing persons.
+
+    *  2b1. AddressBook displays a message indicating that all persons cannot be deleted at once.
+
+       Use case ends.
+
+#### Use case: UC08 — Listing all persons
+
+**MSS:**
+
+1.  User requests to list persons.
+2.  AddressBook shows the list of persons.
+3.  User views the list of persons.
+
+    Use case ends.
+
+**Extensions:**
+
+*   2a. The list is empty.
+
+    *  2a1. AddressBook displays a message indicating that the list is empty.
+
+       Use case ends.
+
+#### Use case: UC09 — Finding persons
+
+**MSS:**
+
+1.  User requests to find a specific group of persons matching the search criteria.
 2.  AddressBook displays a list of persons matching the criteria.
 
     Use case ends.
 
 **Extensions:**
 
-*    1a. No persons match the search criteria.
+*   1a. No persons match the search criteria.
 
-     *   1a1. AddressBook displays a message indicating that no persons match the criteria.
+    *  1a1. AddressBook displays a message indicating that no persons match the search criteria.
 
-     Use case ends.
+       Use case ends.
 
-
-**Use case: UC07 — Import persons**
-
-**MSS**
-1. User requests to import persons from a csv file.
-2. AddressBook displays a message that all persons have been imported.
-3. User is able to see all the persons imported when a list of persons is requested.
-   Use case ends.
-
-**Extension**
-
-*   1a. AddressBook cannot find file to be imported.
-
-    *   1a1. AddressBook displays a message indicating that the file is not recognised.
-
-    Use case ends.
-
-*   1b. The file to be imported is not a csv file.
-
-    *  1b1. AddressBook displays an error message indicating that the file type is not recognised and should be a csv file
-
-    Use case ends.
-
-
-**Use case: UC08 — Copy email addresses**
+#### Use case: UC10 — Copying email addresses
 
 **MSS:**
 
@@ -998,34 +1166,15 @@ into user's clipboard.
 
 *   2a. No persons currently displayed.
 
-    * 2a1. AddressBook displays a message indicating that
-    no persons are currently displayed.
+    *  2a1. AddressBook displays a message indicating that no persons are currently displayed.
 
-    Use case ends.
+       Use case ends.
 
-**Use case: UC09 — Clear all persons**
-
-**MSS:**
-
-1.  User requests to clear all persons.
-2.  AddressBook clears all persons.
-3.  AddressBook displays a message indicating that all persons have been cleared.
-
-    Use case ends.
-
-**Extensions:**
-
-*    1a. User inputs extraneous parameters.
-
-     *   1a1. AddressBook displays a message indicating that an extraneous parameter was found, and confirms User's intention.
-
-         Use case ends.
-
-**Use case: UC10 — Export listed persons to CSV**
+#### Use case: UC11 — Exporting persons to CSV
 
 **MSS:**
 
-1.  User !!requests to filter persons (UC06)!! by desired requirements
+1. User !!requests to filter persons (UC09)!! by desired requirements
 2. User requests to export all listed persons and details to a CSV file.
 3. AddressBook exports the persons to a CSV file.
 4. AddressBook displays a message to confirm that all listed persons have been exported to a CSV file.
@@ -1034,37 +1183,16 @@ into user's clipboard.
 
 **Extensions:**
 
-* 2a. No persons are listed.
-  * 2a2. AddressBook displays a message indicating that there is no persons to export.
+*   2a. No persons are listed.
 
-    Use case ends.
+    *  2a2. AddressBook displays a message indicating that there is no persons to export.
 
-**Use case: UC11 - Delete shown persons**
+       Use case ends.
 
-**MSS:**
-
-1. User !!requests to filter persons (UC06)!! by desired requirements
-2. User requests to delete all listed persons.
-3. AddressBook deletes all listed persons.
-4. AddressBook displays a message to confirm that all listed persons have been deleted.
-
-    Use case ends.
-
-**Extensions:**
-
-* 2a. No persons are listed.
-    * 2a1. AddressBook displays a message indicating that there is no persons to delete.
-
-        Use case ends.
-
-* 2b. User has a filtered view that contains all existing persons.
-     * 2b1. AddressBook displays a message indicating that all persons cannot be deleted at once.
-
-        Use case ends.
-
-**Use case: UC12 — Import Exam Results**
+#### Use case: UC12 — Importing exam results from a CSV file
 
 **MSS:**
+
 1. User requests to import exam results from a csv file.
 2. AddressBook displays a message that all exam results have been imported.
 
@@ -1072,24 +1200,220 @@ into user's clipboard.
 
 **Extensions:**
 
-* 2a. AddressBook cannot find the file specified.
-    * 2a1. AddressBook displays a message indicating that the file is not recognised.
+*   2a. AddressBook cannot find the file specified.
 
-        Use case ends.
-* 2b. The file to be imported is not a csv file.
-    * 2b1. AddressBook displays an error message indicating that the file type is not recognised and should be a csv file
+    *  2a1. AddressBook displays a message indicating that the file is not recognised.
 
-        Use case ends.
-* 2c. There are duplicate entries in the csv file.
-    * 2c1. AddressBook displays a message indicating that there are duplicate entries in the csv file, and only the first instance has been kept.
+       Use case ends.
 
-        Use case ends.
+*   2b. The file to be imported is not a csv file.
+
+    *  2b1. AddressBook displays an error message indicating that the file type is not recognised and should be a csv file
+
+       Use case ends.
+
+*   2c. There are duplicate entries in the csv file.
+
+    *  2c1. AddressBook displays a message indicating that there are duplicate entries in the csv file, and only the first instance has been kept.
+
+       Use case ends.
+
 * 2d. The csv file contains invalid entries.
-    * 2d1. AddressBook displays a message indicating that there are invalid entries in the csv file, and all other valid entries have been imported.
+
+    *  2d1. AddressBook displays a message indicating that there are invalid entries in the csv file, and all other valid entries have been imported.
+
+       Use case ends.
+
+#### Use case: UC13 — Adding an exam
+
+**MSS:**
+
+1. User requests to add an exam.
+2. AddressBook displays a message that the exam has been added.
+
+    Use case ends.
+
+**Extensions:**
+
+*   1a. User does not input all compulsory parameters along with the exam.
+
+    *  1a1. AddressBook prompts the user on the proper usage of the command.
+
+       Step 1a1 is repeated until the data entered is correct.
+
+       Use case resumes at step 2.
+
+*   1b. User tries to add an exam with an existing name.
+
+    *  1b1. AddressBook displays an error message informing the user that the exam name already exists.
+
+       Step 1b1 is repeated until a valid exam name is entered.
+
+       Use case resumes at step 2.
+
+*   1c. User tries to add an exam with an invalid score.
+
+    *  1c1. AddressBook displays an error message informing the user that the score is invalid.
+
+       Step 1c1 is repeated until a valid score is entered.
+
+       Use case resumes at step 2.
+
+*   1d. User tries to add an exam with an invalid name.
+
+    *  1d1. AddressBook displays an error message informing the user that the name is invalid.
+
+       Step 1d1 is repeated until a valid name is entered.
+
+       Use case resumes at step 2.
+
+#### Use case: UC14 — Deleting an exam
+
+**MSS:**
+
+1. User requests to delete an exam.
+2. AddressBook displays a message that the exam has been deleted.
+
+    Use case ends.
+
+**Extensions:**
+
+*   1a. The exam does not exist.
+
+    *  1a1. AddressBook displays an error message indicating that the exam does not exist.
+
+       Use case ends.
+
+#### Use case: UC15 — Selecting an exam
+
+**MSS:**
+
+1. User requests to select an exam.
+2. AddressBook displays the scores of the selected exam.
+
+    Use case ends.
+
+**Extensions:**
+
+*   1a. The exam does not exist.
+
+    *  1a1. AddressBook displays an error message indicating that the exam does not exist.
+
+       Use case ends.
+
+#### Use case: UC16 — Deselecting an exam
+
+**MSS:**
+
+1. User requests to deselect an exam.
+2. AddressBook displays the persons without the scores of the selected exam.
+
+    Use case ends.
+
+**Extensions:**
+
+*   1a. The exam does not exist.
+
+    *  1a1. AddressBook displays an error message indicating that the exam does not exist.
+
+       Use case ends.
+
+#### Use case: UC17 — Adding scores to a student for an exam
+
+**MSS:**
+
+1. User !!requests to select an exam (UC15)!! to add scores to.
+2. User requests to add scores to a student for the selected exam.
+3. AddressBook displays a message that the scores have been added.
+
+    Use case ends.
+
+**Extensions:**
+
+*   2a. The student does not exist.
+
+    *  2a1. AddressBook displays an error message indicating that the student does not exist.
+
+       Use case ends.
+
+*   2b. The student already has a score for the exam.
+
+    *  2b1. AddressBook displays an error message indicating that the student already has a score for the exam.
+
+       Use case ends.
+
+#### Use case: UC18 — Editing scores for a student for an exam
+
+**MSS:**
+
+1. User !!requests to select an exam (UC15)!! to edit scores for.
+2. User requests to edit scores for a student for the selected exam.
+3. AddressBook displays a message that the scores have been edited.
+
+    Use case ends.
+
+**Extensions:**
+
+*   2a. The student does not exist.
+
+    *  2a1. AddressBook displays an error message indicating that the student does not exist.
+
+       Use case ends.
+
+*   2b. The student does not have a score for the exam.
+
+        *  2b1. AddressBook displays an error message indicating that the student does not have a score for the exam.
 
         Use case ends.
 
-**Use case: UC13 — Exit application**
+*   2c. The score is invalid.
+
+        *  2c1. AddressBook displays an error message indicating that the score is invalid.
+
+        Use case ends.
+
+#### Use case: UC19 — Deleting scores for a student for an exam
+
+**MSS:**
+
+1. User !!requests to select an exam (UC15)!! to delete scores for.
+2. User requests to delete scores for a student for the selected exam.
+3. AddressBook displays a message that the scores have been deleted.
+
+    Use case ends.
+
+**Extensions:**
+
+*   2a. The student does not exist.
+
+    *  2a1. AddressBook displays an error message indicating that the student does not exist.
+
+       Use case ends.
+
+*   2b. The student does not have a score for the exam.
+
+        *  2b1. AddressBook displays an error message indicating that the student does not have a score for the exam.
+
+        Use case ends.
+
+#### Use case: UC20 — Viewing statistics of scores
+
+**MSS:**
+
+1. User !!requests to select an exam (UC15)!! to view statistics of scores for.
+2. AddressBook displays the statistics of scores for the selected exam.
+
+    Use case ends.
+
+**Extensions:**
+
+*  2a. There are no scores for the exam.
+
+    *  2a1. AddressBook does not display any statistics.
+
+       Use case ends.
+
+#### Use case: UC21 — Exit application
 
 **MSS:**
 
@@ -1098,22 +1422,13 @@ into user's clipboard.
 
     Use case ends.
 
-**Extensions:**
-
-*    1a. User inputs extraneous parameters.
-
-     *   1a1. AddressBook displays a message indicating that an extraneous parameter was found, and confirms User's intention.
-
-         Use case ends.
-
 ### Non-Functional Requirements
 
 1.   Should work on any _mainstream OS_ as long as it has Java `11` or above installed.
-2.   Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
+2.   Should be able to hold up to 2000 persons without a noticeable sluggishness in performance for typical usage.
 3.   A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-4.   A user should be able to import up to 1000 persons from an external source without a noticeable sluggishness in performance for typical usage.
+4.   A user should be able to import up to 2000 persons from an external source without a noticeable sluggishness in performance for typical usage.
 5.   The application should provide comprehensive documentation and help resources to assist users in understanding how to use the software effectively.
-
 
 *{More to be added}*
 
@@ -1137,42 +1452,548 @@ testers are expected to do more *exploratory* testing.
 
 ### Launch and shutdown
 
-1. Initial launch
+#### Initial launch
 
-    1. Download the jar file and copy into an empty folder
+1. Download the jar file and copy into an empty folder.
+2. Open Terminal and type the following:
 
-    1. Double-click the jar file Expected: Shows the GUI with a set of sample persons. The window size may not be optimum.
+   ```bash
+   java -jar avengersassemble.jar
+   ```
 
-1. Saving window preferences
+Expected: Shows the GUI with a set of sample persons. The window size may not be optimal.
 
-    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
+#### Saving window preferences
 
-    1. Re-launch the app by double-clicking the jar file.<br>
-       Expected: The most recent window size and location is retained.
+1. Resize the window to an optimal size.
 
-1. _{ more test cases …​ }_
+2. Move the window to a different location.
 
-### Deleting a person
+3. Close the window.
 
-1. Deleting a person while all persons are being shown
+4. Re-launch the app.<br>
 
-    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+Expected: The most recent window size and location is retained.
 
-    1. Test case: `delete 1`<br>
-       Expected: First person is deleted from the list. Details of the deleted person shown in the status message. Timestamp in the status bar is updated.
+#### Shutdown
 
-    1. Test case: `delete 0`<br>
-       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+1. Type `exit` in the command box and press Enter.
 
-    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-       Expected: Similar to previous.
-
-1. _{ more test cases …​ }_
+Expected: The GUI closes and the application exits.
 
 ### Saving data
 
-1. Dealing with missing/corrupted data files
+#### Dealing with missing or corrupted data files
 
-    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+1. Prerequisites: The app is a clean state.
 
-1. _{ more test cases …​ }_
+2. Launch the app.
+
+3. Exit the app.
+
+4. Note the new `data/avengersassemble.json` file that is created. This is the storage file.
+
+5. Test case: Delete the `data/avengersassemble.json` file.
+
+    Expected: The app should create a new `data/avengersassemble.json` file populated with sample data when launched and exited.
+
+6. Test case: Corrupt the `data/avengersassemble.json` file by adding random text to it.
+
+    Expected: The app should ignore the corrupted file and create a new empty `data/avengersassemble.json` file when launched and interacted with.
+
+### Getting help
+
+1. Test case: `help`<br>
+
+   Expected: Link to the user guide is copied to the clipboard. Status message shows that the link has been copied. The link should be accessible from a browser.
+
+### Clearing all persons
+
+1. Prerequisites: Multiple persons in the list.
+
+2. Test case: `clear`<br>
+
+   Expected: All persons are deleted from the list. Status message shows the number of persons deleted.
+
+### Adding a person: `add`
+
+#### Adding a person with all fields
+
+1. Prerequisites: No persons in the list.
+
+2. Test case:
+
+    ```
+   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
+   ```
+
+   Expected: A person with the following fields is added to the list:
+
+   * Name: `Alice`
+   * Phone: `98765432`
+   * Address: `King Edward VII Hall E106`
+   * Email: `e09123456@u.nus.edu`
+   * Matric: `A1234567X`
+   * Reflection: `R2`
+   * Studio: `S1`
+   * Tags: `excelling`, `student`
+
+<box type="info" seamless>
+
+**Note:** If a `Matric` number is provided, the person is automatically tagged as a `student`.
+
+</box>
+
+3. Test case: (Missing compulsory `Email` and `Address` fields)
+
+    ```
+   add n|Alice e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
+   ```
+
+    Expected: An error message is shown indicating that the `Address` and `Phone` fields are missing.
+
+4. Other incorrect test cases to try: `add`, any other command that misses out a combination of compulsory fields.
+
+    Expected: Similar to previous.
+
+#### Adding a person with repeated prefixes
+
+1. Prerequisites: No persons in the list.
+
+2. Test case: (Repeated `n|` prefix)
+
+
+    ```
+    add n|Alice n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
+    ```
+
+    Expected: An error message is shown indicating that the `Name` field is repeated.
+
+3. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|` prefixes.
+
+    Expected: Similar to previous.
+
+#### Adding a person whose `Email` already exists
+
+1. Prerequisites: A person with email `e1234567@u.nus.edu` already exists in the list.
+
+2. Test case:
+
+    ```
+   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e1234567@u.nus.edu
+   ```
+
+    Expected: An error message is shown indicating that the email already exists.
+
+#### Adding a person with only compulsory fields
+
+1. Prerequisites: No persons in the list.
+
+2. Test case:
+
+    ```
+   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu
+   ```
+
+    Expected: A person with the following fields is added to the list:
+
+    * Name: `Alice`
+    * Phone: `98765432`
+    * Address: `King Edward VII Hall E106`
+    * Email: `e09123456@u.nus.edu`
+
+3. Other successful test cases include adding a person with only some optional fields.
+
+#### Adding a person with Matriculation number
+
+1. Prerequisites: No persons in the list.
+
+2. Test case:
+
+    ```
+   add n|Alice p|98765432 a|King Edward VII Hall E106 e|alice@example.com m|A1234567X
+    ```
+
+    Expected: A person with the following fields is added to the list:
+    * Name: `Alice`
+    * Phone: `98765432`
+    * Address: `King Edward VII Hall E106`
+    * Email: `alice@example.com`
+    * Matric: `A1234567X`
+    * Tags: `student`
+
+    Note that the `student` tag is automatically added to the new person.
+
+3. Test case:
+
+    ```
+   add n|Alice p|98765432 a|King Edward VII Hall E106 e|alice@example.com
+    ```
+
+    Expected: A person with the following fields is added to the list:
+   * Name: `Alice`
+   * Phone: `98765432`
+   * Address: `King Edward VII Hall E106`
+   * Email: `alice@example.com`
+
+    Note that there is no automatic tagging.
+
+### Editing a person: `edit`
+
+#### Editing a person with all fields
+
+1. Prerequisites: Start with the provided sample data.
+
+2. Test case:
+
+    ```
+    edit 1 n|new name p|123 a|new address e|newemail@example.com m|A0000000X r|R1 s|S1 t|tag1 t|tag2
+    ```
+
+   Expected: The first person’s details are updated with all the new values.
+
+3. Other successful test cases include a combination of updating some fields and not updating others.
+
+   Expected: Similar to previous.
+
+#### Editing a person with repeated prefixes
+
+1. Prerequisites: Start with the provided sample data.
+
+2. Test case: (Repeated `n|` prefix)
+
+    ```
+    edit 1 n|new name n|new name 2 p|123 a|new address
+    ```
+
+   Expected: An error message is shown indicating that the `Name` field is repeated.
+
+3. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|` prefixes.
+
+   Expected: Similar to previous.
+
+#### Editing a person whose `Email` already exists
+
+1. Prerequisites: Start with the provided sample data. Note the emails of the first and second person.
+
+2. Test case:
+
+    ```
+    edit 1 e|berniceyu@example.com
+    ```
+
+   Expected: An error message is shown indicating that the email already exists.
+
+### Deleting a person: `delete`
+
+#### Deleting a person while all persons are being shown
+
+1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+
+2. Test case: `delete 1`<br>
+
+   Expected: First person is deleted from the list. Details of the deleted person shown in the status message.
+
+3. Test case: `delete 0`<br>
+
+   Expected: No person is deleted. Error details shown in the status message.
+
+4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+
+   Expected: Similar to previous.
+
+#### Deleting a person while some persons are being shown
+
+1. Prerequisites: Filter persons using the `find` command. Multiple but not all persons in the list.
+
+2. Test case: `delete 1`<br>
+
+    Expected: First person in the filtered list is deleted. Details of the deleted person shown in the status message.
+
+3. Test case: `delete 0`<br>
+
+    Expected: No person is deleted. Error details shown in the status message.
+
+4. Other incorrect delete commands to try: `delete`, `delete x`<br>
+
+    Expected: Similar to previous.
+
+#### Deleting a person while no persons are being shown
+
+1. Prerequisites: Filter persons using the `find` command such that there are no persons in the list, or delete all persons with `clear`.
+
+2. Test case: `delete 1`<br>
+
+    Expected: No person is deleted. Error details shown in the status message.
+
+
+### Deleting shown persons: `deleteShown`
+
+#### Deleting a proper subset of all persons
+
+1. Prerequisites: Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
+
+2. Test case: `deleteShown`
+
+    Expected: All persons currently shown are deleted, and the list is updated to show all remaining persons.
+
+3. Other successful test cases: `deleteShown x`
+
+    Expected: Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
+
+#### Deleting all persons
+
+1. Prerequisites: Filter persons using the `find` command such that all persons are shown, or list all persons with `list`.
+
+2. Test case: `deleteShown`
+
+    Expected: An error is shown indicating that all persons cannot be deleted at once.
+
+3. Other incorrect test cases to try: `deleteShown x`
+
+    Expected: Similar to previous.
+
+### Listing all persons: `list`
+
+#### Starting with sample data
+
+1. Prerequisites: Start with the provided sample data.
+
+2. Test case: `list`
+
+    Expected: All persons are shown in the list.
+
+3. Other successful test cases: `list x`
+
+    Expected: Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
+
+#### Starting with a filtered list
+
+1. Prerequisites: Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
+
+2. Test case: `list`
+
+    Expected: All persons in the overall list are shown.
+
+### Finding a person
+
+#### Finding a person by contact details
+
+1. Prerequisites: Multiple persons in the list.
+
+2. Test case: `find n|Alice`<br>
+
+    Expected: Persons with the name "Alice" are shown. Status message shows the number of persons found.
+
+3. Test case: `find e|alice`<br>
+
+    Expected: Persons with emails that contain the word "alice" are shown. Status message shows the number of persons found.
+
+4. Test case: `find p|123`<br>
+
+    Expected: Persons with phone numbers that contain the digits "123" are shown. Status message shows the number of persons found.
+
+5. Test case: `find a|Ang Mo Kio`<br>
+
+    Expected: Persons with addresses that contain the word "Ang Mo Kio" are shown. Status message shows the number of persons found.
+
+5. Test case: `find t|student`<br>
+
+    Expected: Persons with the tag "student" are shown. Status message shows the number of persons found.
+
+6. Test case: `find m|A123`<br>
+
+    Expected: Persons with matriculation numbers containing "A123" are shown. Status message shows the number of persons found.
+
+7. Test case: `find r|R01`<br>
+
+    Expected: Persons with the reflection "R01" are shown. Status message shows the number of persons found.
+
+8. Test case: `find s|S01`<br>
+
+    Expected: Persons with the studio "S01" are shown. Status message shows the number of persons found.
+
+<box type="info" seamless>
+
+**Note:**
+* Search is not case sensitive
+* Finds persons with the **search parameter** that contains the given word (except reflection and studio, which must match exactly).
+* The search parameter can be any part of the person's details, e.g. name, email, etc. and is specified by the prefix.
+
+</box>
+
+#### Finding by score
+
+1. Prerequisites: Multiple persons in the list. Persons with scores. Exam must be selected.
+
+2. Test case: `find lt|50`<br>
+
+    Expected: Persons with scores less than 50 are shown. Status message shows the number of persons found.
+
+3. Test case: `find mt|50`<br>
+
+    Expected: Persons with scores more than 50 are shown. Status message shows the number of persons found.
+
+4. Test case: `find lt|-1`<br>
+
+    Expected: An error message is shown indicating that the `score` provided is invalid.
+
+5. Test case: `find mt|101`<br>
+
+    Expected: An error message is shown indicating that the `score` provided is greater than the maximum score of the selected exam. (Assuming the maximum score is 100)
+
+<box type="info" seamless>
+
+**Note:**
+* The range of scores searched is exclusive of the given score. E.g. `find lt|50` will not include persons with a score of 50.
+* You can search for scores from 0 to the maximum score of the selected exam, inclusive.
+
+</box>
+
+#### Finding by multiple prefixes
+
+1. Prerequisites: Multiple persons in the list.
+
+2. Test case: `find n|Alice e|Alice`<br>
+
+    Expected: An error message is shown indicating that the format of the command is incorrect.
+
+3. Other incorrect test cases to try: any combination of two or more unique prefixes<br>
+
+    Expected: Similar to previous.
+
+4. Test case: `find n|Alice n|Bob`<br>
+
+    Expected: An error message is shown indicating that the prefix `n` is duplicated.
+
+5. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|`, `mt|`, `lt|` prefixes.
+
+    Expected: Similar to previous.
+
+### Copying emails
+
+#### Copying emails of all persons
+
+1. Prerequisites: Multiple persons in the list. Use the `list` command to display all persons.
+
+2. Test case: `copy`<br>
+
+    Expected: All emails are copied to the clipboard. Status message shows the number of emails copied.
+
+#### Copying emails of a specific group
+
+1. Prerequisites: Multiple persons in the list, filtered by a specific criteria using the `find` command.
+
+2. Test case: `copy`<br>
+
+    Expected: All emails of the currently displayed persons are copied to the clipboard. Status message shows the number of emails copied.
+
+<box type="info" seamless>
+
+**Note:**
+* If no persons are displayed, an error message is shown.
+
+</box>
+
+### Importing Exam Scores: `importExamScores`
+
+#### Importing exam scores from a CSV file
+
+1. Prerequisites: Start with sample data.
+
+2. Add an `Exam` to the sample data:
+
+    ```
+    addExam n|Midterm s|100
+    ```
+
+3. Create a CSV file with the following content:
+
+    Contents of `/path/to/file.csv`:
+
+    ```
+    email,Exam:Midterm
+    alexyeoh@example.com,50
+    ```
+
+4. Test case: `importExamScores /path/to/file.csv`
+
+    Expected: The person with the email of `alexyeoh@example.com` now has a `Midterm` score of `50`.
+
+#### Importing an invalid file
+
+1. Prerequisites: Start with sample data and the `Midterm` exam.
+
+2. Create a file named `invalid.json`.
+
+3. Test case: `importExamScores invalid.json`
+
+    Expected: An error message is shown indicating that the file is not a CSV file.
+
+#### Importing a CSV file with incorrect formatting
+
+1. Prerequisites: Start with sample data and the `Midterm` exam.
+
+2. Create a CSV file with the following content:
+
+    Contents of `/path/to/file.csv`:
+
+    ```
+    email,Exam:Midterm,email
+    alexyeoh@example.com,50,alexyeoh@example.com
+    ```
+
+3. Test case: `importExamScores /path/to/file.csv`
+
+    Expected: An error message is shown indicating that the email header should exist only in the first column.
+
+4. Other incorrect test cases to try: CSV files where email is not the first header.
+
+    Expected: Similar to previous.
+
+#### Importing a CSV file with duplicate entries
+
+1. Prerequisites: Start with sample data and the `Midterm` exam.
+
+2. Create a CSV file with the following content:
+
+    Contents of `/path/to/file.csv`:
+
+    ```
+    email,Exam:Midterm,Exam:Midterm
+   alexyeoh@example.com,50,60
+    ```
+
+3. Test case: `importExamScores /path/to/file.csv`
+
+    Expected: A message is shown indicating that there are duplicate entries in the CSV file, and only the first instance has been kept. The `Midterm` score for the person with the email of `alexyeoh@example.com` is `50`.
+
+#### Importing a CSV file with invalid entries
+
+1. Prerequisites: Start with sample data and the `Midterm` exam.
+
+2. Create a CSV file with the following content:
+
+    Contents of `/path/to/file.csv`:
+
+    ```
+    email,Exam:Midterm,Exam:Finals
+    alexyeoh@example.com,101,50
+    berniceyu@example.com,50,60
+    nonexistent@example.com,100,100
+    ```
+
+3. Test case: `importExamScores /path/to/file.csv`
+
+    Expected: A message is shown indicating that there are invalid entries in the CSV file, and all other valid entries have been imported. The errors shown are as follows:
+
+    * The score for `alexyeoh@example.com` for the `Midterm` exam is invalid.
+    * The person with the email `nonexistent@example.com` does not exist in the given list.
+    * The `Finals` exam does not exist.
+
+    Note that the `Midterm` score for the person with the email of `berniceyu@example.com` is `50`.
+
+4. Other incorrect test cases to try: CSV files with a mix of invalid scores, nonexistent emails, and nonexistent exams.
+
+    Expected: Similar to previous.
+

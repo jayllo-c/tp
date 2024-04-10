@@ -2,6 +2,16 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LESS_THAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MATRIC_NUMBER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MORE_THAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REFLECTION;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDIO;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -21,6 +31,10 @@ public class FindCommandParser implements Parser<FindCommand> {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, FindCommand.ACCEPTED_PREFIXES);
+
+        argMultimap.verifyNoDuplicatePrefixesFor(
+                PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_MATRIC_NUMBER, PREFIX_STUDIO,
+                PREFIX_REFLECTION, PREFIX_TAG, PREFIX_LESS_THAN, PREFIX_MORE_THAN);
 
         Prefix prefix = extractPrefixForFindCommand(argMultimap);
         String keyword = extractValidKeyword(argMultimap, prefix);
