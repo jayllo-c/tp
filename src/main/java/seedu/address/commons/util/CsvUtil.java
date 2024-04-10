@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -71,13 +69,17 @@ public class CsvUtil {
         String errorMsgs = "";
         try {
             CSVReader reader = new CSVReaderBuilder(new FileReader(filePath.toString())).build();
-            List<String> headers = List.of(reader.readNext()); // first line should be headers
-            List<Integer> columnsToSkip = columnsToSkip(headers, compulsoryParameters, optionalParameters);
-            List<String[]> rows = reader.readAll();
-            Pair<List<Map<String, String>>, String> result = parseData(rows, headers, columnsToSkip);
-            data = result.getKey();
-            errorMsgs = result.getValue();
-            nullableData = Optional.of(data);
+            Optional<String[]> headers = Optional.ofNullable(reader.readNext()); // first line should be headers
+            if (headers.isPresent()) {
+                List<String> headersList = List.of(headers.get());
+                List<Integer> columnsToSkip = columnsToSkip(headersList, compulsoryParameters, optionalParameters);
+                List<String[]> rows = reader.readAll();
+                Pair<List<Map<String, String>>, String> result = parseData(rows, headersList, columnsToSkip);
+                data = result.getKey();
+                errorMsgs = result.getValue();
+                nullableData = Optional.of(data);
+            }
+
             return new Pair<>(nullableData, errorMsgs);
         } catch (DataLoadingException | CsvException e) {
             return new Pair<>(nullableData, e.getMessage());
@@ -98,10 +100,20 @@ public class CsvUtil {
             throws DataLoadingException {
         // first check if the compulsory parameters are present in the header
         checkCompulsoryParameters(compulsoryParameters, headers);
-        return IntStream.range(0, headers.size())
-                .filter(i ->
-                        !compulsoryParameters.contains(headers.get(i)) && !optionalParameters.contains(headers.get(i)))
-                .boxed().collect(Collectors.toList());
+        List<Integer> columnsToSkip = new ArrayList<>();
+        HashSet<String> uniqueHeaders = new HashSet<>();
+        for (int i = 0; i < headers.size(); i++) {
+            if ((!compulsoryParameters.contains(headers.get(i))
+                    && !optionalParameters.contains(headers.get(i)))
+                    | uniqueHeaders.contains(headers.get(i))) {
+                columnsToSkip.add(i);
+            } else {
+                uniqueHeaders.add(headers.get(i));
+            }
+
+        }
+
+        return columnsToSkip;
     }
 
     /**

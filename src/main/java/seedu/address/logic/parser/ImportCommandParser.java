@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_IMPORT;
 
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 
 import seedu.address.logic.commands.ImportCommand;
@@ -15,6 +16,8 @@ import seedu.address.logic.parser.exceptions.ParseException;
 public class ImportCommandParser implements Parser<ImportCommand> {
 
     private static final String MESSAGE_NOT_CSV = "File %s is not a csv file \nImport command only accepts csv files";
+
+    private static final String MESSAGE_INVALID_PATH = "Invalid file path: %s";
     /**
      * Parses the given {@code String} of arguments in the context of the {@code RemarkCommand}
      * and returns a {@code RemarkCommand} object for execution.
@@ -29,11 +32,16 @@ public class ImportCommandParser implements Parser<ImportCommand> {
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportCommand.MESSAGE_USAGE));
         }
+        Path path;
+        try {
+            path = ParserUtil.parseFilePath(argMultimap.getValue(PREFIX_IMPORT).orElse(""));
+        } catch (InvalidPathException e) {
+            throw new ParseException(String.format(MESSAGE_INVALID_PATH, e.getReason()));
+        }
 
-        Path path = ParserUtil.parseFilePath(argMultimap.getValue(PREFIX_IMPORT).orElse(""));
 
         if (!isCsvFile(path)) {
-            throw new ParseException(String.format(MESSAGE_NOT_CSV, path.toString()));
+            throw new ParseException(String.format(MESSAGE_NOT_CSV, path));
         }
         return new ImportCommand(path);
     }
