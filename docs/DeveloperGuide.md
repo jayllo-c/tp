@@ -644,8 +644,6 @@ This design allows for easy extension to accommodate future enhancements or addi
 
 <br>
 
-----------------------------------------------------------------------------------------------------
-
 ### **Exam Features**
 
 There are 4 main commands that are used to interact with the exam feature: `addExam`, `deleteExam`, `selectExam` and `deselectExam`.
@@ -783,7 +781,82 @@ The design of the exam feature allows for easy extension to accommodate future e
 
 <br>
 
-#### **Exam Statistics Feature**
+### **Exam Score Features**
+
+There are 3 main commands that are used to interact with exam scores of each person: `addScore`, `editScore` and `deleteScore`.
+
+<br>
+
+#### **Add Score Command** : `addScore`
+
+The `addScore` command allows users to add a score for an exam to a person displayed in the application.
+The user should select the exam they want to add a score for, then specify the index of the person they want to add a score for, and the score they want to add.
+The score is then stored in a hashmap named `scores` within the `Person` object in the `Model` component.
+This hashmap maps the selected exam (an `Exam` object) to the specified score (a `Score` object).
+
+##### Parsing User Input
+
+The `AddScoreCommandParser` is responsible for parsing the user input to extract the index of the person in the displayed list to add a score to, and the score to add.
+It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `index` and `score`.
+It also ensures that the `index` and `score` input value is valid, and that there are no duplicate prefixes in the user input.
+The `index` and `score` is then used in instantiating the `AddScoreCommand` by the `AddScoreCommandParser`.
+
+##### Executing the Command
+
+The `execute` method in `AddScoreCommand` retrieves the `filteredPersons` list in `Model`, and validates the target index against the list of filtered persons to ensure it is not out of bounds.
+It then fetches the person to add the score for based on the target index.
+It also retrieves the currently selected exam from the `Model`, and validates that the score to be added is not more than the maximum score of the selected exam.
+It adds the score to the person's existing `scores` hashmap using the `addExamScoreToPerson` method in the `Model`.
+
+<br>
+
+#### **Editing Score Command** : `editScore`
+
+The `editScore` command allows users to edit a score for an exam of a person displayed in the application.
+The user should select the exam they want to edit the score for, then specify the index of the person they want to edit the score for, and the new score they want to edit to.
+The updated score is then stored in a hashmap named `scores` within the `Person` object in the `Model` component.
+This hashmap maps the selected exam (an `Exam` object) to the updated specified score (a `Score` object).
+
+##### Parsing User Input
+
+The `EditScoreCommandParser` is responsible for parsing the user input to extract the index of the person in the displayed list to edit the score for, and the new score to edit to.
+It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `index` and `score`.
+It also ensures that the `index` and `score` input value is valid, and that there are no duplicate prefixes in the user input.
+The `index` and `score` is then used in instantiating the `EditScoreCommand` by the `EditScoreCommandParser`.
+
+##### Executing the Command
+
+The `execute` method in `EditScoreCommand` retrieves the `filteredPersons` list in `Model`, and validates the target index against the list of filtered persons to ensure it is not out of bounds.
+It then fetches the person to edit the score for based on the target index.
+It also retrieves the currently selected exam from the `Model`, and validates that the score to be added is not more than the maximum score of the selected exam.
+It updates the score for the selected exam in the person's existing `scores` hashmap using the `addExamScoreToPerson` method in `Model`.
+
+<br>
+
+#### **Deleting Score Command** : `deleteScore`
+
+The `deleteScore` command allows users to delete a score for an exam from a person displayed in the application.
+The user should select the exam they want to delete the score for, then specify the index of the person they want to delete the score for.
+The key-value pair (exam-score) is removed from the `scores` hashmap within the `Person` object.
+This operation removes both the selected exam (key) and the score (value), effectively deleting the score from `Person`.
+
+##### Parsing User Input
+
+The `DeleteScoreCommandParser` is responsible for parsing the user input to extract the index of the person in the displayed list to delete the score for.
+It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `index`.
+It also ensures that the `index` is valid, and that there are no duplicate prefixes (i.e. there is only one `index` value) in the user input.
+The `index` is then used in instantiating the `DeleteScoreCommand` by the `DeleteScoreCommandParser`.
+
+##### Executing the Command
+
+The `execute` method in `DeleteScoreCommand` retrieves the `filteredPersons` list in `Model`, and validates the target index against the list of filtered persons to ensure it is not out of bounds.
+It then fetches the person to delete the score for based on the target index.
+It also retrieves the currently selected exam from the `Model`.
+It removes the score for the selected exam in the person's existing `scores` hashmap using the `removeExamScoreFromPerson` method in `Model`.
+
+<br>
+
+### **Exam Statistics Feature**
 
 The exam statistics feature allows users to view the mean and median scores of the selected exam. The statistics are displayed in the `StatusBarFooter` element of the UI on the right side.
 
@@ -1481,6 +1554,8 @@ Expected: The most recent window size and location is retained.
 
 Expected: The GUI closes and the application exits.
 
+<br>
+
 ### Saving data
 
 #### Dealing with missing or corrupted data files
@@ -1895,6 +1970,48 @@ Expected: The GUI closes and the application exits.
 
 </box>
 
+<br>
+
+### Exporting Data to a CSV File
+
+**Command:** `export`<br>
+**More information on usage:** <a href="UserGuide.md#export">Exporting Data to a CSV File</a>
+
+1. Exporting data while all persons are displayed.
+
+    * **Prerequisites:**
+        * Start with the provided sample data.
+        * List all persons using the `list` command.
+          <br><br>
+    * **Test case:** `export`<br>
+      **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file.
+      <br><br>
+
+2. Exporting data while person list is filtered.
+
+    * **Prerequisites:**
+        * Start with the provided sample data.
+        * Filter the person list using the `find` command.
+          <br><br>
+    * **Test case:** Similar to previous.<br>
+      **Expected:** Similar to previous.
+      <br><br>
+
+3. Exporting data with exams and exam scores added.
+
+    * **Prerequisites:**
+        * Start with the provided sample data.
+        * Add an exam using the `addExam` command. For this example, we shall add an exam with name `Test Exam`.
+        * List all persons using the `list` command.
+          <br><br>
+    * **Test case:** `export`<br>
+      **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file. A column with column heading `Exam:Test Exam` is present in the same CSV file, but no values present in that column.
+      <br><br>
+    * **Test case:** Add exam scores to persons in displayed list using `addScore`, then `export`<br>
+      **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file. A column with column heading `Exam:Test Exam` is present in the same CSV file, with corresponding exam scores for each person included in that column.
+
+<br>
+
 ### Importing Exam Scores: `importExamScores`
 
 #### Importing exam scores from a CSV file
@@ -1997,3 +2114,251 @@ Expected: The GUI closes and the application exits.
 
     Expected: Similar to previous.
 
+<br>
+
+
+### Adding a Persons's Exam Score
+
+**Command:** `addScore`<br>
+**More information on usage:** <a href="UserGuide.md#addscore">Adding an Exam Score</a>
+
+1. Adding a score to a person while all persons are displayed.
+
+    * **Prerequisites:**
+        * Ensure at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
+        * Ensure an exam is selected using the `selectExam` command. For this example, we shall select `test exam` from above.
+        * Ensure all persons are displayed using the `list` command.
+          <br><br>
+    * **Test case:** `addScore 1 s|100`<br>
+      **Expected:** A score of `100` is added to the first person in the list of displayed persons. The score and the name of the corresponding person will be shown in the status message.
+      <br><br>
+    * **Test case:** `addScore 2 s|50.25`<br>
+      **Expected:** A score of `50.25` is added to the second person in the list of displayed persons.The score and the name of the corresponding person will be shown in the status message.
+      <br><br>
+    * **Test case (invalid index input):** `addScore 0 s|100`<br>
+      **Expected:** No score is added to any persons. Error details are shown in the status message.
+      <br><br>
+    * **Test case (no index input):** `addScore s|100`<br>
+      **Expected:** No score is added to any persons. Error details are shown in the status message.
+      <br><br>
+    * **Test case (no score input):** `addScore 3 s|`<br>
+      **Expected:** No score is added to any persons. Error details are shown in the status message.
+      <br><br>
+    * **Test case (score larger than maximum score is input):** `addScore 3 s|101`<br>
+      **Expected:** No score is added to any persons. Error details are shown in the status message.
+      <br><br>
+    * **Test case (negative score input):** `addScore 3 s|-50`<br>
+      **Expected:** No score is added to any persons. Error details are shown in the status message.
+      <br><br>
+    * **Test case (person already contains a score):** `addScore 1 s|50.25`<br>
+      **Expected:** No score is added to any persons. Error details are shown in the status message.
+      <br><br>
+    * **Other incorrect `addScore` commands to try:** `addScore`, `addScore INDEX s|100` (where `INDEX` is larger than the list size), `addScore 3 s|SCORE` (where `SCORE` is non-numeric, is less than 0, more than the maximum score of the selected exams, and/or has more than 2 digits in its fractional part)<br>
+      **Expected:** No score is added to any persons. Error details are shown in the status message.
+      <br><br>
+
+2. Adding a score to a person while person list is filtered.
+
+    * **Prerequisites:**
+        * Ensure at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
+        * Ensure an exam is selected using the `selectExam` command. For this example, we shall select `test exam` from above.
+        * Filter the person list using the `find` command.
+          <br><br>
+    * **Test case:** Similar to previous.<br>
+      **Expected:** Similar to previous.
+
+<br>
+
+### Editing a Person's Exam Score
+
+**Command:** `editScore`<br>
+**More information on usage:** <a href="UserGuide.md#editscore">Editing an Exam Score</a>
+
+1. Editing a score of a person while all persons are displayed.
+
+    * **Prerequisites:**
+        * Ensure at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
+        * Ensure an exam is selected using the `selectExam` command. For this example, we shall select `test exam` from above.
+        * Ensure all persons are displayed using the `list` command.
+        * Ensure that one person in the list has a score for the selected exam using the `addScore` command. For this example, we shall add a score of `100` to the first person in the list.
+          <br><br>
+    * **Test case:** `editScore 1 s|90`<br>
+      **Expected:** The score of `100` is edited to `90` for the first person in the list of displayed persons. The score and the details of the corresponding person will be shown in the status message.
+      <br><br>
+    * **Test case (invalid index input):** `editScore 0 s|90`<br>
+      **Expected:** No person's score is edited. Error details are shown in the status message.
+      <br><br>
+    * **Test case (no index input):** `editScore s|90`<br>
+      **Expected:** No person's score is edited. Error details are shown in the status message.
+      <br><br>
+    * **Test case (no score input):** `editScore 1 s|`<br>
+      **Expected:** No person's score is edited. Error details are shown in the status message.
+      <br><br>
+    * **Test case (score larger than maximum score is input):** `editScore 1 s|101`<br>
+      **Expected:** No score is added to any persons. Error details are shown in the status message.
+      <br><br>
+    * **Test case (person does not contain any score):** `editScore 2 s|90`<br>
+      **Expected:** No score is added to any persons. Error details are shown in the status message.
+      <br><br>
+    * **Other incorrect `editScore` commands to try:** `editScore`, `editScore INDEX s|90` (where `INDEX` is larger than the list size), `editScore 1 s|SCORE` (where `SCORE` is non-numeric, is less than 0, more than the maximum score of the selected exams, and/or has more than 2 digits in its fractional part)<br>
+      **Expected:** No score is added to any persons. Error details are shown in the status message.
+      <br><br>
+
+2. Editing a score of a person while person list is filtered.
+
+    * **Prerequisites:**
+        * Ensure at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
+        * Ensure an exam is selected using the `selectExam` command. For this example, we shall select `test exam` from above.
+        * Filter the person list using the `find` command.
+        * Ensure that one person in the list has a score for the selected exam using the `addScore` command. For this example, we shall add a score of `100` to the first person in the list.
+          <br><br>
+    * **Test case:** Similar to previous.<br>
+      **Expected:** Similar to previous.
+
+<br>
+
+### Deleting a Person's Exam Score
+
+**Command:** `deleteScore`<br>
+**More information on usage:** <a href="UserGuide.md#deletescore">Deleting an Exam Score</a>
+
+1. Deleting a score of a person while all persons are displayed.
+
+    * **Prerequisites:**
+        * Ensure at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
+        * Ensure an exam is selected using the `selectExam` command. For this example, we shall select `test exam` from above.
+        * Ensure all persons are displayed using the `list` command.
+        * Ensure that one person in the list has a score for the selected exam using the `addScore` command. For this example, we shall add a score of `100` to the first person in the list.
+          <br><br>
+    * **Test case:** `deleteScore`<br>
+      **Expected:** The score of `100` is deleted from the first person in the list of displayed persons. The details of the corresponding person will be shown in the status message.
+      <br><br>
+    * **Test case (invalid index input):** `deleteScore 0`<br>
+      **Expected:** No person's score is deleted. Error details are shown in the status message.
+      <br><br>
+    * **Test case (person does not contain any score):** `deleteScore 2`<br>
+      **Expected:** No person's score is deleted. Error details are shown in the status message.
+      <br><br>
+    * **Other incorrect `deleteScore` commands to try:** `deleteScore`, `deleteScore INDEX` (where `INDEX` is larger than the list size)<br>
+      **Expected:** No person's score is deleted. Error details are shown in the status message.
+      <br><br>
+
+2. Deleting a score of a person while person list is filtered.
+
+    * **Prerequisites:**
+        * Ensure at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
+        * Ensure an exam is selected using the `selectExam` command. For this example, we shall select `test exam` from above.
+        * Filter the person list using the `find` command.
+        * Ensure that one person in the list has a score for the selected exam using the `addScore` command. For this example, we shall add a score of `100` to the first person in the list.
+          <br><br>
+    * **Test case:** Similar to previous.<br>
+      **Expected:** Similar to previous.
+
+<br>
+
+### Mean and Median of Exam Scores
+
+**More information on usage:** <a href="UserGuide.md#mean-and-median">Mean and Median of Exam Scores</a>
+
+1. Mean and median of exam scores while all persons are displayed.
+
+    * **Prerequisites:**
+        * Ensure at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
+        * Ensure an exam is selected using the `selectExam` command. For this example, we shall select `test exam` from above.
+        * Ensure all persons are displayed using the `list` command.
+          <br><br>
+    * **Initially, no scores added to any persons in the list**<br>
+      **Expected:** "No scores available" is displayed at the bottom, right corner of the GUI.
+      <br><br>
+    * **Use `addScore` to add a score of `50` to the first person in the list**<br>
+      **Expected:** A mean score of `50` and a median score of `50` is displayed at the bottom, right corner of the GUI.
+      <br><br>
+    * **Use `addScore` to add a score of `25` to the second person in the list and a score of `27.7` to the third person in the list**<br>
+      **Expected:** the calculated mean value of the three scores (rounded to two decimal places), `50`, `25` and `27.7`, and the median of the three scores, are displayed at the bottom, right corner of the GUI.
+
+<br>
+
+<div id="appendix-effort"></div>
+
+## **Appendix: Effort**
+
+This sections aims to showcase the effort put into Avengers Assemble by our team. 
+We will highlight the difficulty level, challenges faced, and effort required in this project.
+
+<br>
+
+### Difficulty Level
+
+On top of the `Person` entity originally implemented by AB3, Avengers Assemble also incorporates an additional entity of 
+`Exam`, with `Score` serving as a connection between the two entities.
+With this additional entity added, considerations had to be made regarding the implementation of  
+different features, interactions between each entity, and the management and storage of these 
+entities.
+
+Moreover, in addition to enhancing the original features of AB3 to cater to our target users, Avengers Assemble also introduces
+many new commands to improve the usability of our application, as well as to handle the diverse behaviours and interactions
+of `Person` and `Exam`.
+
+<br>
+
+### Challenges Faced
+
+#### Considerations for Exam Features
+
+**Limited User Interface Space for Score Interaction**<br>
+With the introduction of exam scores, we were presented with the challenge of designing a user-friendly interface for score
+interaction within the limited screen space. We had to devise intuitive methods for users to view, input and manage the scores
+of various exams, without overwhelming the interface.
+
+**Selection System for Exams**<br>
+A key consideration in the development of Avengers Assemble was the implementation of the selection system for exams.
+This feature was introduced to complement the exam score functionality. With this feature, users are able to focus on scores
+for a specific exam, instead of viewing all scores simultaneously. This decision was made to prevent over-cluttering the 
+user interface and to enhance user experience.
+
+**Data Management for Exams and Scores**<br>
+Integrating the `Exam` entity into Avengers Assemble...(might need some input on this part).
+`Exam` entity required additional and separate handling storage
+
+<br>
+
+### Effort Required
+
+#### Enhancements to Existing Features
+
+**Addition of New Fields to Persons**<br>
+New fields such as recitation, studio, matriculation number, was added to persons to align with the context of our application.
+
+**Find**<br>
+Our team improved on the existing `find` command of AB3 to allow for more flexibility. With the new improvements, users
+can now find not only based on the name field of persons, but also specify their search based on other fields such as 
+`email` and `recitation`. With the addition of the exam score features, we also adapted our `find` command to allow users 
+to filter out persons less than or more than a specified score, revamping the way `find` is used and handled.
+
+**Automatic Tagging of Persons**<br>
+In the context of our application, it is mainly used to store students', instructors' and teaching assistants' contacts.
+Hence, on top of the original behaviour of the tag feature, we adapted it to automatically tag contacts with a 
+matriculation number as students.
+
+**User Interface**<br>
+Enhancements were made to the user interface...(johan can add here?)
+
+#### New Features
+
+**Copy**<br>
+Our team introduced a new copy command which allows for users to copy the email addresses of the currently displayed persons. 
+This is to cater to the context of our application, assisting head tutors with the task of making mass announcements.
+
+**Import and Export**<br>
+To facilitate the handling and managing of large amounts of information, our group introduced the import and export feature to
+allow for flexible data movement externally and internally.
+
+**Exams and Exams Scores**<br>
+The implementation of the exam and exam score features was the most significant addition to our application, requiring adjustments to existing features and the 
+introduction of many new commands to handle and manage the addition of exams and exam features.
+
+<br>
+
+### Achievements
+Overall, our group successfully implemented the planned features while addressing bugs and managing potential feature flaws. 
+Despite initial hesitations about implementing significant new features like exams and exam scores, we overcame the challenge and achieved our goals.
