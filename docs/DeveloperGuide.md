@@ -22,7 +22,7 @@ Features related to the creation and reading of CSV files were made possible thr
 
 <div id="setting-up"></div>
 
-## **Setting up, getting started**
+## **Setting Up, Getting Started**
 
 Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
@@ -78,7 +78,7 @@ The sections below give more details of each component.
 
 <div id="ui-component"></div>
 
-### UI component
+### UI Component
 
 The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
 
@@ -127,7 +127,7 @@ One of our main goals was to make our codebase easy to understand and maintain, 
 
 <div id="logic-component"></div>
 
-### Logic component
+### Logic Component
 
 **API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
 
@@ -210,13 +210,13 @@ The `Model` component,
 
 <div id="storage-component"></div>
 
-### Storage component
+### Storage Component
 
 **API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
 
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
-#### Saving of data
+#### Saving of Data
 
 The `Storage` component uses the `Jackson` library to convert objects to JSON format. The conversion methods are predefined in the `JsonAdapted*` classes for their corresponding objects.
 
@@ -228,7 +228,7 @@ The sequence diagram below illustrates how data is saved within the `Storage` co
 
 <puml src="diagrams/StorageSequenceDiagram.puml" alt="Sequence Diagram for the `Storage` Component" />
 
-#### Loading of data
+#### Loading of Data
 
 When the application is initialised, the `Storage` component reads the JSON objects from the save file and converts them back to objects that can be used to initialise the `Model` component. This is done using the `readJsonFile` method of the `JsonUtil` class which utilises the methods defined in the `JsonAdapted*` classes to convert the saved JSON data back to objects that can be used by the `Model` component.
 
@@ -244,7 +244,7 @@ In summary, the `Storage` component:
 
 <br>
 
-### Common classes
+### Common Classes
 
 Classes used by multiple components are in the `seedu.addressbook.commons` package.
 These classes provide utility functions that are used across different components such as
@@ -310,7 +310,7 @@ The parsing is detailed as follows:
 
 ##### Design Considerations
 
-**Use of `Email` field as Unique Identifier** <br>
+**Use of `Email` Field as Unique Identifier** <br>
 
 We have chosen to use the `Email` field as a unique identifier. Due to the real-world implementation of email addresses, and specifically in NUS, email addresses are unique to each person. This allows for easy identification of persons and prevents the creation of duplicate persons with the same email address.
 
@@ -1035,7 +1035,7 @@ For example, an extreme case will be to search for persons with the `Name` field
 
 <br>
 
-#### UI: Wrap text on result box so only 1 scrollbar is needed
+#### Update UI to Wrap Text
 
 Currently, the `ResultDisplay` box does not wrap text, which means that long lines of text will extend beyond the width of the box. This results in the need for two scrollbars, a horizontal one for the result box and a vertical one for the currently shown list of persons. This is not ideal as it makes the UI less optimized for the target audience, who prefer using a CLI-optimized application and prefer not to use mouse controls to scroll through scrollboxes.
 
@@ -1075,7 +1075,7 @@ Retain all other relevant `Tag` objects like `colleagues` and `student` to bette
 
 --------------------------------------------------------------------------------------------------------------------
 
-## **Documentation, logging, testing, configuration, dev-ops**
+## **Documentation, Logging, Testing, Configuration, Dev-ops**
 
 * [Documentation guide](Documentation.md)
 * [Testing guide](Testing.md)
@@ -1087,7 +1087,7 @@ Retain all other relevant `Tag` objects like `colleagues` and `student` to bette
 
 ## **Appendix**
 
-### Appendix A: Product scope
+### Appendix A: Product Scope
 
 **Target user profile**:
 
@@ -1115,13 +1115,13 @@ Retain all other relevant `Tag` objects like `colleagues` and `student` to bette
 * Able to set up the address book through different data-loading options
 * Able to assist with management of large scale communication
 
-**Problem Scope**:
+**Problem scope**:
 
 * The CS1101S Head Tutor will face challenges in effectively organising and managing contact information within the department due to the large scale the course has to operate on. Existing methods, such as paper-based lists or basic digital spreadsheets, lack the necessary functionality to efficiently handle the diverse needs of proper contact management. There is a need for a user-friendly and offline-capable address book solution tailored specifically to the needs of a single user. This address book system should provide features such as easy contact entry and editing, quick search functionality, customizable categorization options, and the ability to add notes for each contact. Additionally, it should operate offline without requiring an internet connection and should not rely on complex database management systems.
 * While the address book system will greatly improve contact management and organisation for the CS1101S Head Tutor, it will not address broader departmental communication or collaboration needs beyond individual contact management since the address book is designed to be a single-user system. It will not facilitate communication between users or provide collaboration tools for group projects or tasks. Additionally, the address book system will not handle complex data analysis or reporting functions beyond basic contact information management. Finally, while the system will provide offline functionality, it will not offer real-time synchronisation with online databases or cloud storage solutions.
 
 
-### Appendix B: User stories
+### Appendix B: User Stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
@@ -1165,7 +1165,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | head tutor using the app                    | view statistics of scores              | analyse student performance                                             |
 
 
-### Appendix C: Use cases
+### Appendix C: Use Cases
 
 (For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
 
@@ -1655,9 +1655,9 @@ testers are expected to do more *exploratory* testing.
 
 </box>
 
-#### Launch and shutdown
+#### Launch and Shutdown
 
-##### Initial launch
+##### Initial Launch
 
 1. Download the jar file and copy into an empty folder.
 2. Open Terminal and type the following:
@@ -1668,7 +1668,7 @@ testers are expected to do more *exploratory* testing.
 
 Expected: Shows the GUI with a set of sample persons. The window size may not be optimal.
 
-##### Saving window preferences
+##### Saving Window Preferences
 
 1. Resize the window to an optimal size.
 
@@ -1690,7 +1690,7 @@ Expected: The GUI closes and the application exits.
 
 #### Saving data
 
-##### Dealing with missing or corrupted data files
+##### Dealing with Missing or Corrupted Data Files
 
 1. Prerequisites: The app is a clean state.
 
@@ -1708,13 +1708,13 @@ Expected: The GUI closes and the application exits.
 
     Expected: The app should ignore the corrupted file and create a new empty `data/avengersassemble.json` file when launched and interacted with.
 
-#### Getting help
+#### Getting Help
 
 1. Test case: `help`<br>
 
    Expected: Link to the user guide is copied to the clipboard. Status message shows that the link has been copied. The link should be accessible from a browser.
 
-#### Clearing all Persons and Exams
+#### Clearing all Persons and Exams: `clear`
 
 1. Prerequisites: Multiple persons in the list.
 
@@ -1722,9 +1722,434 @@ Expected: The GUI closes and the application exits.
 
    Expected: All persons are deleted from the list. Status message shows the number of persons deleted.
 
+<br>
+
+#### Adding a Person: `add`
+
+##### Adding a Person with all fields
+
+1. Prerequisites: No persons in the list.
+
+2. Test case:
+
+    ```
+   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
+   ```
+
+   Expected: A person with the following fields is added to the list:
+
+   * Name: `Alice`
+   * Phone: `98765432`
+   * Address: `King Edward VII Hall E106`
+   * Email: `e09123456@u.nus.edu`
+   * Matric: `A1234567X`
+   * Reflection: `R2`
+   * Studio: `S1`
+   * Tags: `excelling`, `student`
+
+<box type="info" seamless>
+
+**Note:** If a `Matric` number is provided, the person is automatically tagged as a `student`.
+
+</box>
+
+3. Test case: (Missing compulsory `Email` and `Address` fields)
+
+    ```
+   add n|Alice e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
+   ```
+
+    Expected: An error message is shown indicating that the `Address` and `Phone` fields are missing.
+
+4. Other incorrect test cases to try: `add`, any other command that misses out a combination of compulsory fields.
+
+    Expected: Similar to previous.
+
+##### Adding a Person with repeated prefixes
+
+1. Prerequisites: No persons in the list.
+
+2. Test case: (Repeated `n|` prefix)
+
+
+    ```
+    add n|Alice n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
+    ```
+
+    Expected: An error message is shown indicating that the `Name` field is repeated.
+
+3. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|` prefixes.
+
+    Expected: Similar to previous.
+
+##### Adding a Person whose `Email` already exists
+
+1. Prerequisites: A person with email `e1234567@u.nus.edu` already exists in the list.
+
+2. Test case:
+
+    ```
+   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e1234567@u.nus.edu
+   ```
+
+    Expected: An error message is shown indicating that the email already exists.
+
+##### Adding a Person with only compulsory fields
+
+1. Prerequisites: No persons in the list.
+
+2. Test case:
+
+    ```
+   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu
+   ```
+
+    Expected: A person with the following fields is added to the list:
+
+    * Name: `Alice`
+    * Phone: `98765432`
+    * Address: `King Edward VII Hall E106`
+    * Email: `e09123456@u.nus.edu`
+
+3. Other successful test cases include adding a person with only some optional fields.
+
+##### Adding a Person with matriculation number
+
+1. Prerequisites: No persons in the list.
+
+2. Test case:
+
+    ```
+   add n|Alice p|98765432 a|King Edward VII Hall E106 e|alice@example.com m|A1234567X
+    ```
+
+    Expected: A person with the following fields is added to the list:
+    * Name: `Alice`
+    * Phone: `98765432`
+    * Address: `King Edward VII Hall E106`
+    * Email: `alice@example.com`
+    * Matric: `A1234567X`
+    * Tags: `student`
+
+    Note that the `student` tag is automatically added to the new person.
+
+3. Test case:
+
+    ```
+   add n|Alice p|98765432 a|King Edward VII Hall E106 e|alice@example.com
+    ```
+
+    Expected: A person with the following fields is added to the list:
+   * Name: `Alice`
+   * Phone: `98765432`
+   * Address: `King Edward VII Hall E106`
+   * Email: `alice@example.com`
+
+    Note that there is no automatic tagging.
+
+#### Editing a Person: `edit`
+
+##### Editing a Person with all fields
+
+1. Prerequisites: Start with the provided sample data.
+
+2. Test case:
+
+    ```
+    edit 1 n|new name p|123 a|new address e|newemail@example.com m|A0000000X r|R1 s|S1 t|tag1 t|tag2
+    ```
+
+   Expected: The first person’s details are updated with all the new values.
+
+3. Other successful test cases include a combination of updating some fields and not updating others.
+
+   Expected: Similar to previous.
+
+##### Editing a Person with repeated prefixes
+
+1. Prerequisites: Start with the provided sample data.
+
+2. Test case: (Repeated `n|` prefix)
+
+    ```
+    edit 1 n|new name n|new name 2 p|123 a|new address
+    ```
+
+   Expected: An error message is shown indicating that the `Name` field is repeated.
+
+3. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|` prefixes.
+
+   Expected: Similar to previous.
+
+##### Editing a Person whose `Email` already exists
+
+1. Prerequisites: Start with the provided sample data. Note the emails of the first and second person.
+
+2. Test case:
+
+    ```
+    edit 1 e|berniceyu@example.com
+    ```
+
+   Expected: An error message is shown indicating that the email already exists.
+
+#### Deleting a Person: `delete`
+
+##### Deleting a Person while all persons are being shown
+
+1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+
+2. Test case: `delete 1`<br>
+
+   Expected: First person is deleted from the list. Details of the deleted person shown in the status message.
+
+3. Test case: `delete 0`<br>
+
+   Expected: No person is deleted. Error details shown in the status message.
+
+4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+
+   Expected: Similar to previous.
+
+##### Deleting a Person while some persons are being shown
+
+1. Prerequisites: Filter persons using the `find` command. Multiple but not all persons in the list.
+
+2. Test case: `delete 1`<br>
+
+    Expected: First person in the filtered list is deleted. Details of the deleted person shown in the status message.
+
+3. Test case: `delete 0`<br>
+
+    Expected: No person is deleted. Error details shown in the status message.
+
+4. Other incorrect delete commands to try: `delete`, `delete x`<br>
+
+    Expected: Similar to previous.
+
+##### Deleting a Person while no persons are being shown
+
+1. Prerequisites: Filter persons using the `find` command such that there are no persons in the list, or delete all persons with `clear`.
+
+2. Test case: `delete 1`<br>
+
+    Expected: No person is deleted. Error details shown in the status message.
+
+
+#### Deleting shown Persons: `deleteShown`
+
+##### Deleting a proper subset of all Persons
+
+1. Prerequisites: Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
+
+2. Test case: `deleteShown`
+
+    Expected: All persons currently shown are deleted, and the list is updated to show all remaining persons.
+
+3. Other successful test cases: `deleteShown x`
+
+    Expected: Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
+
+##### Deleting all Persons
+
+1. Prerequisites: Filter persons using the `find` command such that all persons are shown, or list all persons with `list`.
+
+2. Test case: `deleteShown`
+
+    Expected: An error is shown indicating that all persons cannot be deleted at once.
+
+3. Other incorrect test cases to try: `deleteShown x`
+
+    Expected: Similar to previous.
+
+#### Listing all Persons: `list`
+
+##### Starting with sample data
+
+1. Prerequisites: Start with the provided sample data.
+
+2. Test case: `list`
+
+    Expected: All persons are shown in the list.
+
+3. Other successful test cases: `list x`
+
+    Expected: Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
+
+##### Starting with a filtered list
+
+1. Prerequisites: Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
+
+2. Test case: `list`
+
+    Expected: All persons in the overall list are shown.
+
+#### Finding a Person: `find`
+
+##### Finding a Person by contact details
+
+1. Prerequisites: Multiple persons in the list.
+
+2. Test case: `find n|Alice`<br>
+
+    Expected: Persons with the name "Alice" are shown. Status message shows the number of persons found.
+
+3. Test case: `find e|alice`<br>
+
+    Expected: Persons with emails that contain the word "alice" are shown. Status message shows the number of persons found.
+
+4. Test case: `find p|123`<br>
+
+    Expected: Persons with phone numbers that contain the digits "123" are shown. Status message shows the number of persons found.
+
+5. Test case: `find a|Ang Mo Kio`<br>
+
+    Expected: Persons with addresses that contain the word "Ang Mo Kio" are shown. Status message shows the number of persons found.
+
+5. Test case: `find t|student`<br>
+
+    Expected: Persons with the tag "student" are shown. Status message shows the number of persons found.
+
+6. Test case: `find m|A123`<br>
+
+    Expected: Persons with matriculation numbers containing "A123" are shown. Status message shows the number of persons found.
+
+7. Test case: `find r|R01`<br>
+
+    Expected: Persons with the reflection "R01" are shown. Status message shows the number of persons found.
+
+8. Test case: `find s|S01`<br>
+
+    Expected: Persons with the studio "S01" are shown. Status message shows the number of persons found.
+
+<box type="info" seamless>
+
+**Note:**
+* Search is not case sensitive
+* Finds persons with the **search parameter** that contains the given word (except reflection and studio, which must match exactly).
+* The search parameter can be any part of the person's details, e.g. name, email, etc. and is specified by the prefix.
+
+</box>
+
+##### Finding by Score
+
+1. Prerequisites: Multiple persons in the list. Persons with scores. Exam must be selected.
+
+2. Test case: `find lt|50`<br>
+
+    Expected: Persons with scores less than 50 are shown. Status message shows the number of persons found.
+
+3. Test case: `find mt|50`<br>
+
+    Expected: Persons with scores more than 50 are shown. Status message shows the number of persons found.
+
+4. Test case: `find lt|-1`<br>
+
+    Expected: An error message is shown indicating that the `score` provided is invalid.
+
+5. Test case: `find mt|101`<br>
+
+    Expected: An error message is shown indicating that the `score` provided is greater than the maximum score of the selected exam. (Assuming the maximum score is 100)
+
+<box type="info" seamless>
+
+**Note:**
+* The range of scores searched is exclusive of the given score. E.g. `find lt|50` will not include persons with a score of 50.
+* You can search for scores from 0 to the maximum score of the selected exam, inclusive.
+
+</box>
+
+##### Finding by multiple prefixes
+
+1. Prerequisites: Multiple persons in the list.
+
+2. Test case: `find n|Alice e|Alice`<br>
+
+    Expected: An error message is shown indicating that the format of the command is incorrect.
+
+3. Other incorrect test cases to try: any combination of two or more unique prefixes<br>
+
+    Expected: Similar to previous.
+
+4. Test case: `find n|Alice n|Bob`<br>
+
+    Expected: An error message is shown indicating that the prefix `n` is duplicated.
+
+5. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|`, `mt|`, `lt|` prefixes.
+
+    Expected: Similar to previous.
+
+#### Copying emails: `copy`
+
+##### Copying emails of all Persons
+
+1. Prerequisites: Multiple persons in the list. Use the `list` command to display all persons.
+
+2. Test case: `copy`<br>
+
+    Expected: All emails are copied to the clipboard. Status message shows the number of emails copied.
+
+##### Copying emails of a specific group
+
+1. Prerequisites: Multiple persons in the list, filtered by a specific criteria using the `find` command.
+
+2. Test case: `copy`<br>
+
+    Expected: All emails of the currently displayed persons are copied to the clipboard. Status message shows the number of emails copied.
+
+<box type="info" seamless>
+
+**Note:**
+* If no persons are displayed, an error message is shown.
+
+</box>
+
+<br>
+
+#### Exporting Data to a CSV File: `export`
+
+**Command:** `export`<br>
+**More information on usage:** <a href="UserGuide.md#export">Exporting Data to a CSV File</a>
+
+1. Exporting data while all persons are displayed.
+
+    * **Prerequisites:**
+        * Start with the provided sample data.
+        * List all persons using the `list` command.
+          <br><br>
+    * **Test case:** `export`<br>
+      **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file.
+      <br><br>
+
+2. Exporting data while person list is filtered.
+
+    * **Prerequisites:**
+        * Start with the provided sample data.
+        * Filter the person list using the `find` command.
+          <br><br>
+    * **Test case:** Similar to previous.<br>
+      **Expected:** Similar to previous.
+      <br><br>
+
+3. Exporting data with exams and exam scores added.
+
+    * **Prerequisites:**
+        * Start with the provided sample data.
+        * Add an exam using the `addExam` command. For this example, we shall add an exam with name `Test Exam`.
+        * List all persons using the `list` command.
+          <br><br>
+    * **Test case:** `export`<br>
+      **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file. A column with column heading `Exam:Test Exam` is present in the same CSV file, but no values present in that column.
+      <br><br>
+    * **Test case:** Add exam scores to persons in displayed list using `addScore`, then `export`<br>
+      **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file. A column with column heading `Exam:Test Exam` is present in the same CSV file, with corresponding exam scores for each person included in that column.
+
+<br>
+
+
 #### Importing Exam Scores: `importExamScores`
 
-##### Importing exam scores from a CSV file
+##### Importing Exam Scores from a CSV file
 
 1. Prerequisites: Start with sample data.
 
@@ -1826,431 +2251,7 @@ Expected: The GUI closes and the application exits.
 
 <br>
 
-
-#### Adding a person: `add`
-
-##### Adding a person with all fields
-
-1. Prerequisites: No persons in the list.
-
-2. Test case:
-
-    ```
-   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
-   ```
-
-   Expected: A person with the following fields is added to the list:
-
-   * Name: `Alice`
-   * Phone: `98765432`
-   * Address: `King Edward VII Hall E106`
-   * Email: `e09123456@u.nus.edu`
-   * Matric: `A1234567X`
-   * Reflection: `R2`
-   * Studio: `S1`
-   * Tags: `excelling`, `student`
-
-<box type="info" seamless>
-
-**Note:** If a `Matric` number is provided, the person is automatically tagged as a `student`.
-
-</box>
-
-3. Test case: (Missing compulsory `Email` and `Address` fields)
-
-    ```
-   add n|Alice e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
-   ```
-
-    Expected: An error message is shown indicating that the `Address` and `Phone` fields are missing.
-
-4. Other incorrect test cases to try: `add`, any other command that misses out a combination of compulsory fields.
-
-    Expected: Similar to previous.
-
-##### Adding a person with repeated prefixes
-
-1. Prerequisites: No persons in the list.
-
-2. Test case: (Repeated `n|` prefix)
-
-
-    ```
-    add n|Alice n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
-    ```
-
-    Expected: An error message is shown indicating that the `Name` field is repeated.
-
-3. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|` prefixes.
-
-    Expected: Similar to previous.
-
-##### Adding a person whose `Email` already exists
-
-1. Prerequisites: A person with email `e1234567@u.nus.edu` already exists in the list.
-
-2. Test case:
-
-    ```
-   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e1234567@u.nus.edu
-   ```
-
-    Expected: An error message is shown indicating that the email already exists.
-
-##### Adding a person with only compulsory fields
-
-1. Prerequisites: No persons in the list.
-
-2. Test case:
-
-    ```
-   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu
-   ```
-
-    Expected: A person with the following fields is added to the list:
-
-    * Name: `Alice`
-    * Phone: `98765432`
-    * Address: `King Edward VII Hall E106`
-    * Email: `e09123456@u.nus.edu`
-
-3. Other successful test cases include adding a person with only some optional fields.
-
-##### Adding a person with Matriculation number
-
-1. Prerequisites: No persons in the list.
-
-2. Test case:
-
-    ```
-   add n|Alice p|98765432 a|King Edward VII Hall E106 e|alice@example.com m|A1234567X
-    ```
-
-    Expected: A person with the following fields is added to the list:
-    * Name: `Alice`
-    * Phone: `98765432`
-    * Address: `King Edward VII Hall E106`
-    * Email: `alice@example.com`
-    * Matric: `A1234567X`
-    * Tags: `student`
-
-    Note that the `student` tag is automatically added to the new person.
-
-3. Test case:
-
-    ```
-   add n|Alice p|98765432 a|King Edward VII Hall E106 e|alice@example.com
-    ```
-
-    Expected: A person with the following fields is added to the list:
-   * Name: `Alice`
-   * Phone: `98765432`
-   * Address: `King Edward VII Hall E106`
-   * Email: `alice@example.com`
-
-    Note that there is no automatic tagging.
-
-#### Editing a person: `edit`
-
-##### Editing a person with all fields
-
-1. Prerequisites: Start with the provided sample data.
-
-2. Test case:
-
-    ```
-    edit 1 n|new name p|123 a|new address e|newemail@example.com m|A0000000X r|R1 s|S1 t|tag1 t|tag2
-    ```
-
-   Expected: The first person’s details are updated with all the new values.
-
-3. Other successful test cases include a combination of updating some fields and not updating others.
-
-   Expected: Similar to previous.
-
-##### Editing a person with repeated prefixes
-
-1. Prerequisites: Start with the provided sample data.
-
-2. Test case: (Repeated `n|` prefix)
-
-    ```
-    edit 1 n|new name n|new name 2 p|123 a|new address
-    ```
-
-   Expected: An error message is shown indicating that the `Name` field is repeated.
-
-3. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|` prefixes.
-
-   Expected: Similar to previous.
-
-##### Editing a person whose `Email` already exists
-
-1. Prerequisites: Start with the provided sample data. Note the emails of the first and second person.
-
-2. Test case:
-
-    ```
-    edit 1 e|berniceyu@example.com
-    ```
-
-   Expected: An error message is shown indicating that the email already exists.
-
-#### Deleting a person: `delete`
-
-##### Deleting a person while all persons are being shown
-
-1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
-
-2. Test case: `delete 1`<br>
-
-   Expected: First person is deleted from the list. Details of the deleted person shown in the status message.
-
-3. Test case: `delete 0`<br>
-
-   Expected: No person is deleted. Error details shown in the status message.
-
-4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-
-   Expected: Similar to previous.
-
-##### Deleting a person while some persons are being shown
-
-1. Prerequisites: Filter persons using the `find` command. Multiple but not all persons in the list.
-
-2. Test case: `delete 1`<br>
-
-    Expected: First person in the filtered list is deleted. Details of the deleted person shown in the status message.
-
-3. Test case: `delete 0`<br>
-
-    Expected: No person is deleted. Error details shown in the status message.
-
-4. Other incorrect delete commands to try: `delete`, `delete x`<br>
-
-    Expected: Similar to previous.
-
-##### Deleting a person while no persons are being shown
-
-1. Prerequisites: Filter persons using the `find` command such that there are no persons in the list, or delete all persons with `clear`.
-
-2. Test case: `delete 1`<br>
-
-    Expected: No person is deleted. Error details shown in the status message.
-
-
-#### Deleting shown persons: `deleteShown`
-
-##### Deleting a proper subset of all persons
-
-1. Prerequisites: Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
-
-2. Test case: `deleteShown`
-
-    Expected: All persons currently shown are deleted, and the list is updated to show all remaining persons.
-
-3. Other successful test cases: `deleteShown x`
-
-    Expected: Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
-
-##### Deleting all persons
-
-1. Prerequisites: Filter persons using the `find` command such that all persons are shown, or list all persons with `list`.
-
-2. Test case: `deleteShown`
-
-    Expected: An error is shown indicating that all persons cannot be deleted at once.
-
-3. Other incorrect test cases to try: `deleteShown x`
-
-    Expected: Similar to previous.
-
-#### Listing all persons: `list`
-
-##### Starting with sample data
-
-1. Prerequisites: Start with the provided sample data.
-
-2. Test case: `list`
-
-    Expected: All persons are shown in the list.
-
-3. Other successful test cases: `list x`
-
-    Expected: Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
-
-##### Starting with a filtered list
-
-1. Prerequisites: Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
-
-2. Test case: `list`
-
-    Expected: All persons in the overall list are shown.
-
-#### Finding a person
-
-##### Finding a person by contact details
-
-1. Prerequisites: Multiple persons in the list.
-
-2. Test case: `find n|Alice`<br>
-
-    Expected: Persons with the name "Alice" are shown. Status message shows the number of persons found.
-
-3. Test case: `find e|alice`<br>
-
-    Expected: Persons with emails that contain the word "alice" are shown. Status message shows the number of persons found.
-
-4. Test case: `find p|123`<br>
-
-    Expected: Persons with phone numbers that contain the digits "123" are shown. Status message shows the number of persons found.
-
-5. Test case: `find a|Ang Mo Kio`<br>
-
-    Expected: Persons with addresses that contain the word "Ang Mo Kio" are shown. Status message shows the number of persons found.
-
-5. Test case: `find t|student`<br>
-
-    Expected: Persons with the tag "student" are shown. Status message shows the number of persons found.
-
-6. Test case: `find m|A123`<br>
-
-    Expected: Persons with matriculation numbers containing "A123" are shown. Status message shows the number of persons found.
-
-7. Test case: `find r|R01`<br>
-
-    Expected: Persons with the reflection "R01" are shown. Status message shows the number of persons found.
-
-8. Test case: `find s|S01`<br>
-
-    Expected: Persons with the studio "S01" are shown. Status message shows the number of persons found.
-
-<box type="info" seamless>
-
-**Note:**
-* Search is not case sensitive
-* Finds persons with the **search parameter** that contains the given word (except reflection and studio, which must match exactly).
-* The search parameter can be any part of the person's details, e.g. name, email, etc. and is specified by the prefix.
-
-</box>
-
-##### Finding by score
-
-1. Prerequisites: Multiple persons in the list. Persons with scores. Exam must be selected.
-
-2. Test case: `find lt|50`<br>
-
-    Expected: Persons with scores less than 50 are shown. Status message shows the number of persons found.
-
-3. Test case: `find mt|50`<br>
-
-    Expected: Persons with scores more than 50 are shown. Status message shows the number of persons found.
-
-4. Test case: `find lt|-1`<br>
-
-    Expected: An error message is shown indicating that the `score` provided is invalid.
-
-5. Test case: `find mt|101`<br>
-
-    Expected: An error message is shown indicating that the `score` provided is greater than the maximum score of the selected exam. (Assuming the maximum score is 100)
-
-<box type="info" seamless>
-
-**Note:**
-* The range of scores searched is exclusive of the given score. E.g. `find lt|50` will not include persons with a score of 50.
-* You can search for scores from 0 to the maximum score of the selected exam, inclusive.
-
-</box>
-
-##### Finding by multiple prefixes
-
-1. Prerequisites: Multiple persons in the list.
-
-2. Test case: `find n|Alice e|Alice`<br>
-
-    Expected: An error message is shown indicating that the format of the command is incorrect.
-
-3. Other incorrect test cases to try: any combination of two or more unique prefixes<br>
-
-    Expected: Similar to previous.
-
-4. Test case: `find n|Alice n|Bob`<br>
-
-    Expected: An error message is shown indicating that the prefix `n` is duplicated.
-
-5. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|`, `mt|`, `lt|` prefixes.
-
-    Expected: Similar to previous.
-
-#### Copying emails
-
-##### Copying emails of all persons
-
-1. Prerequisites: Multiple persons in the list. Use the `list` command to display all persons.
-
-2. Test case: `copy`<br>
-
-    Expected: All emails are copied to the clipboard. Status message shows the number of emails copied.
-
-##### Copying emails of a specific group
-
-1. Prerequisites: Multiple persons in the list, filtered by a specific criteria using the `find` command.
-
-2. Test case: `copy`<br>
-
-    Expected: All emails of the currently displayed persons are copied to the clipboard. Status message shows the number of emails copied.
-
-<box type="info" seamless>
-
-**Note:**
-* If no persons are displayed, an error message is shown.
-
-</box>
-
-<br>
-
-#### Exporting Data to a CSV File
-
-**Command:** `export`<br>
-**More information on usage:** <a href="UserGuide.md#export">Exporting Data to a CSV File</a>
-
-1. Exporting data while all persons are displayed.
-
-    * **Prerequisites:**
-        * Start with the provided sample data.
-        * List all persons using the `list` command.
-          <br><br>
-    * **Test case:** `export`<br>
-      **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file.
-      <br><br>
-
-2. Exporting data while person list is filtered.
-
-    * **Prerequisites:**
-        * Start with the provided sample data.
-        * Filter the person list using the `find` command.
-          <br><br>
-    * **Test case:** Similar to previous.<br>
-      **Expected:** Similar to previous.
-      <br><br>
-
-3. Exporting data with exams and exam scores added.
-
-    * **Prerequisites:**
-        * Start with the provided sample data.
-        * Add an exam using the `addExam` command. For this example, we shall add an exam with name `Test Exam`.
-        * List all persons using the `list` command.
-          <br><br>
-    * **Test case:** `export`<br>
-      **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file. A column with column heading `Exam:Test Exam` is present in the same CSV file, but no values present in that column.
-      <br><br>
-    * **Test case:** Add exam scores to persons in displayed list using `addScore`, then `export`<br>
-      **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file. A column with column heading `Exam:Test Exam` is present in the same CSV file, with corresponding exam scores for each person included in that column.
-
-<br>
-
-
-#### Adding a Persons's Exam Score
+#### Adding a Persons's Exam Score: `addScore`
 
 **Command:** `addScore`<br>
 **More information on usage:** <a href="UserGuide.md#addscore">Adding an Exam Score</a>
@@ -2302,7 +2303,7 @@ Expected: The GUI closes and the application exits.
 
 <br>
 
-#### Editing a Person's Exam Score
+#### Editing a Person's Exam Score: `editScore`
 
 **Command:** `editScore`<br>
 **More information on usage:** <a href="UserGuide.md#editscore">Editing an Exam Score</a>
@@ -2350,7 +2351,7 @@ Expected: The GUI closes and the application exits.
 
 <br>
 
-#### Deleting a Person's Exam Score
+#### Deleting a Person's Exam Score: `deleteScore`
 
 **Command:** `deleteScore`<br>
 **More information on usage:** <a href="UserGuide.md#deletescore">Deleting an Exam Score</a>
