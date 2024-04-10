@@ -1,4 +1,3 @@
-
 @startuml
 !include style.puml
 skinparam ArrowFontStyle plain
@@ -14,7 +13,7 @@ participant "p:Person" as Person MODEL_COLOR
 participant "m:Model" as Model MODEL_COLOR
 end box
 
-group sd addCommand.execute(m) in importCommand
+mainFrame sd Add Command Execution
 ImportCommand -> AddCommand : execute(m)
 activate AddCommand
 
@@ -35,5 +34,4 @@ AddCommand --> ImportCommand : r
 deactivate AddCommand
 AddCommand -[hidden]-> ImportCommand
 destroy AddCommand
-end
 @enduml
