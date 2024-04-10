@@ -18,7 +18,7 @@ box Model MODEL_COLOR_T1
 participant "s:Score" as Score MODEL_COLOR
 end box
 
-[-> AddScoreCommandParser : parser("1 s|100")
+[-> AddScoreCommandParser : parse("1 s|100")
 activate AddScoreCommandParser
 
 AddScoreCommandParser -> ArgumentTokenizer : tokenize("1 s|100", PREFIX_SCORE)

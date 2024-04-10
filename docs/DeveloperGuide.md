@@ -802,7 +802,7 @@ The following sequence diagram illustrates the parsing of an `addScore` command 
 </p>
 
 > **Note:** <br>
-> The parsing of an `editScore` command follows a similar structure, differing in the object instantiated at the end of the `parser` method.
+> The parsing of an `editScore` command follows a similar structure, differing in the object instantiated at the end of the `parse` method.
 > `EditScoreCommandParser` instantiates an `EditScoreCommand` object.
 
 ##### Executing the Command
@@ -856,9 +856,15 @@ This operation removes both the selected exam (key) and the score (value), effec
 ##### Parsing User Input
 
 The `DeleteScoreCommandParser` is responsible for parsing the user input to extract the index of the person in the displayed list to delete the score for.
-It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `index`.
+It uses the `ParserUtil` to parse the input string, extracting the `index`.
 It also ensures that the `index` is valid, and that there are no duplicate prefixes (i.e. there is only one `index` value) in the user input.
 The `index` is then used in instantiating the `DeleteScoreCommand` by the `DeleteScoreCommandParser`.
+
+The following sequence diagram illustrates the parsing of an `deleteScore` command with the user input `deleteScore 1`:
+
+<p align="center">
+    <puml src="diagrams/DeleteScoreParsingSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
+</p>
 
 ##### Executing the Command
 
@@ -866,6 +872,8 @@ The `execute` method in `DeleteScoreCommand` retrieves the `filteredPersons` lis
 It then fetches the person to delete the score for based on the target index.
 It also retrieves the currently selected exam from the `Model`.
 It removes the score for the selected exam in the person's existing `scores` hashmap using the `removeExamScoreFromPerson` method in `Model`.
+
+
 
 <br>
 
