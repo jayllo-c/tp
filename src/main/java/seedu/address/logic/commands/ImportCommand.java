@@ -37,12 +37,10 @@ public class ImportCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports persons from specified filepath."
             + " Must be an absolute CSV file path\n"
-            + "Parameters: filePath\n"
-            + "[" + PREFIX_IMPORT + "import]\n"
-            + "Example: " + COMMAND_WORD + PREFIX_IMPORT + "C:usr/lib/text.csv";
+            + "Parameters: " + PREFIX_IMPORT + "FILEPATH\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_IMPORT + "C:usr/lib/text.csv";
     private static final String MESSAGE_IMPORT_SUCCESS = "Imported persons successfully!\n";
     private final Path filePath;
-    private final AddCommandParser addCommandParser = new AddCommandParser();
 
     /**
      * Represents the order of the data that should be parsed into the addCommandParser
@@ -51,6 +49,8 @@ public class ImportCommand extends Command {
             new HashSet<>(List.of(new String[]{"name", "phone", "email", "address"}));
     private final HashSet<String> optionalParameters = new HashSet<>(
             List.of(new String[]{"matric", "reflection", "studio", "tags"}));
+
+    private final AddCommandParser addCommandParser;
 
     private String errorMsgsFromReadingCsv = "";
     private String errorMsgsFromAddingPersons = "";
@@ -79,6 +79,7 @@ public class ImportCommand extends Command {
         requireNonNull(filePath);
 
         this.filePath = filePath;
+        this.addCommandParser = new AddCommandParser();
     }
 
     /**
@@ -158,7 +159,7 @@ public class ImportCommand extends Command {
         for (Map<String, String> personData : personsData) {
             try {
                 String addCommandInput = convertToAddCommandInput(personData);
-                AddCommand addCommand = parseAddCommandInput(addCommandInput);
+                AddCommand addCommand = addCommandParser.parse(addCommandInput);
                 addCommand.execute(model);
                 successfulImports++;
             } catch (ParseException | CommandException e) {
@@ -201,10 +202,6 @@ public class ImportCommand extends Command {
             sb.append(" ");
         }
         return sb.toString();
-    }
-
-    private AddCommand parseAddCommandInput(String input) throws ParseException {
-        return addCommandParser.parse(input);
     }
 
     @Override

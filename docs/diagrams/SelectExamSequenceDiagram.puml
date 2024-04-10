@@ -1,0 +1,53 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+
+participant ":SelectExamCommand" as SelectExamCommand LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+participant ":AddressBook" as AddressBook MODEL_COLOR
+participant "exams:UniqueExamList" as UniqueExamList MODEL_COLOR
+participant ":ObservableList<Exam>" as ObservableList MODEL_COLOR
+end box
+
+[-> SelectExamCommand : execute(m)
+activate SelectExamCommand
+
+SelectExamCommand -> Model : getExamList()
+activate Model
+
+Model -> AddressBook : getExamList()
+activate AddressBook
+
+AddressBook -> UniqueExamList : asUnmodifiableObservableList()
+activate UniqueExamList
+
+UniqueExamList --> AddressBook : ObservableList<Exam>
+deactivate UniqueExamList
+
+AddressBook --> Model : ObservableList<Exam>
+deactivate AddressBook
+
+Model --> SelectExamCommand : ObservableList<Exam>
+deactivate Model
+
+SelectExamCommand -> ObservableList : get(targetIndex.getZeroBased())
+activate ObservableList
+
+ObservableList --> SelectExamCommand : exam
+deactivate ObservableList
+
+SelectExamCommand -> Model : selectExam(exam)
+activate Model
+
+Model --> SelectExamCommand :
+deactivate Model
+
+[<-- SelectExamCommand : CommandResult
+deactivate SelectExamCommand
+
+@enduml
