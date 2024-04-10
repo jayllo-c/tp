@@ -97,6 +97,21 @@ The sequence diagram below illustrates a more in-depth view of the interactions 
 
 <puml src="diagrams/UiSequenceDiagram.puml" alt="Sequence Diagram of UI Component"/>
 
+#### **Considerations for UI**
+
+##### Dynamic UI Updates
+
+The UI is designed to update dynamically based on changes in the `Model`. We narrowed down to two design choices for updating the UI components. They are:
+
+1. **Update using listeners embeded into UI components** - This design choice would involve embedding listeners into the UI components that would listen for changes in the `Model` (e.g. adding a listener to filteredPersons in ExamListPanel). This would allow for a more loosely coupled system, but would involve more complex implementation which could get messy as the number of listeners increase.
+2. **Update using a centralized update method** - This design choice involves having a centralized `update` method in the `MainWindow` that would call an `update` method in all other UI components after every command. This would involve a more tightly coupled system and may involve unnecessary updates, but would be easier to implement and maintain.
+
+We chose the second design choice as having a centralized update method would allow for easier maintenance, as there is a clear indicator of how UI components are updated from `MainWindow`. Adding extensions would also be more straightforward as future developers would know where to look for the update logic.
+
+With listeners, the update logic would be scattered across multiple UI component classes, making it much harder to search and add upon the update logic.
+
+One of our main goals was to make our codebase easy to understand and maintain, and we felt that the centralized update method would be more in line with this goal despite the slight increase in coupling and inefficiency.
+
 ### Logic component
 
 **API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
@@ -213,18 +228,18 @@ This section describes some noteworthy details on how certain features are imple
 
 ### **Add Person Command** : `add`
 
-The `add` command allows users to add a person to the address book. 
+The `add` command allows users to add a person to the address book.
 
 The user can specify the person's:
-* name (`Name`), 
-* phone number (`Phone`), 
-* address (`Address`), 
-* email (`Email`), 
+* name (`Name`),
+* phone number (`Phone`),
+* address (`Address`),
+* email (`Email`),
 
-and optionally provide additional information such as their: 
-* matriculation number (`Matric`), 
-* reflection (`Reflection`), 
-* studio (`Studio`), 
+and optionally provide additional information such as their:
+* matriculation number (`Matric`),
+* reflection (`Reflection`),
+* studio (`Studio`),
 * and tags (`Tag`).
 
 #### Implementation Details
@@ -318,6 +333,25 @@ For more details on the implementation of the `delete` command, refer to the [De
 
 We have chosen to implement the `delete` command to accept the index of the person to be deleted to maximize convenience for the user. The numbering of the lists will be displayed to the user, making indexing very intuitive.
 
+### **Delete Shown feature** : `deleteShown`
+
+#### Implementation Details
+
+The `deleteShown` command is a child of the `Command` class and relies on the `filteredPersons` list in the `Model` component to delete the persons currently displayed in the `PersonListPanel`.
+
+##### Executing the Command
+If the list shows between 0 and the total number of existing persons, the `deleteShown` command will delete the persons currently displayed in the `PersonListPanel`.
+
+##### Updating Filtered Person List
+After deleting all persons currently displayed in the `PersonListPanel`, the `filteredPersons` list in the `Model` component is updated to show all remaining persons in the address book.
+
+The following activity diagram illustrates the workflow of the execution of the `deleteShown` command:
+
+<puml src="diagrams/DeleteShownActivityDiagram.puml" alt="Activity Diagram for the `deleteShown` Command" />
+
+#### Considerations
+##### Reliance on `find` Command
+Similarly to the `copy` command, the `deleteShown` command is designed to be used with the find command, which filters the persons displayed in the `PersonListPanel`. Consequently, the flexibility of the `deleteShown` command relies heavily on the implementation of the `find` command. Due to this dependency, any changes to the `find` command may affect the functionality of the `deleteShown` command.
 
 ### **Export Feature** : `export`
 
@@ -507,7 +541,7 @@ If the file is not valid, an error message will be returned.
 
 The `importExamScores` command lets users import exam scores corresponding to existing exams and persons from a CSV file.
 
-#### Implementation 
+#### Implementation
 The `ImportExamScoresCommand` class is responsible for import exam scores from a CSV file.
 The `ImportExamScoresParser` class is responsible for parsing the user input, namely the filepath of the CSV file to be imported, and creating an `ImportExamScoresCommand` object.
 
@@ -517,7 +551,7 @@ The CSV file is parsed with the `OpenCSV` library and a `List<String[]>` is crea
 #### Validation
 
 ##### File Validation
-After parsing, a mapping of `Exam` objects to an inner mapping of an `email` string to a `Double` score is created. This mapping is used to validate the data in the CSV file. 
+After parsing, a mapping of `Exam` objects to an inner mapping of an `email` string to a `Double` score is created. This mapping is used to validate the data in the CSV file.
 If the **file** is invalid, an error message is returned.
 
 The validation workflow for the **file** is as follows:
@@ -543,7 +577,7 @@ The `Double` is parsed into a `Score` object.
 
 The `Model` object is then used to:
 * Get the `Exam` object corresponding to the exam name in the row;
-* Get the `Person` object corresponding to the email in the row; 
+* Get the `Person` object corresponding to the email in the row;
 * And finally add the `Score` object to the correct `Person` for the correct `Exam`.
 
 ##### Concrete Examples of Validation
@@ -608,26 +642,188 @@ As the `Model` class was built prior to the implementation of this feature, we d
 
 This design allows for easy extension to accommodate future enhancements or additional search criteria. New prefixes can be added to support additional search criteria without significant changes as we merely need to update our `Predicate` logic. This ensures that the implementation remains adaptable to evolving requirements and we can upgrade and improve the feature whenever required.
 
-### **Delete Shown feature** : `deleteShown`
+<br>
 
-#### Implementation Details
+----------------------------------------------------------------------------------------------------
 
-The `deleteShown` command is a child of the `Command` class and relies on the `filteredPersons` list in the `Model` component to delete the persons currently displayed in the `PersonListPanel`.
+### **Exam Features**
+
+There are 4 main commands that are used to interact with the exam feature: `addExam`, `deleteExam`, `selectExam` and `deselectExam`.
+
+All exams are stored in the `UniqueExamList` object in `AddressBook` of the `Model` component. The `Model` component also stores the currently selected exam in the `selectedExam` field.
+
+<br>
+
+#### **Add Exam Command** : `addExam`
+
+The `addExam` command allows users to add an exam to the application.
+The user can specify the name of the exam and the maximum score of the exam.
+The exam is then added and stored in the `UniqueExamList`.
+
+##### Parsing User Input
+
+The `AddExamCommandParser` is responsible for pasring user input to extract the `name` and the `maxScore` of the exam.
+It uses the `ArgumentTokenizer` to tokenize the input string, extracting `name` and `maxScore`.
+It ensures that `name` and `maxScore` are valid and present in the user input, and that there are no duplicate prefixes in the user input.
+The `name` and `maxScore` are then used to instantiate an `AddExamCommand`.
 
 ##### Executing the Command
-If the list shows between 0 and the total number of existing persons, the `deleteShown` command will delete the persons currently displayed in the `PersonListPanel`.
 
-##### Updating Filtered Person List
-After deleting all persons currently displayed in the `PersonListPanel`, the `filteredPersons` list in the `Model` component is updated to show all remaining persons in the address book.
+The `AddExamCommand` class creates a new `Exam` object with the parsed arguments
+It adds the `Exam` to the `UniqueExamList` through the `addExam` method in the `Model` component.
+If the exam already exists in the list, a `CommandException` is thrown.
 
-The following activity diagram illustrates the workflow of the execution of the `deleteShown` command:
+<br>
 
-<puml src="diagrams/DeleteShownActivityDiagram.puml" alt="Activity Diagram for the `deleteShown` Command" />
+#### **Delete Exam Command** : `deleteExam`
 
-#### Considerations
-##### Reliance on `find` Command
-Similarly to the `copy` command, the `deleteShown` command is designed to be used with the find command, which filters the persons displayed in the `PersonListPanel`. Consequently, the flexibility of the `deleteShown` command relies heavily on the implementation of the `find` command. Due to this dependency, any changes to the `find` command may affect the functionality of the `deleteShown` command.
+The `deleteExam` command allows users to delete an exam from the application.
+The user can specify the index of the exam to be deleted.
+The exam is then removed from the `UniqueExamList`.
 
+##### Parsing User Input
+
+The `DeleteExamParser` is responsible for parsing user input to extract the `index` of the exam to be deleted.
+It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `index`.
+It ensures that the `index` is valid and present in the user input, and that there are no other prefixes in the user input.
+The `index` is used to instantiate a `DeleteExamCommand`.
+
+##### Executing the Command
+
+The `DeleteExamCommand` uses the index to delete the exam from the `UniqueExamList` in the `Model` component.
+It first retrieves the `UniqueExamList` by using the `getExamList` method in the `Model` component.
+It then retrieves the exam from the `UniqueExamList` using the user provided index.
+If the index is greater than the size of the list, a `CommandException` is thrown.
+Using the retrieved exam, it then deletes the exam from the `UniqueExamList` through the `deleteExam` method in the `Model` component.
+
+<br>
+
+#### **Sequence diagrams illustrating exam modification**
+
+The following two sequence diagram illustrates the interactions between the Logic and Model when an exam is modified. This diagram uses the `addExam` command as an example.
+
+**Parsing**
+
+<puml src="diagrams/AddExamParsingSequenceDiagram.puml" alt="Sequence Diagram for the parsing of `addExam` Command" />
+
+**Execution**
+
+<puml src="diagrams/AddExamExecutionSequenceDiagram.puml" alt="Sequence Diagram for the execution of `addExam` Command" />
+
+Note: `deleteExam` follows a similar structure, differing in the arguments parsed and the methods called on the `Model` component (e.g. deleteting from `UniqueExamList` instead of adding to it).
+
+<br>
+
+#### **Select Exam Command** : `selectExam`
+
+The `selectExam` command allows users to select an exam from the ``UniqueExamList`.
+The selection of exams is heavily used in conjunction with our exam score features.
+
+##### Parsing User Input
+
+The `SelectExamCommandParser` is responsible for parsing user input to extract the `index` of the exam to be selected.
+It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `index`.
+It ensures that the `index` is valid and present in the user input, and that there are no other prefixes in the user input.
+
+##### Executing the Command
+
+The `SelectExamCommand` uses the index to select an exam from the `UniqueExamList` in the `Model` component.
+It first retrieves the `UniqueExamList` by using the `getExamList` method in the `Model` component.
+It then retrieves the exam from the `UniqueExamList` using the user provided index.
+If the index is greater than the size of the list, a `CommandException` is thrown.
+Using the retrieved exam, it then sets the `selectedExam` field in the `Model` component using the `selectExam` method.
+
+<br>
+
+#### **Deselect Exam Command** : `deselectExam`
+
+The `deselectExam` command allows users to deselect the currently selected exam.
+
+##### Parsing User Input
+
+The `deselectExam` command does not take any arguments from the user.
+Hence, a `DeselectExamCommandParser` is not required. `AddressBookParser` directly creates a `DeselectExamCommand` object.
+
+##### Executing the Command
+
+The `DeselectExamCommand` uses the `deselectExam` method in the `Model` component to deselect the currently selected exam.
+It sets the `selectedExam` field in the `Model` component to `null`.
+If there is no exam selected, a `CommandException` is thrown.
+
+<br>
+
+#### **Sequence diagrams illustrating exam selection**
+
+The following sequence diagram illustrates the interactions between the Logic and Model when the `SelectExamCommand` is executed.
+
+<puml src="diagrams/SelectExamSequenceDiagram.puml" alt="Sequence Diagram for the parsing of `selectExam` Command" />
+
+Notes:
+- The `ObservableList<Exam>` object is what is returned when retrieving the `UniqueExamList`. This prevents unwanted modifications to the `UniqueExamList` when retrieving the selected exam.
+- `deselectExam` follows a similar structure as the diagram above, differing in the arguments parsed and the methods called on the `Model` component (i.e. calling `deselectExam` on `Model` instead of `selectExam`).
+
+<br>
+
+#### **Considerations for Exam Features**
+
+##### Using a selection system for exams
+
+We decided to implement a selection system for exams to complement the exam score feature. The application would only display the scores of the selected exam, making it easier for users to manage and view the scores.
+
+Our alternative design was to display the scores of all exams at once on every person. However, this alternative design would have made the UI cluttered and less user-friendly. The selection system allows users to focus on the scores of a specific exam, making it easier to view and manage the scores.
+
+##### Using index for exam selection
+We were initially torn between the selection of exams using the exam name or the index. We eventually settled on using the index as it is easier for users to type and remember short numeric codes rather than potentially long and complex exam names which are more prone to typographical errors.
+
+##### Allowing deselection of exams
+We decided to allow users to deselect exams as the exam scores and score statistics are displayed based on the selected exam. Deselecting the exam allows users to get rid of the displayed scores and statistics when they are no longer needed.
+
+##### Extensibility
+The design of the exam feature allows for easy extension to accommodate future enhancements or additional functionalities. Methods for managing exams are implemented in the `Model` component, and the updating of UI for Exams is abstracted into the UI component, Making it easy to add new commands or features related to exams.
+
+<br>
+
+#### **Exam Statistics Feature**
+
+The exam statistics feature allows users to view the mean and median scores of the selected exam. The statistics are displayed in the `StatusBarFooter` element of the UI on the right side.
+
+The statistics are automatically updated whenever the selected exam is changed or when there are potential modifications to the scores of the selected exam.
+
+When there are no scores for the selected exam, the statistics are displayed as `No scores available`. When no exam is selected, the statistics are not displayed at all.
+
+##### Storage of Exam Statistics
+
+The `ScoreStatistics` class is used to store the mean and median scores of the selected exam. The `Model` component stores the `ScoreStatistics` object for the currently selected exam as a `SimpleObjectProperty<ScoreStatistics>`.
+
+##### Updating of Exam Statistics
+
+the `ModelManager` class implements a `updateSelectedExamStatistics` and `getSelectedExamStatistics` method to update the statistics.
+
+`updateSelectedExamStatistics` is called whenever the selected exam is changed or when there are potential modifications to the scores of the selected exam (deletion of a Person, adding of Score, etc.). This ensures that the `selectedExamStatistics` object is always kept up-to-date with the scores of the selected exam.
+
+The sequence diagram below illustrates the interactions within the `Model` component when the score statistics are updated using the `selectExam` command as an example.
+
+<puml src="diagrams/StatisticsSequenceDiagram.puml" alt="Sequence Diagram for Statistics Updating" />
+
+##### User Interface Interaction
+
+The `StatusBarFooter` element of the UI is initialised with an `ObservableValue<ScoreStatistics>` object. This object is bound to the `selectedExamStatistics` object in the `Model` component and is retrieved using the `getSelectedExamStatistics` method.
+
+Whenever a command is executed, the `StatusBarFooter` retrieves the updated statistics and displays them on the right side of the footer which can be seen at the bottom of the UI.
+
+#### Considerations for Exam Statistics Feature
+
+##### Storage of Exam Statistics
+
+There were considerations to just avoid the storage of the statistics and calculate them on the fly whenever needed. However, this would have been inefficient as the statistics would have to be recalculated every time the selected exam is changed or when there are potential modifications to the scores of the selected exam. By storing the statistics, we can limit recalculations to only when necessary.
+
+Furthermore, storing the statistics allows us to maintain the code structure of our UI component, which is designed to observe and retrieve data from the `Model` component. If the statistics were to be calculated on the fly, the UI component would have to either calculate the statistics itself or request the `Model` component to calculate the statistics, which would have complicated the code structure by introducing more dependencies between the UI and Model components.
+
+##### Using `ScoreStatistics` Class
+
+The `ScoreStatistics` class was used to store the mean and median scores of the selected exam. This class was chosen as it provides a clean and structured way to store the statistics. The class also provides extensibility, as additional statistics can easily be added in the future by extending the class.
+
+<br>
 
 ## Planned Enhancements
 
@@ -812,9 +1008,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
        Use case ends.
 
 *  1b. AddressBook cannot find the file to be imported.
-    
+
     *  1b1. AddressBook displays a message indicating that the file is not recognised.
-    
+
        Use case ends.
 
 #### Use case: UC04 — Adding a person
@@ -894,7 +1090,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
        Use case resumes at step 2.
 
-#### Use case: UC07 — Deleting all shown persons 
+#### Use case: UC07 — Deleting all shown persons
 
 **MSS:**
 
@@ -918,7 +1114,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     *  2b1. AddressBook displays a message indicating that all persons cannot be deleted at once.
 
        Use case ends.
-       
+
 #### Use case: UC08 — Listing all persons
 
 **MSS:**
@@ -1048,27 +1244,27 @@ into user's clipboard.
        Use case resumes at step 2.
 
 *   1b. User tries to add an exam with an existing name.
-    
+
     *  1b1. AddressBook displays an error message informing the user that the exam name already exists.
-    
+
        Step 1b1 is repeated until a valid exam name is entered.
-    
+
        Use case resumes at step 2.
 
 *   1c. User tries to add an exam with an invalid score.
-    
+
     *  1c1. AddressBook displays an error message informing the user that the score is invalid.
-    
+
        Step 1c1 is repeated until a valid score is entered.
-    
+
        Use case resumes at step 2.
 
 *   1d. User tries to add an exam with an invalid name.
-        
+
     *  1d1. AddressBook displays an error message informing the user that the name is invalid.
-        
+
        Step 1d1 is repeated until a valid name is entered.
-    
+
        Use case resumes at step 2.
 
 #### Use case: UC14 — Deleting an exam
@@ -1165,15 +1361,15 @@ into user's clipboard.
        Use case ends.
 
 *   2b. The student does not have a score for the exam.
-    
+
         *  2b1. AddressBook displays an error message indicating that the student does not have a score for the exam.
-    
+
         Use case ends.
 
 *   2c. The score is invalid.
-    
+
         *  2c1. AddressBook displays an error message indicating that the score is invalid.
-    
+
         Use case ends.
 
 #### Use case: UC19 — Deleting scores for a student for an exam
@@ -1195,9 +1391,9 @@ into user's clipboard.
        Use case ends.
 
 *   2b. The student does not have a score for the exam.
-    
+
         *  2b1. AddressBook displays an error message indicating that the student does not have a score for the exam.
-    
+
         Use case ends.
 
 #### Use case: UC20 — Viewing statistics of scores
@@ -1269,11 +1465,11 @@ Expected: Shows the GUI with a set of sample persons. The window size may not be
 
 #### Saving window preferences
 
-1. Resize the window to an optimal size. 
+1. Resize the window to an optimal size.
 
-2. Move the window to a different location. 
+2. Move the window to a different location.
 
-3. Close the window. 
+3. Close the window.
 
 4. Re-launch the app.<br>
 
@@ -1309,7 +1505,7 @@ Expected: The GUI closes and the application exits.
 
 1. Test case: `help`<br>
 
-   Expected: Link to the user guide is copied to the clipboard. Status message shows that the link has been copied. The link should be accessible from a browser. 
+   Expected: Link to the user guide is copied to the clipboard. Status message shows that the link has been copied. The link should be accessible from a browser.
 
 ### Clearing all persons
 
@@ -1325,12 +1521,12 @@ Expected: The GUI closes and the application exits.
 
 1. Prerequisites: No persons in the list.
 
-2. Test case: 
+2. Test case:
 
     ```
    add n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
-   ``` 
-   
+   ```
+
    Expected: A person with the following fields is added to the list:
 
    * Name: `Alice`
@@ -1352,8 +1548,8 @@ Expected: The GUI closes and the application exits.
 
     ```
    add n|Alice e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
-   ``` 
-   
+   ```
+
     Expected: An error message is shown indicating that the `Address` and `Phone` fields are missing.
 
 4. Other incorrect test cases to try: `add`, any other command that misses out a combination of compulsory fields.
@@ -1369,8 +1565,8 @@ Expected: The GUI closes and the application exits.
 
     ```
     add n|Alice n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
-    ``` 
-   
+    ```
+
     Expected: An error message is shown indicating that the `Name` field is repeated.
 
 3. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|` prefixes.
@@ -1385,8 +1581,8 @@ Expected: The GUI closes and the application exits.
 
     ```
    add n|Alice p|98765432 a|King Edward VII Hall E106 e|e1234567@u.nus.edu
-   ``` 
-   
+   ```
+
     Expected: An error message is shown indicating that the email already exists.
 
 #### Adding a person with only compulsory fields
@@ -1397,8 +1593,8 @@ Expected: The GUI closes and the application exits.
 
     ```
    add n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu
-   ``` 
-   
+   ```
+
     Expected: A person with the following fields is added to the list:
 
     * Name: `Alice`
@@ -1417,7 +1613,7 @@ Expected: The GUI closes and the application exits.
     ```
    add n|Alice p|98765432 a|King Edward VII Hall E106 e|alice@example.com m|A1234567X
     ```
-   
+
     Expected: A person with the following fields is added to the list:
     * Name: `Alice`
     * Phone: `98765432`
@@ -1433,7 +1629,7 @@ Expected: The GUI closes and the application exits.
     ```
    add n|Alice p|98765432 a|King Edward VII Hall E106 e|alice@example.com
     ```
-   
+
     Expected: A person with the following fields is added to the list:
    * Name: `Alice`
    * Phone: `98765432`
@@ -1614,18 +1810,18 @@ Expected: The GUI closes and the application exits.
     Expected: Persons with the reflection "R01" are shown. Status message shows the number of persons found.
 
 8. Test case: `find s|S01`<br>
-    
+
     Expected: Persons with the studio "S01" are shown. Status message shows the number of persons found.
 
 <box type="info" seamless>
 
-**Note:** 
+**Note:**
 * Search is not case sensitive
 * Finds persons with the **search parameter** that contains the given word (except reflection and studio, which must match exactly).
 * The search parameter can be any part of the person's details, e.g. name, email, etc. and is specified by the prefix.
 
 </box>
-    
+
 #### Finding by score
 
 1. Prerequisites: Multiple persons in the list. Persons with scores. Exam must be selected.
@@ -1648,7 +1844,7 @@ Expected: The GUI closes and the application exits.
 
 <box type="info" seamless>
 
-**Note:** 
+**Note:**
 * The range of scores searched is exclusive of the given score. E.g. `find lt|50` will not include persons with a score of 50.
 * You can search for scores from 0 to the maximum score of the selected exam, inclusive.
 
@@ -1660,10 +1856,10 @@ Expected: The GUI closes and the application exits.
 
 2. Test case: `find n|Alice e|Alice`<br>
 
-    Expected: An error message is shown indicating that the format of the command is incorrect.  
+    Expected: An error message is shown indicating that the format of the command is incorrect.
 
 3. Other incorrect test cases to try: any combination of two or more unique prefixes<br>
-    
+
     Expected: Similar to previous.
 
 4. Test case: `find n|Alice n|Bob`<br>
@@ -1671,7 +1867,7 @@ Expected: The GUI closes and the application exits.
     Expected: An error message is shown indicating that the prefix `n` is duplicated.
 
 5. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|`, `mt|`, `lt|` prefixes.
-    
+
     Expected: Similar to previous.
 
 ### Copying emails
@@ -1694,7 +1890,7 @@ Expected: The GUI closes and the application exits.
 
 <box type="info" seamless>
 
-**Note:** 
+**Note:**
 * If no persons are displayed, an error message is shown.
 
 </box>
@@ -1703,7 +1899,7 @@ Expected: The GUI closes and the application exits.
 
 #### Importing exam scores from a CSV file
 
-1. Prerequisites: Start with sample data. 
+1. Prerequisites: Start with sample data.
 
 2. Add an `Exam` to the sample data:
 
@@ -1714,7 +1910,7 @@ Expected: The GUI closes and the application exits.
 3. Create a CSV file with the following content:
 
     Contents of `/path/to/file.csv`:
-    
+
     ```
     email,Exam:Midterm
     alexyeoh@example.com,50
@@ -1741,12 +1937,12 @@ Expected: The GUI closes and the application exits.
 2. Create a CSV file with the following content:
 
     Contents of `/path/to/file.csv`:
-    
+
     ```
     email,Exam:Midterm,email
     alexyeoh@example.com,50,alexyeoh@example.com
     ```
-   
+
 3. Test case: `importExamScores /path/to/file.csv`
 
     Expected: An error message is shown indicating that the email header should exist only in the first column.
@@ -1762,12 +1958,12 @@ Expected: The GUI closes and the application exits.
 2. Create a CSV file with the following content:
 
     Contents of `/path/to/file.csv`:
-    
+
     ```
     email,Exam:Midterm,Exam:Midterm
    alexyeoh@example.com,50,60
     ```
-   
+
 3. Test case: `importExamScores /path/to/file.csv`
 
     Expected: A message is shown indicating that there are duplicate entries in the CSV file, and only the first instance has been kept. The `Midterm` score for the person with the email of `alexyeoh@example.com` is `50`.
@@ -1779,14 +1975,14 @@ Expected: The GUI closes and the application exits.
 2. Create a CSV file with the following content:
 
     Contents of `/path/to/file.csv`:
-    
+
     ```
     email,Exam:Midterm,Exam:Finals
     alexyeoh@example.com,101,50
     berniceyu@example.com,50,60
     nonexistent@example.com,100,100
     ```
-   
+
 3. Test case: `importExamScores /path/to/file.csv`
 
     Expected: A message is shown indicating that there are invalid entries in the CSV file, and all other valid entries have been imported. The errors shown are as follows:

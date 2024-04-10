@@ -83,6 +83,7 @@ deactivate AddCommandParser
 'Hidden arrow to position the destroy marker below the end of the activation bar.
 AddCommandParser -[hidden]-> AddressBookParser
 destroy AddCommandParser
+destroy ArgumentMultimap
 
 [<-- AddressBookParser :
 deactivate AddressBookParser
