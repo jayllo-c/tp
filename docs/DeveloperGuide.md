@@ -1,7 +1,7 @@
 ---
 layout: default.md
 title: "Developer Guide"
-pageNav: 3
+pageNav: 4
 ---
 
 # Avengers Assemble Developer Guide
@@ -67,6 +67,8 @@ For example, the `Logic` component defines its API in the `Logic.java` interface
 
 The sections below give more details of each component.
 
+<br>
+
 ### UI component
 
 The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
@@ -97,7 +99,7 @@ The sequence diagram below illustrates a more in-depth view of the interactions 
 
 <puml src="diagrams/UiSequenceDiagram.puml" alt="Sequence Diagram of UI Component"/>
 
-#### **Considerations for UI**
+#### Considerations for UI
 
 ##### Dynamic UI Updates
 
@@ -111,6 +113,8 @@ We chose the second design choice as having a centralized update method would al
 With listeners, the update logic would be scattered across multiple UI component classes, making it much harder to search and add upon the update logic.
 
 One of our main goals was to make our codebase easy to understand and maintain, and we felt that the centralized update method would be more in line with this goal despite the slight increase in coupling and inefficiency.
+
+<br>
 
 ### Logic component
 
@@ -160,6 +164,8 @@ The following is a more detailed explaination on how user input is parsed into a
 
 **Note:** Some commands do not require any arguments (e.g., `help`, `clear`, `list`, `exit`). In such cases, the `XYZCommand` class is directly instantiated by the `AddressBookParser` class without the parsing of arguments. As such, any arguments passed to these commands are ignored.
 
+<br>
+
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
@@ -183,6 +189,7 @@ The `Model` component,
 
 </box>
 
+<br>
 
 ### Storage component
 
@@ -216,17 +223,26 @@ In summary, the `Storage` component:
 * inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
+<br>
+
 ### Common classes
 
 Classes used by multiple components are in the `seedu.addressbook.commons` package.
+These classes provide utility functions that are used across different components such as
+`CollectionUtil`, `StringUtil`, `JsonUtil` etc. It also contains app wide constants and exceptions.
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Implementation**
 
-This section describes some noteworthy details on how certain features are implemented.
+This section describes some noteworthy details on how certain features are implemented
 
-### **Add Person Command** : `add`
+### Contact Management Features
+
+All contacts are stored as `Person` objects in the `UniquePersonList` object under the `AddressBook` of the `Model` component.
+There is an additional `filteredPersons` list stored in the `Model` component that stores the persons currently displayed in the `PersonListPanel` on the UI. This list is updated whenever the user issues a command that might change the persons displayed in the `PersonListPanel`.
+
+#### **Add Person Command** : `add`
 
 The `add` command allows users to add a person to the address book.
 
@@ -242,13 +258,12 @@ and optionally provide additional information such as their:
 * studio (`Studio`),
 * and tags (`Tag`).
 
-#### Implementation Details
-
 ##### Parsing User Input
 The `AddCommandParser` class is responsible for parsing user input to extract the details of the person to be added. It uses the `ArgumentTokenizer` to tokenize the input string, extracting prefixes and their associated values. It ensures that all mandatory fields are present and that there are no duplicate prefixes in the user input.
 
 ##### Executing the Command
-A `AddCommand` is created by the `AddressBookParser` class and passed to the `Logic` component for execution. The `LogicManager` then calls the `execute` method in the `AddCommand` class.
+The `AddCommand` class creates a new `Person` object with the parsed details.
+The `Person` object is then added to the `UniquePersonList` through the `addPerson` method in the `Model` component.
 
 ##### Sequence Diagram
 
@@ -264,16 +279,20 @@ It takes an add command: `execute(add n|Dohn Joe p|98765432 a|123 e|dohn@gm.com 
 
 The parsing is detailed as follows:
 <puml src="diagrams/AddCommandParsing.puml" alt="Detailed Interactions for Parsing Fields of the Add command." />
-#
 
-#### Design Considerations
+<br>
+<br>
 
-##### Use of `Email` field as Unique Identifier
+##### Design Considerations
+
+**Use of `Email` field as Unique Identifier** <br>
+
 We have chosen to use the `Email` field as a unique identifier. Due to the real-world implementation of email addresses, and specifically in NUS, email addresses are unique to each person. This allows for easy identification of persons and prevents the creation of duplicate persons with the same email address.
 
-This is opposed to using the `Name` field as a unique identifier, as an app with our proposed scale will likely be handling a large number of persons with the same name. This would make it difficult to identify or keep track of persons with the same name.
+This is opposed to using the `Name` field as a unique identifier, as an app with our proposed scale will likely be handling a large number of persons potentially having the same name. This would make it difficult to identify or keep track of persons with the same name.
 
-##### Compulsory and Non-compulsory Fields
+**Compulsory and Non-compulsory Fields** <br>
+
 We have chosen to make the following fields compulsory as they are essentials and most likely available to the head TA:
 * `Name`
 * `Email`
@@ -286,23 +305,23 @@ The following fields are optional as they may not be available for all persons:
 * `Studio`
 * `Tag`
 
-### **Edit Person Command** : `edit`
+<br>
+
+#### **Edit Person Command** : `edit`
 
 The `edit` command allows a user to edit the details of an existing person.
 
-#### Implementation Details
-
-The `EditCommandParser` class is responsible for parsing user input to extract the index of the person to be edited and the new details of the person.
-After that, the `EditCommand` class is created and executed by the `Logic` component.
-
 ##### Parsing User Input
 
-An `EditCommandParser` object is instantiated by the `AddressBookParser` object when the user inputs the `edit` command. The `EditCommandParser` object uses the `ArgumentTokenizer` class to tokenize the user input string, extracting the index of the person to be edited and the new details of the person. It ensures that the index is valid and that there are no duplicate prefixes in the user input.
+The `EditCommandParser` class is responsible for parsing user input to extract the index of the person to be edited and the new details of the person.
+It uses the `ArgumentTokenizer` class to tokenize the user input string, extracting the index of the person to be edited and the new details of the person. It ensures that the index is valid and that there are no duplicate prefixes in the user input.
 
 ##### Executing the Command
 
-The `EditCommand` object is created by the `EditCommandParser` object and its `execute` method is called.
-After that, it interacts with the `Model` component to edit the details of the person.
+The `EditCommand` first retrieves the person to be edited from the `Model` component.
+This is done by first retrieving the `filteredPersonList` from the `Model` component using the `getFilteredPersonList` method
+The person to be edited is then retrived from the `filteredPersonList` using the index provided by the user.
+The `EditCommand` then creates a new `Person` object with the new details provided by the user and the selected person's existing details. The `Person` object is then updated in the `UniquePersonList` through the `setPerson` method in the `Model` component.
 
 ##### Activity Diagram
 
@@ -310,12 +329,11 @@ The activity diagram below illustrates the workflow involved in executing the `e
 
 <puml src="diagrams/EditCommandActivityDiagram.puml" alt="Activity Diagram for the `edit` Command" />
 
+<br>
 
-### Delete Person Command : `delete`
+#### **Delete Person Command** : `delete`
 
 The `delete` command allows a user to delete a person with the specified index.
-
-#### Implementation Details
 
 ##### Parsing User Input
 
@@ -323,126 +341,183 @@ The `DeleteCommandParser` class is responsible for parsing user input to extract
 
 ##### Executing the Command
 
-The `DeleteCommandParser` object creates a `DeleteCommand` object upon successful parsing. The `LogicManager` then calls the `execute` method in the `DeleteCommand` class, which then interacts with the `Model` component to remove the person.
+The `DeleteCommand` class first retrieves the person to be deleted from the `Model` component. This is done by first retrieving the `filteredPersonList` from the `Model` component using the `getFilteredPersonList` method. The person to be deleted is then retrieved from the `filteredPersonList` using the index provided by the user. The `DeleteCommand` then deletes the person from the `UniquePersonList` through the `deletePerson` method in the `Model` component.
 
 ##### Sequence Diagram
 
 For more details on the implementation of the `delete` command, refer to the [Delete Command Sequence Diagram](#example-of-parsing-user-input-delete-command).
 
-#### Design Considerations
+##### Design Considerations
 
 We have chosen to implement the `delete` command to accept the index of the person to be deleted to maximize convenience for the user. The numbering of the lists will be displayed to the user, making indexing very intuitive.
 
-### **Delete Shown feature** : `deleteShown`
+<br>
 
-#### Implementation Details
+#### **Find Feature** : `find`
 
-The `deleteShown` command is a child of the `Command` class and relies on the `filteredPersons` list in the `Model` component to delete the persons currently displayed in the `PersonListPanel`.
+The `find` command lets users search for persons by substring matching. The user can select any parameter to search under: `NAME`, `EMAIL`, `TAG`, `MATRIC`, `REFLECTION`, `STUDIO`, and `TAGS` can all be used. E.g. to search for all persons under studio `S2`, the user can use `find s|s2`.
+
+The user can also use two other prefixes: `lt` and `mt` to search for persons with scores less than or more than a certain value respectively. E.g. `find mt|50` will return all persons with scores more than 50.
+
+The `find` feature makes use of the predicate class `PersonDetailContainsKeywordPredicate` and the method `updateFilteredPersonList` to update the model to show only persons that fufill the criteria that the user has keyed in.
+
+##### Parsing User Input
+
+The `FindCommandParser` class is responsible for parsing user input to extract search criteria. It uses the `ArgumentTokenizer` to tokenize the input string, extracting prefixes and their associated values. Following that, the `extractPrefixForFindCommand` method ensures that only one valid, non-empty prefix is provided in the input.
+
+##### Predicate Creation
+
+The `PersonDetailContainsKeywordPredicate` class implements the `Predicate` interface to filter contacts based on search criteria. It takes a prefix and keyword as parameters, allowing it to filter contacts based on specific details like name, phone number, etc.
+
+With the prefix and the value extracted from parsing the user input, a `PersonDetailContainsKeywordPredicate` is created.
 
 ##### Executing the Command
-If the list shows between 0 and the total number of existing persons, the `deleteShown` command will delete the persons currently displayed in the `PersonListPanel`.
+
+The `FindCommand` class is responsible for executing the command for filtering the list in the application. It takes in a `PersonDetailContainsKeywordPredicate` as a parameter and has a `execute` method inherited from its parent class of `Command`
+
+Using the `PersonDetailContainsKeywordPredicate` created from parsing user input, a `FindCommand` is created. the `execute` method is then called by the `LogicManager`.
+
+**Updating Filtered Person List** <br>
+
+The `ModelManager` class implements the `Model` interface and manages the application's data. It maintains a `filteredPersons` list, which is a FilteredList of contacts based on the applied predicate. The `updateFilteredPersonList` method implemented in `ModelManager` updates the filtered list based on the provided predicate.
+
+When the `FindCommand` is executed, the `updateFilteredPersonList` method is called with the `PersonDetailContainsKeywordPredicate` as a parameter. This updates the `filteredPersons` list to show only persons that fufill the predicate.
+
+**User Interface Interaction** <br>
+
+After the `filteredPersons` list is updated, the user interface is updated such that the `PersonListPanel` now shows persons that fufill the predicate generated by the original user input.
+
+The following sequence diagram illustrates the `find` command with the user input `find n|Alice`
+<puml src="diagrams/FindImplementationSequenceDiagram.puml" width="550" />
+
+The following activity Diagram illustrates the user execution of the `find` command
+<puml src="diagrams/FindImplementationActivityDiagram.puml" width="550" />
+
+##### Design Considerations
+
+**User Interface Consistency** <br>
+
+The choice of implementing the command to use prefixes to determine the filter criteria ensures consistency with other commands in the application. As this command follows a similar structure to all other commands, it is easier for users to learn and use the application.
+
+**Flexibility in Search Criteria** <br>
+
+By allowing users to specify search criteria using different prefixes (name, phone, email, etc.), the implementation offers flexibility.
+Users can search for contacts based on various details, enhancing the usability of the feature. In the context of our potential users, we considered that users would likely have to sometimes filter students by their classes, or filter people by their roles (student, tutor, professor). So we opted to implement this feature with the flexibility of using all prefixes to account for all these potential use cases.
+
+**Predicate-based Filtering** <br>
+
+As the `Model` class was built prior to the implementation of this feature, we did our best to re-use available methods instead of unnecessarily re-programing already exisiting logic. Hence, we decided to craft the command around the idea of a custom predicate as the `Model` class already had a `updateFilteredPersonList` method implemented that would filter persons using a predicate.
+
+**Extensibility** <br>
+
+This design allows for easy extension to accommodate future enhancements or additional search criteria. New prefixes can be added to support additional search criteria without significant changes as we merely need to update our `Predicate` logic. This ensures that the implementation remains adaptable to evolving requirements and we can upgrade and improve the feature whenever required.
+
+<br>
+
+#### **Delete Shown Feature** : `deleteShown`
+
+The `deleteShown` command relies on the `filteredPersons` list in the `Model` component to delete the persons currently displayed in the `PersonListPanel`.
+
+##### Executing the Command
+
+The `deleteShown` command first retrives the `filteredPersons` list from the `Model` component using the `getFilteredPersonList` method. The `deleteShown` command then iterates through the `filteredPersons` list and deletes all currently shown `Persons` from the `UniquePersonList`.
+
+If the currently filtered list does is not showing between 0 and the total number of existing persons, the `deleteShown` command will throw a `CommandException`.
 
 ##### Updating Filtered Person List
+
 After deleting all persons currently displayed in the `PersonListPanel`, the `filteredPersons` list in the `Model` component is updated to show all remaining persons in the address book.
 
 The following activity diagram illustrates the workflow of the execution of the `deleteShown` command:
 
 <puml src="diagrams/DeleteShownActivityDiagram.puml" alt="Activity Diagram for the `deleteShown` Command" />
 
-#### Considerations
-##### Reliance on `find` Command
+##### Design Considerations
+
+**Reliance on `find` Command** <br>
+
 Similarly to the `copy` command, the `deleteShown` command is designed to be used with the find command, which filters the persons displayed in the `PersonListPanel`. Consequently, the flexibility of the `deleteShown` command relies heavily on the implementation of the `find` command. Due to this dependency, any changes to the `find` command may affect the functionality of the `deleteShown` command.
 
-### **Export Feature** : `export`
+<br>
 
-The `export` command allows users to export the details of each person currently displayed in the `PersonListPanel` to a CSV file. The CSV file is generated in the file `./addressbookdata/avengersassemble.csv`.
+#### **Import Contacts Feature** : `import`
 
-#### Implementation Details
+##### Parsing User Input
 
-The user uses the `find` feature to filter out the relevant persons, which will be displayed in the `PersonListPanel`.
-The `export` feature utilizes the `filteredPersons` list stored in `Model` to retrieve the relavant data displayed in `PersonListPanel`.
-The `export` feature also relies on the Jackson Dataformat CSV module and the Jackson Databind module write the details of persons to the CSV file `./addressbookdata/avengersassemble.csv`.
+The `ImportCommandParser` class is responsible for parsing user input to extract the file path of the CSV file to be imported. It uses the `ArgumentTokenizer` to tokenize the input string, extracting the file path of the CSV file to be imported.
 
-#### Parsing User Input
+##### Executing the Command
 
-The `ExportCommand` class is instantiated directly by the `AddressBookParser` class when the user inputs the `export` command as the `export` command does not require any additional arguments.
+The `ImportCommand` class then reads the CSV file and adds the contacts to the `Model`.
+The import process is done using a series of `AddCommand`, which are executed in the same order as the rows in the CSV file.
 
-#### Executing the Command
+The import process is done in the following steps:
+1. ImportCommand reads the CSV file with the given file path.
+2. The CSV file is parsed and converts each row into the input a user would give to add the person (uses addCommand).
+3. The addCommand is then executed passing the same model as import command.
+4. The addCommand then adds the person to the model.
 
-When the user inputs an `export` command, it is passed to an `AddressBookParser` which creates an `ExportCommand` object. The `LogicManager` then calls the `execute` method in the `ExportCommand` class.
+**Handling duplicate persons** <br>
 
-#### Data Retrieval
+Duplicate records in the imported CSV file is handled by `AddCommand`, which will check if the person already exists in the model. If the person already exists, the `AddCommand` throws a `CommandException` which is caught by the `ImportCommand` and added to an error report.
 
-The `excute` method calls the `Model#getFilteredPersonList()` to retrieve the `filteredPersons` list stored in `Model`. This lists stores the relevant persons currently displayed in the `PersonListPanel`.
-It then creates a temporary `AddressBook` object and iterates through the `filteredPerons` list to add each person from the list into the AddressBook.
+**Handling invalid CSV files**<br>
 
-#### JSON Serialization
+Invalid files are handled by ImportCommand, which checks if the given filepath is valid.
 
-The information in the temporary `AddressBook` is written into a JSON file, `filteredaddressbook.json` using the `JsonAddressBookStorage#writeToJsonFile()` method.
+The validities checked are:
+- The file exists
+- The file is a CSV file
+- **The first row of the file is the header row. In which all compulsory fields are present. Headers that are not recognized will be ignored.**
 
-#### CSV Conversion
+If the file is not valid, an error message will be returned.
 
-The `export` feature relies on the Jackson Dataformat CSV module and the Jackson Databind module to read the JSON file and write the information into a CSV file.
-Given below is are the steps taken to convert the JSON-formatted data to CSV:
+The sequence diagram below illustrates the interactions within the `Logic` component when the user issues the command `import`.
 
-* The JSON data is read from the JSON file and converted into a JSON tree using Jackson's `ObjectMapper`.
-* The JSON tree is processed to extract the array of persons.
-* A CSV schema is dynamically built based on the structure of the JSON array.
-* The CSV schema and JSON data are used to write to the CSV file using Jackson's `CsvMapper`.
+<puml src="diagrams/ImportSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `import` Command" />
 
-The following sequence diagram shows the interactions within the different classes when the user inputs an `export` command.
+Reference Diagram for each addCommand in importCommand
 
-<puml src="diagrams/ExportSequenceDiagram.puml" alt="Sequence Diagram for the `export` Command" />
+<puml src="diagrams/ImportSequenceDiagramRef.puml" alt="Interactions Inside the Add Component for the `import` Command" />
 
-#### Alternative Implementations
+##### Design Considerations
 
-* **Alternative 1 (current choice):** Exports the details of persons displayed in `PersonListPanel`.
-    * Pros: Users do not have to go through the extra step of filtering through the persons in the CSV file in an external software.
-    * Cons: The extent to which users can filter the persons displayed is highly dependent on the `find` feature.
+**Usage of `AddCommand`** <br>
 
-* **Alternative 2:** Exports **all** contacts stored in the address book.
-    * Pros:
-      * Easy to implement.
-      * The `export` feature is not reliant on the `find` feature to update the `filteredPersons` list.
-    * Cons: Users need to manually filter and sort through the CSV file if they require certain data which may be less efficient.
+The main concern in the increased coupling between `ImportCommand` and `AddCommand`. However, we established that this coupling was actually a good thing, as the incoporation of the `AddCommand` allowed us to reuse the validation and error handling that was already implemented in the `AddCommand`. Furthermore, should we ever need to change the validation and error handling in the `AddCommand`, the `ImportCommand` would automatically inherit these changes. By making `AddCommand` the gate in which all persons are added to the model, we ensure that all persons added to the model are validated and handled in the same way.
 
-### **Copy feature** : `copy`
+<br>
+
+#### **Copy Feature** : `copy`
 
 The `copy` command enables users to quickly copy the email addresses of the persons currently displayed to them in the
 `PersonListPanel`. The copied emails are stored in the users' clipboard and can be pasted into an email client.
 This feature is useful when users need to send emails to a group of persons.
 
-#### Implementation Details
-
 The copy command is a child of the `command` class and relies on the `filteredPersons` list in the `Model` component,
 as well as the `java.awt` package to copy the emails of all currently displayed persons to the users' clipboard.
 
-#### Parsing User Input
+##### Parsing User Input
 
 The `CopyCommand` class is instantiated directly by the `AddressBookParser` class when the user inputs the `copy` command.
 This is because the `copy` command does not require any additional arguments from the user.
 
-#### Executing the Command
-
-The `CopyCommand` class is created by the `AddressBookParser` class and passed to the `Logic` component for execution.
-The `Logic` component then executes the command by calling the `execute` method in the `CopyCommand` class.
-
-#### Copying Emails:
+##### Executing the Command
 
 The `CopyCommand` class is responsible for executing the command for obtaining the emails of the filtered persons and copying them to the clipboard.
 It iterates through the `filteredPersons` list in the `Model` component and extracts the email addresses of each person.
 The email addresses are then concatenated into a single string, separated by commas, and copied to the clipboard using the `java.awt` package.
 
-#### User Interface Interaction
+**User Interface Interaction** <br>
 
 After the `CopyCommand` is executed, the `UI` component updates the `ResultDisplay` to show a message indicating that the emails have been copied to the clipboard.
 
 The following activity diagram summarizes the steps involved in executing the `copy` command:
 <puml src="diagrams/CopyImplementationActivityDiagram.puml" width="1000" />
 
-#### **Considerations**
+##### Considerations
 
-##### Reliance on `find` Command
+**Reliance on `find` Command** <br>
 
 The `copy` command is designed to be used with the find command, which filters the persons displayed in the `PersonListPanel`.
 Consequently, the flexibility of the `copy` command relies heavily on the implementation of the `find` command.
@@ -467,181 +542,100 @@ Instead of copying the emails to the clipboard, the emails could be saved into a
 This approach would allow users to access the emails at a later time and would prevent the loss of copied emails if the clipboard is cleared.
 However, it may be less convenient for users who want to paste the emails directly into an email client.
 
+<br>
 
-### Addition of fields: Matriculation Number (Matric)
+#### **Export Feature** : `export`
+
+The `export` command allows users to export the details of each person currently displayed in the `PersonListPanel` to a CSV file. The CSV file is generated in the file `./addressbookdata/avengersassemble.csv`.
+
+The user can first use the `find` feature to filter out the relevant persons, which will be displayed in the `PersonListPanel`.
+The `export` feature utilizes the `filteredPersons` list stored in `Model` to retrieve the relavant data displayed in `PersonListPanel`.
+The `export` feature also relies on the Jackson Dataformat CSV module and the Jackson Databind module write the details of persons to the CSV file `./addressbookdata/avengersassemble.csv`.
+
+##### Parsing User Input
+
+The `export` command does not require any additional arguments from the user. Hence a `ExportCommandParser` class is not required. `AddressBookParser` directly creates an `ExportCommand` object.
+
+##### Executing the Command
+
+**Data Retrieval** <br>
+
+The `excute` method calls `Model#getFilteredPersonList()` to retrieve the `filteredPersons` list stored in `Model`. This lists stores the relevant persons currently displayed in the `PersonListPanel`.
+It then creates a temporary `AddressBook` object and iterates through the `filteredPerons` list to add each person from the list into the AddressBook.
+
+**JSON Serialization** <br>
+
+The information in the temporary `AddressBook` is written into a JSON file, `filteredaddressbook.json` using the `JsonAddressBookStorage#writeToJsonFile()` method.
+
+**CSV Conversion** <br>
+
+The `export` feature relies on the Jackson Dataformat CSV module and the Jackson Databind module to read the JSON file and write the information into a CSV file.
+Given below is are the steps taken to convert the JSON-formatted data to CSV:
+
+* The JSON data is read from the JSON file and converted into a JSON tree using Jackson's `ObjectMapper`.
+* The JSON tree is processed to extract the array of persons.
+* A CSV schema is dynamically built based on the structure of the JSON array.
+* The CSV schema and JSON data are used to write to the CSV file using Jackson's `CsvMapper`.
+
+The following sequence diagram shows the interactions within the different classes when the user inputs an `export` command.
+
+<puml src="diagrams/ExportSequenceDiagram.puml" alt="Sequence Diagram for the `export` Command" />
+
+<br>
+
+##### Alternative Implementations
+
+**Alternative 1 (current choice):** Exports the details of persons displayed in `PersonListPanel`.
+* Pros: Users do not have to go through the extra step of filtering through the persons in the CSV file in an external software.
+* Cons: The extent to which users can filter the persons displayed is highly dependent on the `find` feature.
+
+**Alternative 2:** Exports **all** contacts stored in the address book.
+* Pros:
+  * Easy to implement.
+  * The `export` feature is not reliant on the `find` feature to update the `filteredPersons` list.
+* Cons: Users need to manually filter and sort through the CSV file if they require certain data which may be less efficient.
+
+<br>
+
+#### **Feature: Addition of Optional Fields (Matric)**
 
 The optional `Matric` field enables the user to store the matriculation number of a person. The field is stored as a `Matric` in the `Person` object.
-The `Studio` and `Reflection` fields are similarly implemented.
 
-#### Implementation Details
+Note: The optional `Studio` and `Reflection` fields are similarly implemented.
+
+##### Implementation Details
+
 The `Matric` class is a simple wrapper class that ensures it is valid according to NUS matriculation number format and is not empty.
 The `Matric` field is used by the `add` and `edit` commands.
 
-#### Parsing User Input: `add`
+##### Parsing User Input: `add`
+
 For the `add` command, as opposed to the `name` and other fields, the parser does not check if a prefix for `Matric` is present. This is because we define the `Matric` field to be optional as contacts (e.g. professors) do not need to have a matriculation number.
 
-Then, the parser verifies that there are no duplicate prefixes for `Matric` in a single `add` command.
-A new Person is then created with the `Matric` field set to the parsed `Matric` object.
+The parser also verifies that there are no duplicate prefixes for `Matric` in a single `add` command. A new Person is then created with the `Matric` field set to the parsed `Matric` object.
 
-#### Parsing User Input: `edit`
+If there is no `Matric` field present, the `Matric` field of the new `Person` object is set to `null`.
+
+##### Parsing User Input: `edit`
+
 For the `edit` command, the parser will add or update the `Matric` field of the person being edited.
 
+<br>
 
-### Automatic Tagging of Persons
+#### **Feature: Automatic Tagging of Persons**
 
 A `student` tag is automatically added during the parsing of the `add` command based on the presence of the `Matric` field of the person being added.
 
-#### Implementation Details
-During the parsing of the `add` command, the parser will check if the `Matric` field is present, meaning they are a student.
+##### Implementation Details
+
+During the parsing of the `add` command, the parser will check if the `Matric` field is present, indicating that they are a student.
 The parser also generates `Tag` objects based on the user input. The existing tags are updated with the new automatically generated tag.
 
 The activity diagram is as follows:
 <puml src="diagrams/AutomaticTaggingActivityDiagram.puml" alt="Activity Diagram for Auto Tagging Feature" />
 
-### Import contacts from CSV file : `import`
 
-#### Implementation
-
-The `ImportCommand` class is responsible for importing contacts from a CSV file.
-The `ImportCommandParser` class is responsible for parsing the user input and creating an `ImportCommand` object. The `ImportCommand` class then reads the CSV file and add the contacts to the `Model`.
-The import process is done using a series of addCommands, which are executed in the same order as the rows in the CSV file.
-It uses the addCommand so as to take advantage of the validation and error handling that is already implemented in the addCommand.
-The import process is done in the following steps:
-- ImportCommand reads the CSV file with the given file path.
-- The CSV file is parsed and converts each row into the input a user would give to add the person (uses addCommand).
-- The addCommand is then executed passing the same model as import command.
-- The addCommand then adds the person to the model.
-
-The sequence diagram below illustrates the interactions within the `Logic` component when the user issues the command `import`.
-
-<puml src="diagrams/ImportSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `import` Command" />
-
-Reference Diagram for each addCommand in importCommand
-
-<puml src="diagrams/ImportSequenceDiagramRef.puml" alt="Interactions Inside the Add Component for the `import` Command" />
-
-#### Design Considerations
-
-**Aspect: How to handle duplicate persons**
-
-Handled by addCommand, which will check if the person already exists in the model. If the person already exists, the addCommand will not add the person and will return an error message.
-
-**Aspect: How to handle invalid CSV files**
-
-Handled by ImportCommand, which will check if the CSV file is valid.
-
-The validities checked are:
-- The file exists
-- The file is a CSV file
-- **The first row of the file is the header row. In which all compulsory fields are present. Headers that are not recognized will be ignored.**
-
-If the file is not valid, an error message will be returned.
-
-### **Import Exam Scores feature** : `importExamScores`
-
-The `importExamScores` command lets users import exam scores corresponding to existing exams and persons from a CSV file.
-
-#### Implementation
-The `ImportExamScoresCommand` class is responsible for import exam scores from a CSV file.
-The `ImportExamScoresParser` class is responsible for parsing the user input, namely the filepath of the CSV file to be imported, and creating an `ImportExamScoresCommand` object.
-
-##### Parsing CSV File
-The CSV file is parsed with the `OpenCSV` library and a `List<String[]>` is created, with each `String[]` representing a row in the CSV file.
-
-#### Validation
-
-##### File Validation
-After parsing, a mapping of `Exam` objects to an inner mapping of an `email` string to a `Double` score is created. This mapping is used to validate the data in the CSV file.
-If the **file** is invalid, an error message is returned.
-
-The validation workflow for the **file** is as follows:
-
-<puml src="diagrams/ImportExamScoresFileActivityDiagram.puml" alt="Activity Diagram for Import Exam Scores File Validation" />
-
-If the file is valid, any invalid entries will be ignored, with the rest being successfully processed.
-
-A **column** will be ignored if:
-1. The column header is not the `email` column, but does not start with `Exam:`.
-2. The column header's name does not correspond to an existing `Exam` object. (i.e. Anything after `Exam:` is not an existing exam name.)
-
-A **row** will be ignored if:
-1. The `email` value does not correspond to an existing `Person`.
-
-A **cell** will be ignored if:
-1. The `Double` representing the score for an existing `Person` and `Exam` is not a valid `Score`.
-
-##### Value Validation
-For every valid row:
-
-The `Double` is parsed into a `Score` object.
-
-The `Model` object is then used to:
-* Get the `Exam` object corresponding to the exam name in the row;
-* Get the `Person` object corresponding to the email in the row;
-* And finally add the `Score` object to the correct `Person` for the correct `Exam`.
-
-##### Concrete Examples of Validation
-
-For concrete examples of the validation process, [refer to the manual testing section of the `importExamScores` command](#importing-exam-scores-importexamscores).
-
-### **Find feature** : `find`
-
-The `find` command lets users search for persons by substring matching. The user can select any parameter to search under: `NAME`, `EMAIL`, `TAG`, `MATRIC`, `REFLECTION`, `STUDIO`, and `TAGS` can all be used. E.g. to search for all persons under studio `S2`, the user can use `find s|s2`. The user can also use two other prefixes: `lt` and `mt` to search for persons with scores less than or more than a certain value respectively. E.g. `find mt|50` will return all persons with scores more than 50.
-
-#### Implementation Details
-The `find` feature makes use of the predicate class `PersonDetailContainsKeywordPredicate` and the method `updateFilteredPersonList` to update the model to show only persons that fufill the criteria that the user has keyed in.
-
-##### Parsing User Input
-
-The `FindCommandParser` class is responsible for parsing user input to extract search criteria. It uses the `ArgumentTokenizer` to tokenize the input string, extracting prefixes and their associated values. Following that, the `extractPrefixForFindCommand` method ensures that only one valid, non-empty prefix is provided in the input.
-
-##### Predicate Creation
-
-The `PersonDetailContainsKeywordPredicate` class implements the `Predicate` interface to filter contacts based on search criteria. It takes a prefix and keyword as parameters, allowing it to filter contacts based on specific details like name, phone number, etc.
-
-With the prefix and the value extracted from parsing the user input, a `PersonDetailContainsKeywordPredicate` is created.
-
-##### Executing the Command
-
-The `FindCommand` class is responsible for executing the command for filtering the list in the application. It takes in a `PersonDetailContainsKeywordPredicate` as a parameter and has a `execute` method inherited from its parent class of `Command`
-
-Using the `PersonDetailContainsKeywordPredicate` created from parsing user input, a `FindCommand` is created. the `execute` method is then called by the `LogicManager`.
-
-##### Updating Filtered Person List:
-
-The `ModelManager` class implements the `Model` interface and manages the application's data. It maintains a `filteredPersons` list, which is a FilteredList of contacts based on the applied predicate. The `updateFilteredPersonList` method implemented in `ModelManager` updates the filtered list based on the provided predicate.
-
-When the `FindCommand` is executed, the `updateFilteredPersonList` method is called with the `PersonDetailContainsKeywordPredicate` as a parameter. This updates the `filteredPersons` list to show only persons that fufill the predicate.
-
-##### User Interface Interaction
-
-After the `filteredPersons` list is updated, the user interface is updated such that the `PersonListPanel` now shows persons that fufill the predicate generated by the original user input.
-
-The following sequence diagram illustrates the `find` command with the user input `find n|Alice`
-<puml src="diagrams/FindImplementationSequenceDiagram.puml" width="550" />
-
-The following activity Diagram illustrates the user execution of the `find` command
-<puml src="diagrams/FindImplementationActivityDiagram.puml" width="550" />
-
-#### **Considerations**
-
-##### User Interface Consistency
-
-The choice of implementing the command to use prefixes to determine the filter criteria ensures consistency with other commands in the application. As this command follows a similar structure to all other commands, it is easier for users to learn and use the application.
-
-##### Flexibility in Search Criteria
-
-By allowing users to specify search criteria using different prefixes (name, phone, email, etc.), the implementation offers flexibility.
-Users can search for contacts based on various details, enhancing the usability of the feature. In the context of our potential users, we considered that users would likely have to sometimes filter students by their classes, or filter people by their roles (student, tutor, professor). So we opted to implement this feature with the flexibility of using all prefixes to account for all these potential use cases.
-
-##### Predicate-based Filtering
-
-As the `Model` class was built prior to the implementation of this feature, we did our best to re-use available methods instead of unnecessarily re-programing already exisiting logic. Hence, we decided to craft the command around the idea of a custom predicate as the `Model` class already had a `updateFilteredPersonList` method implemented that would filter persons using a predicate.
-
-##### Extensibility
-
-This design allows for easy extension to accommodate future enhancements or additional search criteria. New prefixes can be added to support additional search criteria without significant changes as we merely need to update our `Predicate` logic. This ensures that the implementation remains adaptable to evolving requirements and we can upgrade and improve the feature whenever required.
-
+<br>
 <br>
 
 ### **Exam Features**
@@ -708,7 +702,7 @@ The following two sequence diagram illustrates the interactions between the Logi
 
 <puml src="diagrams/AddExamExecutionSequenceDiagram.puml" alt="Sequence Diagram for the execution of `addExam` Command" />
 
-Note: `deleteExam` follows a similar structure, differing in the arguments parsed and the methods called on the `Model` component (e.g. deleteting from `UniqueExamList` instead of adding to it).
+Note: `deleteExam` follows a similar structure, differing in the arguments parsed and the methods called on the `Model` component (e.g. deleting from `UniqueExamList` instead of adding to it).
 
 <br>
 
@@ -872,6 +866,60 @@ The `execute` method in `DeleteScoreCommand` retrieves the `filteredPersons` lis
 It then fetches the person to delete the score for based on the target index.
 It also retrieves the currently selected exam from the `Model`.
 It removes the score for the selected exam in the person's existing `scores` hashmap using the `removeExamScoreFromPerson` method in `Model`.
+
+<br>
+
+#### **Import Exam Scores Feature** : `importExamScores`
+
+The `importExamScores` command lets users import exam scores corresponding to existing exams and persons from a CSV file.
+
+##### Parsing User Input
+
+The `ImportExamScoresParser` class is responsible for parsing the user input. It uses the `ArgumentTokenizer` to tokenize the input string, extracting the file path of the CSV file to be imported.
+
+##### Executing the Command
+
+**Parsing CSV File** <br>
+
+The `ImportExamScoresCommand` class reads the CSV file with the given file path.
+The CSV file is parsed with the `OpenCSV` library and a `List<String[]>` is created, with each `String[]` representing a row in the CSV file.
+
+**File Validation** <br>
+
+After parsing, a mapping of `Exam` objects to an inner mapping of an `email` string to a `Double` score is created. This mapping is used to validate the data in the CSV file.
+If the **file** is invalid, an error message is returned.
+
+The validation workflow for the **file** is as follows:
+
+<puml src="diagrams/ImportExamScoresFileActivityDiagram.puml" alt="Activity Diagram for Import Exam Scores File Validation" />
+
+If the file is valid, any invalid entries will be ignored, with the rest being successfully processed.
+
+A **column** will be ignored if:
+1. The column header is not the `email` column, but does not start with `Exam:`.
+2. The column header's name does not correspond to an existing `Exam` object. (i.e. Anything after `Exam:` is not an existing exam name.)
+
+A **row** will be ignored if:
+1. The `email` value does not correspond to an existing `Person`.
+
+A **cell** will be ignored if:
+1. The `Double` representing the score for an existing `Person` and `Exam` is not a valid `Score`.
+
+**Value Validation** <br>
+
+For every valid row:
+
+The `Double` is parsed into a `Score` object.
+
+The `Model` object is then used to:
+* Get the `Exam` object corresponding to the exam name in the row;
+* Get the `Person` object corresponding to the email in the row;
+* And finally add the `Score` object to the correct `Person` for the correct `Exam`.
+
+##### Concrete Examples of Validation
+
+For concrete examples of the validation process, [refer to the manual testing section of the `importExamScores` command](#importing-exam-scores-importexamscores).
+
 
 <br>
 
@@ -2301,43 +2349,27 @@ Expected: The GUI closes and the application exits.
 
 ## **Appendix: Effort**
 
-This sections aims to showcase the effort put into Avengers Assemble by our team. 
+This sections aims to showcase the effort put into Avengers Assemble by our team.
 We will highlight the difficulty level, challenges faced, and effort required in this project.
 
 <br>
 
 ### Difficulty Level
 
-On top of the `Person` entity originally implemented by AB3, Avengers Assemble also incorporates an additional entity of 
+On top of the `Person` entity originally implemented by AB3, Avengers Assemble also incorporates an additional entity of
 `Exam`, with `Score` serving as a connection between the two entities.
-With this additional entity added, considerations had to be made regarding the implementation of  
-different features, interactions between each entity, and the management and storage of these 
-entities.
+With this additional entity added, considerations had to be made regarding the implementation of
+different features, interactions between each entity, and the management and storage of these
+entities. The consideration of these factors turned out to be more challenging than initially anticipated.
 
 Moreover, in addition to enhancing the original features of AB3 to cater to our target users, Avengers Assemble also introduces
 many new commands to improve the usability of our application, as well as to handle the diverse behaviours and interactions
-of `Person` and `Exam`.
+of `Person` and `Exam`. This required a significant amount of effort to ensure that the new features were
+implemented correctly and seamlessly integrated with the existing features.
 
-<br>
-
-### Challenges Faced
-
-#### Considerations for Exam Features
-
-**Limited User Interface Space for Score Interaction**<br>
-With the introduction of exam scores, we were presented with the challenge of designing a user-friendly interface for score
-interaction within the limited screen space. We had to devise intuitive methods for users to view, input and manage the scores
-of various exams, without overwhelming the interface.
-
-**Selection System for Exams**<br>
-A key consideration in the development of Avengers Assemble was the implementation of the selection system for exams.
-This feature was introduced to complement the exam score functionality. With this feature, users are able to focus on scores
-for a specific exam, instead of viewing all scores simultaneously. This decision was made to prevent over-cluttering the 
-user interface and to enhance user experience.
-
-**Data Management for Exams and Scores**<br>
-Integrating the `Exam` entity into Avengers Assemble...(might need some input on this part).
-`Exam` entity required additional and separate handling storage
+Compared to the individual project, the group project was lower in intensity for each of us in terms of lines of code,
+but the coordination and communication required to ensure that the features were implemented correctly and
+seamlessly integrated with the existing features added a layer of complexity to the project.
 
 <br>
 
@@ -2350,34 +2382,101 @@ New fields such as recitation, studio, matriculation number, was added to person
 
 **Find**<br>
 Our team improved on the existing `find` command of AB3 to allow for more flexibility. With the new improvements, users
-can now find not only based on the name field of persons, but also specify their search based on other fields such as 
-`email` and `recitation`. With the addition of the exam score features, we also adapted our `find` command to allow users 
+can now find not only based on the name field of persons, but also specify their search based on other fields such as
+`email` and `recitation`. With the addition of the exam score features, we also adapted our `find` command to allow users
 to filter out persons less than or more than a specified score, revamping the way `find` is used and handled.
 
 **Automatic Tagging of Persons**<br>
 In the context of our application, it is mainly used to store students', instructors' and teaching assistants' contacts.
-Hence, on top of the original behaviour of the tag feature, we adapted it to automatically tag contacts with a 
+Hence, on top of the original behaviour of the tag feature, we adapted it to automatically tag contacts with a
 matriculation number as students.
 
 **User Interface**<br>
-Enhancements were made to the user interface...(johan can add here?)
+Enhancements were made to the user interface to improve the user experience. The structure of the user interface was
+modified to accommodate the new features, and the theme of the application was changed to follow the theme of the
+course that we were developing the application for. Furthermore, the logic for the updating of user interface was also
+modified to a more developer-friendly approach which would allow developers to understand and modify the user interface
+more easily.
 
 #### New Features
 
 **Copy**<br>
-Our team introduced a new copy command which allows for users to copy the email addresses of the currently displayed persons. 
+Our team introduced a new copy command which allows for users to copy the email addresses of the currently displayed persons.
 This is to cater to the context of our application, assisting head tutors with the task of making mass announcements.
 
 **Import and Export**<br>
 To facilitate the handling and managing of large amounts of information, our group introduced the import and export feature to
-allow for flexible data movement externally and internally.
+allow for flexible data movement externally and internally. These features required extensive effort due to how bug prone
+they were. This is elaborated upon in the challenges section below.
 
 **Exams and Exams Scores**<br>
-The implementation of the exam and exam score features was the most significant addition to our application, requiring adjustments to existing features and the 
-introduction of many new commands to handle and manage the addition of exams and exam features.
+The implementation of the exam and exam score features was the most significant addition to our application, requiring adjustments to existing features and the
+introduction of many new commands to handle and manage the addition of exams and exam features. This feature was the most
+complex and required the most effort to implement, as it involved the introduction of a new entity, `Exam`, and the management
+of scores for each person for each exam. This is further elaborated upon in the challenges section below.
+
+<br>
+
+### Challenges Faced
+
+#### Understanding the Existing Codebase
+One of the challenges we faced was understanding the existing codebase of AB3. We had to familiarize ourselves with the
+structure of the codebase, the interactions between the different classes, and the existing features of AB3. This required
+us to spend time reading through the code, discussing the existing features, and identifying potential areas where
+conflicts might arise when adding new features. We also had to consider how to integrate our new features using the existing
+structure in AB3, and how to ensure that the new features did not conflict with the existing features.
+
+#### Considerations for New Entity `Exam` and its Interactions with `Person`
+Our team wanted to implement a feature that would allow users to manage and store exam scores for each person.
+It was clear from the start that this would require the introduction of a new entity, `Exam`, to store information about
+each exam. However, we found that there was a challenge in determining how to connect the `Person` entity with the `Exam` entity, and how to
+manage and store the scores for each person for each exam. This required careful consideration and planning to ensure that
+the interactions between the two entities were seamless and intuitive for users. We also had to consider how to handle the
+storage of these entities and how to manage the data effectively.
+
+**Limited User Interface Space for Score Interaction**<br>
+One of the greatest challenges was designing a user-friendly interface for score
+interaction within the limited screen space. We had to devise intuitive methods for users to view, input and manage the scores
+of various exams, without overwhelming the interface. This proved to be a greater challenge than initially anticipated,
+as we had to consider trade offs between functionality and user experience. Lowering the complexity of the interface
+would result in an interface that is easier to read, but might not provide all the necessary information at a glance and
+require more user interactions to access the information. On the other hand, a more complex interface would provide more
+information at a glance, but might overwhelm users with too much information. Striking a balance between these two
+trade-offs was a challenge that required extended discussions and iterations before arriving at a solution that we were
+satisfied with: the selection system for exams.
+
+**Implementation of Exam and Exam Score Features**<br>
+After coming to a concensus with regards to the user interface, implemetation for exam features seemed straightforward.
+However, it turned out to be a lot more complex to implement than initially anticipated. Our exam features consisted
+of many subfeatures which included the management of exams, the management of scores, the storage of scores in persons,
+and the importing of scores. As we were working in a collaborative environment, we had to consider how to distribute
+the workload in a manner that would prevent conflicts.
+This required early discussions of the structure of the exam and score features, and how they would interact with the existing features of AB3.
+We drafted up diagrams to visualize the interactions between each feature. This helped us to identify potential conflicts
+early on and resolve them through distributing the workload effectively and meeting regularly to discuss progress and issues.
+
+**Data Management for Exams and Scores**<br>
+Handling the data for exams and scores was another challenge that we faced. We had to consider how to store the data for
+each exam, how to store the scores for each person for each exam, and how to manage the data effectively.
+The storage for exams was relatively straightforward, as we could create an additional list in the `AddressBook` class to store
+the exams. However, the storage for scores was more complex.. We had to decide whether to store all the exam score data
+in corresponding `Exam` objects, or store each persons' exam scores in their corresponding `Person` objects.
+
+There was once again another trade-off to consider: storing all exam score data in the `Exam` objects would make it
+easier to implement exam operations, but would require more complex interactions between the score and person objects.
+On the other hand, storing each person's score in their corresponding `Person` object would make it easier to implement
+operations on persons, but would require more complex interactions for exam management. We had to consider the pros and cons
+of each approach, before deciding on the latter approach, as we concluded that our application was more person-centric.
+
+#### Bug Fixing and Testing
+A significant challenge we faced was the identification and resolution of bugs. Unit tests for our own features were
+relatively straightforward to implement, but we found that identifying edge cases proved to be tricky. Certain features
+were also a lot more bug prone than others, such as the import features, which required extensive testing to ensure that
+all potential errors were caught and proper error messages were displayed. We also had to ensure that the application
+handled these errors gracefully and did not crash when these errors occurred.
 
 <br>
 
 ### Achievements
-Overall, our group successfully implemented the planned features while addressing bugs and managing potential feature flaws. 
+Overall, our group successfully implemented the planned features while addressing bugs and managing potential feature flaws.
 Despite initial hesitations about implementing significant new features like exams and exam scores, we overcame the challenge and achieved our goals.
