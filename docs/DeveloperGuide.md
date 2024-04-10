@@ -493,29 +493,45 @@ All exams are stored in the `UniqueExamList` object in `AddressBook` of the `Mod
 
 #### **Add Exam Command** : `addExam`
 
-The `addExam` command allows users to add an exam to the application. The user can specify the name of the exam and the maximum score of the exam. The exam is then added to the `UniqueExamList`.
+The `addExam` command allows users to add an exam to the application.
+The user can specify the name of the exam and the maximum score of the exam.
+The exam is then added and stored in the `UniqueExamList`.
 
 ##### Parsing User Input
 
-The `addExam` command takes in two arguments from the user: the name of the exam and the maximum score of the exam. `AddExamCommandParser` checks that the user has provided both arguments and that both arguments are valid.
+The `AddExamCommandParser` is responsible for pasring user input to extract the `name` and the `maxScore` of the exam.
+It uses the `ArgumentTokenizer` to tokenize the input string, extracting `name` and `maxScore`.
+It ensures that `name` and `maxScore` are valid and present in the user input, and that there are no duplicate prefixes in the user input.
+The `name` and `maxScore` are then used to instantiate an `AddExamCommand`.
 
 ##### Executing the Command
 
-On execution, the `AddExamCommand` class creates a new `Exam` object with the parsed arguments and adds it to the `UniqueExamList` stored in the `AddressBook` of the `Model` component. If the exam already exists in the list, a `CommandException` is thrown.
+The `AddExamCommand` class creates a new `Exam` object with the parsed arguments
+It adds the `Exam` to the `UniqueExamList` through the `addExam` method in the `Model` component.
+If the exam already exists in the list, a `CommandException` is thrown.
 
 <br>
 
 #### **Delete Exam Command** : `deleteExam`
 
-The `deleteExam` command allows users to delete an exam from the application. The user can specify the index of the exam to be deleted. The exam is then removed from the `UniqueExamList`.
+The `deleteExam` command allows users to delete an exam from the application.
+The user can specify the index of the exam to be deleted.
+The exam is then removed from the `UniqueExamList`.
 
 ##### Parsing User Input
 
-The `deleteExam` command takes in one argument from the user: the index of the exam to be deleted. `DeleteExamCommandParser` checks that the user has provided the index and that the index is valid.
+The `DeleteExamParser` is responsible for parsing user input to extract the `index` of the exam to be deleted.
+It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `index`.
+It ensures that the `index` is valid and present in the user input, and that there are no other prefixes in the user input.
+The `index` is used to instantiate a `DeleteExamCommand`.
 
 ##### Executing the Command
 
-On execution, the `DeleteExamCommand` class deletes the exam at the specified index from the `UniqueExamList` stored in the `AddressBook` of the `Model` component. If the index is invalid (e.g. the index is greater than the size of the exam), a `CommandException` is thrown.
+The `DeleteExamCommand` uses the index to delete the exam from the `UniqueExamList` in the `Model` component.
+It first retrieves the `UniqueExamList` by using the `getExamList` method in the `Model` component.
+It then retrieves the exam from the `UniqueExamList` using the user provided index.
+If the index is greater than the size of the list, a `CommandException` is thrown.
+Using the retrieved exam, it then deletes the exam from the `UniqueExamList` through the `deleteExam` method in the `Model` component.
 
 <br>
 
@@ -537,17 +553,22 @@ Note: `deleteExam` follows a similar structure, differing in the arguments parse
 
 #### **Select Exam Command** : `selectExam`
 
-The `selectExam` command allows users to select an exam from the ``UniqueExamList`. The selection of exams is heavily used in conjunction with our exam score features.
+The `selectExam` command allows users to select an exam from the ``UniqueExamList`.
+The selection of exams is heavily used in conjunction with our exam score features.
 
 ##### Parsing User Input
 
-The `selectExam` command takes in one argument from the user: the index of the exam to be selected. `SelectExamCommandParser` checks that the user has provided the index and that the index is valid.
+The `SelectExamCommandParser` is responsible for parsing user input to extract the `index` of the exam to be selected.
+It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `index`.
+It ensures that the `index` is valid and present in the user input, and that there are no other prefixes in the user input.
 
 ##### Executing the Command
 
-On execution, the `SelectExamCommand` retrieves the the selected exam from the `UniqueExamList` based on the user input index. The selected exam is then stored in `Model` under the `selectedExam` field.
-
-If the index is invalid (e.g. the index is greater than the size of the exam), a `CommandException` is thrown.
+The `SelectExamCommand` uses the index to select an exam from the `UniqueExamList` in the `Model` component.
+It first retrieves the `UniqueExamList` by using the `getExamList` method in the `Model` component.
+It then retrieves the exam from the `UniqueExamList` using the user provided index.
+If the index is greater than the size of the list, a `CommandException` is thrown.
+Using the retrieved exam, it then sets the `selectedExam` field in the `Model` component using the `selectExam` method.
 
 <br>
 
@@ -557,11 +578,14 @@ The `deselectExam` command allows users to deselect the currently selected exam.
 
 ##### Parsing User Input
 
-The `deselectExam` command does not take any arguments from the user. Hence, a `DeselectExamCommandParser` is not required. `AddressBookParser` directly creates a `DeselectExamCommand` object.
+The `deselectExam` command does not take any arguments from the user.
+Hence, a `DeselectExamCommandParser` is not required. `AddressBookParser` directly creates a `DeselectExamCommand` object.
 
 ##### Executing the Command
 
-On execution, the `DeselectExamCommand` sets the `selectedExam` in `ModelManger` to null. If there is no exam currently selected, a `CommandException` is thrown.
+The `DeselectExamCommand` uses the `deselectExam` method in the `Model` component to deselect the currently selected exam.
+It sets the `selectedExam` field in the `Model` component to `null`.
+If there is no exam selected, a `CommandException` is thrown.
 
 <br>
 
