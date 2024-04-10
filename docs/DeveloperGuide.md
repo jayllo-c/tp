@@ -1285,145 +1285,6 @@ Expected: The most recent window size and location is retained.
 
 Expected: The GUI closes and the application exits.
 
-### Getting help
-
-1. Test case: `help`<br>
-   Expected: Link to the user guide is copied to the clipboard. Status message shows that the link has been copied. The link should be accessible from a browser. 
-
-### Clearing all persons
-
-1. Prerequisites: Multiple persons in the list.
-
-2. Test case: `clear`<br>
-
-   Expected: All persons are deleted from the list. Status message shows the number of persons deleted.
-
-### Finding a person
-
-#### Finding a person by contact details
-
-1. Prerequisites: Multiple persons in the list.
-
-2. Test case: `find n|Alice`<br>
-
-    Expected: Persons with the name "Alice" are shown. Status message shows the number of persons found.
-
-3. Test case: `find e|alice`<br>
-
-    Expected: Persons with emails that contain the word "alice" are shown. Status message shows the number of persons found.
-
-4. Test case: `find p|123`<br>
-
-    Expected: Persons with phone numbers that contain the digits "123" are shown. Status message shows the number of persons found.
-
-5. Test case: `find a|Ang Mo Kio`<br>
-
-    Expected: Persons with addresses that contain the word "Ang Mo Kio" are shown. Status message shows the number of persons found.
-
-5. Test case: `find t|student`<br>
-
-    Expected: Persons with the tag "student" are shown. Status message shows the number of persons found.
-
-6. Test case: `find m|A123`<br>
-
-    Expected: Persons with matriculation numbers containing "A123" are shown. Status message shows the number of persons found.
-
-7. Test case: `find r|R01`<br>
-
-    Expected: Persons with the reflection "R01" are shown. Status message shows the number of persons found.
-
-8. Test case: `find s|S01`<br>
-    
-    Expected: Persons with the studio "S01" are shown. Status message shows the number of persons found.
-
-<box type="info" seamless>
-
-**Note:** 
-* Search is not case sensitive
-* Finds persons with the **search parameter** that contains the given word (except reflection and studio, which must match exactly).
-* The search parameter can be any part of the person's details, e.g. name, email, etc. and is specified by the prefix.
-
-</box>
-    
-#### Finding by score
-
-1. Prerequisites: Multiple persons in the list. Persons with scores. Exam must be selected.
-
-2. Test case: `find lt|50`<br>
-
-    Expected: Persons with scores less than 50 are shown. Status message shows the number of persons found.
-
-3. Test case: `find mt|50`<br>
-
-    Expected: Persons with scores more than 50 are shown. Status message shows the number of persons found.
-
-4. Test case: `find lt|-1`<br>
-
-    Expected: An error message is shown indicating that the `score` provided is invalid.
-
-5. Test case: `find mt|101`<br>
-
-    Expected: An error message is shown indicating that the `score` provided is greater than the maximum score of the selected exam. (Assuming the maximum score is 100)
-
-<box type="info" seamless>
-
-**Note:** 
-* The range of scores searched is exclusive of the given score. E.g. `find lt|50` will not include persons with a score of 50.
-* You can search for scores from 0 to the maximum score of the selected exam, inclusive.
-
-</box>
-
-#### Finding by multiple prefixes
-
-1. Prerequisites: Multiple persons in the list.
-
-2. Test case: `find n|Alice e|Alice`<br>
-
-    Expected: An error message is shown indicating that the format of the command is incorrect.  
-
-3. Other incorrect test cases to try: any combination of two or more unique prefixes<br>
-    
-    Expected: Similar to previous.
-
-4. Test case: `find n|Alice n|Bob`<br>
-
-    Expected: An error message is shown indicating that the prefix `n` is duplicated.
-
-5. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|`, `mt|`, `lt|` prefixes.
-    
-    Expected: Similar to previous.
-
-### Copying emails
-
-#### Copying emails of all persons
-
-1. Prerequisites: Multiple persons in the list. Use the `list` command to display all persons.
-
-2. Test case: `copy`<br>
-
-    Expected: All emails are copied to the clipboard. Status message shows the number of emails copied.
-
-#### Copying emails of a specific group
-
-1. Prerequisites: Multiple persons in the list, filtered by a specific criteria using the `find` command.
-
-2. Test case: `copy`<br>
-
-    Expected: All emails of the currently displayed persons are copied to the clipboard. Status message shows the number of emails copied.
-
-<box type="info" seamless>
-
-**Note:** 
-* If no persons are displayed, an error message is shown.
-
-</box>
-
-### Exiting the application
-
-1. Test case: `exit`<br>
-
-    Expected: The application closes.
-
 ### Saving data
 
 #### Dealing with missing or corrupted data files
@@ -1444,6 +1305,19 @@ Expected: The GUI closes and the application exits.
 
     Expected: The app should ignore the corrupted file and create a new empty `data/avengersassemble.json` file when launched and interacted with.
 
+### Getting help
+
+1. Test case: `help`<br>
+
+   Expected: Link to the user guide is copied to the clipboard. Status message shows that the link has been copied. The link should be accessible from a browser. 
+
+### Clearing all persons
+
+1. Prerequisites: Multiple persons in the list.
+
+2. Test case: `clear`<br>
+
+   Expected: All persons are deleted from the list. Status message shows the number of persons deleted.
 
 ### Adding a person: `add`
 
@@ -1704,6 +1578,126 @@ Expected: The GUI closes and the application exits.
 2. Test case: `list`
 
     Expected: All persons in the overall list are shown.
+
+### Finding a person
+
+#### Finding a person by contact details
+
+1. Prerequisites: Multiple persons in the list.
+
+2. Test case: `find n|Alice`<br>
+
+    Expected: Persons with the name "Alice" are shown. Status message shows the number of persons found.
+
+3. Test case: `find e|alice`<br>
+
+    Expected: Persons with emails that contain the word "alice" are shown. Status message shows the number of persons found.
+
+4. Test case: `find p|123`<br>
+
+    Expected: Persons with phone numbers that contain the digits "123" are shown. Status message shows the number of persons found.
+
+5. Test case: `find a|Ang Mo Kio`<br>
+
+    Expected: Persons with addresses that contain the word "Ang Mo Kio" are shown. Status message shows the number of persons found.
+
+5. Test case: `find t|student`<br>
+
+    Expected: Persons with the tag "student" are shown. Status message shows the number of persons found.
+
+6. Test case: `find m|A123`<br>
+
+    Expected: Persons with matriculation numbers containing "A123" are shown. Status message shows the number of persons found.
+
+7. Test case: `find r|R01`<br>
+
+    Expected: Persons with the reflection "R01" are shown. Status message shows the number of persons found.
+
+8. Test case: `find s|S01`<br>
+    
+    Expected: Persons with the studio "S01" are shown. Status message shows the number of persons found.
+
+<box type="info" seamless>
+
+**Note:** 
+* Search is not case sensitive
+* Finds persons with the **search parameter** that contains the given word (except reflection and studio, which must match exactly).
+* The search parameter can be any part of the person's details, e.g. name, email, etc. and is specified by the prefix.
+
+</box>
+    
+#### Finding by score
+
+1. Prerequisites: Multiple persons in the list. Persons with scores. Exam must be selected.
+
+2. Test case: `find lt|50`<br>
+
+    Expected: Persons with scores less than 50 are shown. Status message shows the number of persons found.
+
+3. Test case: `find mt|50`<br>
+
+    Expected: Persons with scores more than 50 are shown. Status message shows the number of persons found.
+
+4. Test case: `find lt|-1`<br>
+
+    Expected: An error message is shown indicating that the `score` provided is invalid.
+
+5. Test case: `find mt|101`<br>
+
+    Expected: An error message is shown indicating that the `score` provided is greater than the maximum score of the selected exam. (Assuming the maximum score is 100)
+
+<box type="info" seamless>
+
+**Note:** 
+* The range of scores searched is exclusive of the given score. E.g. `find lt|50` will not include persons with a score of 50.
+* You can search for scores from 0 to the maximum score of the selected exam, inclusive.
+
+</box>
+
+#### Finding by multiple prefixes
+
+1. Prerequisites: Multiple persons in the list.
+
+2. Test case: `find n|Alice e|Alice`<br>
+
+    Expected: An error message is shown indicating that the format of the command is incorrect.  
+
+3. Other incorrect test cases to try: any combination of two or more unique prefixes<br>
+    
+    Expected: Similar to previous.
+
+4. Test case: `find n|Alice n|Bob`<br>
+
+    Expected: An error message is shown indicating that the prefix `n` is duplicated.
+
+5. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|`, `mt|`, `lt|` prefixes.
+    
+    Expected: Similar to previous.
+
+### Copying emails
+
+#### Copying emails of all persons
+
+1. Prerequisites: Multiple persons in the list. Use the `list` command to display all persons.
+
+2. Test case: `copy`<br>
+
+    Expected: All emails are copied to the clipboard. Status message shows the number of emails copied.
+
+#### Copying emails of a specific group
+
+1. Prerequisites: Multiple persons in the list, filtered by a specific criteria using the `find` command.
+
+2. Test case: `copy`<br>
+
+    Expected: All emails of the currently displayed persons are copied to the clipboard. Status message shows the number of emails copied.
+
+<box type="info" seamless>
+
+**Note:** 
+* If no persons are displayed, an error message is shown.
+
+</box>
 
 ### Importing Exam Scores: `importExamScores`
 
