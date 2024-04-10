@@ -1,0 +1,16 @@
+@startuml
+skin rose
+skinparam ActivityFontSize 15
+skinparam ArrowFontSize 12
+start
+:User executes deleteShown command;
+if () then ([filtered list equals list of all existing persons])
+  :Indicate that all persons cannot be deleted;
+else ([else])
+while () is ([there are persons left to delete])
+    :Delete person;
+  endwhile;
+  -> [else];
+endif;
+stop
+@enduml

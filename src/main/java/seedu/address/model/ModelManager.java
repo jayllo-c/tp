@@ -92,6 +92,7 @@ public class ModelManager implements Model {
     @Override
     public void setAddressBook(ReadOnlyAddressBook addressBook) {
         this.addressBook.resetData(addressBook);
+        updateSelectedExamStatistics();
     }
 
     @Override
@@ -108,12 +109,14 @@ public class ModelManager implements Model {
     @Override
     public void deletePerson(Person target) {
         addressBook.removePerson(target);
+        updateSelectedExamStatistics();
     }
 
     @Override
     public void addPerson(Person person) {
         addressBook.addPerson(person);
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        updateSelectedExamStatistics();
     }
 
     @Override
@@ -121,6 +124,7 @@ public class ModelManager implements Model {
         requireAllNonNull(target, editedPerson);
 
         addressBook.setPerson(target, editedPerson);
+        updateSelectedExamStatistics();
     }
 
     @Override
@@ -158,6 +162,7 @@ public class ModelManager implements Model {
     public void updateFilteredPersonList(Predicate<Person> predicate) {
         requireNonNull(predicate);
         filteredPersons.setPredicate(predicate);
+        updateSelectedExamStatistics();
     }
 
     @Override
@@ -195,6 +200,7 @@ public class ModelManager implements Model {
         }
         if (selectedExam.getValue() != null && selectedExam.getValue().equals(target)) {
             deselectExam();
+            updateSelectedExamStatistics();
         }
     }
 
@@ -240,10 +246,10 @@ public class ModelManager implements Model {
             selectedExamStatistics.set(null);
             return;
         }
-        selectedExamStatistics.set(getExamScoreStatistics(selectedExam.getValue()));
+        selectedExamStatistics.set(calculateExamScoreStatistics(selectedExam.getValue()));
     }
 
-    private ScoreStatistics getExamScoreStatistics(Exam exam) {
+    private ScoreStatistics calculateExamScoreStatistics(Exam exam) {
         // Get all scores for the exam that exist in the filtered persons
         List<Score> scores = filteredPersons.stream()
             .map(person -> person.getScores().get(exam))
