@@ -392,6 +392,12 @@ The import process is done in the following steps:
 
 The sequence diagram below illustrates the interactions within the `Logic` component when the user issues the command `import`.
 
+**Parsing**
+
+<puml src="diagrams/ImportParserSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `import` Command for parsing" />
+
+**Execution**
+
 <puml src="diagrams/ImportSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `import` Command" />
 
 Reference Diagram for each addCommand in importCommand
