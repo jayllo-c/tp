@@ -34,14 +34,15 @@ ImportCommand -> AddCommandParser : parseAddCommandInput(addCommandInput)
 activate AddCommandParser
 create AddCommand
 AddCommandParser -> AddCommand : parse(addCommandInput)
-deactivate AddCommandParser
 activate AddCommand
-AddCommand --> ImportCommand
+AddCommand --> AddCommandParser
 deactivate AddCommand
+AddCommandParser --> ImportCommand
+deactivate AddCommandParser
 
 ImportCommand -> AddCommand
 activate AddCommand
-ref over AddCommand, Person, Model : addCommand.execute(m)
+ref over AddCommand, Person, Model : Add Command Execution
 AddCommand --> ImportCommand
 deactivate AddCommand
 

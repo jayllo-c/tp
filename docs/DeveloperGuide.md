@@ -2005,7 +2005,7 @@ Expected: The GUI closes and the application exits.
 
 ### Adding an exam: `addExam`
 
-### Adding an exam with valid data
+#### Adding an exam with valid data
 
 1. Prerequisites: No exams in the address book.
 
@@ -2015,14 +2015,14 @@ Expected: The GUI closes and the application exits.
 3. Other test cases to try: `addExam n|Final d|2021-12-12`<br>
    Expected: New exam is added to the address book. Status message shows the exam added.
 
-### Adding an exam that already exists
+#### Adding an exam that already exists
 
     1. Prerequisites: An exam of name: Final, date: 2021-12-12 exists in the address book.
 
     2. . Test case: `addExam n|Final d|2021-12-12`<br>
          Expected: Error message shown in the error report. No change in the address book.
 
-### Adding an exam with missing fields
+#### Adding an exam with missing fields
 
     1. Pre-requisite: No exams in the address book.
 
@@ -2045,7 +2045,7 @@ Expected: The GUI closes and the application exits.
     5. Test case: `deleteExam` (no index)<br>
        Expected: No exam is deleted. Error message shown. No change in the address book.
 
-### Selecting an exam: `selectExam`
+#### Selecting an exam: `selectExam`
 
     1. Prerequisites: Exactly one exam in the address book. Hence, exam has an index of 1.
 
@@ -2061,7 +2061,7 @@ Expected: The GUI closes and the application exits.
     5. Test case: `selectExam` (no index)<br>
        Expected: No exam is selected. Error message shown. No change in the address book.
 
-### Deselecting an exam: `deselectExam`
+#### Deselecting an exam: `deselectExam`
 
     1. Prerequisites: An exam has been selected.
 
@@ -2073,7 +2073,7 @@ Expected: The GUI closes and the application exits.
 
 ### Importing persons: `import`
 
-### Importing data from a CSV file
+#### Importing data from a CSV file
 
     1. Prerequisites: Prepare a CSV file with a few persons. There isa file at path C:file.csv with the following content:
 
@@ -2085,14 +2085,14 @@ Expected: The GUI closes and the application exits.
     2. Test case: `import i|file.csv`<br>
         Expected: Persons from the CSV file are added to the address book. Status message shows the number of persons imported.
 
-### Importing data from a CSV file that does not exist
+#### Importing data from a CSV file that does not exist
 
     1. Prerequisites: No CSV file at the path C:file.csv
 
     2. Test case: `import i|file.csv` <br>
        Expected: Error message shown in the error report. No change in the address book.
 
-### Importing data from a CSV file that is not a CSV file
+#### Importing data from a CSV file that is not a CSV file
 
     1. Prerequisites: A file at the path C:file.txt with the following content:
 
@@ -2104,7 +2104,7 @@ Expected: The GUI closes and the application exits.
     2. Test case: `import i|file.txt` (file is not a CSV file)<br>
        Expected: Error message shown in the error report. No change in the address book.
 
-### Importing data from a CSV file with duplicate compulsory headers in header row
+#### Importing data from a CSV file with duplicate compulsory headers in header row
 
     1. Prerequisites: A CSV file with duplicate compulsory headers (e.g. 2 header columns named 'name') at the path C:file.csv with the following content:
 
@@ -2116,7 +2116,7 @@ Expected: The GUI closes and the application exits.
     2. Test case: `import i|file.csv` (file has duplicate headers)<br>
        Expected: First occurrence in the CSV file is added to the address book. Duplicate entries are ignored.
 
-### Importing data from a CSV file with missing compulsory headers in header row
+#### Importing data from a CSV file with missing compulsory headers in header row
 
     1. Prerequisites: A CSV file with missing compulsory headers at the path C:file.csv with the following content:
     ```
@@ -2127,7 +2127,7 @@ Expected: The GUI closes and the application exits.
     2. Test case: `import i|file.csv` (file has missing headers)<br>
        Expected: Error message shown in the error report. No change in the address book.
 
-### Importing data from a CSV file with missing compulsory values in a row
+#### Importing data from a CSV file with missing compulsory values in a row
 
     1. Prerequisites: A CSV file with missing compulsory values in a row at the path C:file.csv with the following content:
 
@@ -2139,7 +2139,7 @@ Expected: The GUI closes and the application exits.
     2. Test case: `import i|file.csv` <br>
        Expected: All valid rows are added to the address book. Error message shown in the error report for invalid rows.
 
-### Importing data from a CSV file with extra headers in header row
+#### Importing data from a CSV file with extra headers in header row
 
     1. Prerequisites: A CSV file with extra headers in header row at the path C:file.csv with the following content:
 
@@ -2151,7 +2151,7 @@ Expected: The GUI closes and the application exits.
     2. Test case: `import i|file.csv` (file has extra headers)<br>
        Expected: Only the compulsory headers are read. Optional headers are read if present. Extra headers are ignored.
 
-### Importing data from a CSV file with unequal number of values in a row as the number of headers
+#### Importing data from a CSV file with unequal number of values in a row as the number of headers
 
     1. Prerequisites: A CSV file with extra values in a row at the path C:file.csv with the following content:
 
@@ -2163,7 +2163,7 @@ Expected: The GUI closes and the application exits.
     2. Test case: `import i|file.csv` (file has extra values in a row)<br>
        Expected: All valid rows are added to the address book. Error message shown in the error report for invalid rows.
 
-### Importing data from an empty CSV file
+#### Importing data from an empty CSV file
 
     1. Prerequisites: An empty CSV file at the path C:file.csv
 
