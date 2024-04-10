@@ -581,6 +581,8 @@ The following sequence diagram shows the interactions within the different class
 
 <puml src="diagrams/ExportSequenceDiagram.puml" alt="Sequence Diagram for the `export` Command" />
 
+<br>
+
 ##### Alternative Implementations
 
 **Alternative 1 (current choice):** Exports the details of persons displayed in `PersonListPanel`.
@@ -700,7 +702,7 @@ The following two sequence diagram illustrates the interactions between the Logi
 
 <puml src="diagrams/AddExamExecutionSequenceDiagram.puml" alt="Sequence Diagram for the execution of `addExam` Command" />
 
-Note: `deleteExam` follows a similar structure, differing in the arguments parsed and the methods called on the `Model` component (e.g. deleteting from `UniqueExamList` instead of adding to it).
+Note: `deleteExam` follows a similar structure, differing in the arguments parsed and the methods called on the `Model` component (e.g. deleting from `UniqueExamList` instead of adding to it).
 
 <br>
 
