@@ -801,6 +801,12 @@ It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `in
 It also ensures that the `index` and `score` input value is valid, and that there are no duplicate prefixes in the user input.
 The `index` and `score` is then used in instantiating the `AddScoreCommand` by the `AddScoreCommandParser`.
 
+The following sequence diagram illustrates the parsing of an `addScore` command with the user input `addScore 1 s|100`:
+
+<p align="center">
+    <puml src="diagrams/AddScoreParsingSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
+</p>
+
 ##### Executing the Command
 
 The `execute` method in `AddScoreCommand` retrieves the `filteredPersons` list in `Model`, and validates the target index against the list of filtered persons to ensure it is not out of bounds.
