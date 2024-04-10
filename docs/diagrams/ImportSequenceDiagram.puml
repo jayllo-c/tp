@@ -15,15 +15,6 @@ participant "p:Person" as Person MODEL_COLOR
 participant "m:Model" as Model MODEL_COLOR
 end box
 
-create ImportCommand
-activate ImportCommand
-
-create AddCommandParser
-ImportCommand -> AddCommandParser
-activate AddCommandParser
-AddCommandParser -> ImportCommand
-deactivate AddCommandParser
-
  -> ImportCommand : execute(m)
 activate ImportCommand
 
@@ -67,7 +58,7 @@ activate CommandResult
 CommandResult --> ImportCommand: CommandResult
 deactivate CommandResult
 
- -->  ImportCommand : CommandResult
+ <--  ImportCommand : CommandResult
 deactivate ImportCommand
 
 @enduml
