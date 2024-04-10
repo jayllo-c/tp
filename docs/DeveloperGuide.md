@@ -464,6 +464,113 @@ As the `Model` class was built prior to the implementation of this feature, we d
 
 This design allows for easy extension to accommodate future enhancements or additional search criteria. New prefixes can be added to support additional search criteria without significant changes as we merely need to update our `Predicate` logic. This ensures that the implementation remains adaptable to evolving requirements and we can upgrade and improve the feature whenever required.
 
+<br>
+
+### **Exam Score Features**
+
+There are 3 main commands that are used to interact with exam scores of each person: `addScore`, `editScore` and `deleteScore`.
+
+<br>
+
+#### **Add Score Command** : `addScore`
+
+The `addScore` command allows users to add a score for an exam to a person displayed in the application. 
+The user should select the exam they want to add a score for, then specify the index of the person they want to add a score for, and the score they want to add.
+The score is then stored in a hashmap named `scores` within the `Person` object in the `Model` component. 
+This hashmap maps the selected exam (an `Exam` object) to the specified score (a `Score` object).
+
+##### Implementation Details
+
+The `addScore` command is implemented by the `AddScoreCommandParser` and the `AddScoreCommand`.
+
+##### Parsing User Input
+
+The `AddScoreCommandParser` is responsible for parsing the user input to extract the index of the person in the displayed list to add a score to, and the score to add.
+It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `index` and `score`.
+It also ensures that the `index` is valid, and that there are no duplicate prefixes in the user input.
+The `index` and `score` is then used in instantiating the `AddScoreCommand` by the `AddScoreCommandParser`.
+
+##### Executing the Command
+
+The `AddScoreCommandParser` instantiates an `AddScoreCommand` object with the parsed parameters (`index` and `score`) upon successful parsing.
+`AddScoreCommand` implements the `execute` method inherited from its parent class, `Command`.
+
+##### Adding a Score for an Exam to a Person
+
+The `execute` method in `AddScoreCommand` retrieves the `filteredPersons` list in `Model`.
+It then fetches the person to add the score for based on the target index.
+It also retrieves the currently selected exam from the `Model`.
+It adds the score to the person's existing `scores` hashmap using the `addExamScoreToPerson` method in the `Model`.
+
+<br>
+
+#### **Editing Score Command** : `editScore`
+
+The `editScore` command allows users to edit a score for an exam of a person displayed in the application.
+The user should select the exam they want to edit the score for, then specify the index of the person they want to edit the score for, and the new score they want to edit to.
+The updated score is then stored in a hashmap named `scores` within the `Person` object in the `Model` component.
+This hashmap maps the selected exam (an `Exam` object) to the updated specified score (a `Score` object).
+
+##### Implementation Details
+
+The `editScore` command is implemented by the `EditScoreCommandParser` and the `EditScoreCommand`.
+
+##### Parsing User Input
+
+The `EditScoreCommandParser` is responsible for parsing the user input to extract the index of the person in the displayed list to edit the score for, and the new score to edit to.
+It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `index` and `score`.
+It also ensures that the `index` is valid, and that there are no duplicate prefixes in the user input.
+The `index` and `score` is then used in instantiating the `EditScoreCommand` by the `EditScoreCommandParser`.
+
+##### Executing the Command
+
+The `EditScoreCommandParser` instantiates an `EditScoreCommand` object with the parsed parameters (`index` and `score`) upon successful parsing.
+`EditScoreCommand` implements the `execute` method inherited from its parent class, `Command`.
+
+##### Editing a Score for an Exam to a Person
+
+The `execute` method in `EditScoreCommand` retrieves the `filteredPersons` list in `Model`.
+It then fetches the person to edit the score for based on the target index.
+It also retrieves the currently selected exam from the `Model`.
+It updates the score for the selected exam in the person's existing `scores` hashmap using the `addExamScoreToPerson` method in `Model`.
+
+<br>
+
+#### **Deleting Score Command** : `deleteScore`
+
+The `deleteScore` command allows users to delete a score for an exam from a person displayed in the application.
+The user should select the exam they want to delete the score for, then specify the index of the person they want to delete the score for.
+The key-value pair (exam-score) is removed from the `scores` hashmap within the `Person` object.
+This operation removes both the selected exam (key) and the score (value), effectively deleting the score from `Person`.
+
+##### Implementation Details
+
+The `deleteScore` command is implemented by the `DeleteScoreCommandParser` and the `DeleteScoreCommand`.
+
+##### Parsing User Input
+
+The `DeleteScoreCommandParser` is responsible for parsing the user input to extract the index of the person in the displayed list to delete the score for.
+It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `index`.
+It also ensures that the `index` is valid, and that there are no duplicate prefixes (i.e. there is only one `index` value) in the user input.
+The `index` is then used in instantiating the `DeleteScoreCommand` by the `DeleteScoreCommandParser`.
+
+##### Executing the Command
+
+The `DeleteScoreCommandParser` instantiates an `DeleteScoreCommand` object with the parsed parameter (`index`) upon successful parsing.
+`DeleteScoreCommand` implements the `execute` method inherited from its parent class, `Command`.
+
+##### Deleting a Score for an Exam to a Person
+
+The `execute` method in `DeleteScoreCommand` retrieves the `filteredPersons` list in `Model`.
+It then fetches the person to delete the score for based on the target index.
+It also retrieves the currently selected exam from the `Model`.
+It removes the score for the selected exam in the person's existing `scores` hashmap using the `removeExamScoreFromPerson` method in `Model`.
+<br><br>
+The following sequence diagram illustrates the `addScore` command:
+
+
+<br>
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
