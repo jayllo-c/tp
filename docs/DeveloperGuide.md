@@ -1004,104 +1004,169 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
-### Adding an exam
+### Adding an exam: `addExam`
 
-1. Adding an exam with valid data
+### Adding an exam with valid data
 
-    1. Prerequisites: No exams in the address book.
+   1. Prerequisites: No exams in the address book.
 
-    1. Test case: `addExam n|Midterm d|2021-10-10`<br>
-       Expected: New exam is added to the address book. Status message shows the exam added.
+   2. Test case: `addExam n|Midterm d|2021-10-10`<br>
+      Expected: New exam is added to the address book. Status message shows the exam added.
 
-    1. Test case: `addExam n|Final d|2021-12-12`<br>
-       Expected: New exam is added to the address book. Status message shows the exam added.
+   3. Other test cases to try: `addExam n|Final d|2021-12-12`<br>
+      Expected: New exam is added to the address book. Status message shows the exam added.
 
-    1. Test case: `addExam n|Final d|2021-12-12` (exam already exists)<br>
-       Expected: Error message shown in the error report. No change in the address book.
+### Adding an exam that already exists
 
-    1. Test case: `addExam n|Final` (missing date)<br>
-       Expected: Error message shown in the error report. No change in the address book.
+    1. Prerequisites: An exam of name: Final, date: 2021-12-12 exists in the address book.
 
-### Deleting an exam
+    2. . Test case: `addExam n|Final d|2021-12-12`<br>
+         Expected: Error message shown in the error report. No change in the address book.
 
-1. Deleting an exam
+### Adding an exam with missing fields
 
-    1. Prerequisites: At least one exam in the address book.
+    1. Pre-requisite: No exams in the address book.
 
-    1. Test case: `deleteExam 1`<br>
+    2. Test case: `addExam n|Final` (missing date)<br>
+         Expected: Error message shown in the error report. No change in the address book.
+
+### Deleting an exam: `deleteExam`
+
+    1. Prerequisites: Exactly one exam in the address book. Hence, exam has an index of 1.
+
+    2. Test case: `deleteExam 1`<br>
        Expected: First exam is deleted from the address book. Status message shows the exam deleted.
 
-    1. Test case: `deleteExam 0`<br>
+    3. Test case: `deleteExam 0`<br>
        Expected: No exam is deleted. Error message shown. No change in the address book.
 
-    1. Test case: `deleteExam 2` (index out of bounds)<br>
+    4. Test case: `deleteExam 2` (index out of bounds)<br>
        Expected: No exam is deleted. Error message shown. No change in the address book.
 
-    1. Test case: `deleteExam` (no index)<br>
+    5. Test case: `deleteExam` (no index)<br>
        Expected: No exam is deleted. Error message shown. No change in the address book.
 
-### Selecting an exam
+### Selecting an exam: `selectExam`
 
-1. Selecting an exam
+    1. Prerequisites: Exactly one exam in the address book. Hence, exam has an index of 1.
 
-    1. Prerequisites: At least one exam in the address book.
-
-    1. Test case: `selectExam 1`<br>
+    2. Test case: `selectExam 1`<br>
        Expected: First exam is selected. Status message shows the exam selected.
 
-    1. Test case: `selectExam 0`<br>
+    3. Test case: `selectExam 0`<br>
        Expected: No exam is selected. Error message shown. No change in the address book.
 
-    1. Test case: `selectExam 2` (index out of bounds)<br>
+    4. Test case: `selectExam 2` (index out of bounds)<br>
        Expected: No exam is selected. Error message shown. No change in the address book.
 
-    1. Test case: `selectExam` (no index)<br>
+    5. Test case: `selectExam` (no index)<br>
        Expected: No exam is selected. Error message shown. No change in the address book.
 
-### Deselecting an exam
-
-1. Deselecting an exam
+### Deselecting an exam: `deselectExam`
 
     1. Prerequisites: An exam has been selected.
 
-    1. Test case: `deselectExam`<br>
+    2. Test case: `deselectExam`<br>
        Expected: Selected exam is deselected. Status message shows the exam deselected.
 
-    1. Test case: `deselectExam` (no exam selected)<br>
+    3. Test case: `deselectExam` (no exam selected)<br>
        Expected: No exam is deselected. Error message shown. No change in the address book.
 
-### Importing persons
+### Importing persons: `import`
 
-1. Importing data from a CSV file
+### Importing data from a CSV file
 
-    1. Prerequisites: Prepare a CSV file with a few persons. The file should be in a known location.
+    1. Prerequisites: Prepare a CSV file with a few persons. There isa file at path C:file.csv with the following content:
 
-    1. Test case: `import i|file.csv`<br>
-       Expected: Persons from the CSV file are added to the address book. Status message shows the number of persons imported.
+    ```
+    name,email,address,phone
+    alice,alice@gmail,wonderland,123
+    ```
 
-    1. Test case: `import i|file.csv` (file does not exist)<br>
+    2. Test case: `import i|file.csv`<br>
+        Expected: Persons from the CSV file are added to the address book. Status message shows the number of persons imported.
+
+### Importing data from a CSV file that does not exist
+
+    1. Prerequisites: No CSV file at the path C:file.csv
+
+    2. Test case: `import i|file.csv` <br>
        Expected: Error message shown in the error report. No change in the address book.
 
-    1. Test case: `import i|file.txt` (file is not a CSV file)<br>
+### Importing data from a CSV file that is not a CSV file
+
+    1. Prerequisites: A file at the path C:file.txt with the following content:
+
+    ```
+    name,email,address,phone
+    alice,alice@gmail,wonderland,123
+    ```
+
+    2. Test case: `import i|file.txt` (file is not a CSV file)<br>
        Expected: Error message shown in the error report. No change in the address book.
 
-    1. Test case: `import i|file.csv` (file has duplicate headers)<br>
+### Importing data from a CSV file with duplicate compulsory headers in header row
+
+    1. Prerequisites: A CSV file with duplicate compulsory headers (e.g. 2 header columns named 'name') at the path C:file.csv with the following content:
+
+    ```
+    name,email,address,phone,name
+    alice,alice@gmail.com,123,123,bob
+    ```
+
+    2. Test case: `import i|file.csv` (file has duplicate headers)<br>
        Expected: First occurrence in the CSV file is added to the address book. Duplicate entries are ignored.
 
-   1. Test case: `import i|file.csv` (file has invalid entries)<br>
-       Expected: All valid entries are added to the address book. Error message shown in the error report for invalid entries.
+### Importing data from a CSV file with missing compulsory headers in header row
 
-   1. Test case: `import i|file.csv` (file has missing compulsory header)<br>
-       Expected: No contacts are added to the address book. Error message shown in the error report.
+    1. Prerequisites: A CSV file with missing compulsory headers at the path C:file.csv with the following content:
+    ```
+    email,address,phone
+    Alice@gmail.com,123,123
+    ```
 
-   1. Test case: `import i|file.csv` (file has a row with missing compulsory value)<br>
-      Expected: All valid rows are added to the address book. Error message shown in the error report for invalid rows.
+    2. Test case: `import i|file.csv` (file has missing headers)<br>
+       Expected: Error message shown in the error report. No change in the address book.
 
-   1. Test case: `import i|file.csv` (file has extra headers)<br>
+### Importing data from a CSV file with missing compulsory values in a row
+
+    1. Prerequisites: A CSV file with missing compulsory values in a row at the path C:file.csv with the following content:
+
+        ```
+        name,email,address,phone
+        Alice,,123,123
+        ```
+
+    2. Test case: `import i|file.csv` <br>
+       Expected: All valid rows are added to the address book. Error message shown in the error report for invalid rows.
+
+### Importing data from a CSV file with extra headers in header row
+    
+    1. Prerequisites: A CSV file with extra headers in header row at the path C:file.csv with the following content:
+
+        ```
+        name,email,address,phone,extra
+        Alice,alice@gmail.com,123,123,extra
+        ```
+
+    2. Test case: `import i|file.csv` (file has extra headers)<br>
        Expected: Only the compulsory headers are read. Optional headers are read if present. Extra headers are ignored.
 
-   1. Test case: `import i|file.txt` (file is empty CSV file)<br>
-      Expected: Error message shown in the error report. No change in the address book.
+### Importing data from a CSV file with unequal number of values in a row as the number of headers
+    
+    1. Prerequisites: A CSV file with extra values in a row at the path C:file.csv with the following content:
 
-   1. Test case: `import i|file.csv` (file has rows whose number of values is unequal to the number of headers)<br>
-      Expected: All valid rows are added to the address book. Error message shown in the error report for invalid rows.
+        ```
+        name,email,address,phone,matric
+        Alice,alice@gmail.com,123,123
+        ```
+
+    2. Test case: `import i|file.csv` (file has extra values in a row)<br>
+       Expected: All valid rows are added to the address book. Error message shown in the error report for invalid rows.
+
+### Importing data from an empty CSV file
+
+    1. Prerequisites: An empty CSV file at the path C:file.csv
+
+    2. Test case: `import i|file.csv` (file is empty CSV file)<br>
+      Expected: Error message shown in the error report. No change in the address book.
