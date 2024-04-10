@@ -362,7 +362,7 @@ The user can also use two other prefixes: `lt` and `mt` to search for persons wi
 E.g. `find mt|50` will return all persons with scores more than 50.
 
 The `find` feature makes use of the predicate classes `PersonDetailPredicate` and `ExamPredicate`, as well as the method `updateFilteredPersonList` 
-to update the model to show only persons that fufill the criteria that the user has keyed in.
+to update the model to show only persons that fulfill the criteria that the user has keyed in.
 
 ##### Parsing User Input
 
@@ -384,8 +384,8 @@ Using the prefix and keyword from parsing user input, a `FindCommand` is created
 
 **Note:** The `PersonDetailPredicate` and `ExamPredicate` classes implement the `Predicate` interface to filter contacts based on the search criteria.
 A brief overview of the two classes is given below:
-* PersonDetailPredicate takes a prefix and keyword as parameters, allowing it to filter contacts based on specific details like name, phone number, etc.
-* ExamPredicate takes a prefix, a keyword, and an exam as parameters, allowing it to filter contacts based on exam scores of a specific exam.
+* `PersonDetailPredicate` takes a prefix and keyword as parameters, allowing it to filter contacts based on specific details like name, phone number, etc.
+* `ExamPredicate` takes a prefix, a keyword, and an exam as parameters, allowing it to filter contacts based on exam scores of a specific exam.
 </box>
 
 
@@ -412,10 +412,10 @@ The following sequence diagram illustrates the `find` command with the user inpu
 The next sequence diagram details the creation of the predicate, as well as the updating of the `filteredPersons` list in the `Model` component.
 <puml src="diagrams/FindImplementationPredicateCreationSequenceDiagram.puml" width="700" />
 
-The following activity Diagram illustrates the user execution of the `find` command
+The following activity Diagram illustrates the user execution of the `find` command.
 <puml src="diagrams/FindImplementationActivityDiagram.puml" width="800" />
 
-The next activity diagram is an expansion of the previous diagram, detailing the find by score action.
+The next activity diagram is an expansion of the previous diagram, detailing the case where the user searches for contacts based on exam scores.
 <puml src="diagrams/FindImplementationFindByScoreActivityDiagram.puml" width="1000" />
 
 ##### Design Considerations
@@ -449,7 +449,7 @@ The alternative would be to have a single predicate class that handles all filte
 **Predicate-based Filtering** <br>
 
 As the `Model` class was built prior to the implementation of this feature, we did our best to re-use available methods 
-instead of unnecessarily re-programing already existing logic. Hence, we decided to craft the command around the idea of a 
+instead of unnecessarily reprogramming already existing logic. Hence, we decided to craft the command around the idea of a 
 custom predicate as the `Model` class already had a `updateFilteredPersonList` method implemented that would filter persons using a predicate.
 
 **Extensibility** <br>
