@@ -201,6 +201,7 @@ public class ExportCommand extends Command {
 
             File filteredJsonFile = filteredJsonFilePath.toFile();
             File unfilteredJsonFile = model.getAddressBookFilePath().toFile();
+
             File csvFile = new File(csvFilePath);
 
             JsonNode filteredJsonTree = readJsonFile(filteredJsonFile);
