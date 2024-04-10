@@ -479,10 +479,6 @@ The user should select the exam they want to add a score for, then specify the i
 The score is then stored in a hashmap named `scores` within the `Person` object in the `Model` component. 
 This hashmap maps the selected exam (an `Exam` object) to the specified score (a `Score` object).
 
-##### Implementation Details
-
-The `addScore` command is implemented by the `AddScoreCommandParser` and the `AddScoreCommand`.
-
 ##### Parsing User Input
 
 The `AddScoreCommandParser` is responsible for parsing the user input to extract the index of the person in the displayed list to add a score to, and the score to add.
@@ -510,10 +506,6 @@ The `editScore` command allows users to edit a score for an exam of a person dis
 The user should select the exam they want to edit the score for, then specify the index of the person they want to edit the score for, and the new score they want to edit to.
 The updated score is then stored in a hashmap named `scores` within the `Person` object in the `Model` component.
 This hashmap maps the selected exam (an `Exam` object) to the updated specified score (a `Score` object).
-
-##### Implementation Details
-
-The `editScore` command is implemented by the `EditScoreCommandParser` and the `EditScoreCommand`.
 
 ##### Parsing User Input
 
@@ -543,10 +535,6 @@ The user should select the exam they want to delete the score for, then specify 
 The key-value pair (exam-score) is removed from the `scores` hashmap within the `Person` object.
 This operation removes both the selected exam (key) and the score (value), effectively deleting the score from `Person`.
 
-##### Implementation Details
-
-The `deleteScore` command is implemented by the `DeleteScoreCommandParser` and the `DeleteScoreCommand`.
-
 ##### Parsing User Input
 
 The `DeleteScoreCommandParser` is responsible for parsing the user input to extract the index of the person in the displayed list to delete the score for.
@@ -565,9 +553,6 @@ The `execute` method in `DeleteScoreCommand` retrieves the `filteredPersons` lis
 It then fetches the person to delete the score for based on the target index.
 It also retrieves the currently selected exam from the `Model`.
 It removes the score for the selected exam in the person's existing `scores` hashmap using the `removeExamScoreFromPerson` method in `Model`.
-<br><br>
-The following sequence diagram illustrates the `addScore` command:
-
 
 <br>
 
