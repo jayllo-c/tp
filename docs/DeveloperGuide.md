@@ -483,19 +483,14 @@ This hashmap maps the selected exam (an `Exam` object) to the specified score (a
 
 The `AddScoreCommandParser` is responsible for parsing the user input to extract the index of the person in the displayed list to add a score to, and the score to add.
 It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `index` and `score`.
-It also ensures that the `index` is valid, and that there are no duplicate prefixes in the user input.
+It also ensures that the `index` and `score` input value is valid, and that there are no duplicate prefixes in the user input.
 The `index` and `score` is then used in instantiating the `AddScoreCommand` by the `AddScoreCommandParser`.
 
 ##### Executing the Command
 
-The `AddScoreCommandParser` instantiates an `AddScoreCommand` object with the parsed parameters (`index` and `score`) upon successful parsing.
-`AddScoreCommand` implements the `execute` method inherited from its parent class, `Command`.
-
-##### Adding a Score for an Exam to a Person
-
-The `execute` method in `AddScoreCommand` retrieves the `filteredPersons` list in `Model`.
+The `execute` method in `AddScoreCommand` retrieves the `filteredPersons` list in `Model`, and validates the target index against the list of filtered persons to ensure it is not out of bounds.
 It then fetches the person to add the score for based on the target index.
-It also retrieves the currently selected exam from the `Model`.
+It also retrieves the currently selected exam from the `Model`, and validates that the score to be added is not more than the maximum score of the selected exam.
 It adds the score to the person's existing `scores` hashmap using the `addExamScoreToPerson` method in the `Model`.
 
 <br>
@@ -511,19 +506,14 @@ This hashmap maps the selected exam (an `Exam` object) to the updated specified 
 
 The `EditScoreCommandParser` is responsible for parsing the user input to extract the index of the person in the displayed list to edit the score for, and the new score to edit to.
 It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `index` and `score`.
-It also ensures that the `index` is valid, and that there are no duplicate prefixes in the user input.
+It also ensures that the `index` and `score` input value is valid, and that there are no duplicate prefixes in the user input.
 The `index` and `score` is then used in instantiating the `EditScoreCommand` by the `EditScoreCommandParser`.
 
 ##### Executing the Command
 
-The `EditScoreCommandParser` instantiates an `EditScoreCommand` object with the parsed parameters (`index` and `score`) upon successful parsing.
-`EditScoreCommand` implements the `execute` method inherited from its parent class, `Command`.
-
-##### Editing a Score for an Exam to a Person
-
-The `execute` method in `EditScoreCommand` retrieves the `filteredPersons` list in `Model`.
+The `execute` method in `EditScoreCommand` retrieves the `filteredPersons` list in `Model`, and validates the target index against the list of filtered persons to ensure it is not out of bounds.
 It then fetches the person to edit the score for based on the target index.
-It also retrieves the currently selected exam from the `Model`.
+It also retrieves the currently selected exam from the `Model`, and validates that the score to be added is not more than the maximum score of the selected exam.
 It updates the score for the selected exam in the person's existing `scores` hashmap using the `addExamScoreToPerson` method in `Model`.
 
 <br>
@@ -544,12 +534,7 @@ The `index` is then used in instantiating the `DeleteScoreCommand` by the `Delet
 
 ##### Executing the Command
 
-The `DeleteScoreCommandParser` instantiates an `DeleteScoreCommand` object with the parsed parameter (`index`) upon successful parsing.
-`DeleteScoreCommand` implements the `execute` method inherited from its parent class, `Command`.
-
-##### Deleting a Score for an Exam to a Person
-
-The `execute` method in `DeleteScoreCommand` retrieves the `filteredPersons` list in `Model`.
+The `execute` method in `DeleteScoreCommand` retrieves the `filteredPersons` list in `Model`, and validates the target index against the list of filtered persons to ensure it is not out of bounds.
 It then fetches the person to delete the score for based on the target index.
 It also retrieves the currently selected exam from the `Model`.
 It removes the score for the selected exam in the person's existing `scores` hashmap using the `removeExamScoreFromPerson` method in `Model`.
