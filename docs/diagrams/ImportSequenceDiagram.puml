@@ -10,7 +10,7 @@ participant ":ArgumentTokenizer" as ArgumentTokenizer LOGIC_COLOR
 participant "multi:ArgumentMultimap" as ArgumentMultimap LOGIC_COLOR
 participant ":ParserUtil" as ParserUtil LOGIC_COLOR
 participant "i:ImportCommand" as ImportCommand LOGIC_COLOR
-participant "<<class>>CsvUtil" as CsvUtil LOGIC_COLOR
+participant "<<class>>\nCsvUtil" as CsvUtil LOGIC_COLOR
 participant "r:CommandResult" as CommandResult LOGIC_COLOR
 participant "a:AddCommandParser" as AddCommandParser LOGIC_COLOR
 participant "a:AddCommand" as AddCommand LOGIC_COLOR
