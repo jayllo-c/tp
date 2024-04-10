@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_IMPORT;
 
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 
 import seedu.address.logic.commands.ImportExamScoresCommand;
@@ -31,12 +32,17 @@ public class ImportExamScoresCommandParser implements Parser<ImportExamScoresCom
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportExamScoresCommand.MESSAGE_USAGE));
         }
 
-        Path path = ParserUtil.parseFilePath(argMultimap.getValue(PREFIX_IMPORT).orElse(""));
-        if (!isCsvFile(path)) {
+        try {
+            Path path = ParserUtil.parseFilePath(argMultimap.getValue(PREFIX_IMPORT).orElse(""));
+            if (!isCsvFile(path)) {
+                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                        ImportExamScoresCommand.MESSAGE_USAGE));
+            }
+            return new ImportExamScoresCommand(path);
+        } catch (InvalidPathException e) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     ImportExamScoresCommand.MESSAGE_USAGE));
         }
-        return new ImportExamScoresCommand(path);
     }
 
     /**

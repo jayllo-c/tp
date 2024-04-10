@@ -21,13 +21,21 @@ public class ImportExamScoresCommandParserTest {
 
     @Test
     public void parse_notCsvFile_failure() {
+        String command = "importExamScores i/file.json";
         assertParseFailure(
-                parser, "importExamScores i/file.json",
+                parser, command,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportExamScoresCommand.MESSAGE_USAGE));
+        assertThrows(ParseException.class, () -> parser.parse(command));
     }
 
     @Test
-    public void parse_notCsvFile_exceptionThrown() {
-        assertThrows(ParseException.class, () -> parser.parse("importExamScores i/file.json"));
+    public void parse_invertedCommas_failure() {
+        String command = "importExamScores i/\"file.csv\"";
+
+        assertParseFailure(
+                parser, command,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportExamScoresCommand.MESSAGE_USAGE));
+
+        assertThrows(ParseException.class, () -> parser.parse(command));
     }
 }
