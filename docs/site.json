@@ -4,7 +4,8 @@
   "titleSuffix": "Avengers Assemble",
   "faviconPath": "images/AaLogo.png",
   "style": {
-    "codeTheme": "light"
+    "codeTheme": "light",
+    "bootstrapTheme": "bootswatch-zephyr"
   },
   "ignore": [
     "_markbind/layouts/*",
@@ -26,4 +27,5 @@
     "message": "Site Update."
   },
   "timeZone": "Asia/Singapore"
+
 }

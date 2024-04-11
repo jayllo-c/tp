@@ -26,7 +26,7 @@ activate Model
 Model --> Model : Statistics
 deactivate Model
 
-Model --> selectedExamStatistics : set(Statistics)
+Model -> selectedExamStatistics : set(Statistics)
 activate selectedExamStatistics
 
 selectedExamStatistics --> Model

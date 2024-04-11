@@ -33,7 +33,7 @@ deactivate AddressBook
 Model --> AddExamCommand
 deactivate Model
 
-AddExamCommand --> Model : addExam(e)
+AddExamCommand -> Model : addExam(e)
 activate Model
 
 Model -> AddressBook : addExam(e)
