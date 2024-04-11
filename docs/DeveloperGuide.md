@@ -109,6 +109,8 @@ This project is based on the AddressBook-Level3 project created by the [SE-EDU i
 
 Features related to the creation and reading of CSV files were made possible through the use of the [OpenCSV](http://opencsv.sourceforge.net/) library.
 
+Our project made use of AI assistance from [GitHub Copilot](https://copilot.github.com/) to finish small snippets of code and to provide suggestions.
+
 --------------------------------------------------------------------------------------------------------------------
 
 <div id="setting-up"></div>
