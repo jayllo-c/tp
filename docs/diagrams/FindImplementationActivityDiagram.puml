@@ -1,7 +1,21 @@
 @startuml
+' rake symbol from https://forum.plantuml.net/195/is-there-any-support-for-subactivity-or-the-rake-symbol
+sprite $rake [16x16/8] {
+0000000000000000
+0000000jj0000000
+0000000jj0000000
+0005555jj5555000
+000jjeejjeejj000
+000jj00jj00jj000
+000jj00jj00jj000
+0000000000000000
+}
+
 skin rose
 skinparam ActivityFontSize 15
 skinparam ArrowFontSize 12
+
+title Activity: find command execution
 start
 :User executes find command;
 
@@ -10,7 +24,16 @@ if () then ([command is in invalid format])
 
 
 else ([else])
-    : Displays the students that match the search criteria;
+    if () then ([prefix is mt| or lt|])
+'        if () then ([invalid score provided])
+'            :Show invalid value as error message;
+'            stop
+'        else ([else])
+'        endif
+        :find by score <$rake>;
+    else ([else])
+        :Displays the students that match the search criteria;
+    endif
 endif
 stop
 
