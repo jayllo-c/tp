@@ -135,7 +135,7 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 ### Architecture
 
-<puml src="diagrams/ArchitectureDiagram.puml" width="280" />
+<p align="center"><puml src="diagrams/ArchitectureDiagram.puml" width="280" /></p>
 
 The ***Architecture Diagram*** given above explains the high-level design of the App.
 
@@ -160,7 +160,7 @@ The bulk of the app's work is done by the following four components:
 
 The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
 
-<puml src="diagrams/ArchitectureSequenceDiagram.puml" width="574" />
+<p align="center"><puml src="diagrams/ArchitectureSequenceDiagram.puml" width="574" /></p>
 
 Each of the four main components (also shown in the diagram above),
 
@@ -169,7 +169,7 @@ Each of the four main components (also shown in the diagram above),
 
 For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the implementation of a component), as illustrated in the (partial) class diagram below.
 
-<puml src="diagrams/ComponentManagers.puml" width="300" />
+<p align="center"><puml src="diagrams/ComponentManagers.puml" width="300" /></p>
 
 The sections below give more details of each component.
 
@@ -181,7 +181,7 @@ The sections below give more details of each component.
 
 The **API** of this component is specified in [`Ui.java`](https://github.com/AY2324S2-CS2103T-T10-1/tp/tree/master/src/main/java/seedu/address/ui/Ui.java)
 
-<puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
+<p align="center"><puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/></p>
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
@@ -205,7 +205,7 @@ In summary, the `UI` component:
 
 The sequence diagram below illustrates a more in-depth view of the interactions within the UI component
 
-<puml src="diagrams/UiSequenceDiagram.puml" alt="Sequence Diagram of UI Component"/>
+<p align="center"><puml src="diagrams/UiSequenceDiagram.puml" alt="Sequence Diagram of UI Component"/></p>
 
 #### Considerations for UI
 
@@ -232,7 +232,7 @@ One of our main goals was to make our codebase easy to understand and maintain, 
 
 Here's a (partial) class diagram of the `Logic` component:
 
-<puml src="diagrams/LogicClassDiagram.puml" width="550"/>
+<p align="center"><puml src="diagrams/LogicClassDiagram.puml" width="550"/></p>
 
 How the `Logic` component works:
 
@@ -244,7 +244,7 @@ How the `Logic` component works:
 
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
-<puml src="diagrams/ParserClasses.puml" width="600"/>
+<p align="center"><puml src="diagrams/ParserClasses.puml" width="600"/></p>
 
 How the parsing works:
 
@@ -258,7 +258,7 @@ How the parsing works:
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking a simple `execute("delete 1")` API call as an example.
 
-<puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `delete 1` Command" />
+<p align="center"><puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `delete 1` Command" /></p>
 
 **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </box>
@@ -285,7 +285,7 @@ The `Logic` component is designed to be the central component that executes all 
 ### Model component
 **API** : [`Model.java`](https://github.com/AY2324S2-CS2103T-T10-1/tp/master/src/main/java/seedu/address/model/Model.java)
 
-<puml src="diagrams/ModelClassDiagram.puml" width="450" />
+<p align="center"><puml src="diagrams/ModelClassDiagram.puml" width="450" /></p>
 
 
 The `Model` component,
@@ -301,7 +301,7 @@ The `Model` component,
 
 **Note:** An alternative (arguably, a more OOP) model is given below relating to the `Person` class. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br> However, we opted not to use this model. As much as possible, we tried to keep the attributes of `Person` unlinked to other classes to prevent complications in our saving, import and export functionalities.
 
-<puml src="diagrams/BetterModelClassDiagram.puml" width="450" />
+<p align="center"><puml src="diagrams/BetterModelClassDiagram.puml" width="450" /></p>
 
 </box>
 
@@ -313,7 +313,7 @@ The `Model` component,
 
 **API** : [`Storage.java`](https://github.com/AY2324S2-CS2103T-T10-1/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
 
-<puml src="diagrams/StorageClassDiagram.puml" width="550" />
+<p align="center"><puml src="diagrams/StorageClassDiagram.puml" width="550" /></p>
 
 <br>
 <br>
@@ -328,7 +328,7 @@ The `StorageManager` class calls on the `JsonAddressBookStorage` class to conver
 
 The sequence diagram below illustrates how data is saved within the `Storage` component when the user issues a command.
 
-<puml src="diagrams/StorageSequenceDiagram.puml" alt="Sequence Diagram for the `Storage` Component" />
+<p align="center"><puml src="diagrams/StorageSequenceDiagram.puml" alt="Sequence Diagram for the `Storage` Component" /></p>
 
 <br>
 <br>
@@ -339,7 +339,7 @@ When the application is initialised, the `Storage` component reads the JSON obje
 
 The sequence diagram below illustrates how data is loaded within the `Storage` component when the application is initialised.
 
-<puml src="diagrams/StorageLoadSequenceDiagram.puml" alt="Sequence Diagram for the `Storage` Component" />
+<p align="center"><puml src="diagrams/StorageLoadSequenceDiagram.puml" alt="Sequence Diagram for the `Storage` Component" /></p>
 
 
 In summary, the `Storage` component:
@@ -454,7 +454,7 @@ The `Person` object is then added to the `UniquePersonList` through the `addPers
 The sequence diagram below illustrates a more in-depth view of the interactions regarding the parsing of user input.
 It takes an add command: `execute(add n|Dohn Joe p|98765432 a|123 e|dohn@gm.com m|A1234567X s|S1 r|R1)` as an example.
 
-<puml src="diagrams/AddSequenceDiagram.puml" alt="Detailed Interactions Inside the Logic Component for the `add n/Dohn Joe p/98765432 a/123 e/dohn@gm.com m/A1234567X s/S1 r/R1` User Input" />
+<p align="center"><puml src="diagrams/AddSequenceDiagram.puml" alt="Detailed Interactions Inside the Logic Component for the `add n/Dohn Joe p/98765432 a/123 e/dohn@gm.com m/A1234567X s/S1 r/R1` User Input" /></p>
 
 <box type="info" seamless>
 
@@ -462,7 +462,7 @@ It takes an add command: `execute(add n|Dohn Joe p|98765432 a|123 e|dohn@gm.com 
 </box>
 
 The parsing is detailed as follows:
-<puml src="diagrams/AddCommandParsing.puml" alt="Detailed Interactions for Parsing Fields of the Add command." />
+<p align="center"><puml src="diagrams/AddCommandParsing.puml" alt="Detailed Interactions for Parsing Fields of the Add command." /></p>
 
 <br>
 <br>
@@ -513,7 +513,7 @@ The `EditCommand` then creates a new `Person` object with the new details provid
 
 The activity diagram below illustrates the workflow involved in executing the `edit` command. In practice, a `Reject` activity will result in a `CommandException` being thrown.
 
-<puml src="diagrams/EditCommandActivityDiagram.puml" alt="Activity Diagram for the `edit` Command" />
+<p align="center"><puml src="diagrams/EditCommandActivityDiagram.puml" alt="Activity Diagram for the `edit` Command" /></p>
 
 <br>
 
@@ -597,16 +597,16 @@ This updates the `filteredPersons` list to show only persons that fufill the con
 After the `filteredPersons` list is updated, the user interface is updated such that the `PersonListPanel` now shows persons that fufill the predicate generated by the original user input.
 
 The following sequence diagram illustrates the `find` command with the user input `find n|Alice`.
-<puml src="diagrams/FindImplementationSequenceDiagram.puml" width="1000" />
+<p align="center"><puml src="diagrams/FindImplementationSequenceDiagram.puml" width="1000" /></p>
 
 The next sequence diagram details the creation of the predicate, as well as the updating of the `filteredPersons` list in the `Model` component.
-<puml src="diagrams/FindImplementationPredicateCreationSequenceDiagram.puml" width="700" />
+<p align="center"><puml src="diagrams/FindImplementationPredicateCreationSequenceDiagram.puml" width="700" /></p>
 
 The following activity Diagram illustrates the user execution of the `find` command.
-<puml src="diagrams/FindImplementationActivityDiagram.puml" width="800" />
+<p align="center"><puml src="diagrams/FindImplementationActivityDiagram.puml" width="800" /></p>
 
 The next activity diagram is an expansion of the previous diagram, detailing the case where the user searches for contacts based on exam scores.
-<puml src="diagrams/FindImplementationFindByScoreActivityDiagram.puml" width="1000" />
+<p align="center"><puml src="diagrams/FindImplementationFindByScoreActivityDiagram.puml" width="1000" /></p>
 
 ##### Design Considerations
 
@@ -668,7 +668,7 @@ After deleting all persons currently displayed in the `PersonListPanel`, the `fi
 
 The following activity diagram illustrates the workflow of the execution of the `deleteShown` command:
 
-<puml src="diagrams/DeleteShownActivityDiagram.puml" alt="Activity Diagram for the `deleteShown` Command" />
+<p align="center"><puml src="diagrams/DeleteShownActivityDiagram.puml" alt="Activity Diagram for the `deleteShown` Command" /></p>
 
 ##### Design Considerations
 
@@ -729,15 +729,15 @@ The sequence diagrams below illustrates the interactions within the `Logic` comp
 
 **Parsing**
 
-<puml src="diagrams/ImportParserSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `import` Command for parsing" />
+<p align="center"><puml src="diagrams/ImportParserSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `import` Command for parsing" /></p>
 
 **Execution**
 
-<puml src="diagrams/ImportSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `import` Command" />
+<p align="center"><puml src="diagrams/ImportSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `import` Command" /></p>
 
 **Reference Diagram for each addCommand in importCommand**
 
-<puml src="diagrams/ImportSequenceDiagramRef.puml" alt="Interactions Inside the Add Component for the `import` Command" />
+<p align="center"><puml src="diagrams/ImportSequenceDiagramRef.puml" alt="Interactions Inside the Add Component for the `import` Command" /></p>
 
 <br>
 <br>
@@ -777,7 +777,7 @@ The email addresses are then concatenated into a single string, separated by com
 After the `CopyCommand` is executed, the `UI` component updates the `ResultDisplay` to show a message indicating that the emails have been copied to the clipboard.
 
 The following activity diagram summarizes the steps involved in executing the `copy` command:
-<puml src="diagrams/CopyImplementationActivityDiagram.puml" width="1000" />
+<p align="center"><puml src="diagrams/CopyImplementationActivityDiagram.puml" width="1000" /></p>
 
 ##### Considerations
 
@@ -922,7 +922,7 @@ During the parsing of the `add` command, the parser will check if the `Matric` f
 The parser also generates `Tag` objects based on the user input. The existing tags are updated with the new automatically generated tag.
 
 The activity diagram is as follows:
-<puml src="diagrams/AutomaticTaggingActivityDiagram.puml" alt="Activity Diagram for Auto Tagging Feature" />
+<p align="center"><puml src="diagrams/AutomaticTaggingActivityDiagram.puml" alt="Activity Diagram for Auto Tagging Feature" /></p>
 
 <br>
 
@@ -994,11 +994,11 @@ The following two sequence diagram illustrates the interactions between the Logi
 
 **Parsing**
 
-<puml src="diagrams/AddExamParsingSequenceDiagram.puml" alt="Sequence Diagram for the parsing of `addExam` Command" />
+<p align="center"><puml src="diagrams/AddExamParsingSequenceDiagram.puml" alt="Sequence Diagram for the parsing of `addExam` Command" /></p>
 
 **Execution**
 
-<puml src="diagrams/AddExamExecutionSequenceDiagram.puml" alt="Sequence Diagram for the execution of `addExam` Command" />
+<p align="center"><puml src="diagrams/AddExamExecutionSequenceDiagram.puml" alt="Sequence Diagram for the execution of `addExam` Command" /></p>
 
 Note: `deleteExam` follows a similar structure, differing in the arguments parsed and the methods called on the `Model` component (e.g. deleting from `UniqueExamList` instead of adding to it).
 
@@ -1052,7 +1052,7 @@ If there is no exam selected, a `CommandException` is thrown.
 
 The following sequence diagram illustrates the interactions between the Logic and Model when the `SelectExamCommand` is executed.
 
-<puml src="diagrams/SelectExamSequenceDiagram.puml" alt="Sequence Diagram for the parsing of `selectExam` Command" />
+<p align="center"><puml src="diagrams/SelectExamSequenceDiagram.puml" alt="Sequence Diagram for the parsing of `selectExam` Command" /></p>
 
 Notes:
 - The `ObservableList<Exam>` object is what is returned when retrieving the `UniqueExamList`. This prevents unwanted modifications to the `UniqueExamList` when retrieving the selected exam.
@@ -1228,7 +1228,7 @@ If the **file** is invalid, an error message is returned.
 
 The validation workflow for the **file** is as follows:
 
-<puml src="diagrams/ImportExamScoresFileActivityDiagram.puml" alt="Activity Diagram for Import Exam Scores File Validation" />
+<p align="center"><puml src="diagrams/ImportExamScoresFileActivityDiagram.puml" alt="Activity Diagram for Import Exam Scores File Validation" /></p>
 
 If the file is valid, any invalid entries will be ignored, with the rest being successfully processed.
 
@@ -1284,7 +1284,7 @@ the `ModelManager` class implements a `updateSelectedExamStatistics` and `getSel
 
 The sequence diagram below illustrates the interactions within the `Model` component when the score statistics are updated using the `selectExam` command as an example.
 
-<puml src="diagrams/StatisticsSequenceDiagram.puml" alt="Sequence Diagram for Statistics Updating" />
+<p align="center"><puml src="diagrams/StatisticsSequenceDiagram.puml" alt="Sequence Diagram for Statistics Updating" /></p>
 
 ##### User Interface Interaction
 
