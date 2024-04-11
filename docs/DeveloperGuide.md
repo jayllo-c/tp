@@ -355,62 +355,108 @@ We have chosen to implement the `delete` command to accept the index of the pers
 
 #### **Find Feature** : `find`
 
-The `find` command lets users search for persons by substring matching. The user can select any parameter to search under: `NAME`, `EMAIL`, `TAG`, `MATRIC`, `REFLECTION`, `STUDIO`, and `TAGS` can all be used. E.g. to search for all persons under studio `S2`, the user can use `find s|s2`.
+The `find` command lets users search for persons by substring matching. The user can select any parameter to search under: 
+`NAME`, `EMAIL`, `TAG`, `MATRIC`, `REFLECTION`, `STUDIO`, and `TAGS` can all be used. E.g. to search for all persons under studio `S2`, the user can use `find s|s2`.
 
-The user can also use two other prefixes: `lt` and `mt` to search for persons with scores less than or more than a certain value respectively. E.g. `find mt|50` will return all persons with scores more than 50.
+The user can also use two other prefixes: `lt` and `mt` to search for persons with scores less than or more than a certain value respectively. 
+E.g. `find mt|50` will return all persons with scores more than 50.
 
-The `find` feature makes use of the predicate class `PersonDetailContainsKeywordPredicate` and the method `updateFilteredPersonList` to update the model to show only persons that fufill the criteria that the user has keyed in.
+The `find` feature makes use of the predicate classes `PersonDetailPredicate` and `ExamPredicate`, as well as the method `updateFilteredPersonList` 
+to update the model to show only persons that fulfill the criteria that the user has keyed in.
 
 ##### Parsing User Input
 
-The `FindCommandParser` class is responsible for parsing user input to extract search criteria. It uses the `ArgumentTokenizer` to tokenize the input string, extracting prefixes and their associated values. Following that, the `extractPrefixForFindCommand` method ensures that only one valid, non-empty prefix is provided in the input.
-
-##### Predicate Creation
-
-The `PersonDetailContainsKeywordPredicate` class implements the `Predicate` interface to filter contacts based on search criteria. It takes a prefix and keyword as parameters, allowing it to filter contacts based on specific details like name, phone number, etc.
-
-With the prefix and the value extracted from parsing the user input, a `PersonDetailContainsKeywordPredicate` is created.
+The `FindCommandParser` class is responsible for parsing user input to extract search criteria. It uses the `ArgumentTokenizer` to tokenize the input string, 
+extracting prefixes and their associated values. Next, the method `verifyNoDuplicatePrefixesFor` ensures that there are no duplicate prefixes in the user input.
+Following that, the `extractPrefixForFindCommand` method ensures that only one valid, non-empty prefix is provided in the input.
+After which, the `extractValidKeyword` method ensures that the keyword provided in the input is valid in the case that the prefix is `mt|` or `lt|`, 
+since these two prefixes specifically require a numerical value as the keyword instead of a string value. 
 
 ##### Executing the Command
 
-The `FindCommand` class is responsible for executing the command for filtering the list in the application. It takes in a `PersonDetailContainsKeywordPredicate` as a parameter and has a `execute` method inherited from its parent class of `Command`
+The `FindCommand` class is responsible for executing the command for filtering the list in the application. 
 
-Using the `PersonDetailContainsKeywordPredicate` created from parsing user input, a `FindCommand` is created. the `execute` method is then called by the `LogicManager`.
+Using the prefix and keyword from parsing user input, a `FindCommand` is created. the `execute` method is then called by the `LogicManager`.
+
+**Creating Predicate** <br>
+
+<box type="info" seamless>
+
+**Note:** The `PersonDetailPredicate` and `ExamPredicate` classes implement the `Predicate` interface to filter contacts based on the search criteria.
+A brief overview of the two classes is given below:
+* `PersonDetailPredicate` takes a prefix and keyword as parameters, allowing it to filter contacts based on specific details like name, phone number, etc.
+* `ExamPredicate` takes a prefix, a keyword, and an exam as parameters, allowing it to filter contacts based on exam scores of a specific exam.
+</box>
+
+
+The find command first checks if an exam is required by checking if the prefix is `mt|` or `lt|`. 
+If an exam is required, the `selectedExam` is retrieved from the `model` and passed to the `ExamPredicate` constructor along with the prefix and keyword.
+Otherwise, the `PersonDetailPredicate` class is created with the prefix and keyword.
 
 **Updating Filtered Person List** <br>
 
-The `ModelManager` class implements the `Model` interface and manages the application's data. It maintains a `filteredPersons` list, which is a FilteredList of contacts based on the applied predicate. The `updateFilteredPersonList` method implemented in `ModelManager` updates the filtered list based on the provided predicate.
+The `ModelManager` class implements the `Model` interface and manages the application's data. It maintains a `filteredPersons` list, 
+which is a filtered list of contacts based on the applied predicate. The `updateFilteredPersonList` method implemented in `ModelManager` 
+updates the filtered list based on the predicate provided.
 
-When the `FindCommand` is executed, the `updateFilteredPersonList` method is called with the `PersonDetailContainsKeywordPredicate` as a parameter. This updates the `filteredPersons` list to show only persons that fufill the predicate.
+When the `FindCommand` is executed, the `updateFilteredPersonList` method is called with either the `PersonDetailPredicate` or `ExamPredicate` as a parameter. 
+This updates the `filteredPersons` list to show only persons that fufill the conditions set in the `test` method in either of the predicates.
 
 **User Interface Interaction** <br>
 
 After the `filteredPersons` list is updated, the user interface is updated such that the `PersonListPanel` now shows persons that fufill the predicate generated by the original user input.
 
-The following sequence diagram illustrates the `find` command with the user input `find n|Alice`
-<puml src="diagrams/FindImplementationSequenceDiagram.puml" width="550" />
+The following sequence diagram illustrates the `find` command with the user input `find n|Alice`.
+<puml src="diagrams/FindImplementationSequenceDiagram.puml" width="1000" />
 
-The following activity Diagram illustrates the user execution of the `find` command
-<puml src="diagrams/FindImplementationActivityDiagram.puml" width="550" />
+The next sequence diagram details the creation of the predicate, as well as the updating of the `filteredPersons` list in the `Model` component.
+<puml src="diagrams/FindImplementationPredicateCreationSequenceDiagram.puml" width="700" />
+
+The following activity Diagram illustrates the user execution of the `find` command.
+<puml src="diagrams/FindImplementationActivityDiagram.puml" width="800" />
+
+The next activity diagram is an expansion of the previous diagram, detailing the case where the user searches for contacts based on exam scores.
+<puml src="diagrams/FindImplementationFindByScoreActivityDiagram.puml" width="1000" />
 
 ##### Design Considerations
 
 **User Interface Consistency** <br>
 
-The choice of implementing the command to use prefixes to determine the filter criteria ensures consistency with other commands in the application. As this command follows a similar structure to all other commands, it is easier for users to learn and use the application.
+The choice of implementing the command to use prefixes to determine the filter criteria ensures consistency with other commands in the application. 
+As this command follows a similar structure to all other commands, it is easier for users to learn and use the application.
 
 **Flexibility in Search Criteria** <br>
 
 By allowing users to specify search criteria using different prefixes (name, phone, email, etc.), the implementation offers flexibility.
-Users can search for contacts based on various details, enhancing the usability of the feature. In the context of our potential users, we considered that users would likely have to sometimes filter students by their classes, or filter people by their roles (student, tutor, professor). So we opted to implement this feature with the flexibility of using all prefixes to account for all these potential use cases.
+Users can search for contacts based on various details, enhancing the usability of the feature. 
+
+In the context of our potential users, 
+we considered that users would likely have to sometimes filter students by their classes, or filter people by their roles (student, tutor, professor). 
+So we opted to implement this feature with the flexibility of using all prefixes to account for all these potential use cases.
+
+Furthermore, with consideration that our potential users will interact with exam scores, we wanted to integrate the find functionality 
+to search for contacts based on exam scores. Hence, we decided to introduce the `mt|` and `lt|` prefixes to allow users to search for contacts based on exam scores.
+
+**Two Predicate Classes** <br>
+
+The implementation of two predicate classes, `PersonDetailPredicate` and `ExamPredicate`, allows for a clear separation of concerns.
+
+The `PersonDetailPredicate` class is responsible for filtering contacts based on details like name, phone number, etc., 
+while the `ExamPredicate` class is responsible for filtering contacts based on exam scores.
+
+The alternative would be to have a single predicate class that handles all filtering, but this would make this supposed class more complex and harder to maintain.
 
 **Predicate-based Filtering** <br>
 
-As the `Model` class was built prior to the implementation of this feature, we did our best to re-use available methods instead of unnecessarily re-programing already exisiting logic. Hence, we decided to craft the command around the idea of a custom predicate as the `Model` class already had a `updateFilteredPersonList` method implemented that would filter persons using a predicate.
+As the `Model` class was built prior to the implementation of this feature, we did our best to re-use available methods 
+instead of unnecessarily reprogramming already existing logic. Hence, we decided to craft the command around the idea of a 
+custom predicate as the `Model` class already had a `updateFilteredPersonList` method implemented that would filter persons using a predicate.
 
 **Extensibility** <br>
 
-This design allows for easy extension to accommodate future enhancements or additional search criteria. New prefixes can be added to support additional search criteria without significant changes as we merely need to update our `Predicate` logic. This ensures that the implementation remains adaptable to evolving requirements and we can upgrade and improve the feature whenever required.
+This design allows for easy extension to accommodate future enhancements or additional search criteria. 
+New prefixes can be added to support additional search criteria without significant changes as we merely need to update our `Predicate` logic. 
+This ensures that the implementation remains adaptable to evolving requirements and we can upgrade and improve the feature whenever required.
 
 <br>
 
@@ -714,66 +760,6 @@ The `Model` object is then used to:
 ##### Concrete Examples of Validation
 
 For concrete examples of the validation process, [refer to the manual testing section of the `importExamScores` command](#importing-exam-scores-importexamscores).
-
-### **Find feature** : `find`
-
-The `find` command lets users search for persons by substring matching. The user can select any parameter to search under: `NAME`, `EMAIL`, `TAG`, `MATRIC`, `REFLECTION`, `STUDIO`, and `TAGS` can all be used. E.g. to search for all persons under studio `S2`, the user can use `find s|s2`. The user can also use two other prefixes: `lt` and `mt` to search for persons with scores less than or more than a certain value respectively. E.g. `find mt|50` will return all persons with scores more than 50.
-
-#### Implementation Details
-The `find` feature makes use of the predicate class `PersonDetailContainsKeywordPredicate` and the method `updateFilteredPersonList` to update the model to show only persons that fufill the criteria that the user has keyed in.
-
-##### Parsing User Input
-
-The `FindCommandParser` class is responsible for parsing user input to extract search criteria. It uses the `ArgumentTokenizer` to tokenize the input string, extracting prefixes and their associated values. Following that, the `extractPrefixForFindCommand` method ensures that only one valid, non-empty prefix is provided in the input.
-
-##### Predicate Creation
-
-The `PersonDetailContainsKeywordPredicate` class implements the `Predicate` interface to filter contacts based on search criteria. It takes a prefix and keyword as parameters, allowing it to filter contacts based on specific details like name, phone number, etc.
-
-With the prefix and the value extracted from parsing the user input, a `PersonDetailContainsKeywordPredicate` is created.
-
-##### Executing the Command
-
-The `FindCommand` class is responsible for executing the command for filtering the list in the application. It takes in a `PersonDetailContainsKeywordPredicate` as a parameter and has a `execute` method inherited from its parent class of `Command`
-
-Using the `PersonDetailContainsKeywordPredicate` created from parsing user input, a `FindCommand` is created. the `execute` method is then called by the `LogicManager`.
-
-##### Updating Filtered Person List:
-
-The `ModelManager` class implements the `Model` interface and manages the application's data. It maintains a `filteredPersons` list, which is a FilteredList of contacts based on the applied predicate. The `updateFilteredPersonList` method implemented in `ModelManager` updates the filtered list based on the provided predicate.
-
-When the `FindCommand` is executed, the `updateFilteredPersonList` method is called with the `PersonDetailContainsKeywordPredicate` as a parameter. This updates the `filteredPersons` list to show only persons that fufill the predicate.
-
-##### User Interface Interaction
-
-After the `filteredPersons` list is updated, the user interface is updated such that the `PersonListPanel` now shows persons that fufill the predicate generated by the original user input.
-
-The following sequence diagram illustrates the `find` command with the user input `find n|Alice`
-<puml src="diagrams/FindImplementationSequenceDiagram.puml" width="550" />
-
-The following activity Diagram illustrates the user execution of the `find` command
-<puml src="diagrams/FindImplementationActivityDiagram.puml" width="550" />
-
-#### **Considerations**
-
-##### User Interface Consistency
-
-The choice of implementing the command to use prefixes to determine the filter criteria ensures consistency with other commands in the application. As this command follows a similar structure to all other commands, it is easier for users to learn and use the application.
-
-##### Flexibility in Search Criteria
-
-By allowing users to specify search criteria using different prefixes (name, phone, email, etc.), the implementation offers flexibility.
-Users can search for contacts based on various details, enhancing the usability of the feature. In the context of our potential users, we considered that users would likely have to sometimes filter students by their classes, or filter people by their roles (student, tutor, professor). So we opted to implement this feature with the flexibility of using all prefixes to account for all these potential use cases.
-
-##### Predicate-based Filtering
-
-As the `Model` class was built prior to the implementation of this feature, we did our best to re-use available methods instead of unnecessarily re-programing already exisiting logic. Hence, we decided to craft the command around the idea of a custom predicate as the `Model` class already had a `updateFilteredPersonList` method implemented that would filter persons using a predicate.
-
-##### Extensibility
-
-This design allows for easy extension to accommodate future enhancements or additional search criteria. New prefixes can be added to support additional search criteria without significant changes as we merely need to update our `Predicate` logic. This ensures that the implementation remains adaptable to evolving requirements and we can upgrade and improve the feature whenever required.
-
-<br>
 
 ### **Exam Features**
 
