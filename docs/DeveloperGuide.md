@@ -6,7 +6,7 @@ title: "Developer Guide"
 # Avengers Assemble Developer Guide
 
 <!-- * Table of Contents -->
-## Table of Contents
+## Table Of Contents
 
 <div id="table-of-contents" style="line-height: 2.0">
 <ol>
@@ -35,11 +35,11 @@ title: "Developer Guide"
                     <li><a href="#add-person">Add Person Command</a></li>
                     <li><a href="#edit-person">Edit Person Command</a></li>
                     <li><a href="#delete-person">Delete Person Command</a></li>
-                    <li><a href="#find">Find Feature</a></li>
-                    <li><a href="#deleteshown">Delete Shown Feature</a></li>
-                    <li><a href="#import">Import Contacts Feature</a></li>
-                    <li><a href="#copy">Copy Feature</a></li>
-                    <li><a href="#export">Export Feature</a></li>
+                    <li><a href="#find">Find Command</a></li>
+                    <li><a href="#deleteshown">Delete Shown Command</a></li>
+                    <li><a href="#import">Import Contacts Command</a></li>
+                    <li><a href="#copy">Copy Command</a></li>
+                    <li><a href="#export">Export Command</a></li>
                     <li><a href="#optional-fields">Feature: Addition of Optional Fields (Matric)</a></li>
                     <li><a href="#tagging">Feature: Automatic Tagging of Persons</a></li>
                 </ol>
@@ -60,7 +60,7 @@ title: "Developer Guide"
                     <li><a href="#addscore">Add Score Command</a></li>
                     <li><a href="#editscore">Edit Score Command</a></li>
                     <li><a href="#deletescore">Delete Score Command</a></li>
-                    <li><a href="#importexamscores">Import Exam Scores Feature</a></li>
+                    <li><a href="#importexamscores">Import Exam Scores Command</a></li>
                     <li><a href="#scorestatistics">Score Statistics Feature</a></li>
                 </ol>
             </li>
@@ -177,7 +177,7 @@ The sections below give more details of each component.
 
 <div id="ui-component"></div>
 
-### UI Component
+### Ui Component
 
 The **API** of this component is specified in [`Ui.java`](https://github.com/AY2324S2-CS2103T-T10-1/tp/tree/master/src/main/java/seedu/address/ui/Ui.java)
 
@@ -207,9 +207,9 @@ The sequence diagram below illustrates a more in-depth view of the interactions 
 
 <p align="center"><puml src="diagrams/UiSequenceDiagram.puml" alt="Sequence Diagram of UI Component"/></p>
 
-#### Considerations for UI
+#### Considerations For Ui
 
-##### Dynamic UI Updates
+##### Dynamic Ui Updates
 
 The UI is designed to update dynamically based on changes in the `Model`. We narrowed down to two design choices for updating the UI components. They are:
 
@@ -254,7 +254,7 @@ How the parsing works:
 
 <br>
 
-#### Example of Parsing User Input: `delete` Command
+#### Example Of Parsing User Input: `Delete` Command
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking a simple `execute("delete 1")` API call as an example.
 
@@ -274,7 +274,7 @@ The following is a more detailed explaination on how user input is parsed into a
 
 **Note:** Some commands do not require any arguments (e.g., `help`, `clear`, `list`, `exit`). In such cases, the `XYZCommand` class is directly instantiated by the `AddressBookParser` class without the parsing of arguments. As such, any arguments passed to these commands are ignored.
 
-#### Considerations for Logic
+#### Considerations For Logic
 
 The `Logic` component is designed to be the central component that executes all user commands. This design choice was made to ensure that all commands are executed in a consistent manner, and to prevent the duplication of command execution logic across different components. By centralizing the command execution logic in the `Logic` component, we ensure that all commands are executed in the same way, regardless of the component that initiates the command execution. This design choice also allows for easier maintenance and extensibility, as any changes to the command execution logic can be made in a single location.
 
@@ -282,7 +282,7 @@ The `Logic` component is designed to be the central component that executes all 
 
 <div id="model-component"></div>
 
-### Model component
+### Model Component
 **API** : [`Model.java`](https://github.com/AY2324S2-CS2103T-T10-1/tp/master/src/main/java/seedu/address/model/Model.java)
 
 <p align="center"><puml src="diagrams/ModelClassDiagram.puml" width="450" /></p>
@@ -318,7 +318,7 @@ The `Model` component,
 <br>
 <br>
 
-#### Saving of Data
+#### Saving Of Data
 
 The `Storage` component uses the `Jackson` library to convert objects to JSON format. The conversion methods are predefined in the `JsonAdapted*` classes for their corresponding objects.
 
@@ -333,7 +333,7 @@ The sequence diagram below illustrates how data is saved within the `Storage` co
 <br>
 <br>
 
-#### Loading of Data
+#### Loading Of Data
 
 When the application is initialised, the `Storage` component reads the JSON objects from the save file and converts them back to objects that can be used to initialise the `Model` component. This is done using the `readJsonFile` method of the `JsonUtil` class which utilises the methods defined in the `JsonAdapted*` classes to convert the saved JSON data back to objects that can be used by the `Model` component.
 
@@ -375,7 +375,7 @@ As these general features do not require any arguments, the `AddressBookParser` 
 
 The `help` command utilizes the `java.awt.Toolkit` class to copy the user guide link to the user's clipboard.
 
-##### Executing the Command
+##### Executing The Command
 
 On execution of the `HelpCommand`, the `copyToClipboard` method is called which retrives the system clipboard
 through `Toolkit.getDefaultToolkit().getSystemClipboard()` and copies the user guide link to the clipboard by using
@@ -393,7 +393,7 @@ to navigate to the user guide link.
 
 The `clear` command allows users to clear all persons and exams from the address book.
 
-##### Executing the Command
+##### Executing The Command
 
 The `ClearCommand` simply sets the `AddressBook` in the `Model` component to a new `AddressBook` object, effectively clearing all persons and exams from the address book.
 
@@ -407,7 +407,7 @@ We designed the `clear` command to clear all persons and exams from the address 
 
 The `list` command allows users to list all persons in the address book.
 
-##### Executing the Command
+##### Executing The Command
 
 The `ListCommand` retrieves the `filteredPersonList` from the `Model` component and returns a `CommandResult` object containing the list of persons to be displayed on the UI.
 
@@ -445,7 +445,7 @@ and optionally provide additional information such as their:
 ##### Parsing User Input
 The `AddCommandParser` class is responsible for parsing user input to extract the details of the person to be added. It uses the `ArgumentTokenizer` to tokenize the input string, extracting prefixes and their associated values. It ensures that all mandatory fields are present and that there are no duplicate prefixes in the user input.
 
-##### Executing the Command
+##### Executing The Command
 The `AddCommand` class creates a new `Person` object with the parsed details.
 The `Person` object is then added to the `UniquePersonList` through the `addPerson` method in the `Model` component.
 
@@ -502,7 +502,7 @@ The `edit` command allows a user to edit the details of an existing person.
 The `EditCommandParser` class is responsible for parsing user input to extract the index of the person to be edited and the new details of the person.
 It uses the `ArgumentTokenizer` class to tokenize the user input string, extracting the index of the person to be edited and the new details of the person. It ensures that the index is valid and that there are no duplicate prefixes in the user input.
 
-##### Executing the Command
+##### Executing The Command
 
 The `EditCommand` first retrieves the person to be edited from the `Model` component.
 This is done by first retrieving the `filteredPersonList` from the `Model` component using the `getFilteredPersonList` method
@@ -527,7 +527,7 @@ The `delete` command allows a user to delete a person with the specified index.
 
 The `DeleteCommandParser` class is responsible for parsing user input to extract the index of the person to be deleted. It uses the `ArgumentTokenizer` to tokenize the input string, extracting the index of the person to be deleted and ensuring that the index is valid.
 
-##### Executing the Command
+##### Executing The Command
 
 The `DeleteCommand` class first retrieves the person to be deleted from the `Model` component. This is done by first retrieving the `filteredPersonList` from the `Model` component using the `getFilteredPersonList` method. The person to be deleted is then retrieved from the `filteredPersonList` using the index provided by the user. The `DeleteCommand` then deletes the person from the `UniquePersonList` through the `deletePerson` method in the `Model` component.
 
@@ -543,7 +543,7 @@ We have chosen to implement the `delete` command to accept the index of the pers
 
 <div id="find"></div>
 
-#### **Find Feature** : `find`
+#### **Find Command** : `find`
 
 The `find` command lets users search for persons by substring matching. The user can select any parameter to search under:
 `NAME`, `EMAIL`, `TAG`, `MATRIC`, `REFLECTION`, `STUDIO`, and `TAGS` can all be used. E.g. to search for all persons under studio `S2`, the user can use `find s|s2`.
@@ -562,7 +562,7 @@ Following that, the `extractPrefixForFindCommand` method ensures that only one v
 After which, the `extractValidKeyword` method ensures that the keyword provided in the input is valid in the case that the prefix is `mt|` or `lt|`,
 since these two prefixes specifically require a numerical value as the keyword instead of a string value.
 
-##### Executing the Command
+##### Executing The Command
 
 The `FindCommand` class is responsible for executing the command for filtering the list in the application.
 
@@ -652,11 +652,11 @@ This ensures that the implementation remains adaptable to evolving requirements 
 
 <div id="deleteshown" ></div>
 
-#### **Delete Shown Feature** : `deleteShown`
+#### **Delete Shown Command** : `deleteShown`
 
 The `deleteShown` command relies on the `filteredPersons` list in the `Model` component to delete the persons currently displayed in the `PersonListPanel`.
 
-##### Executing the Command
+##### Executing The Command
 
 The `deleteShown` command first retrives the `filteredPersons` list from the `Model` component using the `getFilteredPersonList` method. The `deleteShown` command then iterates through the `filteredPersons` list and deletes all currently shown `Persons` from the `UniquePersonList`.
 
@@ -680,7 +680,7 @@ Similarly to the `copy` command, the `deleteShown` command is designed to be use
 
 <div id="import"></div>
 
-#### **Import Contacts Feature** : `import`
+#### **Import Contacts Command** : `import`
 
 The `import` command allows users to import contacts from a CSV file. Users can specify the file path of the CSV file to
 import contacts from and with the validation and checking of the CSV rows, person objects can be added to the addressbook.
@@ -689,7 +689,7 @@ import contacts from and with the validation and checking of the CSV rows, perso
 
 The `ImportCommandParser` class is responsible for parsing user input to extract the file path of the CSV file to be imported. It uses the `ArgumentTokenizer` to tokenize the input string, extracting the file path of the CSV file to be imported.
 
-##### Executing the Command
+##### Executing The Command
 
 The `ImportCommand` class first makes use `OpenCSV` library which parses the CSV file into a `List<String[]>`, with each `String[]`
 representing a row in the CSV file. The `List<String[]>` is further parsed row by row by the `readCsvFile` method, which
@@ -752,7 +752,7 @@ The main concern in the increased coupling between `ImportCommand` and `AddComma
 
 <div id="copy"></div>
 
-#### **Copy Feature** : `copy`
+#### **Copy Command** : `copy`
 
 The `copy` command enables users to quickly copy the email addresses of the persons currently displayed to them in the
 `PersonListPanel`. The copied emails are stored in the users' clipboard and can be pasted into an email client.
@@ -766,7 +766,7 @@ as well as the `java.awt` package to copy the emails of all currently displayed 
 The `CopyCommand` class is instantiated directly by the `AddressBookParser` class when the user inputs the `copy` command.
 This is because the `copy` command does not require any additional arguments from the user.
 
-##### Executing the Command
+##### Executing The Command
 
 The `CopyCommand` class is responsible for executing the command for obtaining the emails of the filtered persons and copying them to the clipboard.
 It iterates through the `filteredPersons` list in the `Model` component and extracts the email addresses of each person.
@@ -810,7 +810,7 @@ However, it may be less convenient for users who want to paste the emails direct
 
 <div id="export"></div>
 
-#### **Export Feature** : `export`
+#### **Export Command** : `export`
 
 The `export` command allows users to export the details of each person currently displayed in the `PersonListPanel` to a CSV file. The CSV file is generated in the file `./addressbookdata/avengersassemble.csv`.
 
@@ -822,7 +822,7 @@ The `export` feature also relies on the Jackson Dataformat CSV module and the Ja
 The `export` command does not require any additional arguments from the user. Hence, an `ExportCommandParser` class is not required.
 `AddressBookParser` directly creates an `ExportCommand` object.
 
-##### Executing the Command
+##### Executing The Command
 
 **Data Retrieval** <br>
 * The `execute` method retrieves the `filteredPersons` list in `Model` by calling the `getFilteredPersonList()` method in `Model`.
@@ -885,7 +885,7 @@ Therefore, appending `Exam:` to the beginning of exam names in the CSV column he
 
 <div id="optional-fields"></div>
 
-#### **Feature: Addition of Optional Fields (Matric)**
+#### **Feature: Addition Of Optional Fields (Matric)**
 
 The optional `Matric` field enables the user to store the matriculation number of a person. The field is stored as a `Matric` in the `Person` object.
 
@@ -912,7 +912,7 @@ For the `edit` command, the parser will add or update the `Matric` field of the 
 
 <div id="tagging"></div>
 
-#### **Feature: Automatic Tagging of Persons**
+#### **Feature: Automatic Tagging Of Persons**
 
 A `student` tag is automatically added during the parsing of the `add` command based on the presence of the `Matric` field of the person being added.
 
@@ -953,7 +953,7 @@ It uses the `ArgumentTokenizer` to tokenize the input string, extracting `name` 
 It ensures that `name` and `maxScore` are valid and present in the user input, and that there are no duplicate prefixes in the user input.
 The `name` and `maxScore` are then used to instantiate an `AddExamCommand`.
 
-##### Executing the Command
+##### Executing The Command
 
 The `AddExamCommand` class creates a new `Exam` object with the parsed arguments
 It adds the `Exam` to the `UniqueExamList` through the `addExam` method in the `Model` component.
@@ -976,7 +976,7 @@ It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `in
 It ensures that the `index` is valid and present in the user input, and that there are no other prefixes in the user input.
 The `index` is used to instantiate a `DeleteExamCommand`.
 
-##### Executing the Command
+##### Executing The Command
 
 The `DeleteExamCommand` uses the index to delete the exam from the `UniqueExamList` in the `Model` component.
 It first retrieves the `UniqueExamList` by using the `getExamList` method in the `Model` component.
@@ -1017,7 +1017,7 @@ The `SelectExamCommandParser` is responsible for parsing user input to extract t
 It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `index`.
 It ensures that the `index` is valid and present in the user input, and that there are no other prefixes in the user input.
 
-##### Executing the Command
+##### Executing The Command
 
 The `SelectExamCommand` uses the index to select an exam from the `UniqueExamList` in the `Model` component.
 It first retrieves the `UniqueExamList` by using the `getExamList` method in the `Model` component.
@@ -1038,7 +1038,7 @@ The `deselectExam` command allows users to deselect the currently selected exam.
 The `deselectExam` command does not take any arguments from the user.
 Hence, a `DeselectExamCommandParser` is not required. `AddressBookParser` directly creates a `DeselectExamCommand` object.
 
-##### Executing the Command
+##### Executing The Command
 
 The `DeselectExamCommand` uses the `deselectExam` method in the `Model` component to deselect the currently selected exam.
 It sets the `selectedExam` field in the `Model` component to `null`.
@@ -1062,18 +1062,18 @@ Notes:
 
 <div id="exam-considerations"></div>
 
-#### **Considerations for Exam Features**
+#### **Considerations For Exam Features**
 
-##### Using a selection system for exams
+##### Using A Selection System For Exams
 
 We decided to implement a selection system for exams to complement the exam score feature. The application would only display the scores of the selected exam, making it easier for users to manage and view the scores.
 
 Our alternative design was to display the scores of all exams at once on every person. However, this alternative design would have made the UI cluttered and less user-friendly. The selection system allows users to focus on the scores of a specific exam, making it easier to view and manage the scores.
 
-##### Using index for exam selection
+##### Using Index For Exam Selection
 We were initially torn between the selection of exams using the exam name or the index. We eventually settled on using the index as it is easier for users to type and remember short numeric codes rather than potentially long and complex exam names which are more prone to typographical errors.
 
-##### Allowing deselection of exams
+##### Allowing Deselection Of Exams
 We decided to allow users to deselect exams as the exam scores and score statistics are displayed based on the selected exam. Deselecting the exam allows users to get rid of the displayed scores and statistics when they are no longer needed.
 
 ##### Extensibility
@@ -1117,7 +1117,7 @@ The following sequence diagram illustrates the parsing of an `addScore` command 
 > The parsing of an `editScore` command follows a similar structure, differing in the object instantiated at the end of the `parse` method.
 > `EditScoreCommandParser` instantiates an `EditScoreCommand` object.
 
-##### Executing the Command
+##### Executing The Command
 
 The `execute` method in `AddScoreCommand` retrieves the `filteredPersons` list in `Model`, and validates the target index against the list of filtered persons to ensure it is not out of bounds.
 It then fetches the person to add the score for based on the target index.
@@ -1160,7 +1160,7 @@ It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `in
 It also ensures that the `index` and `score` input value is valid, and that there are no duplicate prefixes in the user input.
 The `index` and `score` is then used in instantiating the `EditScoreCommand` by the `EditScoreCommandParser`.
 
-##### Executing the Command
+##### Executing The Command
 
 The `execute` method in `EditScoreCommand` retrieves the `filteredPersons` list in `Model`, and validates the target index against the list of filtered persons to ensure it is not out of bounds.
 It then fetches the person to edit the score for based on the target index.
@@ -1191,7 +1191,7 @@ The following sequence diagram illustrates the parsing of an `deleteScore` comma
     <puml src="diagrams/DeleteScoreParsingSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
 </p>
 
-##### Executing the Command
+##### Executing The Command
 
 The `execute` method in `DeleteScoreCommand` retrieves the `filteredPersons` list in `Model`, and validates the target index against the list of filtered persons to ensure it is not out of bounds.
 It then fetches the person to delete the score for based on the target index.
@@ -1206,7 +1206,7 @@ It removes the score for the selected exam in the person's existing `scores` has
 
 <div id="importexamscores"></div>
 
-#### **Import Exam Scores Feature** : `importExamScores`
+#### **Import Exam Scores Command** : `importExamScores`
 
 The `importExamScores` command lets users import exam scores corresponding to existing exams and persons from a CSV file.
 
@@ -1214,7 +1214,7 @@ The `importExamScores` command lets users import exam scores corresponding to ex
 
 The `ImportExamScoresParser` class is responsible for parsing the user input. It uses the `ArgumentTokenizer` to tokenize the input string, extracting the file path of the CSV file to be imported.
 
-##### Executing the Command
+##### Executing The Command
 
 **Parsing CSV File** <br>
 
@@ -1255,7 +1255,7 @@ The `Model` object is then used to:
 
 <br>
 
-##### Concrete Examples of Validation
+##### Concrete Examples Of Validation
 
 For concrete examples of the validation process, [refer to the manual testing section of the `importExamScores` command](#importing-exam-scores-importexamscores).
 
@@ -1264,7 +1264,7 @@ For concrete examples of the validation process, [refer to the manual testing se
 
 <div id="scorestatistics"></div>
 
-#### **Score Statistics Feature**
+#### **Score Statistics Command**
 
 The exam statistics feature allows users to view the mean and median scores of the selected exam. The statistics are displayed in the `StatusBarFooter` element of the UI on the right side.
 
@@ -1272,11 +1272,11 @@ The statistics are automatically updated whenever the selected exam is changed o
 
 When there are no scores for the selected exam, the statistics are displayed as `No scores available`. When no exam is selected, the statistics are not displayed at all.
 
-##### Storage of Exam Statistics
+##### Storage Of Exam Statistics
 
 The `ScoreStatistics` class is used to store the mean and median scores of the selected exam. The `Model` component stores the `ScoreStatistics` object for the currently selected exam as a `SimpleObjectProperty<ScoreStatistics>`.
 
-##### Updating of Exam Statistics
+##### Updating Of Exam Statistics
 
 the `ModelManager` class implements a `updateSelectedExamStatistics` and `getSelectedExamStatistics` method to update the statistics.
 
@@ -1292,7 +1292,7 @@ The `StatusBarFooter` element of the UI is initialised with an `ObservableValue<
 
 Whenever a command is executed, the `StatusBarFooter` retrieves the updated statistics and displays them on the right side of the footer which can be seen at the bottom of the UI.
 
-##### Considerations for Exam Statistics Feature
+##### Considerations For Exam Statistics Command
 
 **Storage of Exam Statistics** <br>
 
@@ -1314,7 +1314,7 @@ The `ScoreStatistics` class was used to store the mean and median scores of the 
 
 <br>
 
-#### Enhance input validation for `find` command
+#### Enhance Input Validation For `find` Command
 
 Currently, the `find` command only validates the `lt` and `mt` prefixes, where other prefixes are not validated. This means that users may search for persons with fields that do not exist to begin with, which is guaranteed to return no results.
 
@@ -1328,7 +1328,7 @@ For example, an extreme case will be to search for persons with the `Name` field
 
 <br>
 
-#### Update UI to Wrap Text
+#### Update Ui To Wrap Text
 
 Currently, the `ResultDisplay` box does not wrap text, which means that long lines of text will extend beyond the width of the box. This results in the need for two scrollbars, a horizontal one for the result box and a vertical one for the currently shown list of persons. This is not ideal as it makes the UI less optimized for the target audience, who prefer using a CLI-optimized application and prefer not to use mouse controls to scroll through scrollboxes.
 
@@ -1340,7 +1340,7 @@ In the case where the wrapped text still exceeds the height of the `ResultDispla
 
 <br>
 
-#### Primary key: Use both `Matric` and `Email`
+#### Primary Key: Use Both `Matric` And `Email`
 
 Currently, only `Email` is used as a unique identifier for `Person` objects. However, this means that two `Person` objects can have different `Email`s but the same `Matric` number. This clashes with the real-life constraint that NUS students, in particular CS1101S students, are put under, where Matriculation numbers are supposed to be unique for each student. Our planned enhancement hence aims to better reflect real-life constraints.
 
@@ -1354,7 +1354,7 @@ Additionally, some persons such as staff members and course instructors may not 
 
 <br>
 
-#### UX: Make sample data tags more relevant and helpful to the user
+#### Ux: Make Sample Data Tags More Relevant And Helpful To The User
 
 Currently, the sample data tags are not very helpful to the user, having tags like `friends`, `neighbours` and `family`. This may pose confusion to users about the context of the application, which is the head TA's management of persons related to CS1101S.
 
@@ -1369,7 +1369,7 @@ Retain all other relevant `Tag` objects like `colleagues` and `student` to bette
 --------------------------------------------------------------------------------------------------------------------
 <div id="documentation"></div>
 
-## **Documentation, Logging, Testing, Configuration, Dev-ops**
+## **Documentation, Logging, Testing, Configuration, Dev-Ops**
 
 * [Documentation guide](Documentation.md)
 * [Testing guide](Testing.md)
@@ -1449,7 +1449,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | head tutor using the app                    | copy email addresses of a group        | effectively communicate with target groups                              |
 | `* * *`  | head tutor using the app                    | export the details of persons to a csv | easily share the details of a group with others                         |
 
-#### For Exam and Score Management
+#### For Exam And Score Management
 
 | Priority | As a …​                                      | I want to …​                            | So that I can…​                                                          |
 |----------|---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------|
@@ -1472,7 +1472,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 (For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
 
-##### Use case: UC01 — Getting Help
+##### Use Case: UC01 — Getting Help
 
 **MSS:**
 
@@ -1482,7 +1482,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
-##### Use case: UC02 — Clearing Sample Data
+##### Use Case: UC02 — Clearing Sample Data
 
 **MSS:**
 
@@ -1492,7 +1492,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
-##### Use case: UC03 — Importing person details from a CSV file
+##### Use Case: UC03 — Importing Person Details From A Csv File
 
 **MSS:**
 
@@ -1516,7 +1516,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
        Use case ends.
 
-##### Use case: UC04 — Adding a person
+##### Use Case: UC04 — Adding A Person
 
 **MSS:**
 
@@ -1544,7 +1544,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
        Use case resumes at step 2.
 
-##### Use case: UC05 — Editing a person's details
+##### Use Case: UC05 — Editing A Person's Details
 
 **MSS:**
 
@@ -1570,7 +1570,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
        Use case ends.
 
-##### Use case: UC06 — Deleting a person
+##### Use Case: UC06 — Deleting A Person
 
 **MSS:**
 
@@ -1593,7 +1593,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
        Use case resumes at step 2.
 
-##### Use case: UC07 — Deleting all shown persons
+##### Use Case: UC07 — Deleting All Shown Persons
 
 **MSS:**
 
@@ -1618,7 +1618,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
        Use case ends.
 
-##### Use case: UC08 — Listing all persons
+##### Use Case: UC08 — Listing All Persons
 
 **MSS:**
 
@@ -1636,7 +1636,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
        Use case ends.
 
-##### Use case: UC09 — Finding persons
+##### Use Case: UC09 — Finding Persons
 
 **MSS:**
 
@@ -1653,7 +1653,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
        Use case ends.
 
-##### Use case: UC10 — Copying email addresses
+##### Use Case: UC10 — Copying Email Addresses
 
 **MSS:**
 
@@ -1673,7 +1673,7 @@ into user's clipboard.
 
        Use case ends.
 
-##### Use case: UC11 — Exporting persons to CSV
+##### Use Case: UC11 — Exporting Persons To Csv
 
 **MSS:**
 
@@ -1692,7 +1692,7 @@ into user's clipboard.
 
        Use case ends.
 
-##### Use case: UC12 — Importing exam results from a CSV file
+##### Use Case: UC12 — Importing Exam Results From A Csv File
 
 **MSS:**
 
@@ -1727,7 +1727,7 @@ into user's clipboard.
 
        Use case ends.
 
-##### Use case: UC13 — Adding an exam
+##### Use Case: UC13 — Adding An Exam
 
 **MSS:**
 
@@ -1770,7 +1770,7 @@ into user's clipboard.
 
        Use case resumes at step 2.
 
-##### Use case: UC14 — Deleting an exam
+##### Use Case: UC14 — Deleting An Exam
 
 **MSS:**
 
@@ -1787,7 +1787,7 @@ into user's clipboard.
 
        Use case ends.
 
-##### Use case: UC15 — Selecting an exam
+##### Use Case: UC15 — Selecting An Exam
 
 **MSS:**
 
@@ -1804,7 +1804,7 @@ into user's clipboard.
 
        Use case ends.
 
-##### Use case: UC16 — Deselecting an exam
+##### Use Case: UC16 — Deselecting An Exam
 
 **MSS:**
 
@@ -1821,7 +1821,7 @@ into user's clipboard.
 
        Use case ends.
 
-##### Use case: UC17 — Adding scores to a student for an exam
+##### Use Case: UC17 — Adding Scores To A Student For An Exam
 
 **MSS:**
 
@@ -1845,7 +1845,7 @@ into user's clipboard.
 
        Use case ends.
 
-##### Use case: UC18 — Editing scores for a student for an exam
+##### Use Case: UC18 — Editing Scores For A Student For An Exam
 
 **MSS:**
 
@@ -1875,7 +1875,7 @@ into user's clipboard.
 
         Use case ends.
 
-##### Use case: UC19 — Deleting scores for a student for an exam
+##### Use Case: UC19 — Deleting Scores For A Student For An Exam
 
 **MSS:**
 
@@ -1899,7 +1899,7 @@ into user's clipboard.
 
         Use case ends.
 
-##### Use case: UC20 — Viewing statistics of scores
+##### Use Case: UC20 — Viewing Statistics Of Scores
 
 **MSS:**
 
@@ -1916,7 +1916,7 @@ into user's clipboard.
 
        Use case ends.
 
-##### Use case: UC21 — Exit application
+##### Use Case: UC21 — Exit Application
 
 **MSS:**
 
@@ -1957,7 +1957,7 @@ into user's clipboard.
 
 <div id="appendix_f"></div>
 
-### Appendix F: Instructions for Manual Testing
+### Appendix F: Instructions For Manual Testing
 
 Given below are instructions to test the app manually.
 
@@ -1970,7 +1970,7 @@ testers are expected to do more *exploratory* testing.
 
 <div id="test_launch"></div>
 
-#### Launch and Shutdown
+#### Launch And Shutdown
 
 ##### Initial Launch
 
@@ -2005,9 +2005,9 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_save"></div>
 
-#### Saving data
+#### Saving Data
 
-##### Dealing with Missing or Corrupted Data Files
+##### Dealing With Missing Or Corrupted Data Files
 
 1. Prerequisites: The app is a clean state.
 
@@ -2035,7 +2035,7 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_clear"></div>
 
-#### Clearing all Persons and Exams: `clear`
+#### Clearing All Persons And Exams: `clear`
 
 1. Prerequisites: Multiple persons in the list.
 
@@ -2047,9 +2047,9 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_import"></div>
 
-#### Importing persons: `import`
+#### Importing Persons: `import`
 
-##### Importing data from a CSV file
+##### Importing Data From A Csv File
 
 1. Prerequisites: Prepare a CSV file with a few persons. There isa file at path C:file.csv with the following content:
 
@@ -2061,14 +2061,14 @@ Expected: The GUI closes and the application exits.
 2. Test case: `import i|file.csv`<br>
         Expected: Persons from the CSV file are added to the address book. Status message shows the number of persons imported.
 
-##### Importing data from a CSV file that does not exist
+##### Importing Data From A Csv File That Does Not Exist
 
 1. Prerequisites: No CSV file at the path C:file.csv
 
 2. Test case: `import i|file.csv` <br>
    Expected: Error message shown in the error report. No change in the address book.
 
-##### Importing data from a CSV file that is not a CSV file
+##### Importing Data From A Csv File That Is Not A Csv File
 
 1. Prerequisites: A file at the path C:file.txt with the following content:
 
@@ -2080,7 +2080,7 @@ Expected: The GUI closes and the application exits.
 2. Test case: `import i|file.txt` (file is not a CSV file)<br>
        Expected: Error message shown in the error report. No change in the address book.
 
-##### Importing data from a CSV file with duplicate compulsory headers in header row
+##### Importing Data From A Csv File With Duplicate Compulsory Headers In Header Row
 
 1. Prerequisites: A CSV file with duplicate compulsory headers (e.g. 2 header columns named 'name') at the path C:file.csv with the following content:
 
@@ -2092,7 +2092,7 @@ Expected: The GUI closes and the application exits.
 2. Test case: `import i|file.csv` (file has duplicate headers)<br>
        Expected: First occurrence in the CSV file is added to the address book. Duplicate entries are ignored.
 
-##### Importing data from a CSV file with missing compulsory headers in header row
+##### Importing Data From A Csv File With Missing Compulsory Headers In Header Row
 
 1. Prerequisites: A CSV file with missing compulsory headers at the path C:file.csv with the following content:
     ```
@@ -2103,7 +2103,7 @@ Expected: The GUI closes and the application exits.
 2. Test case: `import i|file.csv` (file has missing headers)<br>
        Expected: Error message shown in the error report. No change in the address book.
 
-##### Importing data from a CSV file with missing compulsory values in a row
+##### Importing Data From A Csv File With Missing Compulsory Values In A Row
 
 1. Prerequisites: A CSV file with missing compulsory values in a row at the path C:file.csv with the following content:
 
@@ -2115,7 +2115,7 @@ Expected: The GUI closes and the application exits.
 2. Test case: `import i|file.csv` <br>
        Expected: All valid rows are added to the address book. Error message shown in the error report for invalid rows.
 
-##### Importing data from a CSV file with extra headers in header row
+##### Importing Data From A Csv File With Extra Headers In Header Row
 
 1. Prerequisites: A CSV file with extra headers in header row at the path C:file.csv with the following content:
 
@@ -2127,7 +2127,7 @@ Expected: The GUI closes and the application exits.
 2. Test case: `import i|file.csv` (file has extra headers)<br>
    Expected: Only the compulsory headers are read. Optional headers are read if present. Extra headers are ignored.
 
-##### Importing data from a CSV file with unequal number of values in a row as the number of headers
+##### Importing Data From A Csv File With Unequal Number Of Values In A Row As The Number Of Headers
 
 1. Prerequisites: A CSV file with extra values in a row at the path C:file.csv with the following content:
 
@@ -2139,7 +2139,7 @@ Expected: The GUI closes and the application exits.
 2. Test case: `import i|file.csv` (file has extra values in a row)<br>
        Expected: All valid rows are added to the address book. Error message shown in the error report for invalid rows.
 
-##### Importing data from an empty CSV file
+##### Importing Data From An Empty Csv File
 
 1. Prerequisites: An empty CSV file at the path C:file.csv
 
@@ -2150,9 +2150,9 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_add"></div>
 
-#### Adding a Person: `add`
+#### Adding A Person: `add`
 
-##### Adding a Person with all fields
+##### Adding A Person With All Fields
 
 1. Prerequisites: No persons in the list.
 
@@ -2191,7 +2191,7 @@ Expected: The GUI closes and the application exits.
 
     Expected: Similar to previous.
 
-##### Adding a Person with repeated prefixes
+##### Adding A Person With Repeated Prefixes
 
 1. Prerequisites: No persons in the list.
 
@@ -2208,7 +2208,7 @@ Expected: The GUI closes and the application exits.
 
     Expected: Similar to previous.
 
-##### Adding a Person whose `Email` already exists
+##### Adding A Person Whose `Email` Already Exists
 
 1. Prerequisites: A person with email `e1234567@u.nus.edu` already exists in the list.
 
@@ -2220,7 +2220,7 @@ Expected: The GUI closes and the application exits.
 
     Expected: An error message is shown indicating that the email already exists.
 
-##### Adding a Person with only compulsory fields
+##### Adding A Person With Only Compulsory Fields
 
 1. Prerequisites: No persons in the list.
 
@@ -2239,7 +2239,7 @@ Expected: The GUI closes and the application exits.
 
 3. Other successful test cases include adding a person with only some optional fields.
 
-##### Adding a Person with matriculation number
+##### Adding A Person With Matriculation Number
 
 1. Prerequisites: No persons in the list.
 
@@ -2275,9 +2275,9 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_edit"></div>
 
-#### Editing a Person: `edit`
+#### Editing A Person: `edit`
 
-##### Editing a Person with all fields
+##### Editing A Person With All Fields
 
 1. Prerequisites: Start with the provided sample data.
 
@@ -2293,7 +2293,7 @@ Expected: The GUI closes and the application exits.
 
    Expected: Similar to previous.
 
-##### Editing a Person with repeated prefixes
+##### Editing A Person With Repeated Prefixes
 
 1. Prerequisites: Start with the provided sample data.
 
@@ -2309,7 +2309,7 @@ Expected: The GUI closes and the application exits.
 
    Expected: Similar to previous.
 
-##### Editing a Person whose `Email` already exists
+##### Editing A Person Whose `Email` Already Exists
 
 1. Prerequisites: Start with the provided sample data. Note the emails of the first and second person.
 
@@ -2323,9 +2323,9 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_delete"></div>
 
-#### Deleting a Person: `delete`
+#### Deleting A Person: `delete`
 
-##### Deleting a Person while all persons are being shown
+##### Deleting A Person While All Persons Are Being Shown
 
 1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
@@ -2341,7 +2341,7 @@ Expected: The GUI closes and the application exits.
 
    Expected: Similar to previous.
 
-##### Deleting a Person while some persons are being shown
+##### Deleting A Person While Some Persons Are Being Shown
 
 1. Prerequisites: Filter persons using the `find` command. Multiple but not all persons in the list.
 
@@ -2357,7 +2357,7 @@ Expected: The GUI closes and the application exits.
 
     Expected: Similar to previous.
 
-##### Deleting a Person while no persons are being shown
+##### Deleting A Person While No Persons Are Being Shown
 
 1. Prerequisites: Filter persons using the `find` command such that there are no persons in the list, or delete all persons with `clear`.
 
@@ -2368,9 +2368,9 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_deleteshown"></div>
 
-#### Deleting shown Persons: `deleteShown`
+#### Deleting Shown Persons: `deleteShown`
 
-##### Deleting a proper subset of all Persons
+##### Deleting A Proper Subset Of All Persons
 
 1. Prerequisites: Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
 
@@ -2382,7 +2382,7 @@ Expected: The GUI closes and the application exits.
 
     Expected: Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
 
-##### Deleting all Persons
+##### Deleting All Persons
 
 1. Prerequisites: Filter persons using the `find` command such that all persons are shown, or list all persons with `list`.
 
@@ -2396,9 +2396,9 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_list"></div>
 
-#### Listing all Persons: `list`
+#### Listing All Persons: `list`
 
-##### Starting with sample data
+##### Starting With Sample Data
 
 1. Prerequisites: Start with the provided sample data.
 
@@ -2410,7 +2410,7 @@ Expected: The GUI closes and the application exits.
 
     Expected: Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
 
-##### Starting with a filtered list
+##### Starting With A Filtered List
 
 1. Prerequisites: Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
 
@@ -2420,9 +2420,9 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_find"></div>
 
-#### Finding a Person: `find`
+#### Finding A Person: `find`
 
-##### Finding a Person by contact details
+##### Finding A Person By Contact Details
 
 1. Prerequisites: Multiple persons in the list.
 
@@ -2467,7 +2467,7 @@ Expected: The GUI closes and the application exits.
 
 </box>
 
-##### Finding by Score
+##### Finding By Score
 
 1. Prerequisites: Multiple persons in the list. Persons with scores. Exam must be selected.
 
@@ -2495,7 +2495,7 @@ Expected: The GUI closes and the application exits.
 
 </box>
 
-##### Finding by multiple prefixes
+##### Finding By Multiple Prefixes
 
 1. Prerequisites: Multiple persons in the list.
 
@@ -2517,9 +2517,9 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_copy"></div>
 
-#### Copying emails: `copy`
+#### Copying Emails: `copy`
 
-##### Copying emails of all Persons
+##### Copying Emails Of All Persons
 
 1. Prerequisites: Multiple persons in the list. Use the `list` command to display all persons.
 
@@ -2527,7 +2527,7 @@ Expected: The GUI closes and the application exits.
 
     Expected: All emails are copied to the clipboard. Status message shows the number of emails copied.
 
-##### Copying emails of a specific group
+##### Copying Emails Of A Specific Group
 
 1. Prerequisites: Multiple persons in the list, filtered by a specific criteria using the `find` command.
 
@@ -2546,7 +2546,7 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_export"></div>
 
-#### Exporting Data to a CSV File: `export`
+#### Exporting Data To A Csv File: `export`
 
 **Command:** `export`<br>
 **More information on usage:** <a href="UserGuide.md#export">Exporting Data to a CSV File</a>
@@ -2588,9 +2588,9 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_addexam"></div>
 
-#### Adding an Exam: `addExam`
+#### Adding An Exam: `addExam`
 
-##### Adding an Exam with valid data
+##### Adding An Exam With Valid Data
 
 1. Prerequisites: No exams in the address book.
 
@@ -2600,14 +2600,14 @@ Expected: The GUI closes and the application exits.
 3. Other test cases to try: `addExam n|Final s|100`<br>
    Expected: New exam is added to the address book. Status message shows the exam added.
 
-##### Adding an Exam that already exists
+##### Adding An Exam That Already Exists
 
 1. Prerequisites: An exam of name: Final, date: 2021-12-12 exists in the address book.
 
 2. . Test case: `addExam n|Final d|100`<br>
      Expected: Error message shown in the error report. No change in the address book.
 
-##### Adding an Exam with missing fields
+##### Adding An Exam With Missing Fields
 
 1. Pre-requisite: No exams in the address book.
 
@@ -2618,7 +2618,7 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_deleteexam"></div>
 
-#### Deleting an Exam: `deleteExam`
+#### Deleting An Exam: `deleteExam`
 
 1. Prerequisites: Exactly one exam in the address book. Hence, exam has an index of 1.
 
@@ -2638,7 +2638,7 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_selectexam"></div>
 
-#### Selecting an Exam: `selectExam`
+#### Selecting An Exam: `selectExam`
 
 1. Prerequisites: Exactly one exam in the address book. Hence, exam has an index of 1.
 
@@ -2656,7 +2656,7 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_deselectexam"></div>
 
-#### Deselecting an Exam: `deselectExam`
+#### Deselecting An Exam: `deselectExam`
 
 1. Prerequisites: An exam has been selected.
 
@@ -2672,7 +2672,7 @@ Expected: The GUI closes and the application exits.
 
 #### Importing Exam Scores: `importExamScores`
 
-##### Importing Exam Scores from a CSV file
+##### Importing Exam Scores From A Csv File
 
 1. Prerequisites: Start with sample data.
 
@@ -2695,7 +2695,7 @@ Expected: The GUI closes and the application exits.
 
     Expected: The person with the email of `alexyeoh@example.com` now has a `Midterm` score of `50`.
 
-##### Importing an invalid file
+##### Importing An Invalid File
 
 1. Prerequisites: Start with sample data and the `Midterm` exam.
 
@@ -2705,7 +2705,7 @@ Expected: The GUI closes and the application exits.
 
     Expected: An error message is shown indicating that the file is not a CSV file.
 
-##### Importing a CSV file with incorrect formatting
+##### Importing A Csv File With Incorrect Formatting
 
 1. Prerequisites: Start with sample data and the `Midterm` exam.
 
@@ -2726,7 +2726,7 @@ Expected: The GUI closes and the application exits.
 
     Expected: Similar to previous.
 
-##### Importing a CSV file with duplicate entries
+##### Importing A Csv File With Duplicate Entries
 
 1. Prerequisites: Start with sample data and the `Midterm` exam.
 
@@ -2743,7 +2743,7 @@ Expected: The GUI closes and the application exits.
 
     Expected: A message is shown indicating that there are duplicate entries in the CSV file, and only the first instance has been kept. The `Midterm` score for the person with the email of `alexyeoh@example.com` is `50`.
 
-##### Importing a CSV file with invalid entries
+##### Importing A Csv File With Invalid Entries
 
 1. Prerequisites: Start with sample data and the `Midterm` exam.
 
@@ -2776,7 +2776,7 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_addscore"></div>
 
-#### Adding a Persons's Exam Score: `addScore`
+#### Adding A Persons's Exam Score: `addScore`
 
 **Command:** `addScore`<br>
 **More information on usage:** <a href="UserGuide.md#addscore">Adding an Exam Score</a>
@@ -2830,7 +2830,7 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_editscore"></div>
 
-#### Editing a Person's Exam Score: `editScore`
+#### Editing A Person's Exam Score: `editScore`
 
 **Command:** `editScore`<br>
 **More information on usage:** <a href="UserGuide.md#editscore">Editing an Exam Score</a>
@@ -2880,7 +2880,7 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_deletescore"></div>
 
-#### Deleting a Person's Exam Score: `deleteScore`
+#### Deleting A Person's Exam Score: `deleteScore`
 
 **Command:** `deleteScore`<br>
 **More information on usage:** <a href="UserGuide.md#deletescore">Deleting an Exam Score</a>
@@ -2921,7 +2921,7 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_statistics"></div>
 
-#### Mean and Median of Exam Scores
+#### Mean And Median Of Exam Scores
 
 **More information on usage:** <a href="UserGuide.md#mean-and-median">Mean and Median of Exam Scores</a>
 
@@ -2975,7 +2975,7 @@ seamlessly integrated with the existing features added a layer of complexity to 
 
 #### Effort Required
 
-##### Enhancements to Existing Features
+##### Enhancements To Existing Features
 
 **Addition of New Fields to Persons**<br>
 New fields such as recitation, studio, matriculation number, was added to persons to align with the context of our application.
@@ -3019,14 +3019,14 @@ of scores for each person for each exam. This is further elaborated upon in the 
 
 #### Challenges Faced
 
-##### Understanding the Existing Codebase
+##### Understanding The Existing Codebase
 One of the challenges we faced was understanding the existing codebase of AB3. We had to familiarize ourselves with the
 structure of the codebase, the interactions between the different classes, and the existing features of AB3. This required
 us to spend time reading through the code, discussing the existing features, and identifying potential areas where
 conflicts might arise when adding new features. We also had to consider how to integrate our new features using the existing
 structure in AB3, and how to ensure that the new features did not conflict with the existing features.
 
-##### Considerations for New Entity `Exam` and its Interactions with `Person`
+##### Considerations For New Entity `Exam` And Its Interactions With `Person`
 Our team wanted to implement a feature that would allow users to manage and store exam scores for each person.
 It was clear from the start that this would require the introduction of a new entity, `Exam`, to store information about
 each exam. However, we found that there was a challenge in determining how to connect the `Person` entity with the `Exam` entity, and how to
@@ -3071,7 +3071,7 @@ On the other hand, storing each person's score in their corresponding `Person` o
 operations on persons, but would require more complex interactions for exam management. We had to consider the pros and cons
 of each approach, before deciding on the latter approach, as we concluded that our application was more person-centric.
 
-##### Bug Fixing and Testing
+##### Bug Fixing And Testing
 A significant challenge we faced was the identification and resolution of bugs. Unit tests for our own features were
 relatively straightforward to implement, but we found that identifying edge cases proved to be tricky. Certain features
 were also a lot more bug prone than others, such as the import features, which required extensive testing to ensure that
