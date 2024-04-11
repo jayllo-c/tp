@@ -396,7 +396,7 @@ Otherwise, the `PersonDetailPredicate` class is created with the prefix and keyw
 **Updating Filtered Person List** <br>
 
 The `ModelManager` class implements the `Model` interface and manages the application's data. It maintains a `filteredPersons` list, 
-which is a FilteredList of contacts based on the applied predicate. The `updateFilteredPersonList` method implemented in `ModelManager` 
+which is a filtered list of contacts based on the applied predicate. The `updateFilteredPersonList` method implemented in `ModelManager` 
 updates the filtered list based on the predicate provided.
 
 When the `FindCommand` is executed, the `updateFilteredPersonList` method is called with either the `PersonDetailPredicate` or `ExamPredicate` as a parameter. 
