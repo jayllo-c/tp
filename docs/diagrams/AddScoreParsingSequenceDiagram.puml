@@ -1,0 +1,79 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":AddScoreCommandParser" as AddScoreCommandParser LOGIC_COLOR
+participant "<<class>>\nArgumentTokenizer" as ArgumentTokenizer LOGIC_COLOR
+participant "a:ArgumentMultimap" as ArgumentMultimap LOGIC_COLOR
+participant "<<class>>\nParserUtil" as  ParserUtil LOGIC_COLOR
+participant "c:AddScoreCommand" as AddScoreCommand LOGIC_COLOR
+end box
+
+box Commons COMMONS_COLOR_T1
+participant "i:Index" as Index COMMONS_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "s:Score" as Score MODEL_COLOR
+end box
+
+[-> AddScoreCommandParser : parse("1 s|100")
+activate AddScoreCommandParser
+
+AddScoreCommandParser -> ArgumentTokenizer : tokenize("1 s|100", PREFIX_SCORE)
+activate ArgumentTokenizer
+
+create ArgumentMultimap
+ArgumentTokenizer -> ArgumentMultimap
+activate ArgumentMultimap
+
+ArgumentMultimap --> ArgumentTokenizer
+deactivate ArgumentMultimap
+
+ArgumentTokenizer --> AddScoreCommandParser : a
+deactivate ArgumentTokenizer
+
+AddScoreCommandParser -> ArgumentMultimap : verifyNoDuplicatePrefixesFor(PREFIX_SCORE)
+activate ArgumentMultimap
+
+ArgumentMultimap --> AddScoreCommandParser
+deactivate ArgumentMultimap
+
+AddScoreCommandParser -> ParserUtil : parseIndex()
+activate ParserUtil
+
+create Index
+ParserUtil -> Index
+activate Index
+
+Index --> ParserUtil
+deactivate Index
+
+ParserUtil --> AddScoreCommandParser : i
+deactivate ParserUtil
+
+AddScoreCommandParser -> ParserUtil : parseScore()
+activate ParserUtil
+
+create Score
+ParserUtil -> Score
+activate Score
+
+Score --> ParserUtil
+deactivate Score
+
+ParserUtil --> AddScoreCommandParser : s
+deactivate ParserUtil
+
+create AddScoreCommand
+AddScoreCommandParser -> AddScoreCommand : new AddScoreCommand(i, s)
+activate AddScoreCommand
+
+AddScoreCommand --> AddScoreCommandParser
+deactivate AddScoreCommand
+
+[<-- AddScoreCommandParser : c
+deactivate AddScoreCommandParser
+
+@enduml

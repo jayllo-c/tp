@@ -1,0 +1,61 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":DeleteScoreCommand" as DeleteScoreCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+participant "selectedExam:Exam" as Exam MODEL_COLOR
+participant "p:Person" as Person MODEL_COLOR
+end box
+
+[-> DeleteScoreCommand : execute(m)
+activate DeleteScoreCommand
+
+DeleteScoreCommand -> Model : getFilteredPersonList()
+activate Model
+
+Model --> DeleteScoreCommand : list
+deactivate Model
+
+DeleteScoreCommand -> Model : getSelectedExam()
+activate Model
+
+create Exam
+Model -> Exam : getValue()
+activate Exam
+
+Exam --> Model
+deactivate Exam
+
+Model --> DeleteScoreCommand : selectedExam
+deactivate Model
+
+create Person
+DeleteScoreCommand -> Person : list.get()
+activate Person
+
+Person --> DeleteScoreCommand
+deactivate Person
+
+DeleteScoreCommand -> Model : removeExamScoreFromPerson(p, selectedExam)
+activate Model
+
+Model --> DeleteScoreCommand
+deactivate Model
+
+create CommandResult
+DeleteScoreCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> DeleteScoreCommand
+deactivate CommandResult
+
+[<-- DeleteScoreCommand : r
+deactivate DeleteScoreCommand
+
+@enduml

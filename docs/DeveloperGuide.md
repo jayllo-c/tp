@@ -547,51 +547,70 @@ However, it may be less convenient for users who want to paste the emails direct
 The `export` command allows users to export the details of each person currently displayed in the `PersonListPanel` to a CSV file. The CSV file is generated in the file `./addressbookdata/avengersassemble.csv`.
 
 The user can first use the `find` feature to filter out the relevant persons, which will be displayed in the `PersonListPanel`.
-The `export` feature utilizes the `filteredPersons` list stored in `Model` to retrieve the relavant data displayed in `PersonListPanel`.
-The `export` feature also relies on the Jackson Dataformat CSV module and the Jackson Databind module write the details of persons to the CSV file `./addressbookdata/avengersassemble.csv`.
+The `export` feature also relies on the Jackson Dataformat CSV module and the Jackson Databind module to write the details of persons to the CSV file `./addressbookdata/avengersassemble.csv`.
 
 ##### Parsing User Input
 
-The `export` command does not require any additional arguments from the user. Hence a `ExportCommandParser` class is not required. `AddressBookParser` directly creates an `ExportCommand` object.
+The `export` command does not require any additional arguments from the user. Hence, an `ExportCommandParser` class is not required. 
+`AddressBookParser` directly creates an `ExportCommand` object.
 
 ##### Executing the Command
 
 **Data Retrieval** <br>
+* The `execute` method retrieves the `filteredPersons` list in `Model` by calling the `getFilteredPersonList()` method in `Model`.
+  This list stores the relevant persons currently displayed in the `PersonListPanel`. 
+  It then creates a temporary `AddressBook` object and iterates through the `filteredPersons` list to add each person from the list into the AddressBook.
+  The data is then written to a JSON file named `filteredaddressbook.json` with the `writeToJsonFile` method in `ExportCommand`.
 
-The `excute` method calls `Model#getFilteredPersonList()` to retrieve the `filteredPersons` list stored in `Model`. This lists stores the relevant persons currently displayed in the `PersonListPanel`.
-It then creates a temporary `AddressBook` object and iterates through the `filteredPerons` list to add each person from the list into the AddressBook.
+* The `execute` method also retrieves the address book file path by calling the `getAddressBookFilePath()` method in `Model` (this address book stores information of **all** persons and exams).
+  This file path is retrieved to obtain information on the examinations added in the application
 
-**JSON Serialization** <br>
+The sequence diagram illustrates the interactions between the Logic and Model components when data is being retrieved from `Model` when `export` is executed:
 
-The information in the temporary `AddressBook` is written into a JSON file, `filteredaddressbook.json` using the `JsonAddressBookStorage#writeToJsonFile()` method.
+<p align="center">
+    <puml src="diagrams/ExportDataRetrievalSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
+</p>
+
+**JSON File Handling** <br>
+
+The contents of both the JSON files retrieved in the above section is read with the `readJsonFile()` method in `ExportCommand` and returned as JSON trees, `filteredJsonTree` and `unfilteredJsonTree`.
+This method uses Jackson's `ObjectMapper`.
+
+* From the `filteredJsonTree`, the persons array is extracted using the `readPersonsArray()` method in `ExportCommand` to obtain the filtered persons and their data.
+* From the `unfilteredJsonTree`, the exams array is extracted using the `readExamsArray()` method in `ExportCommand` to obtain the exams.
 
 **CSV Conversion** <br>
 
-The `export` feature relies on the Jackson Dataformat CSV module and the Jackson Databind module to read the JSON file and write the information into a CSV file.
-Given below is are the steps taken to convert the JSON-formatted data to CSV:
+A CSV file, `avengersassemble.csv`, to write the data to, is created.
+Its directory is also created using the `createCsvDirectory()` method in `ExportCommand` if the directory does not exist.
+The CSV schema is dynamically built based on the structure of the JSON array using the `buildCsvSchema()` method in `CsvUtil`. This method relies on the Jackson Dataformat CSV module to build the CSV schema.
+The CSV schema and JSON data are used to write to the CSV file using Jackson's `CsvMapper`.
 
-* The JSON data is read from the JSON file and converted into a JSON tree using Jackson's `ObjectMapper`.
-* The JSON tree is processed to extract the array of persons.
-* A CSV schema is dynamically built based on the structure of the JSON array.
-* The CSV schema and JSON data are used to write to the CSV file using Jackson's `CsvMapper`.
+The following sequence diagram shows the interactions within the different classes in the JSON file handling section and CSV conversion section when the `export` command is executed:
 
-The following sequence diagram shows the interactions within the different classes when the user inputs an `export` command.
-
-<puml src="diagrams/ExportSequenceDiagram.puml" alt="Sequence Diagram for the `export` Command" />
+<p align="center">
+  <puml src="diagrams/ExportSequenceDiagram.puml" alt="Sequence Diagram for the `export` Command" />
+</p>
 
 <br>
 
-##### Alternative Implementations
+##### Design Considerations
 
-**Alternative 1 (current choice):** Exports the details of persons displayed in `PersonListPanel`.
-* Pros: Users do not have to go through the extra step of filtering through the persons in the CSV file in an external software.
-* Cons: The extent to which users can filter the persons displayed is highly dependent on the `find` feature.
+**Obtaining Exam Names from `exams` Array in the Address Book File Path**<br>
+* **Alternative 1 (current choice):** Obtaining exam names from `exams` array in the address book file path.
+  * A person in the JSON file will only contain the exam details if they have a score for that exam. 
+    Therefore, with this choice, if no one in the filtered person's JSON file contains any score for a specific exam, the exam name will still be exported.
+  * By adopting this alternative, users will be informed about the existence of an exam even if none of the persons in the filtered list have a score for that exam.
+<br><br>
+* **Alternative 2:** Obtaining exam names directly from `persons` array in the filtered person's JSON file.
+  * This choice will only export an exam if someone in the filtered persons list has a score for that exam.
 
-**Alternative 2:** Exports **all** contacts stored in the address book.
-* Pros:
-  * Easy to implement.
-  * The `export` feature is not reliant on the `find` feature to update the `filteredPersons` list.
-* Cons: Users need to manually filter and sort through the CSV file if they require certain data which may be less efficient.
+<br>
+
+**Adding `Exam:` to Exam Names in the CSV Column Headings**<br>
+Since users have the flexibility to determine the names of exams added, there's a possibility of adding an exam with the same name as a field (e.g. `reflection`). 
+This could lead to confusion when mapping the CSV schema and JSON data. 
+Therefore, appending `Exam:` to the beginning of exam names in the CSV column headings can help mitigate this potential confusion.
 
 <br>
 
@@ -918,12 +937,31 @@ It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `in
 It also ensures that the `index` and `score` input value is valid, and that there are no duplicate prefixes in the user input.
 The `index` and `score` is then used in instantiating the `AddScoreCommand` by the `AddScoreCommandParser`.
 
+The following sequence diagram illustrates the parsing of an `addScore` command with the user input `addScore 1 s|100`:
+
+<p align="center">
+    <puml src="diagrams/AddScoreParsingSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
+</p>
+
+> **Note:** <br>
+> The parsing of an `editScore` command follows a similar structure, differing in the object instantiated at the end of the `parse` method.
+> `EditScoreCommandParser` instantiates an `EditScoreCommand` object.
+
 ##### Executing the Command
 
 The `execute` method in `AddScoreCommand` retrieves the `filteredPersons` list in `Model`, and validates the target index against the list of filtered persons to ensure it is not out of bounds.
 It then fetches the person to add the score for based on the target index.
 It also retrieves the currently selected exam from the `Model`, and validates that the score to be added is not more than the maximum score of the selected exam.
 It adds the score to the person's existing `scores` hashmap using the `addExamScoreToPerson` method in the `Model`.
+
+The following sequence diagram illustrates the execution of an `addScore` command:
+
+<p align="center">
+    <puml src="diagrams/AddScoreExecutionSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
+</p>
+
+> **Note:** <br>
+> The execution of an `editScore` command follows a similar structure to the execution of an `addScore` command.
 
 <br>
 
@@ -960,9 +998,15 @@ This operation removes both the selected exam (key) and the score (value), effec
 ##### Parsing User Input
 
 The `DeleteScoreCommandParser` is responsible for parsing the user input to extract the index of the person in the displayed list to delete the score for.
-It uses the `ArgumentTokenizer` to tokenize the input string, extracting the `index`.
+It uses the `ParserUtil` to parse the input string, extracting the `index`.
 It also ensures that the `index` is valid, and that there are no duplicate prefixes (i.e. there is only one `index` value) in the user input.
 The `index` is then used in instantiating the `DeleteScoreCommand` by the `DeleteScoreCommandParser`.
+
+The following sequence diagram illustrates the parsing of an `deleteScore` command with the user input `deleteScore 1`:
+
+<p align="center">
+    <puml src="diagrams/DeleteScoreParsingSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
+</p>
 
 ##### Executing the Command
 
@@ -970,6 +1014,10 @@ The `execute` method in `DeleteScoreCommand` retrieves the `filteredPersons` lis
 It then fetches the person to delete the score for based on the target index.
 It also retrieves the currently selected exam from the `Model`.
 It removes the score for the selected exam in the person's existing `scores` hashmap using the `removeExamScoreFromPerson` method in `Model`.
+
+<p align="center">
+    <puml src="diagrams/DeleteScoreExecutionSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
+</p>
 
 <br>
 

@@ -1,0 +1,61 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":AddScoreCommand" as AddScoreCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+participant "personToEdit:Person" as Person MODEL_COLOR
+participant "selectedExam:Exam" as Exam MODEL_COLOR
+end box
+
+[-> AddScoreCommand : execute(m)
+activate AddScoreCommand
+
+AddScoreCommand -> Model : getFilteredPersonList()
+activate Model
+
+Model --> AddScoreCommand : list
+deactivate Model
+
+create Person
+AddScoreCommand -> Person : list.get()
+activate Person
+
+Person --> AddScoreCommand
+deactivate Person
+
+AddScoreCommand -> Model : getSelectedExam()
+activate Model
+
+create Exam
+Model -> Exam : getValue()
+activate Exam
+
+Exam --> Model
+deactivate Exam
+
+Model --> AddScoreCommand : selectedExam
+deactivate Model
+
+AddScoreCommand -> Model : addExamScoreToPerson()
+activate Model
+
+Model --> AddScoreCommand
+deactivate Model
+
+create CommandResult
+AddScoreCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> AddScoreCommand
+deactivate CommandResult
+
+[<-- AddScoreCommand : r
+deactivate AddScoreCommand
+
+@enduml

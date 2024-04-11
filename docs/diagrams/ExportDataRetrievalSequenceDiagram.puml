@@ -1,0 +1,72 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":ExportCommand" as ExportCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Commons COMMONS_COLOR_T1
+participant "<<class>>\nCsvUtil" as CsvUtil COMMONS_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+participant "a:AddressBook" as AddressBook MODEL_COLOR
+end box
+
+[-> ExportCommand : execute(m)
+activate ExportCommand
+
+ExportCommand -> Model : getFilteredPersonList()
+activate Model
+
+Model --> ExportCommand : filteredPersons
+deactivate Model
+
+create AddressBook
+ExportCommand -> AddressBook : new AddressBook()
+activate AddressBook
+
+AddressBook --> ExportCommand
+deactivate AddressBook
+
+ExportCommand -> ExportCommand : addToAddressBook()
+activate ExportCommand
+
+ExportCommand --> ExportCommand
+deactivate ExportCommand
+
+ExportCommand -> ExportCommand : writeToJsonFile()
+activate ExportCommand
+
+ExportCommand --> ExportCommand
+deactivate ExportCommand
+
+ExportCommand -> Model : getAddressBookFilePath()
+activate Model
+
+Model --> ExportCommand
+deactivate Model
+
+<style>
+Reference {
+  BackgroundColor White
+}
+</style>
+ref over ExportCommand, CsvUtil
+    JSON file handling and CSV conversion
+end ref
+
+create CommandResult
+ExportCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> ExportCommand
+deactivate CommandResult
+
+[<-- ExportCommand : r
+deactivate ExportCommand
+
+@enduml
