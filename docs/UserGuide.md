@@ -906,6 +906,11 @@ If you move the application to a secondary screen, and later switch to using onl
 On MacOS computers, due to privacy settings, the application may encounter difficulties accessing and importing CSV files from various locations.
 If this issue occurs, transfer the CSV file you want to import to the same folder where the application's JAR file is located, then try again.
 
+### Exporting Data on Initial Launch
+
+Since the `export` function relies on data stored in your computer's hard disk, there might be some issues exporting it during the first launch of the application.
+If you encounter this problem, you can resolve it by executing any other command (such as `list`) and then attempting the export again.
+
 <br>
 
 --------------------------------------------------------------------------------------------------------------------
