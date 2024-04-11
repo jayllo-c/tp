@@ -4,7 +4,6 @@ skinparam ArrowFontStyle plain
 
 box Logic LOGIC_COLOR_T1
 participant "i:ImportCommand" as ImportCommand LOGIC_COLOR
-participant "<<class>>\nCsvUtil" as CsvUtil LOGIC_COLOR
 participant "r:CommandResult" as CommandResult LOGIC_COLOR
 participant "a:AddCommandParser" as AddCommandParser LOGIC_COLOR
 participant "a:AddCommand" as AddCommand LOGIC_COLOR
@@ -15,10 +14,14 @@ participant "p:Person" as Person MODEL_COLOR
 participant "m:Model" as Model MODEL_COLOR
 end box
 
+box Commons COMMONS_COLOR_T1
+participant "<<class>>\nCsvUtil" as CsvUtil COMMONS_COLOR
+end box
+
  -> ImportCommand : execute(m)
 activate ImportCommand
 
-ImportCommand -> CsvUtil : readCsvfile()
+ImportCommand -> CsvUtil : readCsvFile()
 activate CsvUtil
 CsvUtil --> ImportCommand : personsData
 deactivate CsvUtil
@@ -45,9 +48,15 @@ deactivate AddCommandParser
 
 ImportCommand -> AddCommand
 activate AddCommand
+<style>
+Reference {
+  BackgroundColor White
+}
+</style>
 ref over AddCommand, Person, Model : Add Command Execution
 AddCommand --> ImportCommand
 deactivate AddCommand
+AddCommand -[Hidden]-> ImportCommand
 destroy AddCommand
 end
 ImportCommand --> ImportCommand
