@@ -525,7 +525,7 @@ The `delete` command allows a user to delete a person with the specified index.
 
 ##### Parsing User Input
 
-The `DeleteCommandParser` class is responsible for parsing user input to extract the index of the person to be deleted. It uses the `ArgumentTokenizer` to tokenize the input string, extracting the index of the person to be deleted and ensures that the index is valid.
+The `DeleteCommandParser` class is responsible for parsing user input to extract the index of the person to be deleted. It uses the `ArgumentTokenizer` to tokenize the input string, extracting the index of the person to be deleted and ensuring that the index is valid.
 
 ##### Executing the Command
 
