@@ -49,11 +49,11 @@ public class AddExamCommandParserTest {
 
         // invalid score
         assertParseFailure(parser, " " + PREFIX_NAME + "Midterm " + PREFIX_SCORE + " ",
-                Score.MESSAGE_CONSTRAINTS);
+                Exam.MESSAGE_CONSTRAINTS);
 
         // invalid score
         assertParseFailure(parser, " " + PREFIX_NAME + "Midterm " + PREFIX_SCORE + "abc",
-                Score.MESSAGE_CONSTRAINTS);
+                Exam.MESSAGE_CONSTRAINTS);
     }
 
     @Test

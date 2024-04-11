@@ -1,0 +1,61 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":AddExamCommandParser" as AddExamCommandParser LOGIC_COLOR
+participant "<<class>>\nArgumentTokenizer" as ArgumentTokenizer LOGIC_COLOR
+participant "multi:ArgumentMultimap" as ArgumentMultimap LOGIC_COLOR
+participant "a:AddExamCommand" as AddExamCommand LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "e:Exam" as Exam MODEL_COLOR
+end box
+
+[-> AddExamCommandParser : parse(...)
+activate AddExamCommandParser
+
+AddExamCommandParser -> ArgumentTokenizer : tokenize(...)
+activate ArgumentTokenizer
+
+create ArgumentMultimap
+ArgumentTokenizer -> ArgumentMultimap
+activate ArgumentMultimap
+ArgumentMultimap --> ArgumentTokenizer
+
+deactivate ArgumentMultimap
+
+ArgumentTokenizer --> AddExamCommandParser
+deactivate ArgumentTokenizer
+
+AddExamCommandParser -> AddExamCommandParser : arePrefixesPresent(...)
+activate AddExamCommandParser
+AddExamCommandParser --> AddExamCommandParser
+deactivate AddExamCommandParser
+
+AddExamCommandParser -> ArgumentMultimap : verifyNoDuplicatePrefixesFor(...)
+activate ArgumentMultimap
+ArgumentMultimap --> AddExamCommandParser
+
+deactivate ArgumentMultimap
+
+deactivate ArgumentTokenizer
+
+create Exam
+AddExamCommandParser -> Exam
+activate Exam
+Exam --> AddExamCommandParser
+deactivate Exam
+
+create AddExamCommand
+AddExamCommandParser -> AddExamCommand : new AddExamCommand(e)
+activate AddExamCommand
+
+AddExamCommand --> AddExamCommandParser
+deactivate AddExamCommand
+
+[<-- AddExamCommandParser : e
+deactivate AddExamCommandParser
+
+@enduml

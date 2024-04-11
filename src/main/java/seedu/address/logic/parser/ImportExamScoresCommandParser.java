@@ -4,16 +4,16 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_IMPORT;
 
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 
-import seedu.address.logic.commands.ImportCommand;
-import seedu.address.logic.commands.ImportExamCommand;
+import seedu.address.logic.commands.ImportExamScoresCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
  * Parses input arguments and creates a new {@code ImportExamCommand} object
  */
-public class ImportExamCommandParser implements Parser<ImportExamCommand> {
+public class ImportExamScoresCommandParser implements Parser<ImportExamScoresCommand> {
 
     /**
      * Parses the given {@code String} of arguments in the context of the {@code ImportExamCommand}
@@ -21,21 +21,28 @@ public class ImportExamCommandParser implements Parser<ImportExamCommand> {
      * @return a new {@code ImportExamCommand} object
      * @throws ParseException if the user input does not conform the expected format
      */
-    public ImportExamCommand parse(String args) throws ParseException {
+    public ImportExamScoresCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_IMPORT);
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_IMPORT);
         if (!isPrefixPresent(
                 argMultimap)
                 || !argMultimap.getPreamble().isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportExamCommand.MESSAGE_USAGE));
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportExamScoresCommand.MESSAGE_USAGE));
         }
 
-        Path path = ParserUtil.parseFilePath(argMultimap.getValue(PREFIX_IMPORT).orElse(""));
-        if (!isCsvFile(path)) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportCommand.MESSAGE_USAGE));
+        try {
+            Path path = ParserUtil.parseFilePath(argMultimap.getValue(PREFIX_IMPORT).orElse(""));
+            if (!isCsvFile(path)) {
+                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                        ImportExamScoresCommand.MESSAGE_USAGE));
+            }
+            return new ImportExamScoresCommand(path);
+        } catch (InvalidPathException e) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    ImportExamScoresCommand.MESSAGE_USAGE));
         }
-        return new ImportExamCommand(path);
     }
 
     /**

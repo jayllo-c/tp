@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_MISSING_COMPULSORY_PREFIXES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MATRIC_NUMBER;
@@ -11,9 +12,11 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDIO;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import seedu.address.logic.commands.AddCommand;
@@ -46,9 +49,18 @@ public class AddCommandParser implements Parser<AddCommand> {
                         args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
                         PREFIX_ADDRESS, PREFIX_TAG, PREFIX_MATRIC_NUMBER, PREFIX_REFLECTION, PREFIX_STUDIO);
 
-        if (!arePrefixesPresent(
-                argMultimap, PREFIX_NAME, PREFIX_ADDRESS, PREFIX_PHONE, PREFIX_EMAIL)
-                || !argMultimap.getPreamble().isEmpty()) {
+        List<Prefix> missingCompulsoryPrefixes = findMissingCompulsoryPrefixes(argMultimap, PREFIX_NAME, PREFIX_PHONE,
+                PREFIX_EMAIL, PREFIX_ADDRESS);
+
+        if (missingCompulsoryPrefixes.size() > 0) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                                                    MESSAGE_MISSING_COMPULSORY_PREFIXES
+                                                    + missingCompulsoryPrefixes.stream()
+                                                        .map(Prefix::toString)
+                                                        .collect(Collectors.joining(", "))));
+        }
+
+        if (!argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
 
@@ -66,7 +78,7 @@ public class AddCommandParser implements Parser<AddCommand> {
 
         // Update the tagList automatically
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
-        tagList = autoTag(tagList, matric, reflection, studio);
+        tagList = autoTag(tagList, matric);
 
         Person person = new Person(name, phone, email, address, tagList, matric, reflection, studio, scores);
 
@@ -77,16 +89,12 @@ public class AddCommandParser implements Parser<AddCommand> {
      * Automatically adds a tag to the tagList based on the presence of matric, reflection and studio.
      * @param tagList the list of tags to be updated
      * @param matric the matric number of the person
-     * @param reflection the reflection of the person
-     * @param studio the studio of the person
      * @return
      */
-    private Set<Tag> autoTag(Set<Tag> tagList, Matric matric, Reflection reflection, Studio studio) {
+    private Set<Tag> autoTag(Set<Tag> tagList, Matric matric) {
         boolean isMatricPresent = !Matric.isEmptyMatric(matric.matricNumber);
-        boolean isReflectionPresent = !Reflection.isEmptyReflection(reflection.reflection);
-        boolean isStudioPresent = !Studio.isEmptyStudio(studio.studio);
 
-        Optional<Tag> autoTag = createTag(isMatricPresent, isReflectionPresent, isStudioPresent);
+        Optional<Tag> autoTag = createTag(isMatricPresent);
         autoTag.ifPresent(tagList::add);
 
         return tagList;
@@ -95,17 +103,11 @@ public class AddCommandParser implements Parser<AddCommand> {
     /**
      * Creates a tag based on the presence of matric, reflection and studio.
      * @param isMatricPresent boolean whether a Matric number is present.
-     * @param isReflectionPresent boolean whether a Reflection is present.
-     * @param isStudioPresent boolean whether a Studio is present.
      * @return an Optional Tag based on the presence of matric, reflection and studio.
      */
-    private Optional<Tag> createTag(boolean isMatricPresent, boolean isReflectionPresent, boolean isStudioPresent) {
-        if (isMatricPresent && isReflectionPresent && isStudioPresent) {
+    private Optional<Tag> createTag(boolean isMatricPresent) {
+        if (isMatricPresent) {
             return Optional.of(new Tag("student"));
-        } else if (isMatricPresent && (isReflectionPresent ^ isStudioPresent)) {
-            return Optional.of(new Tag("TA"));
-        } else if (!isMatricPresent && !isReflectionPresent && !isStudioPresent) {
-            return Optional.of(new Tag("instructor"));
         }
         return Optional.empty();
     }
@@ -140,6 +142,12 @@ public class AddCommandParser implements Parser<AddCommand> {
      */
     private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
         return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
+    }
+
+    private static List<Prefix> findMissingCompulsoryPrefixes(ArgumentMultimap argumentMultimap,
+            Prefix... compulsoryPrefixes) {
+        return Stream.of(compulsoryPrefixes).filter(prefix -> argumentMultimap.getValue(prefix).isEmpty())
+                                            .collect(Collectors.toList());
     }
 
 }

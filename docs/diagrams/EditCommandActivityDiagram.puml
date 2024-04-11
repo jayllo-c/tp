@@ -1,0 +1,29 @@
+@startuml
+skin rose
+skinparam ActivityFontSize 15
+skinparam ArrowFontSize 12
+
+start
+:Edit command is parsed;
+
+if () then ([else])
+  :Parse prefixes;
+  if () then ([else])
+    :Execute Edit command;
+    if () is ([else]) then
+      if () is ([else]) then
+        :Edit person successfully;
+      else ([email is edited to a duplicate])
+        :Reject;
+      endif
+    else ([no prefixes provided])
+      :Reject;
+    endif
+  else ([repeated prefixes provided])
+    :Reject;
+  endif
+else ([invalid index])
+  :Reject;
+endif;
+stop
+@enduml

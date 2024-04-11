@@ -31,6 +31,7 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
     private final SimpleObjectProperty<Exam> selectedExam;
+    private final SimpleObjectProperty<ScoreStatistics> selectedExamStatistics;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -44,6 +45,7 @@ public class ModelManager implements Model {
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
         selectedExam = new SimpleObjectProperty<>(null);
+        selectedExamStatistics = new SimpleObjectProperty<>(null);
     }
 
     public ModelManager() {
@@ -90,6 +92,7 @@ public class ModelManager implements Model {
     @Override
     public void setAddressBook(ReadOnlyAddressBook addressBook) {
         this.addressBook.resetData(addressBook);
+        updateSelectedExamStatistics();
     }
 
     @Override
@@ -106,12 +109,14 @@ public class ModelManager implements Model {
     @Override
     public void deletePerson(Person target) {
         addressBook.removePerson(target);
+        updateSelectedExamStatistics();
     }
 
     @Override
     public void addPerson(Person person) {
         addressBook.addPerson(person);
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        updateSelectedExamStatistics();
     }
 
     @Override
@@ -119,6 +124,7 @@ public class ModelManager implements Model {
         requireAllNonNull(target, editedPerson);
 
         addressBook.setPerson(target, editedPerson);
+        updateSelectedExamStatistics();
     }
 
     @Override
@@ -130,12 +136,15 @@ public class ModelManager implements Model {
     public void addExamScoreToPerson(Person person, Exam exam, Score score) {
         Person newPerson = person.addExamScore(exam, score);
         setPerson(person, newPerson);
+        updateSelectedExamStatistics();
+
     }
 
     @Override
     public void removeExamScoreFromPerson(Person person, Exam exam) {
         Person newPerson = person.removeExam(exam);
         setPerson(person, newPerson);
+        updateSelectedExamStatistics();
     }
 
     //=========== Filtered Person List Accessors =============================================================
@@ -153,6 +162,7 @@ public class ModelManager implements Model {
     public void updateFilteredPersonList(Predicate<Person> predicate) {
         requireNonNull(predicate);
         filteredPersons.setPredicate(predicate);
+        updateSelectedExamStatistics();
     }
 
     @Override
@@ -190,6 +200,7 @@ public class ModelManager implements Model {
         }
         if (selectedExam.getValue() != null && selectedExam.getValue().equals(target)) {
             deselectExam();
+            updateSelectedExamStatistics();
         }
     }
 
@@ -207,11 +218,13 @@ public class ModelManager implements Model {
     public void selectExam(Exam target) {
         requireNonNull(target);
         selectedExam.set(target);
+        updateSelectedExamStatistics();
     }
 
     @Override
     public void deselectExam() {
         selectedExam.set(null);
+        updateSelectedExamStatistics();
     }
 
     /**
@@ -223,7 +236,21 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ScoreStatistics getExamScoreStatistics(Exam exam) {
+    public ObservableValue<ScoreStatistics> getSelectedExamStatistics() {
+        updateSelectedExamStatistics();
+        return selectedExamStatistics;
+    }
+
+    private void updateSelectedExamStatistics() {
+        if (selectedExam.getValue() == null) {
+            selectedExamStatistics.set(null);
+            return;
+        }
+        selectedExamStatistics.set(calculateExamScoreStatistics(selectedExam.getValue()));
+    }
+
+    private ScoreStatistics calculateExamScoreStatistics(Exam exam) {
+        // Get all scores for the exam that exist in the filtered persons
         List<Score> scores = filteredPersons.stream()
             .map(person -> person.getScores().get(exam))
             .filter(Objects::nonNull)
@@ -233,26 +260,21 @@ public class ModelManager implements Model {
             return new ScoreStatistics();
         }
 
-        Collections.sort(scores);
-
         double sum = scores.stream().mapToDouble(Score::getScore).sum();
         double mean = sum / scores.size(); //Division by zero is handled by the if statement above
-
-        double median;
-        if (scores.size() % 2 == 0) {
-            median = (scores.get(scores.size() / 2 - 1).getScore()
-                        + scores.get(scores.size() / 2).getScore()) / 2.0;
-        } else {
-            median = scores.get(scores.size() / 2).getScore();
-        }
-
-        double min = scores.get(0).getScore();
-        double max = scores.get(scores.size() - 1).getScore();
-
-        double q1 = scores.get(scores.size() / 4).getScore();
-        double q3 = scores.get(3 * scores.size() / 4).getScore();
+        double median = getMedian(scores);
 
         return new ScoreStatistics(mean, median);
+    }
+
+    private double getMedian(List<Score> scores) {
+        Collections.sort(scores);
+        int size = scores.size();
+        if (size % 2 == 0) {
+            return (scores.get(size / 2 - 1).getScore() + scores.get(size / 2).getScore()) / 2.0;
+        } else {
+            return scores.get(size / 2).getScore();
+        }
     }
 
     @Override

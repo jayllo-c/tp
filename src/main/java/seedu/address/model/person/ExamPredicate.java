@@ -1,7 +1,7 @@
 package seedu.address.model.person;
 
-import static seedu.address.logic.parser.CliSyntax.PREFIX_LESSTHAN;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_MORETHAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LESS_THAN;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MORE_THAN;
 
 import java.util.function.Predicate;
 
@@ -12,7 +12,7 @@ import seedu.address.model.exam.Exam;
 /**
  * Tests that a {@code Person}'s details contains the keyword given.
  */
-public class PersonDetailContainsKeywordAndExamPredicate implements Predicate<Person> {
+public class ExamPredicate implements Predicate<Person> {
     private final Prefix prefix;
     private final String keyword;
     private final Exam exam;
@@ -22,7 +22,7 @@ public class PersonDetailContainsKeywordAndExamPredicate implements Predicate<Pe
      * @param prefix The prefix to indicate the detail of the person to be searched.
      * @param keyword The keyword to be searched.
      */
-    public PersonDetailContainsKeywordAndExamPredicate(Prefix prefix, String keyword, Exam exam) {
+    public ExamPredicate(Prefix prefix, String keyword, Exam exam) {
         this.prefix = prefix;
         this.keyword = keyword;
         this.exam = exam;
@@ -33,24 +33,42 @@ public class PersonDetailContainsKeywordAndExamPredicate implements Predicate<Pe
      */
     @Override
     public boolean test(Person person) {
-        if (PREFIX_LESSTHAN.equals(prefix)) {
-            if (person.getScores().containsKey(exam)) {
-                return Double.parseDouble(person.getScores().get(exam).toString())
-                        < Double.parseDouble(keyword);
-            } else {
-                // Handle case when the selected exam is not found in the person's scores
-                return false;
-            }
-        } else if (PREFIX_MORETHAN.equals(prefix)) {
-            if (person.getScores().containsKey(exam)) {
-                return Double.parseDouble(person.getScores().get(exam).toString())
-                        > Double.parseDouble(keyword);
-            } else {
-                // Handle case when the selected exam is not found in the person's scores
-                return false;
-            }
+        if (PREFIX_LESS_THAN.equals(prefix)) {
+            return hasScoreLessThanKeyword(person);
+        } else if (PREFIX_MORE_THAN.equals(prefix)) {
+            return hasScoreMoreThanKeyword(person);
         } else {
             // Code should not reach here
+            return false;
+        }
+    }
+
+    /**
+     * Checks if the person's exam score is greater than the keyword.
+     * @param person The person to be checked.
+     * @return True if the person's exam score is greater than the keyword.
+     */
+    private boolean hasScoreMoreThanKeyword(Person person) {
+        if (person.getScores().containsKey(exam)) {
+            return Double.parseDouble(person.getScores().get(exam).toString())
+                    > Double.parseDouble(keyword);
+        } else {
+            // Handle case when the selected exam is not found in the person's scores
+            return false;
+        }
+    }
+
+    /**
+     * Checks if the person's exam score is less than the keyword.
+     * @param person The person to be checked.
+     * @return True if the person's exam score is less than the keyword.
+     */
+    private boolean hasScoreLessThanKeyword(Person person) {
+        if (person.getScores().containsKey(exam)) {
+            return Double.parseDouble(person.getScores().get(exam).toString())
+                    < Double.parseDouble(keyword);
+        } else {
+            // Handle case when the selected exam is not found in the person's scores
             return false;
         }
     }
@@ -65,12 +83,12 @@ public class PersonDetailContainsKeywordAndExamPredicate implements Predicate<Pe
         }
 
         // instanceof handles nulls
-        if (!(other instanceof PersonDetailContainsKeywordAndExamPredicate)) {
+        if (!(other instanceof ExamPredicate)) {
             return false;
         }
 
-        PersonDetailContainsKeywordAndExamPredicate otherPredicate =
-            (PersonDetailContainsKeywordAndExamPredicate) other;
+        ExamPredicate otherPredicate =
+            (ExamPredicate) other;
 
         return keyword.equals(otherPredicate.keyword) && prefix.equals(otherPredicate.prefix)
                 && exam.equals(otherPredicate.exam);
@@ -91,7 +109,7 @@ public class PersonDetailContainsKeywordAndExamPredicate implements Predicate<Pe
      * @return True if the prefix is PREFIX_LESSTHAN or PREFIX_GREATERTHAN.
      */
     public boolean isExamRequired() {
-        return prefix.equals(PREFIX_LESSTHAN) || prefix.equals(PREFIX_MORETHAN);
+        return prefix.equals(PREFIX_LESS_THAN) || prefix.equals(PREFIX_MORE_THAN);
     }
 }
 

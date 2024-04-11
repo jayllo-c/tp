@@ -20,10 +20,10 @@ public class SelectExamCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Selects the exam identified by the index number used in the displayed exam list.\n"
-            + "Parameters: INDEX (must be a positive integer)\n"
+            + "Parameter: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_SELECT_EXAM_SUCCESS = "Selected Exam: %1$s";
+    public static final String MESSAGE_SELECT_EXAM_SUCCESS = "Selected exam: %1$s";
 
     private final Index targetIndex;
 

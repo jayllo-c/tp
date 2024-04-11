@@ -1,21 +1,13 @@
 @startuml
+skin rose
+skinparam ActivityFontSize 15
+skinparam ArrowFontSize 12
 start
 :User adds a new person;
 
 if () then ([has Matric])
-  if () is ([has both Studio and Reflection]) then
     :Add new "student" tag;
-  else ([else])
-    if () is ([has either Studio \n or Reflection \n but not both]) then
-      :Add new "TA" tag;
-    else ([else])
-    endif
-  endif
 else ([else])
-  if () is ([No Studio and Reflection]) then
-    :Add new "instructor" tag;
-  else ([else])
-  endif
 endif
 stop
 @enduml

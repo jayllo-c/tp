@@ -1,0 +1,48 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":ImportCommandParser" as ImportCommandParser LOGIC_COLOR
+participant ":ArgumentTokenizer" as ArgumentTokenizer LOGIC_COLOR
+participant "multi:ArgumentMultimap" as ArgumentMultimap LOGIC_COLOR
+participant ":ParserUtil" as ParserUtil LOGIC_COLOR
+end box
+
+-> ImportCommandParser : parse(...)
+activate ImportCommandParser
+
+'Tokenizer and ParserUtil dont have constructors, how?
+
+ImportCommandParser -> ArgumentTokenizer : tokenize(...)
+activate ArgumentTokenizer
+
+create ArgumentMultimap
+ArgumentTokenizer -> ArgumentMultimap
+activate ArgumentMultimap
+ArgumentMultimap --> ArgumentTokenizer
+
+deactivate ArgumentMultimap
+
+ArgumentTokenizer --> ImportCommandParser
+deactivate ArgumentTokenizer
+
+ImportCommandParser -> ImportCommandParser : isPrefixPresent(...)
+activate ImportCommandParser
+ImportCommandParser --> ImportCommandParser
+deactivate ImportCommandParser
+
+ImportCommandParser -> ArgumentMultimap : getPreamble()
+activate ArgumentMultimap
+ArgumentMultimap --> ImportCommandParser
+deactivate ArgumentMultimap
+
+ImportCommandParser -> ParserUtil : parseFilePath(...)
+activate ParserUtil
+ParserUtil --> ImportCommandParser : filePath
+deactivate ParserUtil
+
+<-- ImportCommandParser : ImportCommand(filePath)
+deactivate ImportCommandParser
+
+@enduml

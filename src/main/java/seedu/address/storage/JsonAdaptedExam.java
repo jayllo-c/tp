@@ -8,6 +8,9 @@ import seedu.address.model.exam.Exam;
 import seedu.address.model.person.Score;
 
 class JsonAdaptedExam {
+
+    public static final String MISSING_FIELD_MESSAGE_FORMAT = "Exam's %s field is missing!";
+
     private final String name;
     private final String maxScore;
 
@@ -42,9 +45,23 @@ class JsonAdaptedExam {
      * @throws IllegalValueException if there were any data constraints violated in the adapted tag.
      */
     public Exam toModelType() throws IllegalValueException {
-        if (!Exam.isValidName(name)) {
+
+        if (name == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, "name"));
+        }
+        if (Exam.isValidExamName(name) == false) {
             throw new IllegalValueException(Exam.MESSAGE_CONSTRAINTS);
         }
-        return new Exam(name, new Score(Integer.parseInt(maxScore)));
+        if (maxScore == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, "maxScore"));
+        }
+        if (Exam.isValidExamScoreString(maxScore) == false) {
+            throw new IllegalValueException(Exam.MESSAGE_CONSTRAINTS);
+        }
+
+        final String modelName = this.name;
+        final Score modelMaxScore = new Score(Double.parseDouble(this.maxScore));
+
+        return new Exam(modelName, modelMaxScore);
     }
 }

@@ -21,6 +21,7 @@ public class Messages {
     public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
+    public static final String MESSAGE_MISSING_COMPULSORY_PREFIXES = "Missing compulsory prefixes: ";
     public static final String MESSAGE_NO_EXAM_SELECTED = "No exam selected. Please select an exam first.";
 
     /**
@@ -56,7 +57,12 @@ public class Messages {
                 .append("; Tags: ");
         person.getTags().forEach(builder::append);
         builder.append("; Scores: ");
-        person.getScores().forEach((exam, score) -> builder.append(exam).append(": ").append(score).append(", "));
+        person.getScores().forEach((exam, score) -> builder.append("[ ")
+                                        .append(exam.getName()).append(": ")
+                                        .append(score).append(" / ").append(exam.getMaxScore())
+                                        .append(" ] ")
+        );
+        builder.append(";");
         return builder.toString();
     }
 
