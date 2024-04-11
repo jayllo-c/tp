@@ -24,6 +24,12 @@ title: "Developer Guide"
     </li>
     <li><a href="#implementation">Implementation</a>
         <ol>
+            <li><a href="#general-features">General Features</a>
+                <ol>
+                    <li><a href="#help">Help Command</a></li>
+                    <li><a href="#clear">Clear Command</a></li>
+                    <li><a href="#list">List Command</a></li>
+                </ol>
             <li><a href="#contact-management">Contact Management Features</a>
                 <ol>
                     <li><a href="#add-person">Add Person Command</a></li>
@@ -356,6 +362,58 @@ These classes provide utility functions that are used across different component
 ## **Implementation**
 
 This section describes some noteworthy details on how certain features are implemented
+
+<div id="general features"></div>
+
+### General Features
+
+As these general features do not require any arguments, the `AddressBookParser` directly instantiates the corresponding command classes.
+
+<div id ="help"></div>
+
+#### **Help Command** : `help`
+
+The `help` command utilizes the `java.awt.Toolkit` class to copy the user guide link to the user's clipboard.
+
+##### Executing the Command
+
+On execution of the `HelpCommand`, the `copyToClipboard` method is called which retrives the system clipboard
+through `Toolkit.getDefaultToolkit().getSystemClipboard()` and copies the user guide link to the clipboard by using
+`setContents` method.
+
+##### Design Considerations
+
+We designed the help command to copy the user guide link directly to the clipboard as we wanted our application to be
+CLI optimised. This allows our target users to easily access the user guide without having to use their mouse
+to navigate to the user guide link.
+
+<div id="clear"></div>
+
+#### **Clear Command** : `clear`
+
+The `clear` command allows users to clear all persons and exams from the address book.
+
+##### Executing the Command
+
+The `ClearCommand` simply sets the `AddressBook` in the `Model` component to a new `AddressBook` object, effectively clearing all persons and exams from the address book.
+
+##### Design Considerations
+
+We designed the `clear` command to clear all persons and exams from the address book to provide users with a quick and easy way to reset the address book to its initial state. This is useful for users who want to start over or clear the address book for a fresh start.
+
+<div id="list"></div>
+
+#### **List Command** : `list`
+
+The `list` command allows users to list all persons in the address book.
+
+##### Executing the Command
+
+The `ListCommand` retrieves the `filteredPersonList` from the `Model` component and returns a `CommandResult` object containing the list of persons to be displayed on the UI.
+
+##### Design Considerations
+
+We designed the `list` command to list all persons in the address book to provide users with a quick and easy way to view all persons in the address book. This is useful to revert the UI back to the default view after a find command has been executed which filters the persons displayed on the UI.
 
 <div id="contact-management"></div>
 
