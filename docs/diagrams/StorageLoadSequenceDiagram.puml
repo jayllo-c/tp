@@ -36,7 +36,7 @@ deactivate JsonAddressBookStorage
 StorageManager --> MainApp : Optional<AddressBook>
 deactivate StorageManager
 
-MainApp -> MainApp : model
+MainApp --> MainApp : model
 deactivate MainApp
 
 [<-- MainApp
