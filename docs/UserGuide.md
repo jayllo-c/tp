@@ -628,8 +628,6 @@ For more details on the parameter, [click here](#command-parameter-summary).
 
 <br>
 
-<div style="page-break-after: always;"></div>
-
 <div id="addexam"></div>
 
 ### Adding an Exam : `addExam`
