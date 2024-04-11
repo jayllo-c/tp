@@ -206,7 +206,7 @@ public class CsvUtil {
      * @param examsArray The JSON exams array to derive the schema from.
      * @return The CSV schema.
      */
-    public CsvSchema buildCsvSchema(JsonNode personsArray, JsonNode examsArray) {
+    public static CsvSchema buildCsvSchema(JsonNode personsArray, JsonNode examsArray) {
         CsvSchema.Builder csvSchemaBuilder = CsvSchema.builder();
         JsonNode firstObject = personsArray.elements().next();
         Set<String> addedColumns = new HashSet<>(); // Should addedColumns be Hashset<String>?
@@ -242,7 +242,7 @@ public class CsvUtil {
      * @param examsArray The JSON exams array to be written to CSV.
      * @throws IOException If an I/O error occurs during file writing.
      */
-    public void writeToCsvFile(File csvFile, JsonNode personsArray, JsonNode examsArray) throws IOException {
+    public static void writeToCsvFile(File csvFile, JsonNode personsArray, JsonNode examsArray) throws IOException {
         CsvSchema csvSchema = buildCsvSchema(personsArray, examsArray);
         CsvMapper csvMapper = new CsvMapper();
 
