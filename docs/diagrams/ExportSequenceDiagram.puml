@@ -15,6 +15,8 @@ box Commons COMMONS_COLOR_T1
 participant "<<class>>\nCsvUtil" as CsvUtil COMMONS_COLOR
 end box
 
+mainframe **sd** JSON file handling and CSV conversion <U+0020>
+
 [-> ExportCommand : execute(m)
 activate ExportCommand
 
