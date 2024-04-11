@@ -78,26 +78,26 @@ title: "Developer Guide"
             <li><a href="#appendix_f">Appendix F: Instructions for Manual Testing</a></li>
                 <ol>
                     <li><a href="#test_launch">Launch and Shutdown</a></li>
-                    <li><a href="#test_save">Saving data</a></li>
+                    <li><a href="#test_save">Saving Data</a></li>
                     <li><a href="#test_help">Getting Help</a></li>
-                    <li><a href="#test_clear">Clearing all Persons and Exams: `clear`</a></li>
-                    <li><a href="#test_import">Importing persons: `import`</a></li>
-                    <li><a href="#test_add">Adding a Person: `add`</a></li>
-                    <li><a href="#test_edit">Editing a Person: `edit`</a></li>
-                    <li><a href="#test_delete">Deleting a Person: `delete`</a></li>
-                    <li><a href="#test_deleteshown">Deleting shown Persons: `deleteShown`</a></li>
-                    <li><a href="#test_list">Listing all Persons: `list`</a></li>
-                    <li><a href="#test_find">Finding a Person: `find`</a></li>
-                    <li><a href="#test_copy">Copying emails: `copy`</a></li>
-                    <li><a href="#test_export">Exporting Data to a CSV File: `export`</a></li>
-                    <li><a href="#test_addexam">Adding an exam: `addExam`</a></li>
-                    <li><a href="#test_deleteexam">Deleting an exam: `deleteExam`</a></li>
-                    <li><a href="#test_selectexam">Selecting an exam: `selectExam`</a></li>
-                    <li><a href="#test_deselectexam">Deselecting an exam: `deselectExam`</a></li>
-                    <li><a href="#test_importexam">Importing Exam Scores: `importExamScores`</a></li>
-                    <li><a href="#test_addscore">Adding a Persons's Exam Score: `addScore`</a></li>
-                    <li><a href="#test_editscore">Editing a Person's Exam Score: `editScore`</a></li>
-                    <li><a href="#test_deletescore">Deleting a Person's Exam Score: `deleteScore`</a></li>
+                    <li><a href="#test_clear">Clearing all Persons and Exams: <code>clear</code></a></li>
+                    <li><a href="#test_import">Importing persons: <code>import</code></a></li>
+                    <li><a href="#test_add">Adding a Person: <code>add</code></a></li>
+                    <li><a href="#test_edit">Editing a Person: <code>edit</code></a></li>
+                    <li><a href="#test_delete">Deleting a Person: <code>delete</code></a></li>
+                    <li><a href="#test_deleteshown">Deleting shown Persons: <code>deleteShown</code></a></li>
+                    <li><a href="#test_list">Listing all Persons: <code>list</code></a></li>
+                    <li><a href="#test_find">Finding a Person: <code>find</code></a></li>
+                    <li><a href="#test_copy">Copying Emails: <code>copy</code></a></li>
+                    <li><a href="#test_export">Exporting Data to a CSV File: <code>export</code></a></li>
+                    <li><a href="#test_addexam">Adding an Exam: <code>addExam</code></a></li>
+                    <li><a href="#test_deleteexam">Deleting an Exam: <code>deleteExam</code></a></li>
+                    <li><a href="#test_selectexam">Selecting an Exam: <code>selectExam</code></a></li>
+                    <li><a href="#test_deselectexam">Deselecting an Exam: <code>deselectExam</code></a></li>
+                    <li><a href="#test_importexam">Importing Exam Scores: <code>importExamScores</code></a></li>
+                    <li><a href="#test_addscore">Adding a Persons's Exam Score: <code>addScore</code></a></li>
+                    <li><a href="#test_editscore">Editing a Person's Exam Score: <code>editScore</code></a></li>
+                    <li><a href="#test_deletescore">Deleting a Person's Exam Score: <code>deleteScore</code></a></li>
                     <li><a href="#test_statistics">Mean and Median of Exam Scores</a></li>
                 </ol>
             <li><a href="#appendix_g">Appendix G: Effort</a></li>
@@ -2588,9 +2588,9 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_addexam"></div>
 
-#### Adding an exam: `addExam`
+#### Adding an Exam: `addExam`
 
-##### Adding an exam with valid data
+##### Adding an Exam with valid data
 
 1. Prerequisites: No exams in the address book.
 
@@ -2600,14 +2600,14 @@ Expected: The GUI closes and the application exits.
 3. Other test cases to try: `addExam n|Final s|100`<br>
    Expected: New exam is added to the address book. Status message shows the exam added.
 
-##### Adding an exam that already exists
+##### Adding an Exam that already exists
 
 1. Prerequisites: An exam of name: Final, date: 2021-12-12 exists in the address book.
 
 2. . Test case: `addExam n|Final d|100`<br>
      Expected: Error message shown in the error report. No change in the address book.
 
-##### Adding an exam with missing fields
+##### Adding an Exam with missing fields
 
 1. Pre-requisite: No exams in the address book.
 
@@ -2618,7 +2618,7 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_deleteexam"></div>
 
-#### Deleting an exam: `deleteExam`
+#### Deleting an Exam: `deleteExam`
 
 1. Prerequisites: Exactly one exam in the address book. Hence, exam has an index of 1.
 
@@ -2638,7 +2638,7 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_selectexam"></div>
 
-#### Selecting an exam: `selectExam`
+#### Selecting an Exam: `selectExam`
 
 1. Prerequisites: Exactly one exam in the address book. Hence, exam has an index of 1.
 
@@ -2656,7 +2656,7 @@ Expected: The GUI closes and the application exits.
 
 <div id="test_deselectexam"></div>
 
-#### Deselecting an exam: `deselectExam`
+#### Deselecting an Exam: `deselectExam`
 
 1. Prerequisites: An exam has been selected.
 
