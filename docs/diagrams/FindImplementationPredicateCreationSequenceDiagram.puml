@@ -1,0 +1,58 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant "f:FindCommand" as FindCommand LOGIC_COLOR
+participant "p:PersonDetailPredicate" as PersonDetailPredicate LOGIC_COLOR
+participant "p:ExamPredicate" as ExamPredicate LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+mainframe **sd**    create predicate and update the filtered person list <U+0020>
+
+' Create an alt frame to show the predicate creation
+alt prefix is mt| or lt|
+    create ExamPredicate
+    FindCommand -> ExamPredicate : ExamPredicate(...)
+    activate ExamPredicate
+
+    ExamPredicate --> FindCommand
+    deactivate ExamPredicate
+
+    FindCommand -> Model : updateFilteredPersonList(p)
+    activate Model
+
+    Model --> FindCommand
+    deactivate Model
+    ' Hidden arrow to position the destroy marker below the end of the activation bar.
+    Model -[hidden]-> ExamPredicate
+    destroy ExamPredicate
+    ' Hidden arrow to add space between the destroy marker and the border of the alt frame
+    Model -[hidden]-> ExamPredicate
+
+else else
+    create PersonDetailPredicate
+    FindCommand -> PersonDetailPredicate : PersonDetailPredicate(...)
+    activate PersonDetailPredicate
+
+    PersonDetailPredicate --> FindCommand
+    deactivate PersonDetailPredicate
+
+    FindCommand -> Model : updateFilteredPersonList(p)
+    activate Model
+
+    Model --> FindCommand
+    deactivate Model
+    ' Hidden arrow to position the destroy marker below the end of the activation bar.
+    Model -[hidden]-> PersonDetailPredicate
+    destroy PersonDetailPredicate
+    ' Hidden arrow to add space between the destroy marker and the border of the alt frame
+    Model -[hidden]-> PersonDetailPredicate
+
+end
+
+@enduml
