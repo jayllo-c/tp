@@ -2713,8 +2713,6 @@ testers are expected to do more *exploratory* testing.
     **Expected:** Similar to previous.
     <br><br>
 
-<br>
-
 <div id="test_addscore"></div>
 
 #### Adding a Persons's Exam Score: `addScore`
