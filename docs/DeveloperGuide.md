@@ -1965,51 +1965,50 @@ testers are expected to do more *exploratory* testing.
 
 1. Initial launch.
    * **Test case:** Launching the app for the first time.<br>
-   
-     1. Download the jar file and copy into an empty folder.
-     2. Open Terminal and type the following:
-
+        1. Download the jar file and copy into an empty folder.
+        2. Open Terminal and type the following:
         ```bash
         java -jar avengersassemble.jar
         ```
-       **Expected:** Shows the GUI with a set of sample persons. The window size may not be optimal.
-     <br><br>
+        **Expected:** Shows the GUI with a set of sample persons. The window size may not be optimal.
+    <br><br>
 2. Saving window preferences.
-    * **Test case:** Saving the window size and location.
-       1. Resize the window to an optimal size.
-       2. Move the window to a different location.
-       3. Close the window.
-       4. Relaunch the app.<br><br>
-
-       **Expected:** The most recent window size and location is retained.
+    * **Prerequisites:**
+        * Launch the app.
+        * Resize the window.
+        * Close the app.
+    * **Test case:** Launch the app.<br>
+        **Expected:** The most recent window size and location is retained.
+    <br><br>
 
 3. Shutdown.
     * **Test case:** `exit`<br>
       **Expected:** The GUI closes and the application exits.
-
-<br>
+    <br><br>
 
 <div id="test_save"></div>
 
 #### Saving Data
 
+1. Saving of data.
+    * **Prerequisites:**
+        * The app is a clean state.
+        <br><br>
+    * **Test case:** Launch and exit the app.<br>
+        **Expected:** A new `data/avengersassemble.json` file is created. This is the storage file.
+    <br><br>
+
 1. Dealing with missing or corrupted data files.
 
     * **Prerequisites:**
-        * The app is a clean state.
-          <br><br>
-    * **Test case:** Deleting the storage file.
-      1. Launch the app.
-      2. Exit the app.
-      3. Note that a new `data/avengersassemble.json` file is created. This is the storage file.
-      4. Test case:** Delete the `data/avengersassemble.json` file.
-      5. Relaunch the app.
-      6. Exit the app.<br><br>
-
-      **Expected:** A new `data/avengersassemble.json` file populated with sample data is created.
-      <br><br>
+        * There is an existing storage file in the default location.
+        <br><br>
+    * **Test case:** Delete the storage file, then launch and exit the app.<br>
+        **Expected:** A new `data/avengersassemble.json` file populated with sample data is created.
+    <br><br>
     * **Test case:** Corrupt the `data/avengersassemble.json` file by adding random text to it.<br>
-      **Expected:** The app should ignore the corrupted file and create a new empty `data/avengersassemble.json` file when launched and interacted with.
+        **Expected:** The app should ignore the corrupted file and create a new empty `data/avengersassemble.json` file when launched and interacted with.
+    <br><br>
 
 <div id="test_help"></div>
 
