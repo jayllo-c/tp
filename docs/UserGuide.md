@@ -217,7 +217,7 @@ Before we proceed with the commands, here are some important points to note on t
 
 ### Clearing All Entries : `clear`
 
-Deletes **all** entries from your contact list.
+Deletes **all** data from the application. This includes all contact information and examinations.
 
 **Format:** `clear`
 
@@ -488,7 +488,7 @@ For more details on each parameter, [click here](#command-parameter-summary).
 
 <div id="copy"></div>
 
-### Copying Contact Details : `copy`
+### Copying Emails : `copy`
 
 Copies the emails of currently displayed persons into your clipboard.
 
@@ -513,7 +513,7 @@ Copies the emails of currently displayed persons into your clipboard.
 
 > **Note:** The application ignores any extraneous parameters as we assume they are typos.
 
-You will see this message once you have successfully copied the contact details shown to you, indicating that they have been copied to the clipboard:
+You will see this message once you have successfully copied the emails of the persons shown to you, indicating that they have been copied to the clipboard:
 
 <p align="center">
   <img src="images/success_images/copy_success.png" alt="image of successful copy" width="750" />
