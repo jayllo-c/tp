@@ -2185,7 +2185,7 @@ testers are expected to do more *exploratory* testing.
     * **Prerequisites:**
         * A person with email `e1234567@u.nus.edu` already exists in the list.
         <br><br>
-    * **Test case (changing `Email` to a currently existing one):** `add n|Alice p|987 a|Hall e|e1234567@u.nus.edu`<br>
+    * **Test case (`Email` already exists):** `add n|Alice p|987 a|Hall e|e1234567@u.nus.edu`<br>
     **Expected:** An error message is shown indicating that the email already exists.
     <br><br>
 
@@ -2232,146 +2232,146 @@ testers are expected to do more *exploratory* testing.
 
 #### Editing a Person: `edit`
 
-##### Editing a Person with All Fields
+**Command:** `edit`<br>
+**More information on usage:** <a href="UserGuide.md#edit">Editing a Person</a>
 
-1. Prerequisites: Start with the provided sample data.
+1. Editing a person with all fields.
 
-2. Test case:
+    * **Prerequisites:**
+        * Start with the provided sample data.
+        <br><br>
+    * **Test case:** `edit 1 n|new name p|123 a|new home e|newemail@eg.com m|A0000000X r|R1 s|S1 t|tag1 t|tag2`<br>
+    **Expected:** The first person’s details are updated with all the new values.
+    <br><br>
+    * **Other successful test cases to try:** Include a combination of updating some fields and not updating others.<br>
+    **Expected:** Similar to above.
+    <br><br>
 
-    ```
-    edit 1 n|new name p|123 a|new address e|newemail@example.com m|A0000000X r|R1 s|S1 t|tag1 t|tag2
-    ```
 
-   Expected: The first person’s details are updated with all the new values.
+2. Editing a person with repeated prefixes.
 
-3. Other successful test cases include a combination of updating some fields and not updating others.
+    * **Prerequisites:**
+        * Start with the provided sample data.
+        <br><br>
+    * **Test case (repeated `n|` prefix):** `edit 1 n|new name n|new name 2 p|123 a|new address`<br>
+    **Expected:** An error message is shown indicating that the `Name` field is repeated.
+    <br><br>
+    * **Other incorrect `edit` commands to try:** Commands with repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|` prefixes.<br>
+    **Expected:** Similar to previous.
+    <br><br>
 
-   Expected: Similar to previous.
+3. Editing a Person's `Email` to an Existing `Email`.
 
-##### Editing a Person with Repeated Prefixes
-
-1. Prerequisites: Start with the provided sample data.
-
-2. Test case: (Repeated `n|` prefix)
-
-    ```
-    edit 1 n|new name n|new name 2 p|123 a|new address
-    ```
-
-   Expected: An error message is shown indicating that the `Name` field is repeated.
-
-3. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|` prefixes.
-
-   Expected: Similar to previous.
-
-##### Editing a Person's `Email` to an Existing `Email`
-
-1. Prerequisites: Start with the provided sample data. Note the emails of the first and second person.
-
-2. Test case:
-
-    ```
-    edit 1 e|berniceyu@example.com
-    ```
-
-   Expected: An error message is shown indicating that the email already exists.
+    * **Prerequisites:**
+        * Start with the provided sample data. Note the emails of the first and second person.
+        <br><br>
+    * **Test case:** `edit 1 e|berniceyu@example.com`<br>
+    **Expected:** An error message is shown indicating that the email already exists.
+    <br><br>
 
 <div id="test_delete"></div>
 
 #### Deleting a Person: `delete`
 
-##### Deleting a Person while All Persons are Being Shown
+**Command:** `delete`<br>
+**More information on usage:** <a href="UserGuide.md#delete">Deleting a Person</a>
 
-1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+1. Deleting a person while all persons are being shown.
 
-2. Test case: `delete 1`<br>
+    * **Prerequisites:**
+        * List all persons using the `list` command. Multiple persons in the list.
+        <br><br>
+    * **Test case:** `delete 1`<br>
+    **Expected:** First person is deleted from the list. Details of the deleted person shown in the status message.
+    <br><br>
+    * **Test case (invalid index):** `delete 0`<br>
+    **Expected:** No person is deleted. Error details shown in the status message.
+    <br><br>
+    * **Other incorrect `delete` commands to try:** `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+    **Expected:** Similar to previous.
+    <br><br>
 
-   Expected: First person is deleted from the list. Details of the deleted person shown in the status message.
+2. Deleting a person while some persons are being shown.
 
-3. Test case: `delete 0`<br>
+    * **Prerequisites:**
+        * Filter persons using the `find` command. Multiple but not all persons in the list.
+        <br><br>
+    * **Test case**: `delete 1`<br>
+    **Expected:** First person in the filtered list is deleted. Details of the deleted person shown in the status message.
+    <br><br>
+    * **Test case**: `delete 0`<br>
+    **Expected:** No person is deleted. Error details shown in the status message.
+    <br><br>
+    * **Other incorrect `delete` commands to try:** `delete`, `delete x`<br>
+    **Expected:** Similar to previous.
+    <br><br>
 
-   Expected: No person is deleted. Error details shown in the status message.
+3. Deleting a person while no persons are being shown.
 
-4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-
-   Expected: Similar to previous.
-
-##### Deleting a Person while Some Persons are Being Shown
-
-1. Prerequisites: Filter persons using the `find` command. Multiple but not all persons in the list.
-
-2. Test case: `delete 1`<br>
-
-    Expected: First person in the filtered list is deleted. Details of the deleted person shown in the status message.
-
-3. Test case: `delete 0`<br>
-
-    Expected: No person is deleted. Error details shown in the status message.
-
-4. Other incorrect delete commands to try: `delete`, `delete x`<br>
-
-    Expected: Similar to previous.
-
-##### Deleting a Person while No Persons are Being Shown
-
-1. Prerequisites: Filter persons using the `find` command such that there are no persons in the list, or delete all persons with `clear`.
-
-2. Test case: `delete 1`<br>
-
-    Expected: No person is deleted. Error details shown in the status message.
+    * **Prerequisites:**
+        * Filter persons using the `find` command such that there are no persons in the list, or delete all persons with `clear`.
+        <br><br>
+    * **Test case**: `delete 1`<br>
+    **Expected:** No person is deleted. Error details shown in the status message.
+    <br><br>
 
 
 <div id="test_deleteshown"></div>
 
 #### Deleting Shown Persons: `deleteShown`
 
-##### Deleting a Proper Subset of All Persons
+**Command:** `deleteShown`<br>
+**More information on usage:** <a href="UserGuide.md#deleteshown">Deleting Filtered Persons</a>
 
-1. Prerequisites: Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
 
-2. Test case: `deleteShown`
+1. Deleting a proper subset of all persons.
 
-    Expected: All persons currently shown are deleted, and the list is updated to show all remaining persons.
+    * **Prerequisites:**
+        * Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
+        <br><br>
+    * **Test case:** `deleteShown`<br>
+    **Expected:** All persons currently shown are deleted, and the list is updated to show all remaining persons.
+    <br><br>
+    * **Other successful test cases:** `deleteShown x`<br>
+    **Expected:** Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
+    <br><br>
 
-3. Other successful test cases: `deleteShown x`
+2. Deleting all persons.
 
-    Expected: Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
-
-##### Deleting All Persons
-
-1. Prerequisites: Filter persons using the `find` command such that all persons are shown, or list all persons with `list`.
-
-2. Test case: `deleteShown`
-
-    Expected: An error is shown indicating that all persons cannot be deleted at once.
-
-3. Other incorrect test cases to try: `deleteShown x`
-
-    Expected: Similar to previous.
+    * **Prerequisites:**
+        * Filter persons using the `find` command such that all persons are shown, or list all persons with `list`.
+        <br><br>
+    * **Test case:** `deleteShown`<br>
+    **Expected:** An error is shown indicating that all persons cannot be deleted at once.
+    <br><br>
+    * **Other incorrect `deleteShown` commands to try:** `deleteShown x`<br>
+    **Expected:** Similar to previous.
+    <br><br>
 
 <div id="test_list"></div>
 
 #### Listing All Persons: `list`
 
-##### Starting with Sample Data
+1. Starting with sample data.
 
-1. Prerequisites: Start with the provided sample data.
+    * **Prerequisites:**
+        * Start with the provided sample data.
+        <br><br>
+    * **Test case:** `list`<br>
+    **Expected:** All persons are shown in the list.
+    <br><br>
+    * **Other successful test cases:** `list x`<br>
+    **Expected:** Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
+    <br><br>
 
-2. Test case: `list`
+2. Starting with a filtered list.
 
-    Expected: All persons are shown in the list.
-
-3. Other successful test cases: `list x`
-
-    Expected: Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
-
-##### Starting with a Filtered List
-
-1. Prerequisites: Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
-
-2. Test case: `list`
-
-    Expected: All persons in the overall list are shown.
+    * **Prerequisites:**
+        * Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
+        <br><br>
+    * **Test case:** `list`<br>
+    **Expected:** All persons in the overall list are shown.
+    <br><br>
 
 <div id="test_find"></div>
 
@@ -2627,83 +2627,71 @@ testers are expected to do more *exploratory* testing.
 
 #### Importing Exam Scores: `importExamScores`
 
-##### Importing Exam Scores from a CSV File
+**Command:** `importExamScores`<br>
+**More information on usage:** <a href="UserGuide.md#importexamscores">Importing Exam Scores</a>
 
-1. Prerequisites: Start with sample data.
+1. Importing exam scores from a CSV file.
 
-2. Add an `Exam` to the sample data:
-
-    ```
-    addExam n|Midterm s|100
-    ```
-
-3. Create a CSV file with the following content:
-
-    Contents of `/path/to/file.csv`:
+    * **Prerequisites:**
+        * Add an `Exam` to the sample data: `addExam n|Midterm s|100`.
+        * Create a CSV file with the following content:<br>
+        Contents of `/path/to/file.csv`:
 
     ```
     email,Exam:Midterm
     alexyeoh@example.com,50
     ```
+    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    **Expected:** The person with the email of `alexyeoh@example.com` now has a `Midterm` score of `50`.
+    <br><br>
 
-4. Test case: `importExamScores /path/to/file.csv`
+2. Importing an invalid file.
 
-    Expected: The person with the email of `alexyeoh@example.com` now has a `Midterm` score of `50`.
+    * **Prerequisites:** 
+        * Start with sample data and the `Midterm` exam.
+        * Create a file named `invalid.json`.
+        <br><br>
+    * **Test case:** `importExamScores invalid.json`<br>
+    **Expected:** An error message is shown indicating that the file is not a CSV file.
+    <br><br>
 
-##### Importing an Invalid File
+3. Importing a CSV file with incorrect formatting.
 
-1. Prerequisites: Start with sample data and the `Midterm` exam.
-
-2. Create a file named `invalid.json`.
-
-3. Test case: `importExamScores invalid.json`
-
-    Expected: An error message is shown indicating that the file is not a CSV file.
-
-##### Importing a CSV File with Incorrect Formatting
-
-1. Prerequisites: Start with sample data and the `Midterm` exam.
-
-2. Create a CSV file with the following content:
-
-    Contents of `/path/to/file.csv`:
-
+    * **Prerequisites:**
+        * Start with sample data and the `Midterm` exam.
+        * Create a CSV file with the following content:<br>
+        Contents of `/path/to/file.csv`:
     ```
     email,Exam:Midterm,email
     alexyeoh@example.com,50,alexyeoh@example.com
     ```
+    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    **Expected:** An error message is shown indicating that the email header should exist only in the first column.
+    <br><br>
+    * **Other incorrect `importExamScores` commands to try:** CSV files where email is not the first header.<br>
+    **Expected:** Similar to previous.
+    <br><br>
 
-3. Test case: `importExamScores /path/to/file.csv`
+4. Importing a CSV file with duplicate entries.
 
-    Expected: An error message is shown indicating that the email header should exist only in the first column.
-
-4. Other incorrect test cases to try: CSV files where email is not the first header.
-
-    Expected: Similar to previous.
-
-##### Importing a CSV File with Duplicate Entries
-
-1. Prerequisites: Start with sample data and the `Midterm` exam.
-
-2. Create a CSV file with the following content:
-
+    * **Prerequisites:**
+        * Start with sample data and the `Midterm` exam.
+        * Create a CSV file with the following content:<br>
     Contents of `/path/to/file.csv`:
 
     ```
     email,Exam:Midterm,Exam:Midterm
    alexyeoh@example.com,50,60
     ```
+    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    **Expected:** A message is shown indicating that there are duplicate entries in the CSV file, and only the first instance has been kept. The `Midterm` score for the person with the email of `alexyeoh@example.com` is `50`.
+    <br><br>
 
-3. Test case: `importExamScores /path/to/file.csv`
+5. Importing a CSV File with invalid entries.
 
-    Expected: A message is shown indicating that there are duplicate entries in the CSV file, and only the first instance has been kept. The `Midterm` score for the person with the email of `alexyeoh@example.com` is `50`.
-
-##### Importing a CSV File with Invalid Entries
-
-1. Prerequisites: Start with sample data and the `Midterm` exam.
-
-2. Create a CSV file with the following content:
-
+    * **Prerequisites:**
+        * Start with sample data and the `Midterm` exam.
+        * Create a CSV file with the following content:<br>
     Contents of `/path/to/file.csv`:
 
     ```
@@ -2712,20 +2700,18 @@ testers are expected to do more *exploratory* testing.
     berniceyu@example.com,50,60
     nonexistent@example.com,100,100
     ```
+    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    **Expected:** A message is shown indicating that there are invalid entries in the CSV file, and all other valid entries have been imported. The errors shown are as follows:
 
-3. Test case: `importExamScores /path/to/file.csv`
+        * The score for `alexyeoh@example.com` for the `Midterm` exam is invalid.
+        * The person with the email `nonexistent@example.com` does not exist in the given list.
+        * The `Finals` exam does not exist.
+        Note that the `Midterm` score for the person with the email of `berniceyu@example.com` is `50`.
+    <br><br>
 
-    Expected: A message is shown indicating that there are invalid entries in the CSV file, and all other valid entries have been imported. The errors shown are as follows:
-
-    * The score for `alexyeoh@example.com` for the `Midterm` exam is invalid.
-    * The person with the email `nonexistent@example.com` does not exist in the given list.
-    * The `Finals` exam does not exist.
-
-    Note that the `Midterm` score for the person with the email of `berniceyu@example.com` is `50`.
-
-4. Other incorrect test cases to try: CSV files with a mix of invalid scores, nonexistent emails, and nonexistent exams.
-
-    Expected: Similar to previous.
+    * **Other incorrect `importExamScores` commands to try:** CSV files with a mix of invalid scores, nonexistent emails, and nonexistent exams.<br>
+    **Expected:** Similar to previous.
+    <br><br>
 
 <br>
 
