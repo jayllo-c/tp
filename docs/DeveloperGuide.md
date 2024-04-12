@@ -2043,7 +2043,7 @@ Expected: The GUI closes and the application exits.
 The import command requires the use of an external CSV file. The test cases below assume that the tests are run on a Windows sysem, and that the CSV file is located at the path `C:/file.csv`. Please modify the filepath accordingly based on where your file is stored and your operating system.
 
 <box type="info" seamless>
-On Windows systems, you can right click the file and copy the file path, remember to remove the double quotes. On MacOS, you can drag the file into the terminal to get the file path. On Linux, you can use the `pwd` command to get the current directory and append the file name to it.
+On Window systems, you can right click the file and copy the file path, remember to remove the double quotes. <br> On MacOS, you can drag the file into the terminal to get the file path. <br>On Linux, you can use the <code>pwd</code> command to get the current directory and append the file name to it.
 </box>
 
 1. Importing Data from a CSV File
@@ -2058,7 +2058,7 @@ On Windows systems, you can right click the file and copy the file path, remembe
 
     <br>
 
-   * **Test case:** `import i|C:/file.csv`<br>
+   * **Test case:** `import i|C:\file.csv`<br>
      **Expected:** The person with the following details is added:
        * Name: `Alice`
        * Email: `alice@gmail.com`
