@@ -2040,106 +2040,170 @@ Expected: The GUI closes and the application exits.
 
 #### Importing Persons: `import`
 
-##### Importing Data from a CSV File
+The import command requires the use of an external CSV file. The test cases below assume that the tests are run on a Windows sysem, and that the CSV file is located at the path `C:/file.csv`. Please modify the filepath accordingly based on where your file is stored and your operating system.
 
-1. Prerequisites: Prepare a CSV file with a few persons. There isa file at path C:file.csv with the following content:
+<box type="info" seamless>
+On Windows systems, you can right click the file and copy the file path, remember to remove the double quotes. On MacOS, you can drag the file into the terminal to get the file path. On Linux, you can use the `pwd` command to get the current directory and append the file name to it.
+</box>
 
-    ```
-    name,email,address,phone
-    alice,alice@gmail,wonderland,123
-    ```
+1. Importing Data from a CSV File
 
-2. Test case: `import i|file.csv`<br>
-        Expected: Persons from the CSV file are added to the address book. Status message shows the number of persons imported.
+   * **Prerequisites**
+       * There is a file at `C:\file.csv` with the following content:
+       ```
+       name,email,address,phone
+       Alice,alice@gmail.com,wonderland,123
+       ```
+       * **Initially, the address book is empty.**
 
-##### Importing Data from a CSV File that does not Exist
+    <br>
 
-1. Prerequisites: No CSV file at the path C:file.csv
+   * **Test case:** `import i|C:/file.csv`<br>
+     **Expected:** The person with the following details is added:
+       * Name: `Alice`
+       * Email: `alice@gmail.com`
+       * Address: `wonderland`
+       * Phone: `123`
 
-2. Test case: `import i|file.csv` <br>
-   Expected: Error message shown in the error report. No change in the address book.
+    <br>
 
-##### Importing Data from a CSV File that is not a CSV File
+2. Importing Data from a CSV File that does not Exist
 
-1. Prerequisites: A file at the path C:file.txt with the following content:
+   * **Prerequisites**
+       * No CSV file at the path `C:\file.csv`
 
-    ```
-    name,email,address,phone
-    alice,alice@gmail,wonderland,123
-    ```
+    <br>
 
-2. Test case: `import i|file.txt` (file is not a CSV file)<br>
-       Expected: Error message shown in the error report. No change in the address book.
+   * **Test case:** `import i|C:\file.csv`<br>
+     **Expected:** Error message shown in the error report. No change in list of persons.
 
-##### Importing Data from a CSV File with Duplicate Compulsory Headers in Header Row
+   <br>
 
-1. Prerequisites: A CSV file with duplicate compulsory headers (e.g. 2 header columns named 'name') at the path C:file.csv with the following content:
+3. Importing Data from a CSV File that is not a CSV File
 
-    ```
-    name,email,address,phone,name
-    alice,alice@gmail.com,123,123,bob
-    ```
+   * **Prerequisites**
+       * There is a file at the path `C:\file.txt`
 
-2. Test case: `import i|file.csv` (file has duplicate headers)<br>
-       Expected: First occurrence in the CSV file is added to the address book. Duplicate entries are ignored.
+    <br>
 
-##### Importing Data from a CSV File with Missing Compulsory Headers in Header Row
+   * **Test case:** `import i|C:\file.txt`<br>
+     **Expected:** Error message shown in the error report. No change in list of persons.
 
-1. Prerequisites: A CSV file with missing compulsory headers at the path C:file.csv with the following content:
+    <br>
 
-    ```
-    email,address,phone
-    Alice@gmail.com,123,123
-    ```
+4. Importing Data from a CSV File with Duplicate Compulsory Headers in Header Row
 
-3. Test case: `import i|file.csv` (file has missing headers)<br>
-       Expected: Error message shown in the error report. No change in the address book.
+   * **Prerequisites**
+       * A CSV file with duplicate compulsory headers (e.g. 2 header columns named 'name') at the path `C:\file.csv` with the following content:
+         ```
+         name,email,address,phone,name
+         Alice,alice@gmail.com,wonderland,123,bob
+         ```
+       * **Initially, the address book is empty.**
 
-##### Importing Data from a CSV File with Missing Compulsory Values in a Row
+   <br>
 
-1. Prerequisites: A CSV file with missing compulsory values in a row at the path C:file.csv with the following content:
+   * **Test case:** `import i|C:\file.csv`<br>
+     **Expected:** First occurrence of the header is used. Columns with duplicate headers are ignored. The person with the following details is added:
+     * Name: `Alice`
+     * Email: `alice@gmail.com`
+     * Address: `wonderland`
+     * Phone: `123`
 
-     ```
-     name,email,address,phone
-     Alice,,123,123
-     ```
+   <br>
 
-2. Test case: `import i|file.csv` <br>
-       Expected: All valid rows are added to the address book. Error message shown in the error report for invalid rows.
+5. Importing Data from a CSV File with Missing Compulsory Headers in Header Row
 
-##### Importing Data from a CSV File with Extra Headers in Header Row
+   * **Prerequisites**
+       * A CSV file with missing compulsory headers at the path `C:\file.csv` with the following content (missing the `name` header):
+         ```
+         email,address,phone
+         alice@gmail.com,wonderland,123
+         ```
 
-1. Prerequisites: A CSV file with extra headers in header row at the path C:file.csv with the following content:
+    <br>
 
+   * **Test case:** `import i|C:\file.csv`<br>
+   * **Expected:** Error message shown in the error report. No change in list of persons.
 
-     ```
-     name,email,address,phone,extra
-     Alice,alice@gmail.com,123,123,extra
-     ```
+   <br>
 
-2. Test case: `import i|file.csv` (file has extra headers)<br>
-   Expected: Only the compulsory headers are read. Optional headers are read if present. Extra headers are ignored.
+6. Importing Data from a CSV File with Missing Compulsory Values in a Row
 
-##### Importing Data from a CSV File with Unequal Number of Values in a Row as the Number of Headers
+   * **Prerequisites**
+       * A CSV file with missing compulsory values in a row at the path `C:\file.csv` with the following content:
+         ```
+         name,email,address,phone
+         Alice,,wonderland,123
+         Bob,bob@gmail.com,town,123
+         ```
+       * **Initially, the address book is empty.**
 
-1. Prerequisites: A CSV file with extra values in a row at the path C:file.csv with the following content:
+   <br>
 
-     ```
-     name,email,address,phone,matric
-     Alice,alice@gmail.com,123,123
-     ```
+   * **Test case:** `import i|C:\file.csv`<br>
+   * **Expected:** Error message in the results in the display indicating that import has failed with errors. Only one person with the following details is added:
+     * Name: `Bob`
+     * Email: `bob@gmail.com`
+     * Address: `town`
+     * Phone: `123`
 
-2. Test case: `import i|file.csv` (file has extra values in a row)<br>
-       Expected: All valid rows are added to the address book. Error message shown in the error report for invalid rows.
+   <br>
 
-##### Importing Data from an Empty CSV File
+7. Importing Data from a CSV File with Extra Headers in Header Row
 
-1. Prerequisites: An empty CSV file at the path C:file.csv
+   * **Prerequisites**
+       * A CSV file with extra headers in header row at the path `C:\file.csv` with the following content:
+            ```
+            name,email,address,phone,extra
+            Alice,alice@gmail.com,123,123,extra
+            ```
+         * **Initially, the address book is empty.**
 
-2. Test case: `import i|file.csv` (file is empty CSV file)<br>
-  Expected: Error message shown in the error report. No change in the address book.
+    <br>
 
-<br>
+   * **Test case:** `import i|C:\file.csv`<br>
+   * **Expected:** Only the compulsory headers are read. Optional headers are read if present. Extra headers are ignored. The person with the following details is added:
+     * Name: `Alice`
+     * Email: `alice@gmail.com`
+     * Address: `123`
+     * Phone: `123`
+
+   <br>
+
+8. Importing Data from a CSV File with Unequal Number of Values in a Row as the Number of Headers
+
+   * **Prerequisites**
+       * A CSV file with unequal number of values in a row as the number of headers at the path `C:\file.csv` with the following content:
+         ```
+         name,email,address,phone
+         Alice,alice@gmail.com,wonderland,123,123
+         Bob,bob@gmail.com,town,123
+         ```
+       * **Initially, the address book is empty.**
+
+    <br>
+
+   * **Test case:** `import i|C:\file.csv`<br>
+     **Expected:** Error message in the results in the display indicating that import has failed with errors. Only one person with the following details is added:
+     * Name: `Bob`
+     * Email: `bob@gmail.com`
+     * Address: `town`
+     * Phone: `123`
+
+   <br>
+
+9. Importing Data from an Empty CSV File
+
+   * **Prerequisites**
+       * An empty CSV file at the path `C:\file.csv`
+
+    <br>
+
+   * **Test case:** `import i|C:\file.csv`<br>
+   * **Expected:** Error message shown in the error report. No change in list of persons.
+
+   <br>
 
 <div id="test_add"></div>
 
@@ -2854,7 +2918,7 @@ Expected: The GUI closes and the application exits.
     * **Test case (person does not contain any score):** `editScore 2 s|90`<br>
       **Expected:** No score is added to any persons. Error details are shown in the status message.
       <br><br>
-    * **Other incorrect `editScore` commands to try:** `editScore`, `editScore INDEX s|90` (where `INDEX` is larger than the list size), `editScore 1 s|SCORE` (where `SCORE` is non-numeric, is less than 0, more than the maximum score of the selected exams, and/or has more than 2 digits in its fractional part)<br>
+    * **Other incorrect `editScore` commands to try:** `editScore`, `editScore INDEX s|90` (where `INDEX` is larger than the list size), `editScore 1 s|SCORE` (where `SCORE` is non-numeric, is less than 0, more than the maximum score of the selected exam, and/or has more than 2 digits in its fractional part)<br>
       **Expected:** No score is added to any persons. Error details are shown in the status message.
       <br><br>
 
