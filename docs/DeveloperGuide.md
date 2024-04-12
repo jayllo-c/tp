@@ -1963,29 +1963,28 @@ testers are expected to do more *exploratory* testing.
 
 #### Launch and Shutdown
 
-1. Initial Launch
-   * **Test case:** Launching the app for the first time.
+1. Initial launch.
+   * **Test case:** Launching the app for the first time.<br>
+   
      1. Download the jar file and copy into an empty folder.
      2. Open Terminal and type the following:
 
         ```bash
         java -jar avengersassemble.jar
         ```
-      **Expected:** Shows the GUI with a set of sample persons. The window size may not be optimal.
-   <br><br>
-2. Saving Window Preferences
+       **Expected:** Shows the GUI with a set of sample persons. The window size may not be optimal.
+     <br><br>
+2. Saving window preferences.
     * **Test case:** Saving the window size and location.
-      1. Resize the window to an optimal size.
-      2. Move the window to a different location.
-      3. Close the window.
-      4. Re-launch the app.
+       1. Resize the window to an optimal size.
+       2. Move the window to a different location.
+       3. Close the window.
+       4. Relaunch the app.<br><br>
 
-      **Expected:** The most recent window size and location is retained.
+       **Expected:** The most recent window size and location is retained.
 
-3. Shutdown
-    * **Test case:** Exiting the app.
-      1. Type `exit` in the command box and press Enter.
-
+3. Shutdown.
+    * **Test case:** `exit`<br>
       **Expected:** The GUI closes and the application exits.
 
 <br>
@@ -1994,15 +1993,18 @@ testers are expected to do more *exploratory* testing.
 
 #### Saving Data
 
-1. Dealing with Missing or Corrupted Data Files
-    * **Prerequisites:** The app is a clean state.
+1. Dealing with missing or corrupted data files.
+
+    * **Prerequisites:**
+        * The app is a clean state.
+          <br><br>
     * **Test case:** Deleting the storage file.
       1. Launch the app.
       2. Exit the app.
       3. Note that a new `data/avengersassemble.json` file is created. This is the storage file.
       4. Test case:** Delete the `data/avengersassemble.json` file.
       5. Relaunch the app.
-      6. Exit the app.
+      6. Exit the app.<br><br>
 
       **Expected:** A new `data/avengersassemble.json` file populated with sample data is created.
       <br><br>
@@ -2138,126 +2140,93 @@ testers are expected to do more *exploratory* testing.
 
 #### Adding a Person: `add`
 
-##### Adding a Person with All Fields
+**Command:** `add`<br>
+**More information on usage:** <a href="UserGuide.md#add">Adding a Person</a>
 
-1. Prerequisites: No persons in the list.
+1. Adding a person with all fields.
 
-2. Test case:
+    * **Prerequisites:**
+        * No persons in the list.
+          <br><br>
+    * **Test case:** `add n|Alice p|98765432 a|Hall e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling`<br>
+    **Expected:** A person with the following fields is added to the list:
+        * Name: `Alice`
+        * Phone: `98765432`
+        * Address: `Hall`
+        * Email: `e09123456@u.nus.edu`
+        * Matric: `A1234567X`
+        * Reflection: `R2`
+        * Studio: `S1`
+        * Tags: `excelling`, `student`
 
-    ```
-   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
-   ```
+    <box type="info" seamless>
 
-   Expected: A person with the following fields is added to the list:
+    **Note:** If a `Matric` number is provided, the person is automatically tagged as a `student`.
 
-   * Name: `Alice`
-   * Phone: `98765432`
-   * Address: `King Edward VII Hall E106`
-   * Email: `e09123456@u.nus.edu`
-   * Matric: `A1234567X`
-   * Reflection: `R2`
-   * Studio: `S1`
-   * Tags: `excelling`, `student`
+    </box>
 
-<box type="info" seamless>
-
-**Note:** If a `Matric` number is provided, the person is automatically tagged as a `student`.
-
-</box>
-
-3. Test case: (Missing compulsory `Email` and `Address` fields)
-
-    ```
-   add n|Alice e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
-   ```
-
-    Expected: An error message is shown indicating that the `Address` and `Phone` fields are missing.
-
-4. Other incorrect test cases to try: `add`, any other command that misses out a combination of compulsory fields.
-
-    Expected: Similar to previous.
-
-##### Adding a Person with Repeated Prefixes
-
-1. Prerequisites: No persons in the list.
-
-2. Test case: (Repeated `n|` prefix)
+    * **Test case (missing `Address` and `Phone` fields):** `add n|Alice e|e09123456@u.nus.edu`<br>
+    **Expected:** An error message is shown indicating that the `Address` and `Phone` fields are missing.
+    <br><br>
 
 
-    ```
-    add n|Alice n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
-    ```
+2. Adding a person with repeated prefixes.
 
-    Expected: An error message is shown indicating that the `Name` field is repeated.
+    * **Prerequisites:**
+        * No persons in the list.
+        <br><br>
+    * **Test case (repeating `Name` field):** `add n|Ali n|Ali p|98765432 a|Hall e|test@test.com m|A1234567X`<br>
+    **Expected:** An error message is shown indicating that the `Name` field is repeated.
+    <br><br>
 
-3. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|` prefixes.
 
-    Expected: Similar to previous.
+3. Adding a person whose `Email` already exists.
 
-##### Adding a Person whose `Email` Already Exists
+    * **Prerequisites:**
+        * A person with email `e1234567@u.nus.edu` already exists in the list.
+        <br><br>
+    * **Test case (changing `Email` to a currently existing one):** `add n|Alice p|987 a|Hall e|e1234567@u.nus.edu`<br>
+    **Expected:** An error message is shown indicating that the email already exists.
+    <br><br>
 
-1. Prerequisites: A person with email `e1234567@u.nus.edu` already exists in the list.
+4. Adding a person with only compulsory fields.
 
-2. Test case:
+    * **Prerequisites:**
+        * No persons in the list.
+        <br><br>
+    * **Test case:** `add n|Alice p|98765432 a|Hall e|e09123456@u.nus.edu`<br>
+    **Expected:** A person with the following fields is added to the list:
+        * Name: `Alice`
+        * Phone: `98765432`
+        * Address: `Hall`
+        * Email: `e09123456@u.nus.edu`
+    <br><br>
 
-    ```
-   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e1234567@u.nus.edu
-   ```
+5. Adding a person with matriculation number
 
-    Expected: An error message is shown indicating that the email already exists.
-
-##### Adding a Person with Only Compulsory Fields
-
-1. Prerequisites: No persons in the list.
-
-2. Test case:
-
-    ```
-   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu
-   ```
-
-    Expected: A person with the following fields is added to the list:
-
-    * Name: `Alice`
-    * Phone: `98765432`
-    * Address: `King Edward VII Hall E106`
-    * Email: `e09123456@u.nus.edu`
-
-3. Other successful test cases include adding a person with only some optional fields.
-
-##### Adding a Person with Matriculation Number
-
-1. Prerequisites: No persons in the list.
-
-2. Test case:
-
-    ```
-   add n|Alice p|98765432 a|King Edward VII Hall E106 e|alice@example.com m|A1234567X
-    ```
-
-    Expected: A person with the following fields is added to the list:
-    * Name: `Alice`
-    * Phone: `98765432`
-    * Address: `King Edward VII Hall E106`
-    * Email: `alice@example.com`
-    * Matric: `A1234567X`
-    * Tags: `student`
-
-    Note that the `student` tag is automatically added to the new person.
-
-3. Test case:
-
-    ```
-   add n|Alice p|98765432 a|King Edward VII Hall E106 e|alice@example.com
-    ```
-
-    Expected: A person with the following fields is added to the list:
-   * Name: `Alice`
-   * Phone: `98765432`
-   * Address: `King Edward VII Hall E106`
-   * Email: `alice@example.com`
-
+    * **Prerequisites:**
+        * No persons in the list.
+        <br><br>
+    * **Test case:** `add n|Alice p|98765432 a|Hall e|alice@example.com m|A1234567X`<br>
+    **Expected:** A person with the following fields is added to the list:
+        * Name: `Alice`
+        * Phone: `98765432`
+        * Address: `Hall`
+        * Email: `alice@example.com`
+        * Matric: `A1234567X`
+        * Tags: `student`
+        <br><br>
+        Note that the `student` tag is automatically added to the new person.
+    <br><br>
+    * **Test case:** `add n|Alice p|98765432 a|Hall e|alice@example.com`<br>
+    **Expected:** A person with the following fields is added to the list:
+        * Name: `Alice`
+        * Phone: `98765432`
+        * Address: `Hall`
+        * Email: `alice@example.com`
+        <br><br>
     Note that there is no automatic tagging.
+    <br><br>
 
 <div id="test_edit"></div>
 
