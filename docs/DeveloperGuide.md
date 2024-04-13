@@ -683,7 +683,7 @@ Similarly to the `copy` command, the `deleteShown` command is designed to be use
 #### **Import Contacts Command** : `import`
 
 The `import` command allows users to import contacts from a CSV file. Users can specify the file path of the CSV file to
-import contacts from and with the validation and checking of the CSV rows, person objects can be added to the addressbook.
+import contacts from and with the validation and checking of the CSV rows, person objects can be added to the persons list in the application.
 
 ##### Parsing User Input
 
