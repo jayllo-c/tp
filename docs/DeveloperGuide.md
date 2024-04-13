@@ -2059,7 +2059,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 1. Importing Data from a CSV File
 
    * **Prerequisites**
-       * There is a file at `C:\file.csv` with the following content:
+       * There is a file at `C:\path\to\file.csv` with the following content:
        ```
        name,email,address,phone
        Alice,alice@gmail.com,wonderland,123
@@ -2068,7 +2068,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 
     <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
      **Expected:** The person with the following details is added:
        * Name: `Alice`
        * Email: `alice@gmail.com`
@@ -2080,11 +2080,11 @@ On Window systems, you can right-click the file and copy the file path, remember
 2. Importing Data from a CSV File that does not Exist
 
    * **Prerequisites**
-       * No CSV file at the path `C:\file.csv`
+       * No CSV file at the path `C:\path\to\file.csv`
 
     <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
      **Expected:** Error message shown in the error report. No change in list of persons.
 
    <br>
@@ -2092,11 +2092,11 @@ On Window systems, you can right-click the file and copy the file path, remember
 3. Importing Data from a CSV File that is not a CSV File
 
    * **Prerequisites**
-       * There is a file at the path `C:\file.txt`
+       * There is a file at the path `C:\path\to\file.txt`
 
     <br>
 
-   * **Test case:** `import i|C:\file.txt`<br>
+   * **Test case:** `import i|C:\path\to\file.txt`<br>
      **Expected:** Error message shown in the error report. No change in list of persons.
 
     <br>
@@ -2104,16 +2104,16 @@ On Window systems, you can right-click the file and copy the file path, remember
 4. Importing Data from a CSV File with Duplicate Compulsory Headers in Header Row
 
    * **Prerequisites**
-       * A CSV file with duplicate compulsory headers (e.g. 2 header columns named 'name') at the path `C:\file.csv` with the following content:
+       * A CSV file with duplicate compulsory headers (e.g. 2 header columns named 'name') at the path `C:\path\to\file.csv` with the following content:
          ```
          name,email,address,phone,name
          Alice,alice@gmail.com,wonderland,123,bob
          ```
-       * Initially, the address book is empty.
+       * Initially, the persons list is empty.
 
    <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
      **Expected:** First occurrence of the header is used. Columns with duplicate headers are ignored. The person with the following details is added:
      * Name: `Alice`
      * Email: `alice@gmail.com`
@@ -2125,7 +2125,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 5. Importing Data from a CSV File with Missing Compulsory Headers in Header Row
 
    * **Prerequisites**
-       * A CSV file with missing compulsory headers at the path `C:\file.csv` with the following content (missing the `name` header):
+       * A CSV file with missing compulsory headers at the path `C:\path\to\file.csv` with the following content (missing the `name` header):
          ```
          email,address,phone
          alice@gmail.com,wonderland,123
@@ -2133,15 +2133,15 @@ On Window systems, you can right-click the file and copy the file path, remember
 
     <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
-   * **Expected:** Error message shown in the error report. No change in list of persons.
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
+   * **Expected:** Error message shown that `name` header is missing in the error report. No change in list of persons.
 
    <br>
 
 6. Importing Data from a CSV File with Missing Compulsory Values in a Row
 
    * **Prerequisites**
-       * A CSV file with missing compulsory values in a row at the path `C:\file.csv` with the following content:
+       * A CSV file with missing compulsory values in a row at the path `C:\path\to\file.csv` with the following content:
          ```
          name,email,address,phone
          Alice,,wonderland,123
@@ -2151,7 +2151,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 
    <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
    * **Expected:** Error message in the results in the display indicating that import has failed with errors. Only one person with the following details is added:
      * Name: `Bob`
      * Email: `bob@gmail.com`
@@ -2163,16 +2163,16 @@ On Window systems, you can right-click the file and copy the file path, remember
 7. Importing Data from a CSV File with Extra Headers in Header Row
 
    * **Prerequisites**
-       * A CSV file with extra headers in header row at the path `C:\file.csv` with the following content:
+       * A CSV file with extra headers in header row at the path `C:\path\to\file.csv` with the following content:
             ```
             name,email,address,phone,extra
             Alice,alice@gmail.com,123,123,extra
             ```
-         * **Initially, the address book is empty.**
+         * Initially, the persons list is empty.
 
     <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
    * **Expected:** Only the compulsory headers are read. Optional headers are read if present. Extra headers are ignored. The person with the following details is added:
      * Name: `Alice`
      * Email: `alice@gmail.com`
@@ -2184,17 +2184,17 @@ On Window systems, you can right-click the file and copy the file path, remember
 8. Importing Data from a CSV File with Unequal Number of Values in a Row as the Number of Headers
 
    * **Prerequisites**
-       * A CSV file with unequal number of values in a row as the number of headers at the path `C:\file.csv` with the following content:
+       * A CSV file with unequal number of values in a row as the number of headers at the path `C:\path\to\file.csv` with the following content:
          ```
          name,email,address,phone
          Alice,alice@gmail.com,wonderland,123,123
          Bob,bob@gmail.com,town,123
          ```
-       * **Initially, the address book is empty.**
+       * Initially, the persons list is empty.
 
     <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
      **Expected:** Error message in the results in the display indicating that import has failed with errors. Only one person with the following details is added:
      * Name: `Bob`
      * Email: `bob@gmail.com`
@@ -2206,12 +2206,12 @@ On Window systems, you can right-click the file and copy the file path, remember
 9. Importing Data from an Empty CSV File
 
    * **Prerequisites**
-       * An empty CSV file at the path `C:\file.csv`
+       * An empty CSV file at the path `C:\path\to\file.csv`
 
     <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
-   * **Expected:** Error message shown in the error report. No change in list of persons.
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
+   * **Expected:** A message that no person is imported is shown. No change in list of persons.
 
    <br>
 
