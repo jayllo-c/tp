@@ -292,7 +292,10 @@ The following is a more detailed explanation on how user input is parsed into a 
 
 #### Considerations for Logic
 
-The `Logic` component is designed to be the central component that executes all user commands. This design choice was made to ensure that all commands are executed in a consistent manner, and to prevent the duplication of command execution logic across different components. By centralizing the command execution logic in the `Logic` component, we ensure that all commands are executed in the same way, regardless of the component that initiates the command execution. This design choice also allows for easier maintenance and extensibility, as any changes to the command execution logic can be made in a single location.
+The `Logic` component is designed to be the central component that executes all user commands. 
+This design choice was made to ensure that all commands are executed in a consistent manner, and to prevent the duplication of command execution logic across different components. 
+By centralizing the command execution logic in the `Logic` component, we ensure that all commands are executed in the same way, regardless of the component that initiates the command execution. 
+This design choice also allows for easier maintenance and extensibility, as any changes to the command execution logic can be made in a single location.
 
 <br>
 
@@ -340,7 +343,7 @@ The `Storage` component uses the `Jackson` library to convert objects to JSON fo
 
 The `Logic` class stores a `StorageManager` object that implements the methods in the `Storage` class. For **every** command that is executed, `Logic` uses `StorageManager` to save the updated `AddressBook` through the `saveAddressBook` method.
 
-The `StorageManager` class calls on the `JsonAddressBookStorage` class to convert all objects in the `AddressBook` to JSON formatting. The converted JSON objects are consolidated in the `JsonSerializableAddressBook` class and it is seraliazed to JSON format and saved using the `saveJsonToFile` method.
+The `StorageManager` class calls on the `JsonAddressBookStorage` class to convert all objects in the `AddressBook` to JSON formatting. The converted JSON objects are consolidated in the `JsonSerializableAddressBook` class and it is serialized to JSON format and saved using the `saveJsonToFile` method.
 
 The sequence diagram below illustrates how data is saved within the `Storage` component when the user issues a command.
 
@@ -351,9 +354,10 @@ The sequence diagram below illustrates how data is saved within the `Storage` co
 
 #### Loading of Data
 
-When the application is initialised, the `Storage` component reads the JSON objects from the save file and converts them back to objects that can be used to initialise the `Model` component. This is done using the `readJsonFile` method of the `JsonUtil` class which utilises the methods defined in the `JsonAdapted` classes to convert the saved JSON data back to objects that can be used by the `Model` component.
+When the application is initialized, the `Storage` component reads the JSON objects from the save file and converts them back to objects that can be used to initialize the `Model` component. 
+This is done using the `readJsonFile` method of the `JsonUtil` class which utilizes the methods defined in the `JsonAdapted` classes to convert the saved JSON data back to objects that can be used by the `Model` component.
 
-The sequence diagram below illustrates how data is loaded within the `Storage` component when the application is initialised.
+The sequence diagram below illustrates how data is loaded within the `Storage` component when the application is initialized.
 
 <p align="center"><puml src="diagrams/StorageLoadSequenceDiagram.puml" alt="Sequence Diagram for the `Storage` Component" /></p>
 
@@ -400,7 +404,7 @@ through `Toolkit.getDefaultToolkit().getSystemClipboard()` and copies the user g
 ##### Design Considerations
 
 We designed the help command to copy the user guide link directly to the clipboard as we wanted our application to be
-CLI optimised. This allows our target users to easily access the user guide without having to use their mouse
+CLI optimized. This allows our target users to easily access the user guide without having to use their mouse
 to navigate to the user guide link.
 
 <div id="clear"></div>
@@ -1295,7 +1299,7 @@ The sequence diagram below illustrates the interactions within the `Model` compo
 
 ##### User Interface Interaction
 
-The `StatusBarFooter` element of the UI is initialised with an `ObservableValue<ScoreStatistics>` object. This object is bound to the `selectedExamStatistics` object in the `Model` component and is retrieved using the `getSelectedExamStatistics` method.
+The `StatusBarFooter` element of the UI is initialized with an `ObservableValue<ScoreStatistics>` object. This object is bound to the `selectedExamStatistics` object in the `Model` component and is retrieved using the `getSelectedExamStatistics` method.
 
 Whenever a command is executed, the `StatusBarFooter` retrieves the updated statistics and displays them on the right side of the footer which can be seen at the bottom of the UI.
 
@@ -1337,11 +1341,11 @@ For example, an extreme case will be to search for persons with the `Name` field
 
 #### Update UI to Wrap Text
 
-Currently, the `ResultDisplay` box does not wrap text, which means that long lines of text will extend beyond the width of the box. This results in the need for two scrollbars, a horizontal one for the result box and a vertical one for the currently shown list of persons. This is not ideal as it makes the UI less optimized for the target audience, who prefer using a CLI-optimized application and prefer not to use mouse controls to scroll through scroll boxes.
+Currently, the `ResultDisplay` box does not wrap text, which means that long lines of text will extend beyond the width of the box. This results in the need for two scroll bars, a horizontal one for the result box and a vertical one for the currently shown list of persons. This is not ideal as it makes the UI less optimized for the target audience, who prefer using a CLI-optimized application and prefer not to use mouse controls to scroll through scroll boxes.
 
 ##### Planned Implementation
 
-We plan to modify the `ResultDisplay` box to wrap text so that there is no longer a need for the horizontal scrollbar in the `ResultDisplay` box.
+We plan to modify the `ResultDisplay` box to wrap text so that there is no longer a need for the horizontal scroll bar in the `ResultDisplay` box.
 
 In the case where the wrapped text still exceeds the height of the `ResultDisplay` box, we plan to enable it to dynamically adjust its height as needed.
 
@@ -1363,7 +1367,7 @@ Additionally, some persons such as staff members and course instructors may not 
 
 #### UX: Make Sample Data Tags More Relevant and Helpful to the User
 
-Currently, the sample data tags are not very helpful to the user, having tags like `friends`, `neighbours` and `family`. This may pose confusion to users about the context of the application, which is the head TA's management of persons related to CS1101S.
+Currently, the sample data tags are not very helpful to the user, having tags like `friends`, `neighbors` and `family`. This may pose confusion to users about the context of the application, which is the head TA's management of persons related to CS1101S.
 
 ##### Planned Implementation
 
@@ -1414,16 +1418,16 @@ Retain all other relevant `Tag` objects like `colleagues` and `student` to bette
 **Value proposition**:
 
 * Manage persons faster than a typical mouse/GUI driven app
-* Centralised platform to store and manage person details for all relevant individuals involved in course administration
+* Centralized platform to store and manage person details for all relevant individuals involved in course administration
 * Able to store and manage exam scores for all students in the course
-* Easier access to information through organising relevant persons into different subgroups
+* Easier access to information through organizing relevant persons into different subgroups
 * Able to set up the application through different data-loading options
 * Able to assist with management of large scale communication
 
 **Problem scope**:
 
-* The CS1101S Head Tutor will face challenges in effectively organising and managing contact information within the department due to the large scale the course has to operate on. Existing methods, such as paper-based lists or basic digital spreadsheets, lack the necessary functionality to efficiently handle the diverse needs of proper contact management. There is a need for a user-friendly and offline-capable address book solution tailored specifically to the needs of a single user. This address book system should provide features such as easy contact entry and editing, quick search functionality, customizable categorization options, and the ability to add notes for each contact. Additionally, it should operate offline without requiring an internet connection and should not rely on complex database management systems.
-* While Avengers Assemble will greatly improve contact management and organisation for the CS1101S Head Tutor, it will not address broader departmental communication or collaboration needs beyond individual contact management since the application is designed to be a single-user system. It will not facilitate communication between users or provide collaboration tools for group projects or tasks. Additionally, the address book system will not handle complex data analysis or reporting functions beyond basic contact information management. Finally, while the system will provide offline functionality, it will not offer real-time synchronisation with online databases or cloud storage solutions.
+* The CS1101S Head Tutor will face challenges in effectively organizing and managing contact information within the department due to the large scale the course has to operate on. Existing methods, such as paper-based lists or basic digital spreadsheets, lack the necessary functionality to efficiently handle the diverse needs of proper contact management. There is a need for a user-friendly and offline-capable address book solution tailored specifically to the needs of a single user. This address book system should provide features such as easy contact entry and editing, quick search functionality, customizable categorization options, and the ability to add notes for each contact. Additionally, it should operate offline without requiring an internet connection and should not rely on complex database management systems.
+* While Avengers Assemble will greatly improve contact management and organization for the CS1101S Head Tutor, it will not address broader departmental communication or collaboration needs beyond individual contact management since the application is designed to be a single-user system. It will not facilitate communication between users or provide collaboration tools for group projects or tasks. Additionally, the address book system will not handle complex data analysis or reporting functions beyond basic contact information management. Finally, while the system will provide offline functionality, it will not offer real-time synchronization with online databases or cloud storage solutions.
 
 <div id="appendix_b"></div>
 
@@ -1452,7 +1456,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | user                                        | delete a specific group of entries      | remove multiple entries that I no longer need more efficiently         |
 | `* * *`  | user                                        | view all saved contacts                 | oversee the data stored within my app                                  |
 | `* * *`  | user                                        | find a person through their particulars | locate details of persons without having to go through the entire list |
-| `* * *`  | head tutor using the app                    | categorise my persons into groups       | manage different groups of students effectively                        |
+| `* * *`  | head tutor using the app                    | categorize my persons into groups       | manage different groups of students effectively                        |
 | `* * *`  | head tutor using the app                    | copy email addresses of a group         | effectively communicate with target groups                             |
 | `* * *`  | head tutor using the app                    | export the details of persons to a CSV  | easily share the details of a group with others                        |
 
@@ -1463,12 +1467,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | head tutor using the app                    | import assessment scores from a CSV file | easily add a large number of scores to the application |
 | `* * *`  | head tutor using the app                    | add exams to the app                     | keep track of student performance                      |
 | `* * *`  | head tutor using the app                    | delete exams from the app                | remove exams that are no longer relevant               |
-| `* * *`  | head tutor using the app                    | view scores for a specific exam          | analyse student scores                                 |
+| `* * *`  | head tutor using the app                    | view scores for a specific exam          | analyze student scores                                 |
 | `* * *`  | head tutor using the app                    | add scores to the app                    | keep track of student performance                      |
 | `* * *`  | head tutor using the app                    | edit scores in the app                   | correct errors in the scores                           |
 | `* * *`  | head tutor using the app                    | delete scores from the app               | remove scores that are no longer relevant              |
 | `* * *`  | head tutor using the app                    | export scores to a CSV file              | easily share the scores with others                    |
-| `* * *`  | head tutor using the app                    | view statistics of scores                | analyse student performance                            |
+| `* * *`  | head tutor using the app                    | view statistics of scores                | analyze student performance                            |
 
 
 <div id="appendix_c"></div>
@@ -1513,13 +1517,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *  1a. The file to be imported is not a CSV file.
 
-    *  1a1. AvengersAssemble displays an error message indicating that the file type is not recognised and should be a CSV file.
+    *  1a1. AvengersAssemble displays an error message indicating that the file type is not recognized and should be a CSV file.
 
        Use case ends.
 
 *  1b. AvengersAssemble cannot find the file to be imported.
 
-    *  1b1. AvengersAssemble displays a message indicating that the file is not recognised.
+    *  1b1. AvengersAssemble displays a message indicating that the file is not recognized.
 
        Use case ends.
 
@@ -1712,13 +1716,13 @@ into user's clipboard.
 
 *   2a. AvengersAssemble cannot find the file specified.
 
-    *  2a1. AvengersAssemble displays a message indicating that the file is not recognised.
+    *  2a1. AvengersAssemble displays a message indicating that the file is not recognized.
 
        Use case ends.
 
 *   2b. The file to be imported is not a CSV file.
 
-    *  2b1. AvengersAssemble displays an error message indicating that the file type is not recognised and should be a CSV file
+    *  2b1. AvengersAssemble displays an error message indicating that the file type is not recognized and should be a CSV file
 
        Use case ends.
 
@@ -3003,7 +3007,7 @@ different features, interactions between each entity, and the management and sto
 entities. The consideration of these factors turned out to be more challenging than initially anticipated.
 
 Moreover, in addition to enhancing the original features of AB3 to cater to our target users, Avengers Assemble also introduces
-many new commands to improve the usability of our application, as well as to handle the diverse behaviours and interactions
+many new commands to improve the usability of our application, as well as to handle the diverse behaviors and interactions
 of `Person` and `Exam`. This required a significant amount of effort to ensure that the new features were
 implemented correctly and seamlessly integrated with the existing features.
 
@@ -3028,7 +3032,7 @@ to filter out persons less than or more than a specified score, revamping the wa
 
 **Automatic Tagging of Persons**<br>
 In the context of our application, it is mainly used to store students', instructors' and teaching assistants' contacts.
-Hence, on top of the original behaviour of the tag feature, we adapted it to automatically tag contacts with a
+Hence, on top of the original behavior of the tag feature, we adapted it to automatically tag contacts with a
 matriculation number as students.
 
 **User Interface**<br>
