@@ -733,7 +733,7 @@ Overall, the conditions checked are:
 - The file exists
 - The file is a CSV file
 - **The first row of the file is the header row**. In which all compulsory fields for creating a persons object
-  (ie `name`, `email`, `address`, `phone`)are present. Optional headers will be read if present. Headers in the csv that are not a field in `Person` will be ignored.
+  (ie `name`, `email`, `address`, `phone`)are present. Optional headers will be read if present. Headers in the CSV that are not a field in `Person` will be ignored.
 
 If the file is not valid, an error message will be returned.
 
@@ -1443,31 +1443,31 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 #### For Contact Management
 
 | Priority | As a …​                                      | I want to …​                            | So that I can…​                                                        |
-|----------|---------------------------------------------|----------------------------------------|------------------------------------------------------------------------|
-| `* * *`  | head tutor using the app                    | import persons from a csv file         | easily add a large number of persons to the application                |
-| `* * *`  | new user                                    | save the data I input into the app     | don't lose the information I've entered                                |
-| `* * *`  | user                                        | add a new person                       | make minor additions to the persons in the application                 |
-| `* * *`  | user                                        | update and edit person details         | keep my persons list accurate                                          |
-| `* * *`  | user                                        | delete a person                        | remove entries that I no longer need                                   |
-| `* * *`  | user                                        | delete a specific group of entries     | remove multiple entries that I no longer need more efficiently         |
-| `* * *`  | user                                        | view all saved contacts                | oversee the data stored within my app                                  |
-| `* * *`  | user                                        | find a person through their particulars| locate details of persons without having to go through the entire list |
-| `* * *`  | head tutor using the app                    | categorise my persons into groups      | manage different groups of students effectively                        |
-| `* * *`  | head tutor using the app                    | copy email addresses of a group        | effectively communicate with target groups                             |
-| `* * *`  | head tutor using the app                    | export the details of persons to a csv | easily share the details of a group with others                        |
+|----------|---------------------------------------------|-----------------------------------------|------------------------------------------------------------------------|
+| `* * *`  | head tutor using the app                    | import persons from a CSV file          | easily add a large number of persons to the application                |
+| `* * *`  | new user                                    | save the data I input into the app      | don't lose the information I've entered                                |
+| `* * *`  | user                                        | add a new person                        | make minor additions to the persons in the application                 |
+| `* * *`  | user                                        | update and edit person details          | keep my persons list accurate                                          |
+| `* * *`  | user                                        | delete a person                         | remove entries that I no longer need                                   |
+| `* * *`  | user                                        | delete a specific group of entries      | remove multiple entries that I no longer need more efficiently         |
+| `* * *`  | user                                        | view all saved contacts                 | oversee the data stored within my app                                  |
+| `* * *`  | user                                        | find a person through their particulars | locate details of persons without having to go through the entire list |
+| `* * *`  | head tutor using the app                    | categorise my persons into groups       | manage different groups of students effectively                        |
+| `* * *`  | head tutor using the app                    | copy email addresses of a group         | effectively communicate with target groups                             |
+| `* * *`  | head tutor using the app                    | export the details of persons to a CSV  | easily share the details of a group with others                        |
 
 #### For Exam and Score Management
 
 | Priority | As a …​                                      | I want to …​                             | So that I can…​                                        |
 |----------|---------------------------------------------|------------------------------------------|--------------------------------------------------------|
-| `* * *`  | head tutor using the app                    | import assessment scores from a csv file | easily add a large number of scores to the application |
+| `* * *`  | head tutor using the app                    | import assessment scores from a CSV file | easily add a large number of scores to the application |
 | `* * *`  | head tutor using the app                    | add exams to the app                     | keep track of student performance                      |
 | `* * *`  | head tutor using the app                    | delete exams from the app                | remove exams that are no longer relevant               |
 | `* * *`  | head tutor using the app                    | view scores for a specific exam          | analyse student scores                                 |
 | `* * *`  | head tutor using the app                    | add scores to the app                    | keep track of student performance                      |
 | `* * *`  | head tutor using the app                    | edit scores in the app                   | correct errors in the scores                           |
 | `* * *`  | head tutor using the app                    | delete scores from the app               | remove scores that are no longer relevant              |
-| `* * *`  | head tutor using the app                    | export scores to a csv file              | easily share the scores with others                    |
+| `* * *`  | head tutor using the app                    | export scores to a CSV file              | easily share the scores with others                    |
 | `* * *`  | head tutor using the app                    | view statistics of scores                | analyse student performance                            |
 
 
@@ -1513,7 +1513,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *  1a. The file to be imported is not a CSV file.
 
-    *  1a1. AvengersAssemble displays an error message indicating that the file type is not recognised and should be a csv file.
+    *  1a1. AvengersAssemble displays an error message indicating that the file type is not recognised and should be a CSV file.
 
        Use case ends.
 
@@ -1938,7 +1938,7 @@ into user's clipboard.
 
 ### Appendix D: Non-Functional Requirements
 
-1.   Should work on any _mainstream OS_ as long as it has Java `11` or above installed.
+1.   Should work on any _mainstream OS_ as long as it has `Java 11` or above installed.
 2.   Should be able to hold up to 2000 persons without a noticeable sluggishness in performance for typical usage.
 3.   A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 4.   A user should be able to import up to 2000 persons from an external source without a noticeable sluggishness in performance for typical usage.
@@ -2069,7 +2069,7 @@ testers are expected to do more *exploratory* testing.
 The import command requires the use of an external CSV file. The test cases below assume that the tests are run on a Windows system, and that the CSV file is located at the path `C:\path\to\file.csv`. Please modify the filepath accordingly based on where your file is stored and your operating system.
 
 <box type="info" seamless>
-On Window systems, you can right-click the file and copy the file path, remember to remove the double quotes. <br> On MacOS, you can drag the file into the terminal to get the file path. <br>On Linux, you can use the <code>pwd</code> command to get the current directory and append the file name to it.
+**Note:**On Window systems, you can right-click the file and copy the file path, remember to remove the double quotes. <br> On MacOS, you can drag the file into the terminal to get the file path. <br>On Linux, you can use the <code>pwd</code> command to get the current directory and append the file name to it.
 </box>
 
 1. Importing data from a CSV file
