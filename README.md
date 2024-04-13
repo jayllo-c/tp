@@ -11,10 +11,11 @@ Avengers Assemble is a contact management app, meant for use with a Command Line
 This application is designed for Head Tutors of the CS1101S Programming Methodology course to manage the contact details of students, tutors and other staff members. Its use cases may also be relevant to Head Tutors of other courses.
 
 ### Project Links
-[Project Website](https://ay2324s2-cs2103t-t10-1.github.io/tp/)
-[User Guide](https://ay2324s2-cs2103t-t10-1.github.io/tp/UserGuide.html)
-[Developer Guide](https://ay2324s2-cs2103t-t10-1.github.io/tp/DeveloperGuide.html)
-[About Us](https://ay2324s2-cs2103t-t10-1.github.io/tp/AboutUs.html)
+* [Project Website](https://ay2324s2-cs2103t-t10-1.github.io/tp/)
+* [User Guide](https://ay2324s2-cs2103t-t10-1.github.io/tp/UserGuide.html)
+* [Developer Guide](https://ay2324s2-cs2103t-t10-1.github.io/tp/DeveloperGuide.html)
+* [About Us](https://ay2324s2-cs2103t-t10-1.github.io/tp/AboutUs.html)
+
 
 ### Acknowledgements
 
