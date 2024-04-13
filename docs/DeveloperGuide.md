@@ -2105,7 +2105,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 
    <br>
 
-3. Importing Data from a file that is not a CSV file
+3. Importing data from a file that is not a CSV file
 
    * **Prerequisites**
        * There is a file at the path `C:\path\to\file.txt`
@@ -2117,7 +2117,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 
     <br>
 
-4. Importing Data from a CSV File with duplicate compulsory headers in header row
+4. Importing data from a CSV File with duplicate compulsory headers in header row
 
    * **Prerequisites**
        * A CSV file with duplicate compulsory headers (e.g. 2 header columns named 'name') at the path `C:\path\to\file.csv` with the following content:
@@ -2138,7 +2138,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 
    <br>
 
-5. Importing Data from a CSV file with missing compulsory headers in header row
+5. Importing data from a CSV file with missing compulsory headers in header row
 
    * **Prerequisites**
        * A CSV file with missing compulsory headers at the path `C:\path\to\file.csv` with the following content (missing the `name` header):
