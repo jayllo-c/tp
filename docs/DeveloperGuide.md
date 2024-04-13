@@ -391,21 +391,21 @@ to navigate to the user guide link.
 
 #### **Clear Command** : `clear`
 
-The `clear` command allows users to clear all persons and exams from the address book.
+The `clear` command allows users to clear all persons and exams from the persons and exams list.
 
 ##### Executing the Command
 
-The `ClearCommand` simply sets the `AddressBook` in the `Model` component to a new `AddressBook` object, effectively clearing all persons and exams from the address book.
+The `ClearCommand` simply sets the `AddressBook` in the `Model` component to a new `AddressBook` object, effectively clearing all persons and exams from the persons and exams list.
 
 ##### Design Considerations
 
-We designed the `clear` command to clear all persons and exams from the address book to provide users with a quick and easy way to reset the address book to its initial state. This is useful for users who want to start over or clear the address book for a fresh start.
+We designed the `clear` command to clear all persons and exams from their respective lists to provide users with a quick and easy way to reset the application to its initial state. This is useful for users who want to start over or clear the address book for a fresh start.
 
 <div id="list"></div>
 
 #### **List Command** : `list`
 
-The `list` command allows users to list all persons in the address book.
+The `list` command allows users to list all persons in the persons list.
 
 ##### Executing the Command
 
@@ -413,7 +413,7 @@ The `ListCommand` retrieves the `filteredPersonList` from the `Model` component 
 
 ##### Design Considerations
 
-We designed the `list` command to list all persons in the address book to provide users with a quick and easy way to view all persons in the address book. This is useful to revert the UI back to the default view after a find command has been executed which filters the persons displayed on the UI.
+We designed the `list` command to list all persons in the persons list to provide users with a quick and easy way to view all persons in the persons list. This is useful to revert the UI back to the default view after a find command has been executed which filters the persons displayed on the UI.
 
 <div id="contact-management"></div>
 
@@ -426,7 +426,7 @@ There is an additional `filteredPersons` list stored in the `Model` component th
 
 #### **Add Person Command** : `add`
 
-The `add` command allows users to add a person to the address book.
+The `add` command allows users to add a person to the persons list.
 
 The user can specify the person's:
 * name (`Name`),
@@ -664,7 +664,7 @@ If the currently filtered list does is not showing between 0 and the total numbe
 
 ##### Updating Filtered Person List
 
-After deleting all persons currently displayed in the `PersonListPanel`, the `filteredPersons` list in the `Model` component is updated to show all remaining persons in the address book.
+After deleting all persons currently displayed in the `PersonListPanel`, the `filteredPersons` list in the `Model` component is updated to show all remaining persons in the persons list.
 
 The following activity diagram illustrates the workflow of the execution of the `deleteShown` command:
 
@@ -796,7 +796,7 @@ However, future enhancements could include the ability to copy other details of 
 
 **Alternative 1: Copying emails of all persons**
 
-Copies the emails of all persons in the address book, regardless of whether they are currently displayed in the `PersonListPanel`.
+Copies the emails of all persons in the persons list, regardless of whether they are currently displayed in the `PersonListPanel`.
 However, this approach may lead to users copying a large number of emails unintentionally, which could be overwhelming.
 Furthermore, it may not be clear to users which emails are being copied.
 
@@ -1401,13 +1401,13 @@ Retain all other relevant `Tag` objects like `colleagues` and `student` to bette
 * Centralised platform to store and manage person details for all relevant individuals involved in course administration
 * Able to store and manage exam scores for all students in the course
 * Easier access to information through organising relevant persons into different subgroups
-* Able to set up the address book through different data-loading options
+* Able to set up the application through different data-loading options
 * Able to assist with management of large scale communication
 
 **Problem scope**:
 
 * The CS1101S Head Tutor will face challenges in effectively organising and managing contact information within the department due to the large scale the course has to operate on. Existing methods, such as paper-based lists or basic digital spreadsheets, lack the necessary functionality to efficiently handle the diverse needs of proper contact management. There is a need for a user-friendly and offline-capable address book solution tailored specifically to the needs of a single user. This address book system should provide features such as easy contact entry and editing, quick search functionality, customizable categorization options, and the ability to add notes for each contact. Additionally, it should operate offline without requiring an internet connection and should not rely on complex database management systems.
-* While the address book system will greatly improve contact management and organisation for the CS1101S Head Tutor, it will not address broader departmental communication or collaboration needs beyond individual contact management since the address book is designed to be a single-user system. It will not facilitate communication between users or provide collaboration tools for group projects or tasks. Additionally, the address book system will not handle complex data analysis or reporting functions beyond basic contact information management. Finally, while the system will provide offline functionality, it will not offer real-time synchronisation with online databases or cloud storage solutions.
+* While Avengers Assemble will greatly improve contact management and organisation for the CS1101S Head Tutor, it will not address broader departmental communication or collaboration needs beyond individual contact management since the application is designed to be a single-user system. It will not facilitate communication between users or provide collaboration tools for group projects or tasks. Additionally, the address book system will not handle complex data analysis or reporting functions beyond basic contact information management. Finally, while the system will provide offline functionality, it will not offer real-time synchronisation with online databases or cloud storage solutions.
 
 <div id="appendix_b"></div>
 
@@ -1417,42 +1417,42 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### General
 
-| Priority | As a …​                                      | I want to …​                            | So that I can…​                                                          |
+| Priority | As a …​                                      | I want to …​                           | So that I can…​                                                          |
 |----------|---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------|
 | `* * *`  | potential user exploring the app            | see the app populated with sample data | immediately see an example of the app in use                            |
 | `* * *`  | new user                                    | see usage instructions                 | refer to instructions when I forget how to use the App                  |
 | `* * *`  | new user                                    | easily clear the example data          | start using the app with real-life data                                 |
-| `* *`    | experienced user                            | use the address book offline           | update and interact with it anywhere                                    |
+| `* *`    | experienced user                            | use the application offline            | update and interact with it anywhere                                    |
 
 #### For Contact Management
 
-| Priority | As a …​                                      | I want to …​                            | So that I can…​                                                          |
-|----------|---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------|
-| `* * *`  | head tutor using the app                    | import persons from a csv file         | easily add a large number of persons to the address book                |
-| `* * *`  | new user                                    | save the data I input into the app     | don't lose the information I've entered                                 |
-| `* * *`  | user                                        | add a new person                       | make minor additions to the persons in the address book                 |
-| `* * *`  | user                                        | update and edit person details         | keep my address book accurate                                           |
-| `* * *`  | user                                        | delete a person                        | remove entries that I no longer need                                    |
-| `* * *`  | user                                        | delete a specific group of entries     | remove multiple entries that I no longer need more efficiently          |
-| `* * *`  | user                                        | view all saved contacts                | oversee the data stored within my app                                   |
-| `* * *`  | user                                        | find a person through their particulars| locate details of persons without having to go through the entire list  |
-| `* * *`  | head tutor using the app                    | categorise my persons into groups      | manage different groups of students effectively                         |
-| `* * *`  | head tutor using the app                    | copy email addresses of a group        | effectively communicate with target groups                              |
-| `* * *`  | head tutor using the app                    | export the details of persons to a csv | easily share the details of a group with others                         |
+| Priority | As a …​                                      | I want to …​                            | So that I can…​                                                        |
+|----------|---------------------------------------------|----------------------------------------|------------------------------------------------------------------------|
+| `* * *`  | head tutor using the app                    | import persons from a csv file         | easily add a large number of persons to the application                |
+| `* * *`  | new user                                    | save the data I input into the app     | don't lose the information I've entered                                |
+| `* * *`  | user                                        | add a new person                       | make minor additions to the persons in the application                 |
+| `* * *`  | user                                        | update and edit person details         | keep my persons list accurate                                          |
+| `* * *`  | user                                        | delete a person                        | remove entries that I no longer need                                   |
+| `* * *`  | user                                        | delete a specific group of entries     | remove multiple entries that I no longer need more efficiently         |
+| `* * *`  | user                                        | view all saved contacts                | oversee the data stored within my app                                  |
+| `* * *`  | user                                        | find a person through their particulars| locate details of persons without having to go through the entire list |
+| `* * *`  | head tutor using the app                    | categorise my persons into groups      | manage different groups of students effectively                        |
+| `* * *`  | head tutor using the app                    | copy email addresses of a group        | effectively communicate with target groups                             |
+| `* * *`  | head tutor using the app                    | export the details of persons to a csv | easily share the details of a group with others                        |
 
 #### For Exam and Score Management
 
-| Priority | As a …​                                      | I want to …​                            | So that I can…​                                                          |
-|----------|---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------|
-| `* * *`  | head tutor using the app                    | import assesment scores from a csv file| easily add a large number of scores to the address book                 |
-| `* * *`  | head tutor using the app                    | add exams to the app                   | keep track of student performance                                       |
-| `* * *`  | head tutor using the app                    | delete exams from the app              | remove exams that are no longer relevant                                |
-| `* * *`  | head tutor using the app                    | view scores for a specific exam        | analyse student scores                                                  |
-| `* * *`  | head tutor using the app                    | add scores to the app                  | keep track of student performance                                       |
-| `* * *`  | head tutor using the app                    | edit scores in the app                 | correct errors in the scores                                            |
-| `* * *`  | head tutor using the app                    | delete scores from the app             | remove scores that are no longer relevant                               |
-| `* * *`  | head tutor using the app                    | export scores to a csv file            | easily share the scores with others                                     |
-| `* * *`  | head tutor using the app                    | view statistics of scores              | analyse student performance                                             |
+| Priority | As a …​                                      | I want to …​                            | So that I can…​                                        |
+|----------|---------------------------------------------|----------------------------------------|--------------------------------------------------------|
+| `* * *`  | head tutor using the app                    | import assesment scores from a csv file| easily add a large number of scores to the application |
+| `* * *`  | head tutor using the app                    | add exams to the app                   | keep track of student performance                      |
+| `* * *`  | head tutor using the app                    | delete exams from the app              | remove exams that are no longer relevant               |
+| `* * *`  | head tutor using the app                    | view scores for a specific exam        | analyse student scores                                 |
+| `* * *`  | head tutor using the app                    | add scores to the app                  | keep track of student performance                      |
+| `* * *`  | head tutor using the app                    | edit scores in the app                 | correct errors in the scores                           |
+| `* * *`  | head tutor using the app                    | delete scores from the app             | remove scores that are no longer relevant              |
+| `* * *`  | head tutor using the app                    | export scores to a csv file            | easily share the scores with others                    |
+| `* * *`  | head tutor using the app                    | view statistics of scores              | analyse student performance                            |
 
 
 <div id="appendix_c"></div>
@@ -2035,10 +2035,10 @@ testers are expected to do more *exploratory* testing.
 1. Clearing all contact information from the app.
 
     * **Prerequisites:**
-        * Ensure that there are multiple persons in the list.
+        * Ensure that there is at least one person and exam in the app.
           <br><br>
     * **Test case:** `clear`<br>
-      **Expected:** All persons are deleted from the list. Status message shows that all persons and exams have been
+      **Expected:** All persons and exams are deleted from the list. Status message shows that all persons and exams have been
       deleted from the app.
 
 <br>
@@ -2459,7 +2459,7 @@ On Window systems, you can right click the file and copy the file path, remember
 1. Finding persons by contact details.
 
     * **Prerequisites:** 
-        * Ensure that there are multiple persons in the list.
+        * Ensure that there are multiple persons in the app. 
           <br><br>
     * **Test case:** `find n|Alice`<br>
       **Expected:** Persons with the name "Alice" are shown. Status message shows the number of persons found.
@@ -2489,7 +2489,7 @@ On Window systems, you can right click the file and copy the file path, remember
 2. Finding persons by score.
 
     * **Prerequisites:** 
-        * Ensure that there are multiple persons in the list.
+        * Ensure that there are multiple persons in the app.
         * Ensure that at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
         * Ensure an exam is selected using the `selectExam` command. For this example, we shall select the `test exam`.
           <br><br>
@@ -2509,7 +2509,7 @@ On Window systems, you can right click the file and copy the file path, remember
 3. Finding persons by multiple prefixes.
 
     * **Prerequisites:** 
-        * Ensure that there are multiple persons in the list.
+        * Ensure that there are multiple persons in the app.
           <br><br>
     * **Test case (multiple unique prefixes):** `find n|Alice e|Alice`<br>
       **Expected:** An error message is shown indicating that the format of the command is incorrect.
@@ -2535,7 +2535,7 @@ On Window systems, you can right click the file and copy the file path, remember
 1. Copying the emails of all persons.
 
     * **Prerequisites:** 
-        * Ensure that there are multiple persons in the list.
+        * Ensure that there are multiple persons in the app.
         * Ensure all persons are displayed using the `list` command.
           <br><br>
     * **Test case:** `copy`<br>
@@ -2545,7 +2545,7 @@ On Window systems, you can right click the file and copy the file path, remember
 2. Copying the emails of a specific group.
 
     * **Prerequisites:** 
-        * Ensure that there are multiple persons in the list.
+        * Ensure that there are multiple persons in the app.
         * Filter the person list using the `find` command.
           <br><br>
     * **Test case:** `copy`<br>
@@ -2588,7 +2588,7 @@ On Window systems, you can right click the file and copy the file path, remember
         * List all persons using the `list` command.
           <br><br>
     * **Test case:** `export`<br>
-      **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file. A column with column heading `Exam:Test Exam` is present in the same CSV file, but no values present in that column.
+      **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file. A column with column heading `Exam:Test Exam` is present in the same CSV file, but no values are present in that column.
       <br><br>
     * **Test case:** Add exam scores to persons in displayed list using `addScore`, then `export`<br>
       **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file. A column with column heading `Exam:Test Exam` is present in the same CSV file, with corresponding exam scores for each person included in that column.
@@ -2599,29 +2599,37 @@ On Window systems, you can right click the file and copy the file path, remember
 
 #### Adding an Exam: `addExam`
 
-##### Adding an Exam with Valid Data
+**Command:** `addExam`<br>
+**More information on usage:** <a href="UserGuide.md#addexam">Adding an Exam</a>
 
-1. Prerequisites: No exams in the address book.
+1. Adding an Exam with Valid Data
 
-2. Test case: `addExam n|Midterm s|100`<br>
-   Expected: New exam is added to the address book. Status message shows the exam added.
+   * **Prerequisites:**
+       * No exams in the address book.
+         <br><br>
+   * **Test case:** `addExam n|Midterm s|100`<br>
+     **Expected:** New exam is added to the address book. Status message shows the exam added.
+     <br><br>
+   * **Other test cases to try:** `addExam n|Final s|100`<br>
+     **Expected:** New exam is added to the address book. Status message shows the exam added.
+     <br><br>
 
-3. Other test cases to try: `addExam n|Final s|100`<br>
-   Expected: New exam is added to the address book. Status message shows the exam added.
+2. Adding an Exam that Already Exists
 
-##### Adding an Exam that Already Exists
+   * **Prerequisites:**
+       * An exam of name: Final, Score: 100 exists in the address book.
+       <br><br>
+   * **Test case:** `addExam n|Final s|100`<br>
+     **Expected:** Error message shown in the error report. No change in the address book.
+     <br><br>
 
-1. Prerequisites: An exam of name: Final, Score: 100 exists in the address book.
+3. Adding an Exam with Missing Fields
 
-2. Test case: `addExam n|Final s|100`<br>
-   Expected: Error message shown in the error report. No change in the address book.
-
-##### Adding an Exam with Missing Fields
-
-1. Pre-requisite: No exams in the address book.
-
-2. Test case: `addExam n|Final` (missing score)<br>
-     Expected: Error message shown in the error report. No change in the address book.
+   * **Prerequisites:** 
+       * No exams in the address book.
+         <br><br>
+   * **Test case (missing score):** `addExam n|Final`<br>
+     **Expected:** Error message shown in the error report. No change in the address book.
 
 <br>
 
@@ -2629,19 +2637,25 @@ On Window systems, you can right click the file and copy the file path, remember
 
 #### Deleting an Exam: `deleteExam`
 
-1. Prerequisites: Exactly one exam in the address book. Hence, exam has an index of 1.
+**Command:** `deleteExam`<br>
+**More information on usage:** <a href="UserGuide.md#deleteexam">Deleting an Exam</a>
 
-2. Test case: `deleteExam 1`<br>
-   Expected: First exam is deleted from the address book. Status message shows the exam deleted.
+1. Deleting an Exam
 
-3. Test case: `deleteExam 0`<br>
-   Expected: No exam is deleted. Error message shown. No change in the address book.
-
-4. Test case: `deleteExam 2` (index out of bounds)<br>
-   Expected: No exam is deleted. Error message shown. No change in the address book.
-
-5. Test case: `deleteExam` (no index)<br>
-   Expected: No exam is deleted. Error message shown. No change in the address book.
+    * **Prerequisites:** 
+        * Exactly one exam in the address book. Hence, exam has an index of 1.
+          <br><br>
+    * **Test case:** `deleteExam 1`<br>
+      **Expected:** First exam is deleted from the address book. Status message shows the exam deleted.
+      <br><br>
+    * **Test case:** `deleteExam 0`<br>
+      **Expected:** No exam is deleted. Error message shown. No change in the address book.
+      <br><br>
+    * **Test case (index out of bounds):** `deleteExam 2`<br>
+      **Expected:** No exam is deleted. Error message shown. No change in the address book.
+      <br><br>
+    * **Test case (no index):** `deleteExam`<br>
+      **Expected:** No exam is deleted. Error message shown. No change in the address book.
 
 <br>
 
@@ -2649,31 +2663,45 @@ On Window systems, you can right click the file and copy the file path, remember
 
 #### Selecting an Exam: `selectExam`
 
-1. Prerequisites: Exactly one exam in the address book. Hence, exam has an index of 1.
+**Command:** `selectExam`<br>
+**More information on usage:** <a href="UserGuide.md#selectexam">Selecting an Exam</a>
 
-2. Test case: `selectExam 1`<br>
-   Expected: First exam is selected. Status message shows the exam selected.
+1. Selecting an exam
 
-3. Test case: `selectExam 0`<br>
-   Expected: No exam is selected. Error message shown. No change in the address book.
+    * **Prerequisites:** 
+        * Exactly one exam in the address book. Hence, exam has an index of 1.
+          <br><br>
+    * **Test case:** `selectExam 1`<br>
+      **Expected:** First exam is selected. Status message shows the exam selected.
+      <br><br>
+    * **Test case:** `selectExam 0`<br>
+      **Expected:** No exam is selected. Error message shown. No change in the address book.
+      <br><br>
+    * **Test case (index out of bounds):** `selectExam 2`<br>
+      **Expected:** No exam is selected. Error message shown. No change in the address book.
+      <br><br>
+    * **Test case (no index):** `selectExam`<br>
+      **Expected:** No exam is selected. Error message shown. No change in the address book.
 
-4. Test case: `selectExam 2` (index out of bounds)<br>
-   Expected: No exam is selected. Error message shown. No change in the address book.
-
-5. Test case: `selectExam` (no index)<br>
-   Expected: No exam is selected. Error message shown. No change in the address book.
+<br>
 
 <div id="test_deselectexam"></div>
 
 #### Deselecting an Exam: `deselectExam`
 
-1. Prerequisites: An exam has been selected.
+**Command:** `deselectExam`<br>
+**More information on usage:** <a href="UserGuide.md#deselectexam">Deselecting an Exam</a>
 
-2. Test case: `deselectExam`<br>
-   Expected: Selected exam is deselected. Status message shows the exam deselected.
+1. Deselecting an Exam
 
-3. Test case: `deselectExam` (no exam selected)<br>
-   Expected: No exam is deselected. Error message shown. No change in the address book.
+    * **Prerequisites:** 
+        * An exam has been selected.
+          <br><br>
+    * **Test case:** `deselectExam`<br>
+      **Expected:** Selected exam is deselected. Status message shows the exam deselected.
+      <br><br>
+    * **Test case (no exam selected):** `deselectExam`<br>
+      **Expected:** No exam is deselected. Error message shown. No change in the address book.
 
 <br>
 
@@ -2695,7 +2723,7 @@ On Window systems, you can right click the file and copy the file path, remember
     email,Exam:Midterm
     alexyeoh@example.com,50
     ```
-    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    * **Test case:** `importExamScores i|/path/to/file.csv`<br>
     **Expected:** The person with the email of `alexyeoh@example.com` now has a `Midterm` score of `50`.
     <br><br>
 
@@ -2705,7 +2733,7 @@ On Window systems, you can right click the file and copy the file path, remember
         * Start with sample data and the `Midterm` exam.
         * Create a file named `invalid.json`.
         <br><br>
-    * **Test case:** `importExamScores invalid.json`<br>
+    * **Test case:** `importExamScores i|invalid.json`<br>
     **Expected:** An error message is shown indicating that the file is not a CSV file.
     <br><br>
 
@@ -2719,7 +2747,7 @@ On Window systems, you can right click the file and copy the file path, remember
     email,Exam:Midterm,email
     alexyeoh@example.com,50,alexyeoh@example.com
     ```
-    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    * **Test case:** `importExamScores i|/path/to/file.csv`<br>
     **Expected:** An error message is shown indicating that the email header should exist only in the first column.
     <br><br>
     * **Other incorrect `importExamScores` commands to try:** CSV files where email is not the first header.<br>
@@ -2735,9 +2763,9 @@ On Window systems, you can right click the file and copy the file path, remember
 
     ```
     email,Exam:Midterm,Exam:Midterm
-   alexyeoh@example.com,50,60
+    alexyeoh@example.com,50,60
     ```
-    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    * **Test case:** `importExamScores i|/path/to/file.csv`<br>
     **Expected:** A message is shown indicating that there are duplicate entries in the CSV file, and only the first instance has been kept. The `Midterm` score for the person with the email of `alexyeoh@example.com` is `50`.
     <br><br>
 
@@ -2754,7 +2782,7 @@ On Window systems, you can right click the file and copy the file path, remember
     berniceyu@example.com,50,60
     nonexistent@example.com,100,100
     ```
-    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    * **Test case:** `importExamScores i|/path/to/file.csv`<br>
     **Expected:** A message is shown indicating that there are invalid entries in the CSV file, and all other valid entries have been imported. The errors shown are as follows:
 
         * The score for `alexyeoh@example.com` for the `Midterm` exam is invalid.
