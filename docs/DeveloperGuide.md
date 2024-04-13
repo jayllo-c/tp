@@ -2047,10 +2047,13 @@ testers are expected to do more *exploratory* testing.
 
 #### Importing Persons: `import`
 
-The import command requires the use of an external CSV file. The test cases below assume that the tests are run on a Windows sysem, and that the CSV file is located at the path `C:/file.csv`. Please modify the filepath accordingly based on where your file is stored and your operating system.
+**Command:** `import`<br>
+**More information on usage:** <a href="UserGuide.md#import">Importing Persons</a>
+
+The import command requires the use of an external CSV file. The test cases below assume that the tests are run on a Windows system, and that the CSV file is located at the path `C:/file.csv`. Please modify the filepath accordingly based on where your file is stored and your operating system.
 
 <box type="info" seamless>
-On Window systems, you can right click the file and copy the file path, remember to remove the double quotes. <br> On MacOS, you can drag the file into the terminal to get the file path. <br>On Linux, you can use the <code>pwd</code> command to get the current directory and append the file name to it.
+On Window systems, you can right-click the file and copy the file path, remember to remove the double quotes. <br> On MacOS, you can drag the file into the terminal to get the file path. <br>On Linux, you can use the <code>pwd</code> command to get the current directory and append the file name to it.
 </box>
 
 1. Importing Data from a CSV File
@@ -2061,7 +2064,7 @@ On Window systems, you can right click the file and copy the file path, remember
        name,email,address,phone
        Alice,alice@gmail.com,wonderland,123
        ```
-       * **Initially, the address book is empty.**
+       * Initially, the persons list is empty.
 
     <br>
 
@@ -2106,7 +2109,7 @@ On Window systems, you can right click the file and copy the file path, remember
          name,email,address,phone,name
          Alice,alice@gmail.com,wonderland,123,bob
          ```
-       * **Initially, the address book is empty.**
+       * Initially, the address book is empty.
 
    <br>
 
