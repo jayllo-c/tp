@@ -1963,58 +1963,52 @@ testers are expected to do more *exploratory* testing.
 
 #### Launch and Shutdown
 
-##### Initial Launch
+1. Initial launch.
+   * **Test case:** Launching the app for the first time.<br>
+        1. Download the jar file and copy into an empty folder.
+        2. Open Terminal and type the following:
+        ```bash
+        java -jar avengersassemble.jar
+        ```
+        **Expected:** Shows the GUI with a set of sample persons. The window size may not be optimal.
+    <br><br>
+2. Saving window preferences.
+    * **Prerequisites:**
+        * Launch the app.
+        * Resize the window.
+        * Close the app.
+    * **Test case:** Launch the app.<br>
+        **Expected:** The most recent window size and location is retained.
+    <br><br>
 
-1. Download the jar file and copy into an empty folder.
-2. Open Terminal and type the following:
-
-   ```bash
-   java -jar avengersassemble.jar
-   ```
-
-Expected: Shows the GUI with a set of sample persons. The window size may not be optimal.
-
-##### Saving Window Preferences
-
-1. Resize the window to an optimal size.
-
-2. Move the window to a different location.
-
-3. Close the window.
-
-4. Re-launch the app.<br>
-
-Expected: The most recent window size and location is retained.
-
-##### Shutdown
-
-1. Type `exit` in the command box and press Enter.
-
-Expected: The GUI closes and the application exits.
-
-<br>
+3. Shutdown.
+    * **Test case:** `exit`<br>
+      **Expected:** The GUI closes and the application exits.
+    <br><br>
 
 <div id="test_save"></div>
 
 #### Saving Data
 
-##### Dealing with Missing or Corrupted Data Files
+1. Saving of data.
+    * **Prerequisites:**
+        * The app is a clean state.
+        <br><br>
+    * **Test case:** Launch and exit the app.<br>
+        **Expected:** A new `data/avengersassemble.json` file is created. This is the storage file.
+    <br><br>
 
-1. Prerequisites: The app is a clean state.
+1. Dealing with missing or corrupted data files.
 
-2. Launch the app.
-
-3. Exit the app.
-
-4. Note the new `data/avengersassemble.json` file that is created. This is the storage file.
-
-5. Test case: Delete the `data/avengersassemble.json` file.
-
-    Expected: The app should create a new `data/avengersassemble.json` file populated with sample data when launched and exited.
-
-6. Test case: Corrupt the `data/avengersassemble.json` file by adding random text to it.
-
-    Expected: The app should ignore the corrupted file and create a new empty `data/avengersassemble.json` file when launched and interacted with.
+    * **Prerequisites:**
+        * There is an existing storage file in the default location.
+        <br><br>
+    * **Test case:** Delete the storage file, then launch and exit the app.<br>
+        **Expected:** A new `data/avengersassemble.json` file populated with sample data is created.
+    <br><br>
+    * **Test case:** Corrupt the `data/avengersassemble.json` file by adding random text to it.<br>
+        **Expected:** The app should ignore the corrupted file and create a new empty `data/avengersassemble.json` file when launched and interacted with.
+    <br><br>
 
 <div id="test_help"></div>
 
@@ -2158,271 +2152,238 @@ Expected: The GUI closes and the application exits.
 
 #### Adding a Person: `add`
 
-##### Adding a Person with All Fields
+**Command:** `add`<br>
+**More information on usage:** <a href="UserGuide.md#add">Adding a Person</a>
 
-1. Prerequisites: No persons in the list.
+1. Adding a person with all fields.
 
-2. Test case:
+    * **Prerequisites:**
+        * No persons in the list.
+          <br><br>
+    * **Test case:** `add n|Alice p|98765432 a|Hall e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling`<br>
+    **Expected:** A person with the following fields is added to the list:
+        * Name: `Alice`
+        * Phone: `98765432`
+        * Address: `Hall`
+        * Email: `e09123456@u.nus.edu`
+        * Matric: `A1234567X`
+        * Reflection: `R2`
+        * Studio: `S1`
+        * Tags: `excelling`, `student`
 
-    ```
-   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
-   ```
+    <box type="info" seamless>
 
-   Expected: A person with the following fields is added to the list:
+    **Note:** If a `Matric` number is provided, the person is automatically tagged as a `student`.
 
-   * Name: `Alice`
-   * Phone: `98765432`
-   * Address: `King Edward VII Hall E106`
-   * Email: `e09123456@u.nus.edu`
-   * Matric: `A1234567X`
-   * Reflection: `R2`
-   * Studio: `S1`
-   * Tags: `excelling`, `student`
+    </box>
 
-<box type="info" seamless>
-
-**Note:** If a `Matric` number is provided, the person is automatically tagged as a `student`.
-
-</box>
-
-3. Test case: (Missing compulsory `Email` and `Address` fields)
-
-    ```
-   add n|Alice e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
-   ```
-
-    Expected: An error message is shown indicating that the `Address` and `Phone` fields are missing.
-
-4. Other incorrect test cases to try: `add`, any other command that misses out a combination of compulsory fields.
-
-    Expected: Similar to previous.
-
-##### Adding a Person with Repeated Prefixes
-
-1. Prerequisites: No persons in the list.
-
-2. Test case: (Repeated `n|` prefix)
+    * **Test case (missing `Address` and `Phone` fields):** `add n|Alice e|e09123456@u.nus.edu`<br>
+    **Expected:** An error message is shown indicating that the `Address` and `Phone` fields are missing.
+    <br><br>
 
 
-    ```
-    add n|Alice n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling
-    ```
+2. Adding a person with repeated prefixes.
 
-    Expected: An error message is shown indicating that the `Name` field is repeated.
+    * **Prerequisites:**
+        * No persons in the list.
+        <br><br>
+    * **Test case (repeating `Name` field):** `add n|Ali n|Ali p|98765432 a|Hall e|test@test.com m|A1234567X`<br>
+    **Expected:** An error message is shown indicating that the `Name` field is repeated.
+    <br><br>
 
-3. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|` prefixes.
 
-    Expected: Similar to previous.
+3. Adding a person whose `Email` already exists.
 
-##### Adding a Person whose `Email` Already Exists
+    * **Prerequisites:**
+        * A person with email `e1234567@u.nus.edu` already exists in the list.
+        <br><br>
+    * **Test case (`Email` already exists):** `add n|Alice p|987 a|Hall e|e1234567@u.nus.edu`<br>
+    **Expected:** An error message is shown indicating that the email already exists.
+    <br><br>
 
-1. Prerequisites: A person with email `e1234567@u.nus.edu` already exists in the list.
+4. Adding a person with only compulsory fields.
 
-2. Test case:
+    * **Prerequisites:**
+        * No persons in the list.
+        <br><br>
+    * **Test case:** `add n|Alice p|98765432 a|Hall e|e09123456@u.nus.edu`<br>
+    **Expected:** A person with the following fields is added to the list:
+        * Name: `Alice`
+        * Phone: `98765432`
+        * Address: `Hall`
+        * Email: `e09123456@u.nus.edu`
+    <br><br>
 
-    ```
-   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e1234567@u.nus.edu
-   ```
+5. Adding a person with matriculation number
 
-    Expected: An error message is shown indicating that the email already exists.
-
-##### Adding a Person with Only Compulsory Fields
-
-1. Prerequisites: No persons in the list.
-
-2. Test case:
-
-    ```
-   add n|Alice p|98765432 a|King Edward VII Hall E106 e|e09123456@u.nus.edu
-   ```
-
-    Expected: A person with the following fields is added to the list:
-
-    * Name: `Alice`
-    * Phone: `98765432`
-    * Address: `King Edward VII Hall E106`
-    * Email: `e09123456@u.nus.edu`
-
-3. Other successful test cases include adding a person with only some optional fields.
-
-##### Adding a Person with Matriculation Number
-
-1. Prerequisites: No persons in the list.
-
-2. Test case:
-
-    ```
-   add n|Alice p|98765432 a|King Edward VII Hall E106 e|alice@example.com m|A1234567X
-    ```
-
-    Expected: A person with the following fields is added to the list:
-    * Name: `Alice`
-    * Phone: `98765432`
-    * Address: `King Edward VII Hall E106`
-    * Email: `alice@example.com`
-    * Matric: `A1234567X`
-    * Tags: `student`
-
-    Note that the `student` tag is automatically added to the new person.
-
-3. Test case:
-
-    ```
-   add n|Alice p|98765432 a|King Edward VII Hall E106 e|alice@example.com
-    ```
-
-    Expected: A person with the following fields is added to the list:
-   * Name: `Alice`
-   * Phone: `98765432`
-   * Address: `King Edward VII Hall E106`
-   * Email: `alice@example.com`
-
+    * **Prerequisites:**
+        * No persons in the list.
+        <br><br>
+    * **Test case:** `add n|Alice p|98765432 a|Hall e|alice@example.com m|A1234567X`<br>
+    **Expected:** A person with the following fields is added to the list:
+        * Name: `Alice`
+        * Phone: `98765432`
+        * Address: `Hall`
+        * Email: `alice@example.com`
+        * Matric: `A1234567X`
+        * Tags: `student`
+        <br><br>
+        Note that the `student` tag is automatically added to the new person.
+    <br><br>
+    * **Test case:** `add n|Alice p|98765432 a|Hall e|alice@example.com`<br>
+    **Expected:** A person with the following fields is added to the list:
+        * Name: `Alice`
+        * Phone: `98765432`
+        * Address: `Hall`
+        * Email: `alice@example.com`
+        <br><br>
     Note that there is no automatic tagging.
+    <br><br>
 
 <div id="test_edit"></div>
 
 #### Editing a Person: `edit`
 
-##### Editing a Person with All Fields
+**Command:** `edit`<br>
+**More information on usage:** <a href="UserGuide.md#edit">Editing a Person</a>
 
-1. Prerequisites: Start with the provided sample data.
+1. Editing a person with all fields.
 
-2. Test case:
+    * **Prerequisites:**
+        * Start with the provided sample data.
+        <br><br>
+    * **Test case:** `edit 1 n|new name p|123 a|new home e|newemail@eg.com m|A0000000X r|R1 s|S1 t|tag1 t|tag2`<br>
+    **Expected:** The first person’s details are updated with all the new values.
+    <br><br>
+    * **Other successful test cases to try:** Include a combination of updating some fields and not updating others.<br>
+    **Expected:** Similar to above.
+    <br><br>
 
-    ```
-    edit 1 n|new name p|123 a|new address e|newemail@example.com m|A0000000X r|R1 s|S1 t|tag1 t|tag2
-    ```
 
-   Expected: The first person’s details are updated with all the new values.
+2. Editing a person with repeated prefixes.
 
-3. Other successful test cases include a combination of updating some fields and not updating others.
+    * **Prerequisites:**
+        * Start with the provided sample data.
+        <br><br>
+    * **Test case (repeated `n|` prefix):** `edit 1 n|new name n|new name 2 p|123 a|new address`<br>
+    **Expected:** An error message is shown indicating that the `Name` field is repeated.
+    <br><br>
+    * **Other incorrect `edit` commands to try:** Commands with repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|` prefixes.<br>
+    **Expected:** Similar to previous.
+    <br><br>
 
-   Expected: Similar to previous.
+3. Editing a Person's `Email` to an Existing `Email`.
 
-##### Editing a Person with Repeated Prefixes
-
-1. Prerequisites: Start with the provided sample data.
-
-2. Test case: (Repeated `n|` prefix)
-
-    ```
-    edit 1 n|new name n|new name 2 p|123 a|new address
-    ```
-
-   Expected: An error message is shown indicating that the `Name` field is repeated.
-
-3. Other incorrect test cases to try: Repeated `p|`, `a|`, `e|`, `m|`, `r|`, `s|`, `t|` prefixes.
-
-   Expected: Similar to previous.
-
-##### Editing a Person's `Email` to an Existing `Email`
-
-1. Prerequisites: Start with the provided sample data. Note the emails of the first and second person.
-
-2. Test case:
-
-    ```
-    edit 1 e|berniceyu@example.com
-    ```
-
-   Expected: An error message is shown indicating that the email already exists.
+    * **Prerequisites:**
+        * Start with the provided sample data. Note the emails of the first and second person.
+        <br><br>
+    * **Test case:** `edit 1 e|berniceyu@example.com`<br>
+    **Expected:** An error message is shown indicating that the email already exists.
+    <br><br>
 
 <div id="test_delete"></div>
 
 #### Deleting a Person: `delete`
 
-##### Deleting a Person while All Persons are Being Shown
+**Command:** `delete`<br>
+**More information on usage:** <a href="UserGuide.md#delete">Deleting a Person</a>
 
-1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+1. Deleting a person while all persons are being shown.
 
-2. Test case: `delete 1`<br>
+    * **Prerequisites:**
+        * List all persons using the `list` command. Multiple persons in the list.
+        <br><br>
+    * **Test case:** `delete 1`<br>
+    **Expected:** First person is deleted from the list. Details of the deleted person shown in the status message.
+    <br><br>
+    * **Test case (invalid index):** `delete 0`<br>
+    **Expected:** No person is deleted. Error details shown in the status message.
+    <br><br>
+    * **Other incorrect `delete` commands to try:** `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+    **Expected:** Similar to previous.
+    <br><br>
 
-   Expected: First person is deleted from the list. Details of the deleted person shown in the status message.
+2. Deleting a person while some persons are being shown.
 
-3. Test case: `delete 0`<br>
+    * **Prerequisites:**
+        * Filter persons using the `find` command. Multiple but not all persons in the list.
+        <br><br>
+    * **Test case**: `delete 1`<br>
+    **Expected:** First person in the filtered list is deleted. Details of the deleted person shown in the status message.
+    <br><br>
+    * **Test case**: `delete 0`<br>
+    **Expected:** No person is deleted. Error details shown in the status message.
+    <br><br>
+    * **Other incorrect `delete` commands to try:** `delete`, `delete x`<br>
+    **Expected:** Similar to previous.
+    <br><br>
 
-   Expected: No person is deleted. Error details shown in the status message.
+3. Deleting a person while no persons are being shown.
 
-4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-
-   Expected: Similar to previous.
-
-##### Deleting a Person while Some Persons are Being Shown
-
-1. Prerequisites: Filter persons using the `find` command. Multiple but not all persons in the list.
-
-2. Test case: `delete 1`<br>
-
-    Expected: First person in the filtered list is deleted. Details of the deleted person shown in the status message.
-
-3. Test case: `delete 0`<br>
-
-    Expected: No person is deleted. Error details shown in the status message.
-
-4. Other incorrect delete commands to try: `delete`, `delete x`<br>
-
-    Expected: Similar to previous.
-
-##### Deleting a Person while No Persons are Being Shown
-
-1. Prerequisites: Filter persons using the `find` command such that there are no persons in the list, or delete all persons with `clear`.
-
-2. Test case: `delete 1`<br>
-
-    Expected: No person is deleted. Error details shown in the status message.
+    * **Prerequisites:**
+        * Filter persons using the `find` command such that there are no persons in the list, or delete all persons with `clear`.
+        <br><br>
+    * **Test case**: `delete 1`<br>
+    **Expected:** No person is deleted. Error details shown in the status message.
+    <br><br>
 
 
 <div id="test_deleteshown"></div>
 
 #### Deleting Shown Persons: `deleteShown`
 
-##### Deleting a Proper Subset of All Persons
+**Command:** `deleteShown`<br>
+**More information on usage:** <a href="UserGuide.md#deleteshown">Deleting Filtered Persons</a>
 
-1. Prerequisites: Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
 
-2. Test case: `deleteShown`
+1. Deleting a proper subset of all persons.
 
-    Expected: All persons currently shown are deleted, and the list is updated to show all remaining persons.
+    * **Prerequisites:**
+        * Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
+        <br><br>
+    * **Test case:** `deleteShown`<br>
+    **Expected:** All persons currently shown are deleted, and the list is updated to show all remaining persons.
+    <br><br>
+    * **Other successful test cases:** `deleteShown x`<br>
+    **Expected:** Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
+    <br><br>
 
-3. Other successful test cases: `deleteShown x`
+2. Deleting all persons.
 
-    Expected: Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
-
-##### Deleting All Persons
-
-1. Prerequisites: Filter persons using the `find` command such that all persons are shown, or list all persons with `list`.
-
-2. Test case: `deleteShown`
-
-    Expected: An error is shown indicating that all persons cannot be deleted at once.
-
-3. Other incorrect test cases to try: `deleteShown x`
-
-    Expected: Similar to previous.
+    * **Prerequisites:**
+        * Filter persons using the `find` command such that all persons are shown, or list all persons with `list`.
+        <br><br>
+    * **Test case:** `deleteShown`<br>
+    **Expected:** An error is shown indicating that all persons cannot be deleted at once.
+    <br><br>
+    * **Other incorrect `deleteShown` commands to try:** `deleteShown x`<br>
+    **Expected:** Similar to previous.
+    <br><br>
 
 <div id="test_list"></div>
 
 #### Listing All Persons: `list`
 
-##### Starting with Sample Data
+1. Starting with sample data.
 
-1. Prerequisites: Start with the provided sample data.
+    * **Prerequisites:**
+        * Start with the provided sample data.
+        <br><br>
+    * **Test case:** `list`<br>
+    **Expected:** All persons are shown in the list.
+    <br><br>
+    * **Other successful test cases:** `list x`<br>
+    **Expected:** Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
+    <br><br>
 
-2. Test case: `list`
+2. Starting with a filtered list.
 
-    Expected: All persons are shown in the list.
-
-3. Other successful test cases: `list x`
-
-    Expected: Similar to previous, as extraneous parameters for single-word commands are treated as typos and ignored.
-
-##### Starting with a Filtered List
-
-1. Prerequisites: Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
-
-2. Test case: `list`
-
-    Expected: All persons in the overall list are shown.
+    * **Prerequisites:**
+        * Filter persons using the `find` command such that there are multiple, but not all, persons in the list.
+        <br><br>
+    * **Test case:** `list`<br>
+    **Expected:** All persons in the overall list are shown.
+    <br><br>
 
 <div id="test_find"></div>
 
@@ -2656,83 +2617,71 @@ Expected: The GUI closes and the application exits.
 
 #### Importing Exam Scores: `importExamScores`
 
-##### Importing Exam Scores from a CSV File
+**Command:** `importExamScores`<br>
+**More information on usage:** <a href="UserGuide.md#importexamscores">Importing Exam Scores</a>
 
-1. Prerequisites: Start with sample data.
+1. Importing exam scores from a CSV file.
 
-2. Add an `Exam` to the sample data:
-
-    ```
-    addExam n|Midterm s|100
-    ```
-
-3. Create a CSV file with the following content:
-
-    Contents of `/path/to/file.csv`:
+    * **Prerequisites:**
+        * Add an `Exam` to the sample data: `addExam n|Midterm s|100`.
+        * Create a CSV file with the following content:<br>
+        Contents of `/path/to/file.csv`:
 
     ```
     email,Exam:Midterm
     alexyeoh@example.com,50
     ```
+    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    **Expected:** The person with the email of `alexyeoh@example.com` now has a `Midterm` score of `50`.
+    <br><br>
 
-4. Test case: `importExamScores /path/to/file.csv`
+2. Importing an invalid file.
 
-    Expected: The person with the email of `alexyeoh@example.com` now has a `Midterm` score of `50`.
+    * **Prerequisites:** 
+        * Start with sample data and the `Midterm` exam.
+        * Create a file named `invalid.json`.
+        <br><br>
+    * **Test case:** `importExamScores invalid.json`<br>
+    **Expected:** An error message is shown indicating that the file is not a CSV file.
+    <br><br>
 
-##### Importing an Invalid File
+3. Importing a CSV file with incorrect formatting.
 
-1. Prerequisites: Start with sample data and the `Midterm` exam.
-
-2. Create a file named `invalid.json`.
-
-3. Test case: `importExamScores invalid.json`
-
-    Expected: An error message is shown indicating that the file is not a CSV file.
-
-##### Importing a CSV File with Incorrect Formatting
-
-1. Prerequisites: Start with sample data and the `Midterm` exam.
-
-2. Create a CSV file with the following content:
-
-    Contents of `/path/to/file.csv`:
-
+    * **Prerequisites:**
+        * Start with sample data and the `Midterm` exam.
+        * Create a CSV file with the following content:<br>
+        Contents of `/path/to/file.csv`:
     ```
     email,Exam:Midterm,email
     alexyeoh@example.com,50,alexyeoh@example.com
     ```
+    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    **Expected:** An error message is shown indicating that the email header should exist only in the first column.
+    <br><br>
+    * **Other incorrect `importExamScores` commands to try:** CSV files where email is not the first header.<br>
+    **Expected:** Similar to previous.
+    <br><br>
 
-3. Test case: `importExamScores /path/to/file.csv`
+4. Importing a CSV file with duplicate entries.
 
-    Expected: An error message is shown indicating that the email header should exist only in the first column.
-
-4. Other incorrect test cases to try: CSV files where email is not the first header.
-
-    Expected: Similar to previous.
-
-##### Importing a CSV File with Duplicate Entries
-
-1. Prerequisites: Start with sample data and the `Midterm` exam.
-
-2. Create a CSV file with the following content:
-
+    * **Prerequisites:**
+        * Start with sample data and the `Midterm` exam.
+        * Create a CSV file with the following content:<br>
     Contents of `/path/to/file.csv`:
 
     ```
     email,Exam:Midterm,Exam:Midterm
    alexyeoh@example.com,50,60
     ```
+    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    **Expected:** A message is shown indicating that there are duplicate entries in the CSV file, and only the first instance has been kept. The `Midterm` score for the person with the email of `alexyeoh@example.com` is `50`.
+    <br><br>
 
-3. Test case: `importExamScores /path/to/file.csv`
+5. Importing a CSV File with invalid entries.
 
-    Expected: A message is shown indicating that there are duplicate entries in the CSV file, and only the first instance has been kept. The `Midterm` score for the person with the email of `alexyeoh@example.com` is `50`.
-
-##### Importing a CSV File with Invalid Entries
-
-1. Prerequisites: Start with sample data and the `Midterm` exam.
-
-2. Create a CSV file with the following content:
-
+    * **Prerequisites:**
+        * Start with sample data and the `Midterm` exam.
+        * Create a CSV file with the following content:<br>
     Contents of `/path/to/file.csv`:
 
     ```
@@ -2741,22 +2690,18 @@ Expected: The GUI closes and the application exits.
     berniceyu@example.com,50,60
     nonexistent@example.com,100,100
     ```
+    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    **Expected:** A message is shown indicating that there are invalid entries in the CSV file, and all other valid entries have been imported. The errors shown are as follows:
 
-3. Test case: `importExamScores /path/to/file.csv`
+        * The score for `alexyeoh@example.com` for the `Midterm` exam is invalid.
+        * The person with the email `nonexistent@example.com` does not exist in the given list.
+        * The `Finals` exam does not exist.
+        Note that the `Midterm` score for the person with the email of `berniceyu@example.com` is `50`.
+    <br><br>
 
-    Expected: A message is shown indicating that there are invalid entries in the CSV file, and all other valid entries have been imported. The errors shown are as follows:
-
-    * The score for `alexyeoh@example.com` for the `Midterm` exam is invalid.
-    * The person with the email `nonexistent@example.com` does not exist in the given list.
-    * The `Finals` exam does not exist.
-
-    Note that the `Midterm` score for the person with the email of `berniceyu@example.com` is `50`.
-
-4. Other incorrect test cases to try: CSV files with a mix of invalid scores, nonexistent emails, and nonexistent exams.
-
-    Expected: Similar to previous.
-
-<br>
+    * **Other incorrect `importExamScores` commands to try:** CSV files with a mix of invalid scores, nonexistent emails, and nonexistent exams.<br>
+    **Expected:** Similar to previous.
+    <br><br>
 
 <div id="test_addscore"></div>
 
