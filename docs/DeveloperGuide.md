@@ -850,6 +850,7 @@ Consequently, the flexibility of the `copy` command relies heavily on the implem
 Due to this dependency, any changes to the `find` command may affect the functionality of the `copy` command.
 
 <div style="page-break-after: always;"></div>
+
 ##### Extensibility
 
 Due to the simplicity of the `copy` command, there are limited opportunities for extending its functionality.
@@ -1156,8 +1157,6 @@ We were initially torn between the selection of exams using the exam name or the
 
 ##### Allowing Deselection of Exams
 We decided to allow users to deselect exams as the exam scores and score statistics are displayed based on the selected exam. Deselecting the exam allows users to get rid of the displayed scores and statistics when they are no longer needed.
-
-<div style="page-break-after: always;"></div>
 
 ##### Extensibility
 The design of the exam feature allows for easy extension to accommodate future enhancements or additional functionalities. Methods for managing exams are implemented in the `Model` component, and the updating of UI for Exams is abstracted into the UI component, Making it easy to add new commands or features related to exams.
