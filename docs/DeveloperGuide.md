@@ -85,7 +85,7 @@ title: "Developer Guide"
                     <li><a href="#test_add">Adding a Person: <code>add</code></a></li>
                     <li><a href="#test_edit">Editing a Person: <code>edit</code></a></li>
                     <li><a href="#test_delete">Deleting a Person: <code>delete</code></a></li>
-                    <li><a href="#test_deleteshown">Deleting shown Persons: <code>deleteShown</code></a></li>
+                    <li><a href="#test_deleteshown">Deleting Shown Persons: <code>deleteShown</code></a></li>
                     <li><a href="#test_list">Listing all Persons: <code>list</code></a></li>
                     <li><a href="#test_find">Finding a Person: <code>find</code></a></li>
                     <li><a href="#test_copy">Copying Emails: <code>copy</code></a></li>
@@ -213,7 +213,7 @@ The sequence diagram below illustrates a more in-depth view of the interactions 
 
 The UI is designed to update dynamically based on changes in the `Model`. We narrowed down to two design choices for updating the UI components. They are:
 
-1. **Update using listeners embeded into UI components** - This design choice would involve embedding listeners into the UI components that would listen for changes in the `Model` (e.g. adding a listener to filteredPersons in ExamListPanel). This would allow for a more loosely coupled system, but would involve more complex implementation which could get messy as the number of listeners increase.
+1. **Update using listeners embedded into UI components** - This design choice would involve embedding listeners into the UI components that would listen for changes in the `Model` (e.g. adding a listener to filteredPersons in ExamListPanel). This would allow for a more loosely coupled system, but would involve more complex implementation which could get messy as the number of listeners increase.
 2. **Update using a centralized update method** - This design choice involves having a centralized `update` method in the `MainWindow` that would call an `update` method in all other UI components after every command. This would involve a more tightly coupled system and may involve unnecessary updates, but would be easier to implement and maintain.
 
 We chose the second design choice as having a centralized update method would allow for easier maintenance, as there is a clear indicator of how UI components are updated from `MainWindow`. Adding extensions would also be more straightforward as future developers would know where to look for the update logic.
@@ -263,16 +263,32 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </box>
 
-The following is a more detailed explaination on how user input is parsed into a `Command` object (Not mentioned above for simplicity).
+The following is a more detailed explanation on how user input is parsed into a `Command` object (not mentioned above for simplicity).
 
+##### Using Argument Tokenizer and Argument Multimap
 * After the `XYZCommandParser` is instantiated by the `AddressBookParser`, it uses the `ArgumentTokenizer` class to tokenize the user input string into the arguments.
-* It then uses the `ArgumentMultimap` class to extract the arguments based on the prefixes present in the user input string.
-* For some commands, some arguments are mandatory and the `ArgumentMultimap` class is used to check if these mandatory arguments are present. If not, an exception is thrown.
-* For some commands, multiple arguments under the same category (e.g. two name arguments for an AddCommand) are not allowed. The `ArgumentMultimap` class is used to check for undesirable multiple arguments. If multiple arguments are present, an exception is thrown.
+  * This is done through the `tokenize` method which returns an `ArgumentMultimap` object.
+* The `ArgumentMultimap` class is then used to extract the relevant arguments.
+
+<br>
+
+**Mandatory Arguments and Multiple Arguments**
+
+* For some commands, some arguments are mandatory and the `arePrefixesPresent` method is used to check if the arguments (i.e the corresponding prefixes) are present in the user input. If not, an exception is thrown.
+* For some commands, multiple arguments under the same category (e.g. two name arguments for an AddCommand) are not allowed. The `ArgumentMultimap` class is used to check for undesirable multiple arguments using the `verifyNoDuplicatePrefixesFor` method. If multiple arguments are present, an exception is thrown.
+
+<br>
+
+**Validation of Arguments**
+
 * Validation of each extracted argument is done using the methods defined in the `ParserUtil` class. This class contains methods to validate different arguments extracted by the `ArgumentMultimap` class based on the `VALIDATION_REGEX` defined in component classes (`Name.java`, `Score.java`, etc.).
 * The parsed arguments are then used to create a `XYZCommand` object to be executed.
 
+<box type="info" seamless>
+
 **Note:** Some commands do not require any arguments (e.g., `help`, `clear`, `list`, `exit`). In such cases, the `XYZCommand` class is directly instantiated by the `AddressBookParser` class without the parsing of arguments. As such, any arguments passed to these commands are ignored.
+
+</box>
 
 #### Considerations for Logic
 
@@ -320,7 +336,7 @@ The `Model` component,
 
 #### Saving of Data
 
-The `Storage` component uses the `Jackson` library to convert objects to JSON format. The conversion methods are predefined in the `JsonAdapted*` classes for their corresponding objects.
+The `Storage` component uses the `Jackson` library to convert objects to JSON format. The conversion methods are predefined in the `JsonAdapted` classes for their corresponding objects.
 
 The `Logic` class stores a `StorageManager` object that implements the methods in the `Storage` class. For **every** command that is executed, `Logic` uses `StorageManager` to save the updated `AddressBook` through the `saveAddressBook` method.
 
@@ -335,7 +351,7 @@ The sequence diagram below illustrates how data is saved within the `Storage` co
 
 #### Loading of Data
 
-When the application is initialised, the `Storage` component reads the JSON objects from the save file and converts them back to objects that can be used to initialise the `Model` component. This is done using the `readJsonFile` method of the `JsonUtil` class which utilises the methods defined in the `JsonAdapted*` classes to convert the saved JSON data back to objects that can be used by the `Model` component.
+When the application is initialised, the `Storage` component reads the JSON objects from the save file and converts them back to objects that can be used to initialise the `Model` component. This is done using the `readJsonFile` method of the `JsonUtil` class which utilises the methods defined in the `JsonAdapted` classes to convert the saved JSON data back to objects that can be used by the `Model` component.
 
 The sequence diagram below illustrates how data is loaded within the `Storage` component when the application is initialised.
 
@@ -377,7 +393,7 @@ The `help` command utilizes the `java.awt.Toolkit` class to copy the user guide 
 
 ##### Executing the Command
 
-On execution of the `HelpCommand`, the `copyToClipboard` method is called which retrives the system clipboard
+On execution of the `HelpCommand`, the `copyToClipboard` method is called which retrieves the system clipboard
 through `Toolkit.getDefaultToolkit().getSystemClipboard()` and copies the user guide link to the clipboard by using
 `setContents` method.
 
@@ -399,7 +415,7 @@ The `ClearCommand` simply sets the `AddressBook` in the `Model` component to a n
 
 ##### Design Considerations
 
-We designed the `clear` command to clear all persons and exams from their respective lists to provide users with a quick and easy way to reset the application to its initial state. This is useful for users who want to start over or clear the address book for a fresh start.
+We designed the `clear` command to clear all persons and exams from their respective lists to provide users with a quick and easy way to reset the application to its initial state. This is useful for users who want to start over or clear the application for a fresh start.
 
 <div id="list"></div>
 
@@ -506,7 +522,7 @@ It uses the `ArgumentTokenizer` class to tokenize the user input string, extract
 
 The `EditCommand` first retrieves the person to be edited from the `Model` component.
 This is done by first retrieving the `filteredPersonList` from the `Model` component using the `getFilteredPersonList` method
-The person to be edited is then retrived from the `filteredPersonList` using the index provided by the user.
+The person to be edited is then retrieved from the `filteredPersonList` using the index provided by the user.
 The `EditCommand` then creates a new `Person` object with the new details provided by the user and the selected person's existing details. The `Person` object is then updated in the `UniquePersonList` through the `setPerson` method in the `Model` component.
 
 ##### Activity Diagram
@@ -590,11 +606,11 @@ which is a filtered list of contacts based on the applied predicate. The `update
 updates the filtered list based on the predicate provided.
 
 When the `FindCommand` is executed, the `updateFilteredPersonList` method is called with either the `PersonDetailPredicate` or `ExamPredicate` as a parameter.
-This updates the `filteredPersons` list to show only persons that fufill the conditions set in the `test` method in either of the predicates.
+This updates the `filteredPersons` list to show only persons that fulfill the conditions set in the `test` method in either of the predicates.
 
 **User Interface Interaction** <br>
 
-After the `filteredPersons` list is updated, the user interface is updated such that the `PersonListPanel` now shows persons that fufill the predicate generated by the original user input.
+After the `filteredPersons` list is updated, the user interface is updated such that the `PersonListPanel` now shows persons that fulfill the predicate generated by the original user input.
 
 The following sequence diagram illustrates the `find` command with the user input `find n|Alice`.
 <p align="center"><puml src="diagrams/FindImplementationSequenceDiagram.puml" width="1000" /></p>
@@ -658,7 +674,7 @@ The `deleteShown` command relies on the `filteredPersons` list in the `Model` co
 
 ##### Executing the Command
 
-The `deleteShown` command first retrives the `filteredPersons` list from the `Model` component using the `getFilteredPersonList` method. The `deleteShown` command then iterates through the `filteredPersons` list and deletes all currently shown `Persons` from the `UniquePersonList`.
+The `deleteShown` command first retrieves the `filteredPersons` list from the `Model` component using the `getFilteredPersonList` method. The `deleteShown` command then iterates through the `filteredPersons` list and deletes all currently shown `Persons` from the `UniquePersonList`.
 
 If the currently filtered list does is not showing between 0 and the total number of existing persons, the `deleteShown` command will throw a `CommandException`.
 
@@ -683,7 +699,7 @@ Similarly to the `copy` command, the `deleteShown` command is designed to be use
 #### **Import Contacts Command** : `import`
 
 The `import` command allows users to import contacts from a CSV file. Users can specify the file path of the CSV file to
-import contacts from and with the validation and checking of the CSV rows, person objects can be added to the addressbook.
+import contacts from and with the validation and checking of the CSV rows, person objects can be added to the persons list in the application.
 
 ##### Parsing User Input
 
@@ -693,16 +709,16 @@ The `ImportCommandParser` class is responsible for parsing user input to extract
 
 The `ImportCommand` class first makes use `OpenCSV` library which parses the CSV file into a `List<String[]>`, with each `String[]`
 representing a row in the CSV file. The `List<String[]>` is further parsed row by row by the `readCsvFile` method, which
-returns a `Pair`. The key of the returned `Pair` is a `personsData` list containing the `Person` objects sucessfully parsed from the CSV file and the value is an error report containing all the errors that occured during the process of reading from the CSV file.
+returns a `Pair`. The key of the returned `Pair` is a `personsData` list containing the `Person` objects successfully parsed from the CSV file and the value is an error report containing all the errors that occurred during the process of reading from the CSV file.
 
 The `ImportCommand` then iterates through the `personsData` list and adds each `Person` object to the `Model` component
 through repeated use of the `AddCommand`. Errors that occur during this process are also added to the error report.
 
 In summary, The import process is done in the following steps:
-1. ImportCommand reads the CSV file with the given file path.
-2. The CSV file is parsed and each row is converted into an addCommand
-3. The addCommand is then executed passing the same model as import command.
-4. The addCommand then adds the person to the model.
+1. `ImportCommand` reads the CSV file with the given file path.
+2. The CSV file is parsed and each row is converted into an `AddCommand`
+3. The `AddCommand` is then executed passing the same model as import command.
+4. The `AddCommand` then adds the person to the model.
 
 **Handling duplicate persons** <br>
 
@@ -710,14 +726,14 @@ Duplicate records in the imported CSV file is handled by `AddCommand`, which wil
 
 **Handling invalid CSV files**<br>
 
-Invalid files are handled by ImportCommand, with the help of ImportCommandParser and CsvUtil. ImportCommandParser will check if  is a CSV file.
-CsvUtil will check if the CSV file is valid and will return a list of persons and an error report. The error report will be displayed to the user if there are any errors.
+Invalid files are handled by `ImportCommand`, with the help of `ImportCommandParser` and `CsvUtil`. `ImportCommandParser` will check if  is a CSV file.
+`CsvUtil` will check if the CSV file is valid and will return a list of persons and an error report. The error report will be displayed to the user if there are any errors.
 
 Overall, the conditions checked are:
 - The file exists
 - The file is a CSV file
 - **The first row of the file is the header row**. In which all compulsory fields for creating a persons object
-  (ie `name`, `email`, `address`, `phone`)are present. Optional headers will be read if present. Headers in the csv that are not a field in `Person` will be ignored.
+  (ie `name`, `email`, `address`, `phone`)are present. Optional headers will be read if present. Headers in the CSV that are not a field in `Person` will be ignored.
 
 If the file is not valid, an error message will be returned.
 
@@ -746,7 +762,7 @@ The sequence diagrams below illustrates the interactions within the `Logic` comp
 
 **Usage of `AddCommand`** <br>
 
-The main concern in the increased coupling between `ImportCommand` and `AddCommand`. However, we established that this coupling was actually a good thing, as the incoporation of the `AddCommand` allowed us to reuse the validation and error handling that was already implemented in the `AddCommand`. Furthermore, should we ever need to change the validation and error handling in the `AddCommand`, the `ImportCommand` would automatically inherit these changes. By making `AddCommand` the gate in which all persons are added to the model, we ensure that all persons added to the model are validated and handled in the same way.
+The main concern in the increased coupling between `ImportCommand` and `AddCommand`. However, we established that this coupling was actually a good thing, as the incorporation of the `AddCommand` allowed us to reuse the validation and error handling that was already implemented in the `AddCommand`. Furthermore, should we ever need to change the validation and error handling in the `AddCommand`, the `ImportCommand` would automatically inherit these changes. By making `AddCommand` the gate in which all persons are added to the model, we ensure that all persons added to the model are validated and handled in the same way.
 
 <br>
 
@@ -827,13 +843,13 @@ The `export` command does not require any additional arguments from the user. He
 **Data Retrieval** <br>
 * The `execute` method retrieves the `filteredPersons` list in `Model` by calling the `getFilteredPersonList()` method in `Model`.
   This list stores the relevant persons currently displayed in the `PersonListPanel`.
-  It then creates a temporary `AddressBook` object and iterates through the `filteredPersons` list to add each person from the list into the AddressBook.
+  It then creates a temporary `AddressBook` object and iterates through the `filteredPersons` list to add each person from the list into the `AddressBook`.
   The data is then written to a JSON file named `filteredaddressbook.json` with the `writeToJsonFile` method in `ExportCommand`.
 
-* The `execute` method also retrieves the address book file path by calling the `getAddressBookFilePath()` method in `Model` (this address book stores information of **all** persons and exams).
+* The `execute` method also retrieves the address book file path by calling the `getAddressBookFilePath()` method in `Model` (this `AddressBook` stores information of **all** persons and exams).
   This file path is retrieved to obtain information on the examinations added in the application
 
-The sequence diagram illustrates the interactions between the Logic and Model components when data is being retrieved from `Model` when `export` is executed:
+The sequence diagram illustrates the interactions between the `Logic` and `Model` components when data is being retrieved from `Model` when `export` is executed:
 
 <p align="center">
     <puml src="diagrams/ExportDataRetrievalSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
@@ -948,7 +964,7 @@ The exam is then added and stored in the `UniqueExamList`.
 
 ##### Parsing User Input
 
-The `AddExamCommandParser` is responsible for pasring user input to extract the `name` and the `maxScore` of the exam.
+The `AddExamCommandParser` is responsible for parsing user input to extract the `name` and the `maxScore` of the exam.
 It uses the `ArgumentTokenizer` to tokenize the input string, extracting `name` and `maxScore`.
 It ensures that `name` and `maxScore` are valid and present in the user input, and that there are no duplicate prefixes in the user input.
 The `name` and `maxScore` are then used to instantiate an `AddExamCommand`.
@@ -1008,7 +1024,7 @@ Note: `deleteExam` follows a similar structure, differing in the arguments parse
 
 #### **Select Exam Command** : `selectExam`
 
-The `selectExam` command allows users to select an exam from the ``UniqueExamList`.
+The `selectExam` command allows users to select an exam from the `UniqueExamList`.
 The selection of exams is heavily used in conjunction with our exam score features.
 
 ##### Parsing User Input
@@ -1321,7 +1337,7 @@ For example, an extreme case will be to search for persons with the `Name` field
 
 #### Update UI to Wrap Text
 
-Currently, the `ResultDisplay` box does not wrap text, which means that long lines of text will extend beyond the width of the box. This results in the need for two scrollbars, a horizontal one for the result box and a vertical one for the currently shown list of persons. This is not ideal as it makes the UI less optimized for the target audience, who prefer using a CLI-optimized application and prefer not to use mouse controls to scroll through scrollboxes.
+Currently, the `ResultDisplay` box does not wrap text, which means that long lines of text will extend beyond the width of the box. This results in the need for two scrollbars, a horizontal one for the result box and a vertical one for the currently shown list of persons. This is not ideal as it makes the UI less optimized for the target audience, who prefer using a CLI-optimized application and prefer not to use mouse controls to scroll through scroll boxes.
 
 ##### Planned Implementation
 
@@ -1384,20 +1400,20 @@ Retain all other relevant `Tag` objects like `colleagues` and `student` to bette
 * Age: 23
 * Occupation: Head Tutor for CS1101S
 
-* head tutor for CS1101S course
-* has a need to manage various aspects of course administration
-* has a need to schedule classes
-* has a need to coordinate with teaching assistants
-* has a need to effectively communicate with students
-* has a need to manage a significant number of persons
-* prefer desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+* Head tutor for CS1101S course
+* Has a need to manage various aspects of course administration
+* Has a need to schedule classes
+* Has a need to coordinate with teaching assistants
+* Has a need to effectively communicate with students
+* Has a need to manage a significant number of persons
+* Prefer desktop apps over other types
+* Can type fast
+* Prefers typing to mouse interactions
+* Is reasonably comfortable using CLI apps
 
 **Value proposition**:
 
-* manage persons faster than a typical mouse/GUI driven app
+* Manage persons faster than a typical mouse/GUI driven app
 * Centralised platform to store and manage person details for all relevant individuals involved in course administration
 * Able to store and manage exam scores for all students in the course
 * Easier access to information through organising relevant persons into different subgroups
@@ -1427,32 +1443,32 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 #### For Contact Management
 
 | Priority | As a …​                                      | I want to …​                            | So that I can…​                                                        |
-|----------|---------------------------------------------|----------------------------------------|------------------------------------------------------------------------|
-| `* * *`  | head tutor using the app                    | import persons from a csv file         | easily add a large number of persons to the application                |
-| `* * *`  | new user                                    | save the data I input into the app     | don't lose the information I've entered                                |
-| `* * *`  | user                                        | add a new person                       | make minor additions to the persons in the application                 |
-| `* * *`  | user                                        | update and edit person details         | keep my persons list accurate                                          |
-| `* * *`  | user                                        | delete a person                        | remove entries that I no longer need                                   |
-| `* * *`  | user                                        | delete a specific group of entries     | remove multiple entries that I no longer need more efficiently         |
-| `* * *`  | user                                        | view all saved contacts                | oversee the data stored within my app                                  |
-| `* * *`  | user                                        | find a person through their particulars| locate details of persons without having to go through the entire list |
-| `* * *`  | head tutor using the app                    | categorise my persons into groups      | manage different groups of students effectively                        |
-| `* * *`  | head tutor using the app                    | copy email addresses of a group        | effectively communicate with target groups                             |
-| `* * *`  | head tutor using the app                    | export the details of persons to a csv | easily share the details of a group with others                        |
+|----------|---------------------------------------------|-----------------------------------------|------------------------------------------------------------------------|
+| `* * *`  | head tutor using the app                    | import persons from a CSV file          | easily add a large number of persons to the application                |
+| `* * *`  | new user                                    | save the data I input into the app      | don't lose the information I've entered                                |
+| `* * *`  | user                                        | add a new person                        | make minor additions to the persons in the application                 |
+| `* * *`  | user                                        | update and edit person details          | keep my persons list accurate                                          |
+| `* * *`  | user                                        | delete a person                         | remove entries that I no longer need                                   |
+| `* * *`  | user                                        | delete a specific group of entries      | remove multiple entries that I no longer need more efficiently         |
+| `* * *`  | user                                        | view all saved contacts                 | oversee the data stored within my app                                  |
+| `* * *`  | user                                        | find a person through their particulars | locate details of persons without having to go through the entire list |
+| `* * *`  | head tutor using the app                    | categorise my persons into groups       | manage different groups of students effectively                        |
+| `* * *`  | head tutor using the app                    | copy email addresses of a group         | effectively communicate with target groups                             |
+| `* * *`  | head tutor using the app                    | export the details of persons to a CSV  | easily share the details of a group with others                        |
 
 #### For Exam and Score Management
 
-| Priority | As a …​                                      | I want to …​                            | So that I can…​                                        |
-|----------|---------------------------------------------|----------------------------------------|--------------------------------------------------------|
-| `* * *`  | head tutor using the app                    | import assesment scores from a csv file| easily add a large number of scores to the application |
-| `* * *`  | head tutor using the app                    | add exams to the app                   | keep track of student performance                      |
-| `* * *`  | head tutor using the app                    | delete exams from the app              | remove exams that are no longer relevant               |
-| `* * *`  | head tutor using the app                    | view scores for a specific exam        | analyse student scores                                 |
-| `* * *`  | head tutor using the app                    | add scores to the app                  | keep track of student performance                      |
-| `* * *`  | head tutor using the app                    | edit scores in the app                 | correct errors in the scores                           |
-| `* * *`  | head tutor using the app                    | delete scores from the app             | remove scores that are no longer relevant              |
-| `* * *`  | head tutor using the app                    | export scores to a csv file            | easily share the scores with others                    |
-| `* * *`  | head tutor using the app                    | view statistics of scores              | analyse student performance                            |
+| Priority | As a …​                                      | I want to …​                             | So that I can…​                                        |
+|----------|---------------------------------------------|------------------------------------------|--------------------------------------------------------|
+| `* * *`  | head tutor using the app                    | import assessment scores from a CSV file | easily add a large number of scores to the application |
+| `* * *`  | head tutor using the app                    | add exams to the app                     | keep track of student performance                      |
+| `* * *`  | head tutor using the app                    | delete exams from the app                | remove exams that are no longer relevant               |
+| `* * *`  | head tutor using the app                    | view scores for a specific exam          | analyse student scores                                 |
+| `* * *`  | head tutor using the app                    | add scores to the app                    | keep track of student performance                      |
+| `* * *`  | head tutor using the app                    | edit scores in the app                   | correct errors in the scores                           |
+| `* * *`  | head tutor using the app                    | delete scores from the app               | remove scores that are no longer relevant              |
+| `* * *`  | head tutor using the app                    | export scores to a CSV file              | easily share the scores with others                    |
+| `* * *`  | head tutor using the app                    | view statistics of scores                | analyse student performance                            |
 
 
 <div id="appendix_c"></div>
@@ -1461,14 +1477,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Appendix C: Use Cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is the `AvengersAssemble` and the **Actor** is the `user`, unless specified otherwise)
 
 ##### Use Case: UC01 — Getting Help
 
 **MSS:**
 
 1.  User requests help information.
-2.  AddressBook copies the link to the user guide to the user's clipboard.
+2.  AvengersAssemble copies the link to the user guide to the user's clipboard.
 3.  User pastes the link into a browser to access the user guide.
 
     Use case ends.
@@ -1478,8 +1494,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to clear the sample data.
-2.  AddressBook clears the sample data.
-3.  AddressBook displays a message indicating that the sample data has been cleared.
+2.  AvengersAssemble clears the sample data.
+3.  AvengersAssemble displays a message indicating that the sample data has been cleared.
 
     Use case ends.
 
@@ -1488,8 +1504,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to import person details from a CSV file.
-2.  AddressBook imports the person details from the CSV file.
-3.  AddressBook displays a message indicating that the person details have been imported.
+2.  AvengersAssemble imports the person details from the CSV file.
+3.  AvengersAssemble displays a message indicating that the person details have been imported.
 
     Use case ends.
 
@@ -1497,13 +1513,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *  1a. The file to be imported is not a CSV file.
 
-    *  1a1. AddressBook displays an error message indicating that the file type is not recognised and should be a csv file.
+    *  1a1. AvengersAssemble displays an error message indicating that the file type is not recognised and should be a CSV file.
 
        Use case ends.
 
-*  1b. AddressBook cannot find the file to be imported.
+*  1b. AvengersAssemble cannot find the file to be imported.
 
-    *  1b1. AddressBook displays a message indicating that the file is not recognised.
+    *  1b1. AvengersAssemble displays a message indicating that the file is not recognised.
 
        Use case ends.
 
@@ -1512,8 +1528,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to add a new person and inputs details for the new person.
-2.  AddressBook saves the new person's information.
-3.  AddressBook confirms the addition of the new person.
+2.  AvengersAssemble saves the new person's information.
+3.  AvengersAssemble confirms the addition of the new person.
 
     Use case ends.
 
@@ -1521,7 +1537,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *  1a. User does not input all compulsory parameters along with the person.
 
-    *  1a1. AddressBook prompts the user on the proper usage of the command.
+    *  1a1. AvengersAssemble prompts the user on the proper usage of the command.
 
        Step 1a1 is repeated until the data entered is correct.
 
@@ -1529,7 +1545,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *  1b. User tries to add a person with an existing email address.
 
-    *  1b1. AddressBook displays an error message informing the user that the email address already exists.
+    *  1b1. AvengersAssemble displays an error message informing the user that the email address already exists.
 
        Step 1b1 is repeated until a valid email address is entered.
 
@@ -1540,8 +1556,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to edit a specific person with updated details.
-2.  AddressBook saves the updated details.
-3.  AddressBook confirms the successful update.
+2.  AvengersAssemble saves the updated details.
+3.  AvengersAssemble confirms the successful update.
 
     Use case ends.
 
@@ -1549,7 +1565,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *   1a. User does not input enough parameters along with the person.
 
-    *  1a1. AddressBook prompts the user on the proper usage of the command.
+    *  1a1. AvengersAssemble prompts the user on the proper usage of the command.
 
        Step 1a1 is repeated until the data entered is correct.
 
@@ -1557,7 +1573,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *   1b. The selected person does not exist.
 
-    *  1b1. AddressBook displays an error message indicating that the person does not exist.
+    *  1b1. AvengersAssemble displays an error message indicating that the person does not exist.
 
        Use case ends.
 
@@ -1566,9 +1582,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User !!requests to list persons (UC08)!!
-2.  AddressBook shows a list of persons
+2.  AvengersAssemble shows a list of persons
 3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+4.  AvengersAssemble deletes the person
 
     Use case ends.
 
@@ -1580,7 +1596,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *   3a. The given index is invalid.
 
-    *  3a1. AddressBook shows an error message.
+    *  3a1. AvengersAssemble shows an error message.
 
        Use case resumes at step 2.
 
@@ -1590,8 +1606,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1. User !!requests to find group of persons (UC09)!! by desired requirements
 2. User requests to delete all listed persons.
-3. AddressBook deletes all listed persons.
-4. AddressBook displays a message to confirm that all listed persons have been deleted.
+3. AvengersAssemble deletes all listed persons.
+4. AvengersAssemble displays a message to confirm that all listed persons have been deleted.
 
     Use case ends.
 
@@ -1599,13 +1615,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *   2a. No persons are listed.
 
-    *  2a1. AddressBook displays a message indicating that there is no persons to delete.
+    *  2a1. AvengersAssemble displays a message indicating that there is no persons to delete.
 
        Use case ends.
 
 *   2b. User has a filtered view that contains all existing persons.
 
-    *  2b1. AddressBook displays a message indicating that all persons cannot be deleted at once.
+    *  2b1. AvengersAssemble displays a message indicating that all persons cannot be deleted at once.
 
        Use case ends.
 
@@ -1614,7 +1630,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to list persons.
-2.  AddressBook shows the list of persons.
+2.  AvengersAssemble shows the list of persons.
 3.  User views the list of persons.
 
     Use case ends.
@@ -1623,7 +1639,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *   2a. The list is empty.
 
-    *  2a1. AddressBook displays a message indicating that the list is empty.
+    *  2a1. AvengersAssemble displays a message indicating that the list is empty.
 
        Use case ends.
 
@@ -1632,7 +1648,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to find a specific group of persons matching the search criteria.
-2.  AddressBook displays a list of persons matching the criteria.
+2.  AvengersAssemble displays a list of persons matching the criteria.
 
     Use case ends.
 
@@ -1640,7 +1656,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *   1a. No persons match the search criteria.
 
-    *  1a1. AddressBook displays a message indicating that no persons match the search criteria.
+    *  1a1. AvengersAssemble displays a message indicating that no persons match the search criteria.
 
        Use case ends.
 
@@ -1649,9 +1665,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to copy emails of currently displayed persons.
-2.  AddressBook copies the emails of currently displayed persons
+2.  AvengersAssemble copies the emails of currently displayed persons
 into user's clipboard.
-3.  AddressBook notifies the user that emails have been copied.
+3.  AvengersAssemble notifies the user that emails have been copied.
 4.  User can paste emails when composing emails.
 
     Use case ends.
@@ -1660,7 +1676,7 @@ into user's clipboard.
 
 *   2a. No persons currently displayed.
 
-    *  2a1. AddressBook displays a message indicating that no persons are currently displayed.
+    *  2a1. AvengersAssemble displays a message indicating that no persons are currently displayed.
 
        Use case ends.
 
@@ -1670,8 +1686,8 @@ into user's clipboard.
 
 1. User !!requests to filter persons (UC09)!! by desired requirements
 2. User requests to export all listed persons and details to a CSV file.
-3. AddressBook exports the persons to a CSV file.
-4. AddressBook displays a message to confirm that all listed persons have been exported to a CSV file.
+3. AvengersAssemble exports the persons to a CSV file.
+4. AvengersAssemble displays a message to confirm that all listed persons have been exported to a CSV file.
 
     Use case ends.
 
@@ -1679,7 +1695,7 @@ into user's clipboard.
 
 *   2a. No persons are listed.
 
-    *  2a2. AddressBook displays a message indicating that there is no persons to export.
+    *  2a2. AvengersAssemble displays a message indicating that there is no persons to export.
 
        Use case ends.
 
@@ -1687,34 +1703,34 @@ into user's clipboard.
 
 **MSS:**
 
-1. User requests to import exam results from a csv file.
-2. AddressBook displays a message that all exam results have been imported.
+1. User requests to import exam results from a CSV file.
+2. AvengersAssemble displays a message that all exam results have been imported.
 
     Use case ends.
 
 **Extensions:**
 
-*   2a. AddressBook cannot find the file specified.
+*   2a. AvengersAssemble cannot find the file specified.
 
-    *  2a1. AddressBook displays a message indicating that the file is not recognised.
-
-       Use case ends.
-
-*   2b. The file to be imported is not a csv file.
-
-    *  2b1. AddressBook displays an error message indicating that the file type is not recognised and should be a csv file
+    *  2a1. AvengersAssemble displays a message indicating that the file is not recognised.
 
        Use case ends.
 
-*   2c. There are duplicate entries in the csv file.
+*   2b. The file to be imported is not a CSV file.
 
-    *  2c1. AddressBook displays a message indicating that there are duplicate entries in the csv file, and only the first instance has been kept.
+    *  2b1. AvengersAssemble displays an error message indicating that the file type is not recognised and should be a CSV file
 
        Use case ends.
 
-* 2d. The csv file contains invalid entries.
+*   2c. There are duplicate entries in the CSV file.
 
-    *  2d1. AddressBook displays a message indicating that there are invalid entries in the csv file, and all other valid entries have been imported.
+    *  2c1. AvengersAssemble displays a message indicating that there are duplicate entries in the CSV file, and only the first instance has been kept.
+
+       Use case ends.
+
+* 2d. The CSV file contains invalid entries.
+
+    *  2d1. AvengersAssemble displays a message indicating that there are invalid entries in the CSV file, and all other valid entries have been imported.
 
        Use case ends.
 
@@ -1723,7 +1739,7 @@ into user's clipboard.
 **MSS:**
 
 1. User requests to add an exam.
-2. AddressBook displays a message that the exam has been added.
+2. AvengersAssemble displays a message that the exam has been added.
 
     Use case ends.
 
@@ -1731,7 +1747,7 @@ into user's clipboard.
 
 *   1a. User does not input all compulsory parameters along with the exam.
 
-    *  1a1. AddressBook prompts the user on the proper usage of the command.
+    *  1a1. AvengersAssemble prompts the user on the proper usage of the command.
 
        Step 1a1 is repeated until the data entered is correct.
 
@@ -1739,7 +1755,7 @@ into user's clipboard.
 
 *   1b. User tries to add an exam with an existing name.
 
-    *  1b1. AddressBook displays an error message informing the user that the exam name already exists.
+    *  1b1. AvengersAssemble displays an error message informing the user that the exam name already exists.
 
        Step 1b1 is repeated until a valid exam name is entered.
 
@@ -1747,7 +1763,7 @@ into user's clipboard.
 
 *   1c. User tries to add an exam with an invalid score.
 
-    *  1c1. AddressBook displays an error message informing the user that the score is invalid.
+    *  1c1. AvengersAssemble displays an error message informing the user that the score is invalid.
 
        Step 1c1 is repeated until a valid score is entered.
 
@@ -1755,7 +1771,7 @@ into user's clipboard.
 
 *   1d. User tries to add an exam with an invalid name.
 
-    *  1d1. AddressBook displays an error message informing the user that the name is invalid.
+    *  1d1. AvengersAssemble displays an error message informing the user that the name is invalid.
 
        Step 1d1 is repeated until a valid name is entered.
 
@@ -1766,7 +1782,7 @@ into user's clipboard.
 **MSS:**
 
 1. User requests to delete an exam.
-2. AddressBook displays a message that the exam has been deleted.
+2. AvengersAssemble displays a message that the exam has been deleted.
 
     Use case ends.
 
@@ -1774,7 +1790,7 @@ into user's clipboard.
 
 *   1a. The exam does not exist.
 
-    *  1a1. AddressBook displays an error message indicating that the exam does not exist.
+    *  1a1. AvengersAssemble displays an error message indicating that the exam does not exist.
 
        Use case ends.
 
@@ -1783,7 +1799,7 @@ into user's clipboard.
 **MSS:**
 
 1. User requests to select an exam.
-2. AddressBook displays the scores of the selected exam.
+2. AvengersAssemble displays the scores of the selected exam.
 
     Use case ends.
 
@@ -1791,7 +1807,7 @@ into user's clipboard.
 
 *   1a. The exam does not exist.
 
-    *  1a1. AddressBook displays an error message indicating that the exam does not exist.
+    *  1a1. AvengersAssemble displays an error message indicating that the exam does not exist.
 
        Use case ends.
 
@@ -1800,7 +1816,7 @@ into user's clipboard.
 **MSS:**
 
 1. User requests to deselect an exam.
-2. AddressBook displays the persons without the scores of the selected exam.
+2. AvengersAssemble displays the persons without the scores of the selected exam.
 
     Use case ends.
 
@@ -1808,7 +1824,7 @@ into user's clipboard.
 
 *   1a. The exam does not exist.
 
-    *  1a1. AddressBook displays an error message indicating that the exam does not exist.
+    *  1a1. AvengersAssemble displays an error message indicating that the exam does not exist.
 
        Use case ends.
 
@@ -1818,7 +1834,7 @@ into user's clipboard.
 
 1. User !!requests to select an exam (UC15)!! to add scores to.
 2. User requests to add scores to a student for the selected exam.
-3. AddressBook displays a message that the scores have been added.
+3. AvengersAssemble displays a message that the scores have been added.
 
     Use case ends.
 
@@ -1826,13 +1842,13 @@ into user's clipboard.
 
 *   2a. The student does not exist.
 
-    *  2a1. AddressBook displays an error message indicating that the student does not exist.
+    *  2a1. AvengersAssemble displays an error message indicating that the student does not exist.
 
        Use case ends.
 
 *   2b. The student already has a score for the exam.
 
-    *  2b1. AddressBook displays an error message indicating that the student already has a score for the exam.
+    *  2b1. AvengersAssemble displays an error message indicating that the student already has a score for the exam.
 
        Use case ends.
 
@@ -1842,7 +1858,7 @@ into user's clipboard.
 
 1. User !!requests to select an exam (UC15)!! to edit scores for.
 2. User requests to edit scores for a student for the selected exam.
-3. AddressBook displays a message that the scores have been edited.
+3. AvengersAssemble displays a message that the scores have been edited.
 
     Use case ends.
 
@@ -1850,19 +1866,19 @@ into user's clipboard.
 
 * 2a. The student does not exist.
 
-    * 2a1. AddressBook displays an error message indicating that the student does not exist.
+    * 2a1. AvengersAssemble displays an error message indicating that the student does not exist.
 
        Use case ends.
 
 * 2b. The student does not have a score for the exam.
 
-    * 2b1. AddressBook displays an error message indicating that the student does not have a score for the exam.
+    * 2b1. AvengersAssemble displays an error message indicating that the student does not have a score for the exam.
 
         Use case ends.
 
 * 2c. The score is invalid.
 
-    * 2c1. AddressBook displays an error message indicating that the score is invalid.
+    * 2c1. AvengersAssemble displays an error message indicating that the score is invalid.
 
         Use case ends.
 
@@ -1872,7 +1888,7 @@ into user's clipboard.
 
 1. User !!requests to select an exam (UC15)!! to delete scores for.
 2. User requests to delete scores for a student for the selected exam.
-3. AddressBook displays a message that the scores have been deleted.
+3. AvengersAssemble displays a message that the scores have been deleted.
 
     Use case ends.
 
@@ -1880,13 +1896,13 @@ into user's clipboard.
 
 *   2a. The student does not exist.
 
-    *  2a1. AddressBook displays an error message indicating that the student does not exist.
+    *  2a1. AvengersAssemble displays an error message indicating that the student does not exist.
 
        Use case ends.
 
 *   2b. The student does not have a score for the exam.
 
-    *  2b1. AddressBook displays an error message indicating that the student does not have a score for the exam.
+    *  2b1. AvengersAssemble displays an error message indicating that the student does not have a score for the exam.
 
         Use case ends.
 
@@ -1895,7 +1911,7 @@ into user's clipboard.
 **MSS:**
 
 1. User !!requests to select an exam (UC15)!! to view statistics of scores for.
-2. AddressBook displays the statistics of scores for the selected exam.
+2. AvengersAssemble displays the statistics of scores for the selected exam.
 
     Use case ends.
 
@@ -1903,7 +1919,7 @@ into user's clipboard.
 
 *  2a. There are no scores for the exam.
 
-    *  2a1. AddressBook does not display any statistics.
+    *  2a1. AvengersAssemble does not display any statistics.
 
        Use case ends.
 
@@ -1912,7 +1928,7 @@ into user's clipboard.
 **MSS:**
 
 1.  User requests to exit the application.
-2.  AddressBook exits the application.
+2.  AvengersAssemble exits the application.
 
     Use case ends.
 
@@ -1922,7 +1938,7 @@ into user's clipboard.
 
 ### Appendix D: Non-Functional Requirements
 
-1.   Should work on any _mainstream OS_ as long as it has Java `11` or above installed.
+1.   Should work on any _mainstream OS_ as long as it has `Java 11` or above installed.
 2.   Should be able to hold up to 2000 persons without a noticeable sluggishness in performance for typical usage.
 3.   A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 4.   A user should be able to import up to 2000 persons from an external source without a noticeable sluggishness in performance for typical usage.
@@ -2020,9 +2036,9 @@ testers are expected to do more *exploratory* testing.
 1. Getting more information on the usage of the app.
 
     * **Test case:** `help`<br>
-      **Expected:** Link to the user guide is copied to the clipboard. Status message shows that the link has been copied. 
+      **Expected:** Link to the user guide is copied to the clipboard. Status message shows that the link has been copied.
       The link should be accessible from a browser.
-      
+
 <br>
 
 <div id="test_clear"></div>
@@ -2047,25 +2063,28 @@ testers are expected to do more *exploratory* testing.
 
 #### Importing Persons: `import`
 
-The import command requires the use of an external CSV file. The test cases below assume that the tests are run on a Windows sysem, and that the CSV file is located at the path `C:/file.csv`. Please modify the filepath accordingly based on where your file is stored and your operating system.
+**Command:** `import`<br>
+**More information on usage:** <a href="UserGuide.md#import">Importing Persons</a>
+
+The import command requires the use of an external CSV file. The test cases below assume that the tests are run on a Windows system, and that the CSV file is located at the path `C:\path\to\file.csv`. Please modify the filepath accordingly based on where your file is stored and your operating system.
 
 <box type="info" seamless>
-On Window systems, you can right click the file and copy the file path, remember to remove the double quotes. <br> On MacOS, you can drag the file into the terminal to get the file path. <br>On Linux, you can use the <code>pwd</code> command to get the current directory and append the file name to it.
+**Note:**On Window systems, you can right-click the file and copy the file path, remember to remove the double quotes. <br> On MacOS, you can drag the file into the terminal to get the file path. <br>On Linux, you can use the <code>pwd</code> command to get the current directory and append the file name to it.
 </box>
 
-1. Importing Data from a CSV File
+1. Importing data from a CSV file
 
    * **Prerequisites**
-       * There is a file at `C:\file.csv` with the following content:
+       * There is a file at `C:\path\to\file.csv` with the following content:
        ```
        name,email,address,phone
        Alice,alice@gmail.com,wonderland,123
        ```
-       * **Initially, the address book is empty.**
+       * Initially, the persons list is empty.
 
     <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
      **Expected:** The person with the following details is added:
        * Name: `Alice`
        * Email: `alice@gmail.com`
@@ -2074,43 +2093,43 @@ On Window systems, you can right click the file and copy the file path, remember
 
     <br>
 
-2. Importing Data from a CSV File that does not Exist
+2. Importing data from a CSV File that does not exist
 
    * **Prerequisites**
-       * No CSV file at the path `C:\file.csv`
+       * No CSV file at the path `C:\path\to\file.csv`
 
     <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
      **Expected:** Error message shown in the error report. No change in list of persons.
 
    <br>
 
-3. Importing Data from a CSV File that is not a CSV File
+3. Importing data from a file that is not a CSV file
 
    * **Prerequisites**
-       * There is a file at the path `C:\file.txt`
+       * There is a file at the path `C:\path\to\file.txt`
 
     <br>
 
-   * **Test case:** `import i|C:\file.txt`<br>
+   * **Test case:** `import i|C:\path\to\file.txt`<br>
      **Expected:** Error message shown in the error report. No change in list of persons.
 
     <br>
 
-4. Importing Data from a CSV File with Duplicate Compulsory Headers in Header Row
+4. Importing data from a CSV File with duplicate compulsory headers in header row
 
    * **Prerequisites**
-       * A CSV file with duplicate compulsory headers (e.g. 2 header columns named 'name') at the path `C:\file.csv` with the following content:
+       * A CSV file with duplicate compulsory headers (e.g. 2 header columns named 'name') at the path `C:\path\to\file.csv` with the following content:
          ```
          name,email,address,phone,name
          Alice,alice@gmail.com,wonderland,123,bob
          ```
-       * **Initially, the address book is empty.**
+       * Initially, the persons list is empty.
 
    <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
      **Expected:** First occurrence of the header is used. Columns with duplicate headers are ignored. The person with the following details is added:
      * Name: `Alice`
      * Email: `alice@gmail.com`
@@ -2119,10 +2138,10 @@ On Window systems, you can right click the file and copy the file path, remember
 
    <br>
 
-5. Importing Data from a CSV File with Missing Compulsory Headers in Header Row
+5. Importing data from a CSV file with missing compulsory headers in header row
 
    * **Prerequisites**
-       * A CSV file with missing compulsory headers at the path `C:\file.csv` with the following content (missing the `name` header):
+       * A CSV file with missing compulsory headers at the path `C:\path\to\file.csv` with the following content (missing the `name` header):
          ```
          email,address,phone
          alice@gmail.com,wonderland,123
@@ -2130,25 +2149,25 @@ On Window systems, you can right click the file and copy the file path, remember
 
     <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
-   * **Expected:** Error message shown in the error report. No change in list of persons.
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
+   * **Expected:** Error message shown that `name` header is missing in the error report. No change in list of persons.
 
    <br>
 
-6. Importing Data from a CSV File with Missing Compulsory Values in a Row
+6. Importing data from a CSV file with missing compulsory values in a row
 
    * **Prerequisites**
-       * A CSV file with missing compulsory values in a row at the path `C:\file.csv` with the following content:
+       * A CSV file with missing compulsory values in a row at the path `C:\path\to\file.csv` with the following content:
          ```
          name,email,address,phone
          Alice,,wonderland,123
          Bob,bob@gmail.com,town,123
          ```
-       * **Initially, the address book is empty.**
+       * **Initially, the persons list is empty.**
 
    <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
    * **Expected:** Error message in the results in the display indicating that import has failed with errors. Only one person with the following details is added:
      * Name: `Bob`
      * Email: `bob@gmail.com`
@@ -2157,19 +2176,19 @@ On Window systems, you can right click the file and copy the file path, remember
 
    <br>
 
-7. Importing Data from a CSV File with Extra Headers in Header Row
+7. Importing data from a CSV file with extra headers in header row
 
    * **Prerequisites**
-       * A CSV file with extra headers in header row at the path `C:\file.csv` with the following content:
+       * A CSV file with extra headers in header row at the path `C:\path\to\file.csv` with the following content:
             ```
             name,email,address,phone,extra
             Alice,alice@gmail.com,123,123,extra
             ```
-         * **Initially, the address book is empty.**
+         * Initially, the persons list is empty.
 
     <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
    * **Expected:** Only the compulsory headers are read. Optional headers are read if present. Extra headers are ignored. The person with the following details is added:
      * Name: `Alice`
      * Email: `alice@gmail.com`
@@ -2178,20 +2197,20 @@ On Window systems, you can right click the file and copy the file path, remember
 
    <br>
 
-8. Importing Data from a CSV File with Unequal Number of Values in a Row as the Number of Headers
+8. Importing data from a CSV file with unequal number of values in a row as the number of headers
 
    * **Prerequisites**
-       * A CSV file with unequal number of values in a row as the number of headers at the path `C:\file.csv` with the following content:
+       * A CSV file with unequal number of values in a row as the number of headers at the path `C:\path\to\file.csv` with the following content:
          ```
          name,email,address,phone
          Alice,alice@gmail.com,wonderland,123,123
          Bob,bob@gmail.com,town,123
          ```
-       * **Initially, the address book is empty.**
+       * Initially, the persons list is empty.
 
     <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
      **Expected:** Error message in the results in the display indicating that import has failed with errors. Only one person with the following details is added:
      * Name: `Bob`
      * Email: `bob@gmail.com`
@@ -2200,15 +2219,15 @@ On Window systems, you can right click the file and copy the file path, remember
 
    <br>
 
-9. Importing Data from an Empty CSV File
+9. Importing data from an empty CSV file
 
    * **Prerequisites**
-       * An empty CSV file at the path `C:\file.csv`
+       * An empty CSV file at the path `C:\path\to\file.csv`
 
     <br>
 
-   * **Test case:** `import i|C:\file.csv`<br>
-   * **Expected:** Error message shown in the error report. No change in list of persons.
+   * **Test case:** `import i|C:\path\to\file.csv`<br>
+   * **Expected:** A message that no person is imported is shown. No change in list of persons.
 
    <br>
 
@@ -2225,7 +2244,7 @@ On Window systems, you can right click the file and copy the file path, remember
         * No persons in the list.
           <br><br>
     * **Test case:** `add n|Alice p|98765432 a|Hall e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling`<br>
-    **Expected:** A person with the following fields is added to the list:
+      **Expected:** A person with the following fields is added to the list:
         * Name: `Alice`
         * Phone: `98765432`
         * Address: `Hall`
@@ -2458,8 +2477,8 @@ On Window systems, you can right click the file and copy the file path, remember
 
 1. Finding persons by contact details.
 
-    * **Prerequisites:** 
-        * Ensure that there are multiple persons in the app. 
+    * **Prerequisites:**
+        * Ensure that there are multiple persons in the app.
           <br><br>
     * **Test case:** `find n|Alice`<br>
       **Expected:** Persons with the name "Alice" are shown. Status message shows the number of persons found.
@@ -2488,7 +2507,7 @@ On Window systems, you can right click the file and copy the file path, remember
 
 2. Finding persons by score.
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Ensure that there are multiple persons in the app.
         * Ensure that at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
         * Ensure an exam is selected using the `selectExam` command. For this example, we shall select the `test exam`.
@@ -2503,12 +2522,12 @@ On Window systems, you can right click the file and copy the file path, remember
       **Expected:** An error message is shown indicating that the `score` provided is invalid.
       <br><br>
     * **Test case:** `find mt|101`<br>
-      **Expected:** An error message is shown indicating that the `score` provided is greater than the maximum score of the selected exam. 
+      **Expected:** An error message is shown indicating that the `score` provided is greater than the maximum score of the selected exam.
       <br><br>
 
 3. Finding persons by multiple prefixes.
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Ensure that there are multiple persons in the app.
           <br><br>
     * **Test case (multiple unique prefixes):** `find n|Alice e|Alice`<br>
@@ -2534,7 +2553,7 @@ On Window systems, you can right click the file and copy the file path, remember
 
 1. Copying the emails of all persons.
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Ensure that there are multiple persons in the app.
         * Ensure all persons are displayed using the `list` command.
           <br><br>
@@ -2544,7 +2563,7 @@ On Window systems, you can right click the file and copy the file path, remember
 
 2. Copying the emails of a specific group.
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Ensure that there are multiple persons in the app.
         * Filter the person list using the `find` command.
           <br><br>
@@ -2602,34 +2621,34 @@ On Window systems, you can right click the file and copy the file path, remember
 **Command:** `addExam`<br>
 **More information on usage:** <a href="UserGuide.md#addexam">Adding an Exam</a>
 
-1. Adding an Exam with Valid Data
+1. Adding an exam with valid data
 
    * **Prerequisites:**
-       * No exams in the address book.
+       * No exams in the exams list.
          <br><br>
    * **Test case:** `addExam n|Midterm s|100`<br>
-     **Expected:** New exam is added to the address book. Status message shows the exam added.
+     **Expected:** New exam is added to the exams list. Status message shows the exam added.
      <br><br>
    * **Other test cases to try:** `addExam n|Final s|100`<br>
-     **Expected:** New exam is added to the address book. Status message shows the exam added.
+     **Expected:** New exam is added to the exams list. Status message shows the exam added.
      <br><br>
 
-2. Adding an Exam that Already Exists
+2. Adding an exam that already exists
 
    * **Prerequisites:**
-       * An exam of name: Final, Score: 100 exists in the address book.
+       * An exam of name: Final, Score: 100 exists in the exams list.
        <br><br>
    * **Test case:** `addExam n|Final s|100`<br>
-     **Expected:** Error message shown in the error report. No change in the address book.
+     **Expected:** Error message shown in the error report. No change in the exams list.
      <br><br>
 
-3. Adding an Exam with Missing Fields
+3. Adding an exam with missing fields
 
    * **Prerequisites:** 
-       * No exams in the address book.
+       * No exams in the exams list.
          <br><br>
    * **Test case (missing score):** `addExam n|Final`<br>
-     **Expected:** Error message shown in the error report. No change in the address book.
+     **Expected:** Error message shown in the error report. No change in the exams list.
 
 <br>
 
@@ -2640,22 +2659,22 @@ On Window systems, you can right click the file and copy the file path, remember
 **Command:** `deleteExam`<br>
 **More information on usage:** <a href="UserGuide.md#deleteexam">Deleting an Exam</a>
 
-1. Deleting an Exam
+1. Deleting an exam
 
     * **Prerequisites:** 
-        * Exactly one exam in the address book. Hence, exam has an index of 1.
+        * Exactly one exam in the exams list. Hence, exam has an index of 1.
           <br><br>
     * **Test case:** `deleteExam 1`<br>
-      **Expected:** First exam is deleted from the address book. Status message shows the exam deleted.
+      **Expected:** First exam is deleted from the exams list. Status message shows the exam deleted.
       <br><br>
     * **Test case:** `deleteExam 0`<br>
-      **Expected:** No exam is deleted. Error message shown. No change in the address book.
+      **Expected:** No exam is deleted. Error message shown. No change in the exams list.
       <br><br>
     * **Test case (index out of bounds):** `deleteExam 2`<br>
-      **Expected:** No exam is deleted. Error message shown. No change in the address book.
+      **Expected:** No exam is deleted. Error message shown. No change in the exams list.
       <br><br>
     * **Test case (no index):** `deleteExam`<br>
-      **Expected:** No exam is deleted. Error message shown. No change in the address book.
+      **Expected:** No exam is deleted. Error message shown. No change in the exams list.
 
 <br>
 
@@ -2669,19 +2688,19 @@ On Window systems, you can right click the file and copy the file path, remember
 1. Selecting an exam
 
     * **Prerequisites:** 
-        * Exactly one exam in the address book. Hence, exam has an index of 1.
+        * Exactly one exam in the exams list. Hence, exam has an index of 1.
           <br><br>
     * **Test case:** `selectExam 1`<br>
       **Expected:** First exam is selected. Status message shows the exam selected.
       <br><br>
     * **Test case:** `selectExam 0`<br>
-      **Expected:** No exam is selected. Error message shown. No change in the address book.
+      **Expected:** No exam is selected. Error message shown. No change in the exams list.
       <br><br>
     * **Test case (index out of bounds):** `selectExam 2`<br>
-      **Expected:** No exam is selected. Error message shown. No change in the address book.
+      **Expected:** No exam is selected. Error message shown. No change in the exams list.
       <br><br>
     * **Test case (no index):** `selectExam`<br>
-      **Expected:** No exam is selected. Error message shown. No change in the address book.
+      **Expected:** No exam is selected. Error message shown. No change in the exams list.
 
 <br>
 
@@ -2692,16 +2711,16 @@ On Window systems, you can right click the file and copy the file path, remember
 **Command:** `deselectExam`<br>
 **More information on usage:** <a href="UserGuide.md#deselectexam">Deselecting an Exam</a>
 
-1. Deselecting an Exam
+1. Deselecting an exam
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * An exam has been selected.
           <br><br>
     * **Test case:** `deselectExam`<br>
       **Expected:** Selected exam is deselected. Status message shows the exam deselected.
       <br><br>
     * **Test case (no exam selected):** `deselectExam`<br>
-      **Expected:** No exam is deselected. Error message shown. No change in the address book.
+      **Expected:** No exam is deselected. Error message shown. No change in the exams list.
 
 <br>
 
@@ -2729,7 +2748,7 @@ On Window systems, you can right click the file and copy the file path, remember
 
 2. Importing an invalid file.
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Start with sample data and the `Midterm` exam.
         * Create a file named `invalid.json`.
         <br><br>
@@ -2970,7 +2989,7 @@ On Window systems, you can right click the file and copy the file path, remember
 
 ### Appendix G: Effort
 
-This sections aims to showcase the effort put into Avengers Assemble by our team.
+This section aims to showcase the effort put into Avengers Assemble by our team.
 We will highlight the difficulty level, challenges faced, and effort required in this project.
 
 <br>
@@ -3060,7 +3079,7 @@ storage of these entities and how to manage the data effectively.
 One of the greatest challenges was designing a user-friendly interface for score
 interaction within the limited screen space. We had to devise intuitive methods for users to view, input and manage the scores
 of various exams, without overwhelming the interface. This proved to be a greater challenge than initially anticipated,
-as we had to consider trade offs between functionality and user experience. Lowering the complexity of the interface
+as we had to consider trade-offs between functionality and user experience. Lowering the complexity of the interface
 would result in an interface that is easier to read, but might not provide all the necessary information at a glance and
 require more user interactions to access the information. On the other hand, a more complex interface would provide more
 information at a glance, but might overwhelm users with too much information. Striking a balance between these two
@@ -3069,9 +3088,9 @@ satisfied with: the selection system for exams.
 
 **Implementation of Exam and Exam Score Features** <br>
 
-After coming to a concensus with regards to the user interface, implemetation for exam features seemed straightforward.
+After coming to a consensus in regard to the user interface, implementation for exam features seemed straightforward.
 However, it turned out to be a lot more complex to implement than initially anticipated. Our exam features consisted
-of many subfeatures which included the management of exams, the management of scores, the storage of scores in persons,
+of many sub-features which included the management of exams, the management of scores, the storage of scores in persons,
 and the importing of scores. As we were working in a collaborative environment, we had to consider how to distribute
 the workload in a manner that would prevent conflicts.
 This required early discussions of the structure of the exam and score features, and how they would interact with the existing features of AB3.
@@ -3083,7 +3102,7 @@ early on and resolve them through distributing the workload effectively and meet
 Handling the data for exams and scores was another challenge that we faced. We had to consider how to store the data for
 each exam, how to store the scores for each person for each exam, and how to manage the data effectively.
 The storage for exams was relatively straightforward, as we could create an additional list in the `AddressBook` class to store
-the exams. However, the storage for scores was more complex.. We had to decide whether to store all the exam score data
+the exams. However, the storage for scores was more complex. We had to decide whether to store all the exam score data
 in corresponding `Exam` objects, or store each persons' exam scores in their corresponding `Person` objects.
 
 There was once again another trade-off to consider: storing all exam score data in the `Exam` objects would make it
