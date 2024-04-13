@@ -1541,6 +1541,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
         border-color: #e0e4e4;
         padding: 5px;
         text-align: left;
+        line-height: 1.5;
     }
     th {
         background-color: #ffffff;
@@ -3457,3 +3458,5 @@ handled these errors gracefully and did not crash when these errors occurred.
 #### Achievements
 Overall, our group successfully implemented the planned features while addressing bugs and managing potential feature flaws.
 Despite initial hesitations about implementing significant new features like exams and exam scores, we overcame the challenge and achieved our goals.
+
+<br>

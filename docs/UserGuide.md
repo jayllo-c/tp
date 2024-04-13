@@ -954,29 +954,137 @@ If you encounter this problem, you can resolve it by executing any other command
 
 Below is a summary of the commands available in Avengers Assemble. Some examples are included for your convenience.
 
-| Action                   | Format, Examples                                                                                                                                                                                                                                        |
-|--------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Help**                 | `help`                                                                                                                                                                                                                                                  |
-| **Clear**                | `clear`                                                                                                                                                                                                                                                 |
-| **Import**               | `import i\|FILEPATH` <br><br>• e.g. `import i\|C:/Users/alk/Downloads/avengersassemble.csv`                                                                                                                                                             |
-| **Add**                  | `add n\|NAME p\|PHONE_NUMBER e\|EMAIL a\|ADDRESS [t\|TAG]… [m\|MATRICULATION_NUMBER] [s\|STUDIO] [r\|REFLECTION]​` <br><br>• e.g. `add n\|James Ho p\|22224444 e\|jamesho@example.com a\|123, Clementi Rd, 1234665 t\|friend t\|colleague m\|A1234567X` |
-| **Edit**                 | `edit INDEX [n\|NAME] [p\|PHONE_NUMBER] [e\|EMAIL] [a\|ADDRESS] [t\|TAG]… [m\|MATRICULATION_NUMBER] [s\|STUDIO] [r\|REFLECTION]​` <br><br>• e.g.`edit 2 n\|James Lee e\|jameslee@example.com m\|A1234567X`                                              |
-| **Delete**               | `delete INDEX` <br><br>• e.g. `delete 3`                                                                                                                                                                                                                |
-| **Delete Shown Persons** | `deleteShown`                                                                                                                                                                                                                                           |
-| **List**                 | `list`                                                                                                                                                                                                                                                  |
-| **Find**                 | `find PREFIX\|KEYWORD` <br><br>• e.g. `find n\|James`                                                                                                                                                                                                   |
-| **Copy**                 | `copy`                                                                                                                                                                                                                                                  |
-| **Export to CSV**        | `export`                                                                                                                                                                                                                                                |
-| **Exit**                 | `exit`                                                                                                                                                                                                                                                  |
-| **Import Exam Scores**   | `importExamScores i\|FILEPATH` <br><br>• e.g. `importExamScores i\|C:/Users/alk/Downloads/exam_scores.csv`                                                                                                                                              |
-| **Add Exam**             | `addExam n\|NAME s\|MAX_SCORE` <br><br>• e.g. `addExam n\|Midterm s\|100`                                                                                                                                                                               |
-| **Delete Exam**          | `deleteExam INDEX` <br><br>• e.g. `deleteExam 3`                                                                                                                                                                                                        |
-| **Select Exam**          | `selectExam INDEX` <br><br>• e.g. `selectExam 1`                                                                                                                                                                                                        |
-| **Deselect Exam**        | `deselectExam`                                                                                                                                                                                                                                          |
-| **Add Exam Score**       | `addScore INDEX s\|SCORE` <br><br>• e.g. `addScore 1 s\|42`                                                                                                                                                                                             |
-| **Edit Exam Score**      | `editScore INDEX s\|SCORE` <br><br>• e.g. `editScore 1 s\|25`                                                                                                                                                                                           |
-| **Delete Exam Score**    | `deleteScore INDEX` <br><br>• e.g. `deleteScore 1`                                                                                                                                                                                                      |
+<style>
+    ul {
+        margin-bottom: 0;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        box-shadow: 0px 10px 10px -10px rgba(0,0,0,0.1);
+    }
 
+    table th, table td {
+        border: 1px;
+        border-style: solid;
+        border-color: #e0e4e4;
+        padding: 10px;
+        text-align: left;
+        line-height: 1.5;
+    }
+
+    table:first-of-type th:first-child, table:first-of-type td:first-child {
+        width: 15%;
+    }
+
+    table:nth-of-type(2) th:first-child, table:nth-of-type(2) td:first-child {
+        width: 9%;
+    }
+
+    table:nth-of-type(2) th:nth-child(3), table:nth-of-type(2) td:nth-child(3) {
+        width: 13%;
+    }
+
+    table th {
+        background-color: #ffffff;
+        border-bottom: 2px solid black;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #F5f5f5;
+    }
+
+    table tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+</style>
+
+<table>
+    <tr>
+        <th>Action</th>
+        <th>Format, Examples</th>
+    </tr>
+    <tr>
+        <td>Help</td>
+        <td><code>help</code></td>
+    </tr>
+    <tr>
+        <td>Clear</td>
+        <td><code>clear</code></td>
+    </tr>
+    <tr>
+        <td>Import</td>
+        <td><code>import i|FILEPATH</code><br><br><ul><li>e.g. <code>import i|C:/Users/alk/Downloads/avengersassemble.csv</code></li></ul></td>
+    </tr>
+    <tr>
+        <td>Add</td>
+        <td><code>add n|NAME p|PHONE_NUMBER e|EMAIL a|ADDRESS [t|TAG]… [m|MATRICULATION_NUMBER] [s|STUDIO] [r|REFLECTION]</code><br><br><ul><li>e.g. <code>add n|James Ho p|22224444 e|jamesho@example.com a|123, Clementi Rd, 1234665 t|friend t|colleague m|A1234567X</code></li></ul></td>
+    </tr>
+    <tr>
+        <td>Edit</td>
+        <td><code>edit INDEX [n|NAME] [p|PHONE_NUMBER] [e|EMAIL] [a|ADDRESS] [t|TAG]… [m|MATRICULATION_NUMBER] [s|STUDIO] [r|REFLECTION]</code><br><br><ul><li>e.g. <code>edit 2 n|James Lee e|jameslee@example.com m|A1234567X</code></li></ul></td>
+    </tr>
+    <tr>
+        <td>Delete</td>
+        <td><code>delete INDEX</code><br><br><ul><li>e.g. <code>delete 3</code></li></ul></td>
+    </tr>
+    <tr>
+        <td>Delete Shown Persons</td>
+        <td><code>deleteShown</code></td>
+    </tr>
+    <tr>
+        <td>List</td>
+        <td><code>list</code></td>
+    </tr>
+    <tr>
+        <td>Find</td>
+        <td><code>find PREFIX|KEYWORD</code><br><br><ul><li>e.g. <code>find n|James</code></li></ul></td>
+    </tr>
+    <tr>
+        <td>Copy</td>
+        <td><code>copy</code></td>
+    </tr>
+    <tr>
+        <td>Export to CSV</td>
+        <td><code>export</code></td>
+    </tr>
+    <tr>
+        <td>Exit</td>
+        <td><code>exit</code></td>
+    </tr>
+    <tr>
+        <td>Import Exam Scores</td>
+        <td><code>importExamScores i|FILEPATH</code><br><br><ul><li>e.g. <code>importExamScores i|C:/Users/alk/Downloads/exam_scores.csv</code></li></ul></td>
+    </tr>
+    <tr>
+        <td>Add Exam</td>
+        <td><code>addExam n|NAME s|MAX_SCORE</code><br><br><ul><li>e.g. <code>addExam n|Midterm s|100</code></li></ul></td>
+    </tr>
+    <tr>
+        <td>Delete Exam</td>
+        <td><code>deleteExam INDEX</code><br><br><ul><li>e.g. <code>deleteExam 3</code></li></ul></td>
+    </tr>
+    <tr>
+        <td>Select Exam</td>
+        <td><code>selectExam INDEX</code><br><br><ul><li>e.g. <code>selectExam 1</code></li></ul></td>
+    </tr>
+    <tr>
+        <td>Deselect Exam</td>
+        <td><code>deselectExam</code></td>
+    </tr>
+    <tr>
+        <td>Add Exam Score</td>
+        <td><code>addScore INDEX s|SCORE</code><br><br><ul><li>e.g. <code>addScore 1 s|42</code></li></ul></td>
+    </tr>
+    <tr>
+        <td>Edit Exam Score</td>
+        <td><code>editScore INDEX s|SCORE</code><br><br><ul><li>e.g. <code>editScore 1 s|25</code></li></ul></td>
+    </tr>
+    <tr>
+        <td>Delete Exam Score</td>
+        <td><code>deleteScore INDEX</code><br><br><ul><li>e.g. <code>deleteScore 1</code></li></ul></td>
+    </tr>
+</table>
 
 <br>
 
@@ -1019,18 +1127,91 @@ Some commands require you to include parameters. These parameters are identified
 
 </box>
 
-| Prefix | What it Refers to         | Max. Length | Constraints                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-|--------|---------------------------|-------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| n\|    | Name                      | 80          | Should only contain alphanumeric characters, spaces, and the characters `,`, `-`, `.`, `/`, `(` and `)`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| n\|    | Exam Name                 | 30          | Should only contain alphanumeric characters and spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| p\|    | Phone Number              | 30          | It can start with an optional `+` to indicate the country code, with the rest only containing numbers. It should be at least 3 digits long.                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| e\|    | Email                     | 100         | **Format:** local-part@domain<br/> **Constraints for local part:**<br/> • Should only contain alphanumeric characters, and the characters `+`, `_`, `.` and `-`.<br/> • Should not start or end with special characters.<br/> • Should not have two consecutive special characters.<br/> **Constraints for domain:**<br/> • Made up of domain labels separated by periods.<br/> • Must end with a domain label of at least 2 characters long.<br/> • Domain label should consist of alphanumeric characters separated only by singular hyphens, if any. |
-| a\|    | Address                   | 100         | Can take any values.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| i\|    | Path of CSV File to Import| -           | Should be the absolute file path of the CSV file without any inverted commas.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| [m\| ] | Matriculation ID          | Fixed at 9 | The first letter must be an uppercase 'A', followed by 7 numbers, and end with an uppercase letter.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| [r\| ] | Reflection Group          | 4           | The first letter must be an uppercase 'R', followed by any number.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| [s\| ] | Studio Group              | 4           | The first letter must be an uppercase 'S', followed by any number.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| [s\| ] | Score                     | 7 + 2 decimals | For exam max scores: the input must be a positive integer.<br/> For persons' exam scores: the input must be an integer greater than or equal to zero.                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| [t\| ]…| Tags                      | 100         | Should be alphanumeric, and should not contain spaces.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| [lt\|] | Less Than                 | 7 + 2 decimals | Should be a positive numerical value smaller than the currently selected exam's max score.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| [mt\| ]| More Than                 | 7 + 2 decimals | Should be a positive numerical value smaller than the currently selected exam's max score.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+<table>
+    <tr>
+        <th>Prefix</th>
+        <th>What it Refers to</th>
+        <th>Max. Length</th>
+        <th>Constraints</th>
+    </tr>
+    <tr>
+        <td><code>n|</code></td>
+        <td>Name</td>
+        <td>80</td>
+        <td>Should only contain alphanumeric characters, spaces, and the characters <code>,</code>, <code>-</code>, <code>.</code>, <code>/</code>, <code>(</code> and <code>)</code>.</td>
+    </tr>
+    <tr>
+        <td><code>n|</code></td>
+        <td>Exam Name</td>
+        <td>30</td>
+        <td>Should only contain alphanumeric characters and spaces.</td>
+    </tr>
+    <tr>
+        <td><code>p|</code></td>
+        <td>Phone Number</td>
+        <td>30</td>
+        <td>It can start with an optional <code>+</code> to indicate the country code, with the rest only containing numbers. It should be at least 3 digits long.</td>
+    </tr>
+    <tr>
+        <td><code>e|</code></td>
+        <td>Email</td>
+        <td>100</td>
+        <td><strong>Format:</strong> local-part@domain<br/> <strong>Constraints for local part:</strong><br/> • Should only contain alphanumeric characters, and the characters <code>+</code>, <code>_</code>, <code>.</code> and <code>-</code>.<br/> • Should not start or end with special characters.<br/> • Should not have two consecutive special characters.<br/> <strong>Constraints for domain:</strong><br/> • Made up of domain labels separated by periods.<br/> • Must end with a domain label of at least 2 characters long.<br/> • Domain label should consist of alphanumeric characters separated only by singular hyphens, if any.</td>
+    </tr>
+    <tr>
+        <td><code>a|</code></td>
+        <td>Address</td>
+        <td>100</td>
+        <td>Can take any values.</td>
+    </tr>
+    <tr>
+        <td><code>i|</code></td>
+        <td>Path of CSV File to Import</td>
+        <td>-</td>
+        <td>Should be the absolute file path of the CSV file without any inverted commas.</td>
+    </tr>
+    <tr>
+        <td><code>[m| ]</code></td>
+        <td>Matriculation ID</td>
+        <td>Fixed at 9</td>
+        <td>The first letter must be an uppercase 'A', followed by 7 numbers, and end with an uppercase letter.</td>
+    </tr>
+    <tr>
+        <td><code>[r| ]</code></td>
+        <td>Reflection Group</td>
+        <td>4</td>
+        <td>The first letter must be an uppercase 'R', followed by any number.</td>
+    </tr>
+    <tr>
+        <td><code>[s| ]</code></td>
+        <td>Studio Group</td>
+        <td>4</td>
+        <td>The first letter must be an uppercase 'S', followed by any number.</td>
+    </tr>
+    <tr>
+        <td><code>[s| ]</code></td>
+        <td>Score</td>
+        <td>7 + 2 decimals</td>
+        <td>For exam max scores: the input must be a positive integer.<br/> For persons' exam scores: the input must be an integer greater than or equal to zero.</td>
+    </tr>
+    <tr>
+        <td><code>[t| ]…</code></td>
+        <td>Tags</td>
+        <td>100</td>
+        <td>Should be alphanumeric, and should not contain spaces.</td>
+    </tr>
+    <tr>
+        <td><code>[lt|]</code></td>
+        <td>Less Than</td>
+        <td>7 + 2 decimals</td>
+        <td>Should be a positive numerical value smaller than the currently selected exam's max score.</td>
+    </tr>
+    <tr>
+        <td><code>[mt| ]</code></td>
+        <td>More Than</td>
+        <td>7 + 2 decimals</td>
+        <td>Should be a positive numerical value smaller than the currently selected exam's max score.</td>
+    </tr>
+</table>
+
+<br>
