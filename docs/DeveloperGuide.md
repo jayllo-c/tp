@@ -1353,7 +1353,7 @@ For concrete examples of the validation process, [refer to the manual testing se
 
 <div id="scorestatistics"></div>
 
-#### **Score Statistics Command**
+#### **Score Statistics Feature**
 
 The exam statistics feature allows users to view the mean and median scores of the selected exam. The statistics are displayed in the `StatusBarFooter` element of the UI on the right side.
 
