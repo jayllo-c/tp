@@ -1461,14 +1461,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Appendix C: Use Cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is the `AvengersAssemble` and the **Actor** is the `user`, unless specified otherwise)
 
 ##### Use Case: UC01 — Getting Help
 
 **MSS:**
 
 1.  User requests help information.
-2.  AddressBook copies the link to the user guide to the user's clipboard.
+2.  AvengersAssemble copies the link to the user guide to the user's clipboard.
 3.  User pastes the link into a browser to access the user guide.
 
     Use case ends.
@@ -1478,8 +1478,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to clear the sample data.
-2.  AddressBook clears the sample data.
-3.  AddressBook displays a message indicating that the sample data has been cleared.
+2.  AvengersAssemble clears the sample data.
+3.  AvengersAssemble displays a message indicating that the sample data has been cleared.
 
     Use case ends.
 
@@ -1488,8 +1488,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to import person details from a CSV file.
-2.  AddressBook imports the person details from the CSV file.
-3.  AddressBook displays a message indicating that the person details have been imported.
+2.  AvengersAssemble imports the person details from the CSV file.
+3.  AvengersAssemble displays a message indicating that the person details have been imported.
 
     Use case ends.
 
@@ -1497,13 +1497,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *  1a. The file to be imported is not a CSV file.
 
-    *  1a1. AddressBook displays an error message indicating that the file type is not recognised and should be a csv file.
+    *  1a1. AvengersAssemble displays an error message indicating that the file type is not recognised and should be a csv file.
 
        Use case ends.
 
-*  1b. AddressBook cannot find the file to be imported.
+*  1b. AvengersAssemble cannot find the file to be imported.
 
-    *  1b1. AddressBook displays a message indicating that the file is not recognised.
+    *  1b1. AvengersAssemble displays a message indicating that the file is not recognised.
 
        Use case ends.
 
@@ -1512,8 +1512,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to add a new person and inputs details for the new person.
-2.  AddressBook saves the new person's information.
-3.  AddressBook confirms the addition of the new person.
+2.  AvengersAssemble saves the new person's information.
+3.  AvengersAssemble confirms the addition of the new person.
 
     Use case ends.
 
@@ -1521,7 +1521,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *  1a. User does not input all compulsory parameters along with the person.
 
-    *  1a1. AddressBook prompts the user on the proper usage of the command.
+    *  1a1. AvengersAssemble prompts the user on the proper usage of the command.
 
        Step 1a1 is repeated until the data entered is correct.
 
@@ -1529,7 +1529,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *  1b. User tries to add a person with an existing email address.
 
-    *  1b1. AddressBook displays an error message informing the user that the email address already exists.
+    *  1b1. AvengersAssemble displays an error message informing the user that the email address already exists.
 
        Step 1b1 is repeated until a valid email address is entered.
 
@@ -1540,8 +1540,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to edit a specific person with updated details.
-2.  AddressBook saves the updated details.
-3.  AddressBook confirms the successful update.
+2.  AvengersAssemble saves the updated details.
+3.  AvengersAssemble confirms the successful update.
 
     Use case ends.
 
@@ -1549,7 +1549,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *   1a. User does not input enough parameters along with the person.
 
-    *  1a1. AddressBook prompts the user on the proper usage of the command.
+    *  1a1. AvengersAssemble prompts the user on the proper usage of the command.
 
        Step 1a1 is repeated until the data entered is correct.
 
@@ -1557,7 +1557,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *   1b. The selected person does not exist.
 
-    *  1b1. AddressBook displays an error message indicating that the person does not exist.
+    *  1b1. AvengersAssemble displays an error message indicating that the person does not exist.
 
        Use case ends.
 
@@ -1566,9 +1566,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User !!requests to list persons (UC08)!!
-2.  AddressBook shows a list of persons
+2.  AvengersAssemble shows a list of persons
 3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+4.  AvengersAssemble deletes the person
 
     Use case ends.
 
@@ -1580,7 +1580,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *   3a. The given index is invalid.
 
-    *  3a1. AddressBook shows an error message.
+    *  3a1. AvengersAssemble shows an error message.
 
        Use case resumes at step 2.
 
@@ -1590,8 +1590,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1. User !!requests to find group of persons (UC09)!! by desired requirements
 2. User requests to delete all listed persons.
-3. AddressBook deletes all listed persons.
-4. AddressBook displays a message to confirm that all listed persons have been deleted.
+3. AvengersAssemble deletes all listed persons.
+4. AvengersAssemble displays a message to confirm that all listed persons have been deleted.
 
     Use case ends.
 
@@ -1599,13 +1599,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *   2a. No persons are listed.
 
-    *  2a1. AddressBook displays a message indicating that there is no persons to delete.
+    *  2a1. AvengersAssemble displays a message indicating that there is no persons to delete.
 
        Use case ends.
 
 *   2b. User has a filtered view that contains all existing persons.
 
-    *  2b1. AddressBook displays a message indicating that all persons cannot be deleted at once.
+    *  2b1. AvengersAssemble displays a message indicating that all persons cannot be deleted at once.
 
        Use case ends.
 
@@ -1614,7 +1614,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to list persons.
-2.  AddressBook shows the list of persons.
+2.  AvengersAssemble shows the list of persons.
 3.  User views the list of persons.
 
     Use case ends.
@@ -1623,7 +1623,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *   2a. The list is empty.
 
-    *  2a1. AddressBook displays a message indicating that the list is empty.
+    *  2a1. AvengersAssemble displays a message indicating that the list is empty.
 
        Use case ends.
 
@@ -1632,7 +1632,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to find a specific group of persons matching the search criteria.
-2.  AddressBook displays a list of persons matching the criteria.
+2.  AvengersAssemble displays a list of persons matching the criteria.
 
     Use case ends.
 
@@ -1640,7 +1640,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *   1a. No persons match the search criteria.
 
-    *  1a1. AddressBook displays a message indicating that no persons match the search criteria.
+    *  1a1. AvengersAssemble displays a message indicating that no persons match the search criteria.
 
        Use case ends.
 
@@ -1649,9 +1649,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to copy emails of currently displayed persons.
-2.  AddressBook copies the emails of currently displayed persons
+2.  AvengersAssemble copies the emails of currently displayed persons
 into user's clipboard.
-3.  AddressBook notifies the user that emails have been copied.
+3.  AvengersAssemble notifies the user that emails have been copied.
 4.  User can paste emails when composing emails.
 
     Use case ends.
@@ -1660,7 +1660,7 @@ into user's clipboard.
 
 *   2a. No persons currently displayed.
 
-    *  2a1. AddressBook displays a message indicating that no persons are currently displayed.
+    *  2a1. AvengersAssemble displays a message indicating that no persons are currently displayed.
 
        Use case ends.
 
@@ -1670,8 +1670,8 @@ into user's clipboard.
 
 1. User !!requests to filter persons (UC09)!! by desired requirements
 2. User requests to export all listed persons and details to a CSV file.
-3. AddressBook exports the persons to a CSV file.
-4. AddressBook displays a message to confirm that all listed persons have been exported to a CSV file.
+3. AvengersAssemble exports the persons to a CSV file.
+4. AvengersAssemble displays a message to confirm that all listed persons have been exported to a CSV file.
 
     Use case ends.
 
@@ -1679,7 +1679,7 @@ into user's clipboard.
 
 *   2a. No persons are listed.
 
-    *  2a2. AddressBook displays a message indicating that there is no persons to export.
+    *  2a2. AvengersAssemble displays a message indicating that there is no persons to export.
 
        Use case ends.
 
@@ -1688,33 +1688,33 @@ into user's clipboard.
 **MSS:**
 
 1. User requests to import exam results from a csv file.
-2. AddressBook displays a message that all exam results have been imported.
+2. AvengersAssemble displays a message that all exam results have been imported.
 
     Use case ends.
 
 **Extensions:**
 
-*   2a. AddressBook cannot find the file specified.
+*   2a. AvengersAssemble cannot find the file specified.
 
-    *  2a1. AddressBook displays a message indicating that the file is not recognised.
+    *  2a1. AvengersAssemble displays a message indicating that the file is not recognised.
 
        Use case ends.
 
 *   2b. The file to be imported is not a csv file.
 
-    *  2b1. AddressBook displays an error message indicating that the file type is not recognised and should be a csv file
+    *  2b1. AvengersAssemble displays an error message indicating that the file type is not recognised and should be a csv file
 
        Use case ends.
 
 *   2c. There are duplicate entries in the csv file.
 
-    *  2c1. AddressBook displays a message indicating that there are duplicate entries in the csv file, and only the first instance has been kept.
+    *  2c1. AvengersAssemble displays a message indicating that there are duplicate entries in the csv file, and only the first instance has been kept.
 
        Use case ends.
 
 * 2d. The csv file contains invalid entries.
 
-    *  2d1. AddressBook displays a message indicating that there are invalid entries in the csv file, and all other valid entries have been imported.
+    *  2d1. AvengersAssemble displays a message indicating that there are invalid entries in the csv file, and all other valid entries have been imported.
 
        Use case ends.
 
@@ -1723,7 +1723,7 @@ into user's clipboard.
 **MSS:**
 
 1. User requests to add an exam.
-2. AddressBook displays a message that the exam has been added.
+2. AvengersAssemble displays a message that the exam has been added.
 
     Use case ends.
 
@@ -1731,7 +1731,7 @@ into user's clipboard.
 
 *   1a. User does not input all compulsory parameters along with the exam.
 
-    *  1a1. AddressBook prompts the user on the proper usage of the command.
+    *  1a1. AvengersAssemble prompts the user on the proper usage of the command.
 
        Step 1a1 is repeated until the data entered is correct.
 
@@ -1739,7 +1739,7 @@ into user's clipboard.
 
 *   1b. User tries to add an exam with an existing name.
 
-    *  1b1. AddressBook displays an error message informing the user that the exam name already exists.
+    *  1b1. AvengersAssemble displays an error message informing the user that the exam name already exists.
 
        Step 1b1 is repeated until a valid exam name is entered.
 
@@ -1747,7 +1747,7 @@ into user's clipboard.
 
 *   1c. User tries to add an exam with an invalid score.
 
-    *  1c1. AddressBook displays an error message informing the user that the score is invalid.
+    *  1c1. AvengersAssemble displays an error message informing the user that the score is invalid.
 
        Step 1c1 is repeated until a valid score is entered.
 
@@ -1755,7 +1755,7 @@ into user's clipboard.
 
 *   1d. User tries to add an exam with an invalid name.
 
-    *  1d1. AddressBook displays an error message informing the user that the name is invalid.
+    *  1d1. AvengersAssemble displays an error message informing the user that the name is invalid.
 
        Step 1d1 is repeated until a valid name is entered.
 
@@ -1766,7 +1766,7 @@ into user's clipboard.
 **MSS:**
 
 1. User requests to delete an exam.
-2. AddressBook displays a message that the exam has been deleted.
+2. AvengersAssemble displays a message that the exam has been deleted.
 
     Use case ends.
 
@@ -1774,7 +1774,7 @@ into user's clipboard.
 
 *   1a. The exam does not exist.
 
-    *  1a1. AddressBook displays an error message indicating that the exam does not exist.
+    *  1a1. AvengersAssemble displays an error message indicating that the exam does not exist.
 
        Use case ends.
 
@@ -1783,7 +1783,7 @@ into user's clipboard.
 **MSS:**
 
 1. User requests to select an exam.
-2. AddressBook displays the scores of the selected exam.
+2. AvengersAssemble displays the scores of the selected exam.
 
     Use case ends.
 
@@ -1791,7 +1791,7 @@ into user's clipboard.
 
 *   1a. The exam does not exist.
 
-    *  1a1. AddressBook displays an error message indicating that the exam does not exist.
+    *  1a1. AvengersAssemble displays an error message indicating that the exam does not exist.
 
        Use case ends.
 
@@ -1800,7 +1800,7 @@ into user's clipboard.
 **MSS:**
 
 1. User requests to deselect an exam.
-2. AddressBook displays the persons without the scores of the selected exam.
+2. AvengersAssemble displays the persons without the scores of the selected exam.
 
     Use case ends.
 
@@ -1808,7 +1808,7 @@ into user's clipboard.
 
 *   1a. The exam does not exist.
 
-    *  1a1. AddressBook displays an error message indicating that the exam does not exist.
+    *  1a1. AvengersAssemble displays an error message indicating that the exam does not exist.
 
        Use case ends.
 
@@ -1818,7 +1818,7 @@ into user's clipboard.
 
 1. User !!requests to select an exam (UC15)!! to add scores to.
 2. User requests to add scores to a student for the selected exam.
-3. AddressBook displays a message that the scores have been added.
+3. AvengersAssemble displays a message that the scores have been added.
 
     Use case ends.
 
@@ -1826,13 +1826,13 @@ into user's clipboard.
 
 *   2a. The student does not exist.
 
-    *  2a1. AddressBook displays an error message indicating that the student does not exist.
+    *  2a1. AvengersAssemble displays an error message indicating that the student does not exist.
 
        Use case ends.
 
 *   2b. The student already has a score for the exam.
 
-    *  2b1. AddressBook displays an error message indicating that the student already has a score for the exam.
+    *  2b1. AvengersAssemble displays an error message indicating that the student already has a score for the exam.
 
        Use case ends.
 
@@ -1842,7 +1842,7 @@ into user's clipboard.
 
 1. User !!requests to select an exam (UC15)!! to edit scores for.
 2. User requests to edit scores for a student for the selected exam.
-3. AddressBook displays a message that the scores have been edited.
+3. AvengersAssemble displays a message that the scores have been edited.
 
     Use case ends.
 
@@ -1850,19 +1850,19 @@ into user's clipboard.
 
 * 2a. The student does not exist.
 
-    * 2a1. AddressBook displays an error message indicating that the student does not exist.
+    * 2a1. AvengersAssemble displays an error message indicating that the student does not exist.
 
        Use case ends.
 
 * 2b. The student does not have a score for the exam.
 
-    * 2b1. AddressBook displays an error message indicating that the student does not have a score for the exam.
+    * 2b1. AvengersAssemble displays an error message indicating that the student does not have a score for the exam.
 
         Use case ends.
 
 * 2c. The score is invalid.
 
-    * 2c1. AddressBook displays an error message indicating that the score is invalid.
+    * 2c1. AvengersAssemble displays an error message indicating that the score is invalid.
 
         Use case ends.
 
@@ -1872,7 +1872,7 @@ into user's clipboard.
 
 1. User !!requests to select an exam (UC15)!! to delete scores for.
 2. User requests to delete scores for a student for the selected exam.
-3. AddressBook displays a message that the scores have been deleted.
+3. AvengersAssemble displays a message that the scores have been deleted.
 
     Use case ends.
 
@@ -1880,13 +1880,13 @@ into user's clipboard.
 
 *   2a. The student does not exist.
 
-    *  2a1. AddressBook displays an error message indicating that the student does not exist.
+    *  2a1. AvengersAssemble displays an error message indicating that the student does not exist.
 
        Use case ends.
 
 *   2b. The student does not have a score for the exam.
 
-    *  2b1. AddressBook displays an error message indicating that the student does not have a score for the exam.
+    *  2b1. AvengersAssemble displays an error message indicating that the student does not have a score for the exam.
 
         Use case ends.
 
@@ -1895,7 +1895,7 @@ into user's clipboard.
 **MSS:**
 
 1. User !!requests to select an exam (UC15)!! to view statistics of scores for.
-2. AddressBook displays the statistics of scores for the selected exam.
+2. AvengersAssemble displays the statistics of scores for the selected exam.
 
     Use case ends.
 
@@ -1903,7 +1903,7 @@ into user's clipboard.
 
 *  2a. There are no scores for the exam.
 
-    *  2a1. AddressBook does not display any statistics.
+    *  2a1. AvengersAssemble does not display any statistics.
 
        Use case ends.
 
@@ -1912,7 +1912,7 @@ into user's clipboard.
 **MSS:**
 
 1.  User requests to exit the application.
-2.  AddressBook exits the application.
+2.  AvengersAssemble exits the application.
 
     Use case ends.
 
@@ -2147,7 +2147,7 @@ On Window systems, you can right-click the file and copy the file path, remember
          Alice,,wonderland,123
          Bob,bob@gmail.com,town,123
          ```
-       * **Initially, the address book is empty.**
+       * **Initially, the persons list is empty.**
 
    <br>
 
