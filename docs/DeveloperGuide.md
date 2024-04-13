@@ -709,7 +709,7 @@ The `ImportCommandParser` class is responsible for parsing user input to extract
 
 The `ImportCommand` class first makes use `OpenCSV` library which parses the CSV file into a `List<String[]>`, with each `String[]`
 representing a row in the CSV file. The `List<String[]>` is further parsed row by row by the `readCsvFile` method, which
-returns a `Pair`. The key of the returned `Pair` is a `personsData` list containing the `Person` objects sucessfully parsed from the CSV file and the value is an error report containing all the errors that occured during the process of reading from the CSV file.
+returns a `Pair`. The key of the returned `Pair` is a `personsData` list containing the `Person` objects successfully parsed from the CSV file and the value is an error report containing all the errors that occurred during the process of reading from the CSV file.
 
 The `ImportCommand` then iterates through the `personsData` list and adds each `Person` object to the `Model` component
 through repeated use of the `AddCommand`. Errors that occur during this process are also added to the error report.
@@ -2072,7 +2072,7 @@ The import command requires the use of an external CSV file. The test cases belo
 On Window systems, you can right-click the file and copy the file path, remember to remove the double quotes. <br> On MacOS, you can drag the file into the terminal to get the file path. <br>On Linux, you can use the <code>pwd</code> command to get the current directory and append the file name to it.
 </box>
 
-1. Importing Data from a CSV File
+1. Importing data from a CSV file
 
    * **Prerequisites**
        * There is a file at `C:\path\to\file.csv` with the following content:
@@ -2093,7 +2093,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 
     <br>
 
-2. Importing Data from a CSV File that does not Exist
+2. Importing data from a CSV File that does not exist
 
    * **Prerequisites**
        * No CSV file at the path `C:\path\to\file.csv`
@@ -2105,7 +2105,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 
    <br>
 
-3. Importing Data from a CSV File that is not a CSV File
+3. Importing Data from a file that is not a CSV file
 
    * **Prerequisites**
        * There is a file at the path `C:\path\to\file.txt`
@@ -2117,7 +2117,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 
     <br>
 
-4. Importing Data from a CSV File with Duplicate Compulsory Headers in Header Row
+4. Importing Data from a CSV File with duplicate compulsory headers in header row
 
    * **Prerequisites**
        * A CSV file with duplicate compulsory headers (e.g. 2 header columns named 'name') at the path `C:\path\to\file.csv` with the following content:
@@ -2138,7 +2138,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 
    <br>
 
-5. Importing Data from a CSV File with Missing Compulsory Headers in Header Row
+5. Importing Data from a CSV file with missing compulsory headers in header row
 
    * **Prerequisites**
        * A CSV file with missing compulsory headers at the path `C:\path\to\file.csv` with the following content (missing the `name` header):
@@ -2154,7 +2154,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 
    <br>
 
-6. Importing Data from a CSV File with Missing Compulsory Values in a Row
+6. Importing data from a CSV file with missing compulsory values in a row
 
    * **Prerequisites**
        * A CSV file with missing compulsory values in a row at the path `C:\path\to\file.csv` with the following content:
@@ -2176,7 +2176,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 
    <br>
 
-7. Importing Data from a CSV File with Extra Headers in Header Row
+7. Importing data from a CSV file with extra headers in header row
 
    * **Prerequisites**
        * A CSV file with extra headers in header row at the path `C:\path\to\file.csv` with the following content:
@@ -2197,7 +2197,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 
    <br>
 
-8. Importing Data from a CSV File with Unequal Number of Values in a Row as the Number of Headers
+8. Importing data from a CSV file with unequal number of values in a row as the number of headers
 
    * **Prerequisites**
        * A CSV file with unequal number of values in a row as the number of headers at the path `C:\path\to\file.csv` with the following content:
@@ -2219,7 +2219,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 
    <br>
 
-9. Importing Data from an Empty CSV File
+9. Importing data from an empty CSV file
 
    * **Prerequisites**
        * An empty CSV file at the path `C:\path\to\file.csv`
