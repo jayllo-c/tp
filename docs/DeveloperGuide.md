@@ -2035,10 +2035,10 @@ testers are expected to do more *exploratory* testing.
 1. Clearing all contact information from the app.
 
     * **Prerequisites:**
-        * Ensure that there are multiple persons in the list.
+        * Ensure that there is at least one person and exam in the app.
           <br><br>
     * **Test case:** `clear`<br>
-      **Expected:** All persons are deleted from the list. Status message shows that all persons and exams have been
+      **Expected:** All persons and exams are deleted from the list. Status message shows that all persons and exams have been
       deleted from the app.
 
 <br>
@@ -2459,7 +2459,7 @@ On Window systems, you can right click the file and copy the file path, remember
 1. Finding persons by contact details.
 
     * **Prerequisites:** 
-        * Ensure that there are multiple persons in the list.
+        * Ensure that there are multiple persons in the app. 
           <br><br>
     * **Test case:** `find n|Alice`<br>
       **Expected:** Persons with the name "Alice" are shown. Status message shows the number of persons found.
@@ -2489,7 +2489,7 @@ On Window systems, you can right click the file and copy the file path, remember
 2. Finding persons by score.
 
     * **Prerequisites:** 
-        * Ensure that there are multiple persons in the list.
+        * Ensure that there are multiple persons in the app.
         * Ensure that at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
         * Ensure an exam is selected using the `selectExam` command. For this example, we shall select the `test exam`.
           <br><br>
@@ -2509,7 +2509,7 @@ On Window systems, you can right click the file and copy the file path, remember
 3. Finding persons by multiple prefixes.
 
     * **Prerequisites:** 
-        * Ensure that there are multiple persons in the list.
+        * Ensure that there are multiple persons in the app.
           <br><br>
     * **Test case (multiple unique prefixes):** `find n|Alice e|Alice`<br>
       **Expected:** An error message is shown indicating that the format of the command is incorrect.
@@ -2535,7 +2535,7 @@ On Window systems, you can right click the file and copy the file path, remember
 1. Copying the emails of all persons.
 
     * **Prerequisites:** 
-        * Ensure that there are multiple persons in the list.
+        * Ensure that there are multiple persons in the app.
         * Ensure all persons are displayed using the `list` command.
           <br><br>
     * **Test case:** `copy`<br>
@@ -2545,7 +2545,7 @@ On Window systems, you can right click the file and copy the file path, remember
 2. Copying the emails of a specific group.
 
     * **Prerequisites:** 
-        * Ensure that there are multiple persons in the list.
+        * Ensure that there are multiple persons in the app.
         * Filter the person list using the `find` command.
           <br><br>
     * **Test case:** `copy`<br>
