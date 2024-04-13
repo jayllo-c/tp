@@ -1195,9 +1195,10 @@ The following sequence diagram illustrates the parsing of an `addScore` command 
     <puml src="diagrams/AddScoreParsingSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
 </p>
 
-> **Note:** <br>
-> The parsing of an `editScore` command follows a similar structure, differing in the object instantiated at the end of the `parse` method.
-> `EditScoreCommandParser` instantiates an `EditScoreCommand` object.
+<box type="info" seamless>
+<b>Note:</b> The parsing of an `editScore` command follows a similar structure, differing in the object instantiated at the end of the `parse` method.
+`EditScoreCommandParser` instantiates an `EditScoreCommand` object.
+</box>
 
 ##### Executing the Command
 
@@ -1214,8 +1215,9 @@ The following sequence diagram illustrates the execution of an `addScore` comman
     <puml src="diagrams/AddScoreExecutionSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
 </p>
 
-> **Note:** <br>
-> The execution of an `editScore` command follows a similar structure to the execution of an `addScore` command.
+<box type="info" seamless>
+<b>Note:</b> The execution of an `editScore` command follows a similar structure to the execution of an `addScore` command.
+</box>
 
 <br>
 
@@ -2361,7 +2363,7 @@ testers are expected to do more *exploratory* testing.
 The import command requires the use of an external CSV file. The test cases below assume that the tests are run on a Windows system, and that the CSV file is located at the path `C:\path\to\file.csv`. Please modify the filepath accordingly based on where your file is stored and your operating system.
 
 <box type="info" seamless>
-**Note:**On Window systems, you can right-click the file and copy the file path, remember to remove the double quotes. <br> On MacOS, you can drag the file into the terminal to get the file path. <br>On Linux, you can use the <code>pwd</code> command to get the current directory and append the file name to it.
+<b>Note:</b> On Window systems, you can right-click the file and copy the file path, remember to remove the double quotes. <br> On MacOS, you can drag the file into the terminal to get the file path. <br>On Linux, you can use the <code>pwd</code> command to get the current directory and append the file name to it.
 </box>
 
 1. Importing data from a CSV file
