@@ -299,7 +299,6 @@ The following is a more detailed explanation on how user input is parsed into a 
 **Note:** Some commands do not require any arguments (e.g., `help`, `clear`, `list`, `exit`). In such cases, the `XYZCommand` class is directly instantiated by the `AddressBookParser` class without the parsing of arguments. As such, any arguments passed to these commands are ignored.
 
 </box>
-<div style="page-break-after: always;"></div>
 
 #### Considerations for Logic
 
@@ -310,6 +309,7 @@ This design choice also allows for easier maintenance and extensibility, as any 
 
 <br>
 
+<div style="page-break-after: always;"></div>
 
 <div id="model-component"></div>
 
@@ -327,7 +327,6 @@ The `Model` component,
 * stores `ScoreStatistics` for the currently selected `Exam`. This statistic is used in conjunction with the mean and median feature. It is also exposed to outsiders as an unmodifiable `ObservableValue<ScoreStatistics>` so that the UI can be bound to this value for updating.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
-<div style="page-break-after: always;"></div>
 
 <box type="info" seamless>
 
@@ -349,7 +348,6 @@ The `Model` component,
 
 <br>
 <br>
-<div style="page-break-after: always;"></div>
 
 #### Saving of Data
 
@@ -496,7 +494,7 @@ The `Person` object is then added to the `UniquePersonList` through the `addPers
 The sequence diagram below illustrates a more in-depth view of the interactions regarding the parsing of user input.
 It takes an add command: `execute(add n|Dohn Joe p|98765432 a|123 e|dohn@gm.com m|A1234567X s|S1 r|R1)` as an example.
 
-<p align="center"><puml src="diagrams/AddSequenceDiagram.puml" alt="Detailed Interactions Inside the Logic Component for the `add n/Dohn Joe p/98765432 a/123 e/dohn@gm.com m/A1234567X s/S1 r/R1` User Input" width="700" /></p>
+<p align="center"><puml src="diagrams/AddSequenceDiagram.puml" alt="Detailed Interactions Inside the Logic Component for the `add n/Dohn Joe p/98765432 a/123 e/dohn@gm.com m/A1234567X s/S1 r/R1` User Input" /></p>
 
 <box type="info" seamless>
 
@@ -841,7 +839,7 @@ The email addresses are then concatenated into a single string, separated by com
 After the `CopyCommand` is executed, the `UI` component updates the `ResultDisplay` to show a message indicating that the emails have been copied to the clipboard.
 
 The following activity diagram summarizes the steps involved in executing the `copy` command:
-<p align="center"><puml src="diagrams/CopyImplementationActivityDiagram.puml" width="800" /></p>
+<p align="center"><puml src="diagrams/CopyImplementationActivityDiagram.puml" width="1000" /></p>
 
 ##### Considerations
 
@@ -851,6 +849,7 @@ The `copy` command is designed to be used with the find command, which filters t
 Consequently, the flexibility of the `copy` command relies heavily on the implementation of the `find` command.
 Due to this dependency, any changes to the `find` command may affect the functionality of the `copy` command.
 
+<div style="page-break-after: always;"></div>
 ##### Extensibility
 
 Due to the simplicity of the `copy` command, there are limited opportunities for extending its functionality.
@@ -1158,6 +1157,8 @@ We were initially torn between the selection of exams using the exam name or the
 ##### Allowing Deselection of Exams
 We decided to allow users to deselect exams as the exam scores and score statistics are displayed based on the selected exam. Deselecting the exam allows users to get rid of the displayed scores and statistics when they are no longer needed.
 
+<div style="page-break-after: always;"></div>
+
 ##### Extensibility
 The design of the exam feature allows for easy extension to accommodate future enhancements or additional functionalities. Methods for managing exams are implemented in the `Model` component, and the updating of UI for Exams is abstracted into the UI component, Making it easy to add new commands or features related to exams.
 
@@ -1265,7 +1266,7 @@ The `index` is then used in instantiating the `DeleteScoreCommand` by the `Delet
 The following sequence diagram illustrates the parsing of an `deleteScore` command with the user input `deleteScore 1`:
 
 <p align="center">
-    <puml src="diagrams/DeleteScoreParsingSequenceDiagram.puml" alt="Sequence Diagram for Parsing of deleteScore command" width="550"/>
+    <puml src="diagrams/DeleteScoreParsingSequenceDiagram.puml" alt="Sequence Diagram for Parsing of deleteScore command" width="650"/>
 </p>
 
 ##### Executing the Command
@@ -1276,7 +1277,7 @@ It also retrieves the currently selected exam from the `Model`.
 It removes the score for the selected exam in the person's existing `scores` hashmap using the `removeExamScoreFromPerson` method in `Model`.
 
 <p align="center">
-    <puml src="diagrams/DeleteScoreExecutionSequenceDiagram.puml" alt="Sequence Diagram for execution of deleteScore command" width="550" />
+    <puml src="diagrams/DeleteScoreExecutionSequenceDiagram.puml" alt="Sequence Diagram for execution of deleteScore command" width="650" />
 </p>
 
 <br>
@@ -1551,8 +1552,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | head tutor using the app                    | categorize my persons into groups       | manage different groups of students effectively                        |
 | `* * *`  | head tutor using the app                    | copy email addresses of a group         | effectively communicate with target groups                             |
 | `* * *`  | head tutor using the app                    | export the details of persons to a CSV  | easily share the details of a group with others                        |
-
-<div style="page-break-after: always;"></div>
 
 #### For Exam and Score Management
 
