@@ -849,7 +849,7 @@ The `export` command does not require any additional arguments from the user. He
 * The `execute` method also retrieves the address book file path by calling the `getAddressBookFilePath()` method in `Model` (this `AddressBook` stores information of **all** persons and exams).
   This file path is retrieved to obtain information on the examinations added in the application
 
-The sequence diagram illustrates the interactions between the Logic and Model components when data is being retrieved from `Model` when `export` is executed:
+The sequence diagram illustrates the interactions between the `Logic` and `Model` components when data is being retrieved from `Model` when `export` is executed:
 
 <p align="center">
     <puml src="diagrams/ExportDataRetrievalSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
@@ -1337,7 +1337,7 @@ For example, an extreme case will be to search for persons with the `Name` field
 
 #### Update UI to Wrap Text
 
-Currently, the `ResultDisplay` box does not wrap text, which means that long lines of text will extend beyond the width of the box. This results in the need for two scrollbars, a horizontal one for the result box and a vertical one for the currently shown list of persons. This is not ideal as it makes the UI less optimized for the target audience, who prefer using a CLI-optimized application and prefer not to use mouse controls to scroll through scrollboxes.
+Currently, the `ResultDisplay` box does not wrap text, which means that long lines of text will extend beyond the width of the box. This results in the need for two scrollbars, a horizontal one for the result box and a vertical one for the currently shown list of persons. This is not ideal as it makes the UI less optimized for the target audience, who prefer using a CLI-optimized application and prefer not to use mouse controls to scroll through scroll boxes.
 
 ##### Planned Implementation
 
@@ -1458,17 +1458,17 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### For Exam and Score Management
 
-| Priority | As a …​                                      | I want to …​                            | So that I can…​                                        |
-|----------|---------------------------------------------|----------------------------------------|--------------------------------------------------------|
-| `* * *`  | head tutor using the app                    | import assesment scores from a csv file| easily add a large number of scores to the application |
-| `* * *`  | head tutor using the app                    | add exams to the app                   | keep track of student performance                      |
-| `* * *`  | head tutor using the app                    | delete exams from the app              | remove exams that are no longer relevant               |
-| `* * *`  | head tutor using the app                    | view scores for a specific exam        | analyse student scores                                 |
-| `* * *`  | head tutor using the app                    | add scores to the app                  | keep track of student performance                      |
-| `* * *`  | head tutor using the app                    | edit scores in the app                 | correct errors in the scores                           |
-| `* * *`  | head tutor using the app                    | delete scores from the app             | remove scores that are no longer relevant              |
-| `* * *`  | head tutor using the app                    | export scores to a csv file            | easily share the scores with others                    |
-| `* * *`  | head tutor using the app                    | view statistics of scores              | analyse student performance                            |
+| Priority | As a …​                                      | I want to …​                             | So that I can…​                                        |
+|----------|---------------------------------------------|------------------------------------------|--------------------------------------------------------|
+| `* * *`  | head tutor using the app                    | import assessment scores from a csv file | easily add a large number of scores to the application |
+| `* * *`  | head tutor using the app                    | add exams to the app                     | keep track of student performance                      |
+| `* * *`  | head tutor using the app                    | delete exams from the app                | remove exams that are no longer relevant               |
+| `* * *`  | head tutor using the app                    | view scores for a specific exam          | analyse student scores                                 |
+| `* * *`  | head tutor using the app                    | add scores to the app                    | keep track of student performance                      |
+| `* * *`  | head tutor using the app                    | edit scores in the app                   | correct errors in the scores                           |
+| `* * *`  | head tutor using the app                    | delete scores from the app               | remove scores that are no longer relevant              |
+| `* * *`  | head tutor using the app                    | export scores to a csv file              | easily share the scores with others                    |
+| `* * *`  | head tutor using the app                    | view statistics of scores                | analyse student performance                            |
 
 
 <div id="appendix_c"></div>
@@ -2989,7 +2989,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 
 ### Appendix G: Effort
 
-This sections aims to showcase the effort put into Avengers Assemble by our team.
+This section aims to showcase the effort put into Avengers Assemble by our team.
 We will highlight the difficulty level, challenges faced, and effort required in this project.
 
 <br>
@@ -3079,7 +3079,7 @@ storage of these entities and how to manage the data effectively.
 One of the greatest challenges was designing a user-friendly interface for score
 interaction within the limited screen space. We had to devise intuitive methods for users to view, input and manage the scores
 of various exams, without overwhelming the interface. This proved to be a greater challenge than initially anticipated,
-as we had to consider trade offs between functionality and user experience. Lowering the complexity of the interface
+as we had to consider trade-offs between functionality and user experience. Lowering the complexity of the interface
 would result in an interface that is easier to read, but might not provide all the necessary information at a glance and
 require more user interactions to access the information. On the other hand, a more complex interface would provide more
 information at a glance, but might overwhelm users with too much information. Striking a balance between these two
@@ -3088,7 +3088,7 @@ satisfied with: the selection system for exams.
 
 **Implementation of Exam and Exam Score Features** <br>
 
-After coming to a concensus with regards to the user interface, implemetation for exam features seemed straightforward.
+After coming to a consensus in regard to the user interface, implementation for exam features seemed straightforward.
 However, it turned out to be a lot more complex to implement than initially anticipated. Our exam features consisted
 of many subfeatures which included the management of exams, the management of scores, the storage of scores in persons,
 and the importing of scores. As we were working in a collaborative environment, we had to consider how to distribute
