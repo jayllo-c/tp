@@ -242,7 +242,6 @@ public class ParserUtilTest {
 
     @Test
     public void parseReflection_optionalFieldMissing_returnsEmptyStudio() throws ParseException {
-        Reflection expected = new Reflection("");
         assertThrows(ParseException.class, () -> ParserUtil.parseReflection(""));
     }
 

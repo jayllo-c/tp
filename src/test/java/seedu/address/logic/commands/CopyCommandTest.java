@@ -28,7 +28,6 @@ import seedu.address.model.person.Person;
  */
 public class CopyCommandTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-    private Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
     private Model emptyModel = new ModelManager(new AddressBook(), new UserPrefs());
     @Test
     public void equals() {
