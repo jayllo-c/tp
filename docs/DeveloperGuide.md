@@ -674,7 +674,7 @@ The `deleteShown` command relies on the `filteredPersons` list in the `Model` co
 
 ##### Executing the Command
 
-The `deleteShown` command first retrives the `filteredPersons` list from the `Model` component using the `getFilteredPersonList` method. The `deleteShown` command then iterates through the `filteredPersons` list and deletes all currently shown `Persons` from the `UniquePersonList`.
+The `deleteShown` command first retrieves the `filteredPersons` list from the `Model` component using the `getFilteredPersonList` method. The `deleteShown` command then iterates through the `filteredPersons` list and deletes all currently shown `Persons` from the `UniquePersonList`.
 
 If the currently filtered list does is not showing between 0 and the total number of existing persons, the `deleteShown` command will throw a `CommandException`.
 
@@ -715,10 +715,10 @@ The `ImportCommand` then iterates through the `personsData` list and adds each `
 through repeated use of the `AddCommand`. Errors that occur during this process are also added to the error report.
 
 In summary, The import process is done in the following steps:
-1. ImportCommand reads the CSV file with the given file path.
-2. The CSV file is parsed and each row is converted into an addCommand
-3. The addCommand is then executed passing the same model as import command.
-4. The addCommand then adds the person to the model.
+1. `ImportCommand` reads the CSV file with the given file path.
+2. The CSV file is parsed and each row is converted into an `AddCommand`
+3. The `AddCommand` is then executed passing the same model as import command.
+4. The `AddCommand` then adds the person to the model.
 
 **Handling duplicate persons** <br>
 
@@ -726,8 +726,8 @@ Duplicate records in the imported CSV file is handled by `AddCommand`, which wil
 
 **Handling invalid CSV files**<br>
 
-Invalid files are handled by ImportCommand, with the help of ImportCommandParser and CsvUtil. ImportCommandParser will check if  is a CSV file.
-CsvUtil will check if the CSV file is valid and will return a list of persons and an error report. The error report will be displayed to the user if there are any errors.
+Invalid files are handled by `ImportCommand`, with the help of `ImportCommandParser` and `CsvUtil`. `ImportCommandParser` will check if  is a CSV file.
+`CsvUtil` will check if the CSV file is valid and will return a list of persons and an error report. The error report will be displayed to the user if there are any errors.
 
 Overall, the conditions checked are:
 - The file exists
@@ -762,7 +762,7 @@ The sequence diagrams below illustrates the interactions within the `Logic` comp
 
 **Usage of `AddCommand`** <br>
 
-The main concern in the increased coupling between `ImportCommand` and `AddCommand`. However, we established that this coupling was actually a good thing, as the incoporation of the `AddCommand` allowed us to reuse the validation and error handling that was already implemented in the `AddCommand`. Furthermore, should we ever need to change the validation and error handling in the `AddCommand`, the `ImportCommand` would automatically inherit these changes. By making `AddCommand` the gate in which all persons are added to the model, we ensure that all persons added to the model are validated and handled in the same way.
+The main concern in the increased coupling between `ImportCommand` and `AddCommand`. However, we established that this coupling was actually a good thing, as the incorporation of the `AddCommand` allowed us to reuse the validation and error handling that was already implemented in the `AddCommand`. Furthermore, should we ever need to change the validation and error handling in the `AddCommand`, the `ImportCommand` would automatically inherit these changes. By making `AddCommand` the gate in which all persons are added to the model, we ensure that all persons added to the model are validated and handled in the same way.
 
 <br>
 
@@ -964,7 +964,7 @@ The exam is then added and stored in the `UniqueExamList`.
 
 ##### Parsing User Input
 
-The `AddExamCommandParser` is responsible for pasring user input to extract the `name` and the `maxScore` of the exam.
+The `AddExamCommandParser` is responsible for parsing user input to extract the `name` and the `maxScore` of the exam.
 It uses the `ArgumentTokenizer` to tokenize the input string, extracting `name` and `maxScore`.
 It ensures that `name` and `maxScore` are valid and present in the user input, and that there are no duplicate prefixes in the user input.
 The `name` and `maxScore` are then used to instantiate an `AddExamCommand`.
@@ -3102,7 +3102,7 @@ early on and resolve them through distributing the workload effectively and meet
 Handling the data for exams and scores was another challenge that we faced. We had to consider how to store the data for
 each exam, how to store the scores for each person for each exam, and how to manage the data effectively.
 The storage for exams was relatively straightforward, as we could create an additional list in the `AddressBook` class to store
-the exams. However, the storage for scores was more complex.. We had to decide whether to store all the exam score data
+the exams. However, the storage for scores was more complex. We had to decide whether to store all the exam score data
 in corresponding `Exam` objects, or store each persons' exam scores in their corresponding `Person` objects.
 
 There was once again another trade-off to consider: storing all exam score data in the `Exam` objects would make it
