@@ -2608,31 +2608,31 @@ On Window systems, you can right-click the file and copy the file path, remember
 1. Adding an Exam with Valid Data
 
    * **Prerequisites:**
-       * No exams in the address book.
+       * No exams in the exams list.
          <br><br>
    * **Test case:** `addExam n|Midterm s|100`<br>
-     **Expected:** New exam is added to the address book. Status message shows the exam added.
+     **Expected:** New exam is added to the exams list. Status message shows the exam added.
      <br><br>
    * **Other test cases to try:** `addExam n|Final s|100`<br>
-     **Expected:** New exam is added to the address book. Status message shows the exam added.
+     **Expected:** New exam is added to the exams list. Status message shows the exam added.
      <br><br>
 
 2. Adding an Exam that Already Exists
 
    * **Prerequisites:**
-       * An exam of name: Final, Score: 100 exists in the address book.
+       * An exam of name: Final, Score: 100 exists in the exams list.
        <br><br>
    * **Test case:** `addExam n|Final s|100`<br>
-     **Expected:** Error message shown in the error report. No change in the address book.
+     **Expected:** Error message shown in the error report. No change in the exams list.
      <br><br>
 
 3. Adding an Exam with Missing Fields
 
    * **Prerequisites:** 
-       * No exams in the address book.
+       * No exams in the exams list.
          <br><br>
    * **Test case (missing score):** `addExam n|Final`<br>
-     **Expected:** Error message shown in the error report. No change in the address book.
+     **Expected:** Error message shown in the error report. No change in the exams lsit.
 
 <br>
 
@@ -2646,19 +2646,19 @@ On Window systems, you can right-click the file and copy the file path, remember
 1. Deleting an Exam
 
     * **Prerequisites:** 
-        * Exactly one exam in the address book. Hence, exam has an index of 1.
+        * Exactly one exam in the exams list. Hence, exam has an index of 1.
           <br><br>
     * **Test case:** `deleteExam 1`<br>
-      **Expected:** First exam is deleted from the address book. Status message shows the exam deleted.
+      **Expected:** First exam is deleted from the exams list. Status message shows the exam deleted.
       <br><br>
     * **Test case:** `deleteExam 0`<br>
-      **Expected:** No exam is deleted. Error message shown. No change in the address book.
+      **Expected:** No exam is deleted. Error message shown. No change in the exams list.
       <br><br>
     * **Test case (index out of bounds):** `deleteExam 2`<br>
-      **Expected:** No exam is deleted. Error message shown. No change in the address book.
+      **Expected:** No exam is deleted. Error message shown. No change in the exams list.
       <br><br>
     * **Test case (no index):** `deleteExam`<br>
-      **Expected:** No exam is deleted. Error message shown. No change in the address book.
+      **Expected:** No exam is deleted. Error message shown. No change in the exams list.
 
 <br>
 
@@ -2672,19 +2672,19 @@ On Window systems, you can right-click the file and copy the file path, remember
 1. Selecting an exam
 
     * **Prerequisites:** 
-        * Exactly one exam in the address book. Hence, exam has an index of 1.
+        * Exactly one exam in the exams list. Hence, exam has an index of 1.
           <br><br>
     * **Test case:** `selectExam 1`<br>
       **Expected:** First exam is selected. Status message shows the exam selected.
       <br><br>
     * **Test case:** `selectExam 0`<br>
-      **Expected:** No exam is selected. Error message shown. No change in the address book.
+      **Expected:** No exam is selected. Error message shown. No change in the exams list.
       <br><br>
     * **Test case (index out of bounds):** `selectExam 2`<br>
-      **Expected:** No exam is selected. Error message shown. No change in the address book.
+      **Expected:** No exam is selected. Error message shown. No change in the exams list.
       <br><br>
     * **Test case (no index):** `selectExam`<br>
-      **Expected:** No exam is selected. Error message shown. No change in the address book.
+      **Expected:** No exam is selected. Error message shown. No change in the exams list.
 
 <br>
 
@@ -2704,7 +2704,7 @@ On Window systems, you can right-click the file and copy the file path, remember
       **Expected:** Selected exam is deselected. Status message shows the exam deselected.
       <br><br>
     * **Test case (no exam selected):** `deselectExam`<br>
-      **Expected:** No exam is deselected. Error message shown. No change in the address book.
+      **Expected:** No exam is deselected. Error message shown. No change in the exams list.
 
 <br>
 
