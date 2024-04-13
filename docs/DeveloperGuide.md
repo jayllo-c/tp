@@ -85,7 +85,7 @@ title: "Developer Guide"
                     <li><a href="#test_add">Adding a Person: <code>add</code></a></li>
                     <li><a href="#test_edit">Editing a Person: <code>edit</code></a></li>
                     <li><a href="#test_delete">Deleting a Person: <code>delete</code></a></li>
-                    <li><a href="#test_deleteshown">Deleting shown Persons: <code>deleteShown</code></a></li>
+                    <li><a href="#test_deleteshown">Deleting Shown Persons: <code>deleteShown</code></a></li>
                     <li><a href="#test_list">Listing all Persons: <code>list</code></a></li>
                     <li><a href="#test_find">Finding a Person: <code>find</code></a></li>
                     <li><a href="#test_copy">Copying Emails: <code>copy</code></a></li>
@@ -213,7 +213,7 @@ The sequence diagram below illustrates a more in-depth view of the interactions 
 
 The UI is designed to update dynamically based on changes in the `Model`. We narrowed down to two design choices for updating the UI components. They are:
 
-1. **Update using listeners embeded into UI components** - This design choice would involve embedding listeners into the UI components that would listen for changes in the `Model` (e.g. adding a listener to filteredPersons in ExamListPanel). This would allow for a more loosely coupled system, but would involve more complex implementation which could get messy as the number of listeners increase.
+1. **Update using listeners embedded into UI components** - This design choice would involve embedding listeners into the UI components that would listen for changes in the `Model` (e.g. adding a listener to filteredPersons in ExamListPanel). This would allow for a more loosely coupled system, but would involve more complex implementation which could get messy as the number of listeners increase.
 2. **Update using a centralized update method** - This design choice involves having a centralized `update` method in the `MainWindow` that would call an `update` method in all other UI components after every command. This would involve a more tightly coupled system and may involve unnecessary updates, but would be easier to implement and maintain.
 
 We chose the second design choice as having a centralized update method would allow for easier maintenance, as there is a clear indicator of how UI components are updated from `MainWindow`. Adding extensions would also be more straightforward as future developers would know where to look for the update logic.
@@ -263,7 +263,7 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </box>
 
-The following is a more detailed explaination on how user input is parsed into a `Command` object (Not mentioned above for simplicity).
+The following is a more detailed explanation on how user input is parsed into a `Command` object (not mentioned above for simplicity).
 
 ##### Using Argument Tokenizer and Argument Multimap
 * After the `XYZCommandParser` is instantiated by the `AddressBookParser`, it uses the `ArgumentTokenizer` class to tokenize the user input string into the arguments.
@@ -2244,7 +2244,7 @@ On Window systems, you can right-click the file and copy the file path, remember
         * No persons in the list.
           <br><br>
     * **Test case:** `add n|Alice p|98765432 a|Hall e|e09123456@u.nus.edu m|A1234567X r|R2 s|S1 t|excelling`<br>
-    **Expected:** A person with the following fields is added to the list:
+      **Expected:** A person with the following fields is added to the list:
         * Name: `Alice`
         * Phone: `98765432`
         * Address: `Hall`
