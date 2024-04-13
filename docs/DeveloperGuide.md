@@ -104,8 +104,6 @@ title: "Developer Guide"
         </ol>
     </li>
 
-
-
 --------------------------------------------------------------------------------------------------------------------
 <div id="acknowledgements"></div>
 
@@ -126,6 +124,8 @@ Our project made use of AI assistance from [GitHub Copilot](https://copilot.gith
 Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 <div id="design"></div>
 
@@ -156,6 +156,8 @@ The bulk of the app's work is done by the following four components:
 
 [**`Commons`**](#common-classes) represents a collection of classes used by multiple other components.
 
+<div style="page-break-after: always;"></div>
+
 **How the architecture components interact with each other**
 
 The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
@@ -174,6 +176,8 @@ For example, the `Logic` component defines its API in the `Logic.java` interface
 The sections below give more details of each component.
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="ui-component"></div>
 
@@ -195,6 +199,8 @@ For the updating of other components in the UI, after each command execution, `M
 
 `StatusBarFooter` contains the mean and median feature, and it updates itself by retrieving `ScoreStatistics`
 from the `Model` on update.
+
+<div style="page-break-after: always;"></div>
 
 In summary, the `UI` component:
 
@@ -224,6 +230,8 @@ One of our main goals was to make our codebase easy to understand and maintain, 
 
 <br>
 
+<div style="page-break-after: always;"></div>
+
 <div id="logic-component"></div>
 
 ### Logic Component
@@ -241,6 +249,8 @@ How the `Logic` component works:
 3. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 4. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
+
+<div style="page-break-after: always;"></div>
 
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
@@ -292,16 +302,21 @@ The following is a more detailed explanation on how user input is parsed into a 
 
 #### Considerations for Logic
 
-The `Logic` component is designed to be the central component that executes all user commands. This design choice was made to ensure that all commands are executed in a consistent manner, and to prevent the duplication of command execution logic across different components. By centralizing the command execution logic in the `Logic` component, we ensure that all commands are executed in the same way, regardless of the component that initiates the command execution. This design choice also allows for easier maintenance and extensibility, as any changes to the command execution logic can be made in a single location.
+The `Logic` component is designed to be the central component that executes all user commands. 
+This design choice was made to ensure that all commands are executed in a consistent manner, and to prevent the duplication of command execution logic across different components. 
+By centralizing the command execution logic in the `Logic` component, we ensure that all commands are executed in the same way, regardless of the component that initiates the command execution. 
+This design choice also allows for easier maintenance and extensibility, as any changes to the command execution logic can be made in a single location.
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="model-component"></div>
 
 ### Model Component
 **API** : [`Model.java`](https://github.com/AY2324S2-CS2103T-T10-1/tp/master/src/main/java/seedu/address/model/Model.java)
 
-<p align="center"><puml src="diagrams/ModelClassDiagram.puml" width="450" /></p>
+<p align="center"><puml src="diagrams/ModelClassDiagram.puml" width="430" /></p>
 
 
 The `Model` component,
@@ -340,7 +355,7 @@ The `Storage` component uses the `Jackson` library to convert objects to JSON fo
 
 The `Logic` class stores a `StorageManager` object that implements the methods in the `Storage` class. For **every** command that is executed, `Logic` uses `StorageManager` to save the updated `AddressBook` through the `saveAddressBook` method.
 
-The `StorageManager` class calls on the `JsonAddressBookStorage` class to convert all objects in the `AddressBook` to JSON formatting. The converted JSON objects are consolidated in the `JsonSerializableAddressBook` class and it is seraliazed to JSON format and saved using the `saveJsonToFile` method.
+The `StorageManager` class calls on the `JsonAddressBookStorage` class to convert all objects in the `AddressBook` to JSON formatting. The converted JSON objects are consolidated in the `JsonSerializableAddressBook` class and it is serialized to JSON format and saved using the `saveJsonToFile` method.
 
 The sequence diagram below illustrates how data is saved within the `Storage` component when the user issues a command.
 
@@ -349,11 +364,14 @@ The sequence diagram below illustrates how data is saved within the `Storage` co
 <br>
 <br>
 
+<div style="page-break-after: always;"></div>
+
 #### Loading of Data
 
-When the application is initialised, the `Storage` component reads the JSON objects from the save file and converts them back to objects that can be used to initialise the `Model` component. This is done using the `readJsonFile` method of the `JsonUtil` class which utilises the methods defined in the `JsonAdapted` classes to convert the saved JSON data back to objects that can be used by the `Model` component.
+When the application is initialized, the `Storage` component reads the JSON objects from the save file and converts them back to objects that can be used to initialize the `Model` component. 
+This is done using the `readJsonFile` method of the `JsonUtil` class which utilizes the methods defined in the `JsonAdapted` classes to convert the saved JSON data back to objects that can be used by the `Model` component.
 
-The sequence diagram below illustrates how data is loaded within the `Storage` component when the application is initialised.
+The sequence diagram below illustrates how data is loaded within the `Storage` component when the application is initialized.
 
 <p align="center"><puml src="diagrams/StorageLoadSequenceDiagram.puml" alt="Sequence Diagram for the `Storage` Component" /></p>
 
@@ -372,6 +390,8 @@ These classes provide utility functions that are used across different component
 `CollectionUtil`, `StringUtil`, `JsonUtil` etc. It also contains app wide constants and exceptions.
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 <div id="implementation"></div>
 
@@ -400,7 +420,7 @@ through `Toolkit.getDefaultToolkit().getSystemClipboard()` and copies the user g
 ##### Design Considerations
 
 We designed the help command to copy the user guide link directly to the clipboard as we wanted our application to be
-CLI optimised. This allows our target users to easily access the user guide without having to use their mouse
+CLI optimized. This allows our target users to easily access the user guide without having to use their mouse
 to navigate to the user guide link.
 
 <div id="clear"></div>
@@ -430,6 +450,8 @@ The `ListCommand` retrieves the `filteredPersonList` from the `Model` component 
 ##### Design Considerations
 
 We designed the `list` command to list all persons in the persons list to provide users with a quick and easy way to view all persons in the persons list. This is useful to revert the UI back to the default view after a find command has been executed which filters the persons displayed on the UI.
+
+<div style="page-break-after: always;"></div>
 
 <div id="contact-management"></div>
 
@@ -465,6 +487,8 @@ The `AddCommandParser` class is responsible for parsing user input to extract th
 The `AddCommand` class creates a new `Person` object with the parsed details.
 The `Person` object is then added to the `UniquePersonList` through the `addPerson` method in the `Model` component.
 
+<div style="page-break-after: always;"></div>
+
 ##### Sequence Diagram
 
 The sequence diagram below illustrates a more in-depth view of the interactions regarding the parsing of user input.
@@ -478,7 +502,7 @@ It takes an add command: `execute(add n|Dohn Joe p|98765432 a|123 e|dohn@gm.com 
 </box>
 
 The parsing is detailed as follows:
-<p align="center"><puml src="diagrams/AddCommandParsing.puml" alt="Detailed Interactions for Parsing Fields of the Add command." /></p>
+<p align="center"><puml src="diagrams/AddCommandParsing.puml" alt="Detailed Interactions for Parsing Fields of the Add command." width="600"/></p>
 
 <br>
 <br>
@@ -507,6 +531,8 @@ The following fields are optional as they may not be available for all persons:
 
 <br>
 
+<div style="page-break-after: always;"></div>
+
 <div id="edit-person"></div>
 
 #### **Edit Person Command** : `edit`
@@ -533,6 +559,8 @@ The activity diagram below illustrates the workflow involved in executing the `e
 
 <br>
 
+<div style="page-break-after: always;"></div>
+
 <div id="delete-person"></div>
 
 #### **Delete Person Command** : `delete`
@@ -556,6 +584,8 @@ For more details on the implementation of the `delete` command, refer to the [De
 We have chosen to implement the `delete` command to accept the index of the person to be deleted to maximize convenience for the user. The numbering of the lists will be displayed to the user, making indexing very intuitive.
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="find"></div>
 
@@ -584,7 +614,7 @@ The `FindCommand` class is responsible for executing the command for filtering t
 
 Using the prefix and keyword from parsing user input, a `FindCommand` is created. the `execute` method is then called by the `LogicManager`.
 
-**Creating Predicate** <br>
+**Creating Predicate**
 
 <box type="info" seamless>
 
@@ -608,6 +638,8 @@ updates the filtered list based on the predicate provided.
 When the `FindCommand` is executed, the `updateFilteredPersonList` method is called with either the `PersonDetailPredicate` or `ExamPredicate` as a parameter.
 This updates the `filteredPersons` list to show only persons that fulfill the conditions set in the `test` method in either of the predicates.
 
+<div style="page-break-after: always;"></div>
+
 **User Interface Interaction** <br>
 
 After the `filteredPersons` list is updated, the user interface is updated such that the `PersonListPanel` now shows persons that fulfill the predicate generated by the original user input.
@@ -617,6 +649,8 @@ The following sequence diagram illustrates the `find` command with the user inpu
 
 The next sequence diagram details the creation of the predicate, as well as the updating of the `filteredPersons` list in the `Model` component.
 <p align="center"><puml src="diagrams/FindImplementationPredicateCreationSequenceDiagram.puml" width="700" /></p>
+
+<div style="page-break-after: always;"></div>
 
 The following activity Diagram illustrates the user execution of the `find` command.
 <p align="center"><puml src="diagrams/FindImplementationActivityDiagram.puml" width="800" /></p>
@@ -643,6 +677,8 @@ So we opted to implement this feature with the flexibility of using all prefixes
 Furthermore, with consideration that our potential users will interact with exam scores, we wanted to integrate the find functionality
 to search for contacts based on exam scores. Hence, we decided to introduce the `mt|` and `lt|` prefixes to allow users to search for contacts based on exam scores.
 
+<div style="page-break-after: always;"></div>
+
 **Two Predicate Classes** <br>
 
 The implementation of two predicate classes, `PersonDetailPredicate` and `ExamPredicate`, allows for a clear separation of concerns.
@@ -665,6 +701,8 @@ New prefixes can be added to support additional search criteria without signific
 This ensures that the implementation remains adaptable to evolving requirements and we can upgrade and improve the feature whenever required.
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="deleteshown" ></div>
 
@@ -695,6 +733,8 @@ Similarly to the `copy` command, the `deleteShown` command is designed to be use
 <br>
 
 <div id="import"></div>
+
+<div style="page-break-after: always;"></div>
 
 #### **Import Contacts Command** : `import`
 
@@ -741,6 +781,8 @@ If the file is not valid, an error message will be returned.
 
 Handled by CsvUtil. The first occurrence of the header will be used and the rest will be ignored.
 
+<div style="page-break-after: always;"></div>
+
 The sequence diagrams below illustrates the interactions within the `Logic` component when the user issues the command `import`.
 
 **Parsing**
@@ -750,6 +792,8 @@ The sequence diagrams below illustrates the interactions within the `Logic` comp
 **Execution**
 
 <p align="center"><puml src="diagrams/ImportSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `import` Command" /></p>
+
+<div style="page-break-after: always;"></div>
 
 **Reference Diagram for each addCommand in importCommand**
 
@@ -765,6 +809,8 @@ The sequence diagrams below illustrates the interactions within the `Logic` comp
 The main concern in the increased coupling between `ImportCommand` and `AddCommand`. However, we established that this coupling was actually a good thing, as the incorporation of the `AddCommand` allowed us to reuse the validation and error handling that was already implemented in the `AddCommand`. Furthermore, should we ever need to change the validation and error handling in the `AddCommand`, the `ImportCommand` would automatically inherit these changes. By making `AddCommand` the gate in which all persons are added to the model, we ensure that all persons added to the model are validated and handled in the same way.
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="copy"></div>
 
@@ -803,6 +849,8 @@ The `copy` command is designed to be used with the find command, which filters t
 Consequently, the flexibility of the `copy` command relies heavily on the implementation of the `find` command.
 Due to this dependency, any changes to the `find` command may affect the functionality of the `copy` command.
 
+<div style="page-break-after: always;"></div>
+
 ##### Extensibility
 
 Due to the simplicity of the `copy` command, there are limited opportunities for extending its functionality.
@@ -823,6 +871,8 @@ This approach would allow users to access the emails at a later time and would p
 However, it may be less convenient for users who want to paste the emails directly into an email client.
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="export"></div>
 
@@ -855,6 +905,8 @@ The sequence diagram illustrates the interactions between the `Logic` and `Model
     <puml src="diagrams/ExportDataRetrievalSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
 </p>
 
+<div style="page-break-after: always;"></div>
+
 **JSON File Handling** <br>
 
 The contents of both the JSON files retrieved in the above section is read with the `readJsonFile()` method in `ExportCommand` and returned as JSON trees, `filteredJsonTree` and `unfilteredJsonTree`.
@@ -862,6 +914,8 @@ This method uses Jackson's `ObjectMapper`.
 
 * From the `filteredJsonTree`, the persons array is extracted using the `readPersonsArray()` method in `ExportCommand` to obtain the filtered persons and their data.
 * From the `unfilteredJsonTree`, the exams array is extracted using the `readExamsArray()` method in `ExportCommand` to obtain the exams.
+
+<br>
 
 **CSV Conversion** <br>
 
@@ -878,6 +932,8 @@ The following sequence diagram shows the interactions within the different class
 
 <br>
 <br>
+
+<div style="page-break-after: always;"></div>
 
 ##### Design Considerations
 
@@ -898,6 +954,8 @@ This could lead to confusion when mapping the CSV schema and JSON data.
 Therefore, appending `Exam:` to the beginning of exam names in the CSV column headings can help mitigate this potential confusion.
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="optional-fields"></div>
 
@@ -942,9 +1000,11 @@ The activity diagram is as follows:
 
 <br>
 
-<div id="exam-management"></div>
-
 --------------------------------------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
+
+<div id="exam-management"></div>
 
 ### **Exam Features**
 
@@ -1004,6 +1064,8 @@ Using the retrieved exam, it then deletes the exam from the `UniqueExamList` thr
 
 <div id="exam-modification-diagram"></div>
 
+<div style="page-break-after: always;"></div>
+
 #### **Sequence Diagrams Illustrating Exam Modification**
 
 The following two sequence diagram illustrates the interactions between the Logic and Model when an exam is modified. This diagram uses the `addExam` command as an example.
@@ -1019,6 +1081,8 @@ The following two sequence diagram illustrates the interactions between the Logi
 Note: `deleteExam` follows a similar structure, differing in the arguments parsed and the methods called on the `Model` component (e.g. deleting from `UniqueExamList` instead of adding to it).
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="exam-selection"></div>
 
@@ -1061,6 +1125,8 @@ It sets the `selectedExam` field in the `Model` component to `null`.
 If there is no exam selected, a `CommandException` is thrown.
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="exam-selection-diagram"></div>
 
@@ -1140,6 +1206,8 @@ It then fetches the person to add the score for based on the target index.
 It also retrieves the currently selected exam from the `Model`, and validates that the score to be added is not more than the maximum score of the selected exam.
 It adds the score to the person's existing `scores` hashmap using the `addExamScoreToPerson` method in the `Model`.
 
+<div style="page-break-after: always;"></div>
+
 The following sequence diagram illustrates the execution of an `addScore` command:
 
 <p align="center">
@@ -1176,6 +1244,8 @@ It updates the score for the selected exam in the person's existing `scores` has
 
 <br>
 
+<div style="page-break-after: always;"></div>
+
 <div id="deletescore"></div>
 
 #### **Delete Score Command** : `deleteScore`
@@ -1195,7 +1265,7 @@ The `index` is then used in instantiating the `DeleteScoreCommand` by the `Delet
 The following sequence diagram illustrates the parsing of an `deleteScore` command with the user input `deleteScore 1`:
 
 <p align="center">
-    <puml src="diagrams/DeleteScoreParsingSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
+    <puml src="diagrams/DeleteScoreParsingSequenceDiagram.puml" alt="Sequence Diagram for Parsing of deleteScore command" width="650"/>
 </p>
 
 ##### Executing the Command
@@ -1206,10 +1276,12 @@ It also retrieves the currently selected exam from the `Model`.
 It removes the score for the selected exam in the person's existing `scores` hashmap using the `removeExamScoreFromPerson` method in `Model`.
 
 <p align="center">
-    <puml src="diagrams/DeleteScoreExecutionSequenceDiagram.puml" alt="Sequence Diagram for Parsing of addScore command" />
+    <puml src="diagrams/DeleteScoreExecutionSequenceDiagram.puml" alt="Sequence Diagram for execution of deleteScore command" width="650" />
 </p>
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="importexamscores"></div>
 
@@ -1235,7 +1307,9 @@ If the **file** is invalid, an error message is returned.
 
 The validation workflow for the **file** is as follows:
 
-<p align="center"><puml src="diagrams/ImportExamScoresFileActivityDiagram.puml" alt="Activity Diagram for Import Exam Scores File Validation" /></p>
+<p align="center"><puml src="diagrams/ImportExamScoresFileActivityDiagram.puml" alt="Activity Diagram for Import Exam Scores File Validation" width="600"/></p>
+
+<div style="page-break-after: always;"></div>
 
 If the file is valid, any invalid entries will be ignored, with the rest being successfully processed.
 
@@ -1243,11 +1317,17 @@ A **column** will be ignored if:
 1. The column header is not the `email` column, but does not start with `Exam:`.
 2. The column header's name does not correspond to an existing `Exam` object. (i.e. Anything after `Exam:` is not an existing exam name.)
 
+<br>
+
 A **row** will be ignored if:
 1. The `email` value does not correspond to an existing `Person`.
 
+<br>
+
 A **cell** will be ignored if:
 1. The `Double` representing the score for an existing `Person` and `Exam` is not a valid `Score`.
+
+<br>
 
 **Value Validation** <br>
 
@@ -1268,6 +1348,8 @@ For concrete examples of the validation process, [refer to the manual testing se
 
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="scorestatistics"></div>
 
@@ -1293,9 +1375,11 @@ The sequence diagram below illustrates the interactions within the `Model` compo
 
 <p align="center"><puml src="diagrams/StatisticsSequenceDiagram.puml" alt="Sequence Diagram for Statistics Updating" /></p>
 
+<div style="page-break-after: always;"></div>
+
 ##### User Interface Interaction
 
-The `StatusBarFooter` element of the UI is initialised with an `ObservableValue<ScoreStatistics>` object. This object is bound to the `selectedExamStatistics` object in the `Model` component and is retrieved using the `getSelectedExamStatistics` method.
+The `StatusBarFooter` element of the UI is initialized with an `ObservableValue<ScoreStatistics>` object. This object is bound to the `selectedExamStatistics` object in the `Model` component and is retrieved using the `getSelectedExamStatistics` method.
 
 Whenever a command is executed, the `StatusBarFooter` retrieves the updated statistics and displays them on the right side of the footer which can be seen at the bottom of the UI.
 
@@ -1314,6 +1398,8 @@ The `ScoreStatistics` class was used to store the mean and median scores of the 
 <br>
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 <div id="planned-enhancements"></div>
 
@@ -1337,11 +1423,11 @@ For example, an extreme case will be to search for persons with the `Name` field
 
 #### Update UI to Wrap Text
 
-Currently, the `ResultDisplay` box does not wrap text, which means that long lines of text will extend beyond the width of the box. This results in the need for two scrollbars, a horizontal one for the result box and a vertical one for the currently shown list of persons. This is not ideal as it makes the UI less optimized for the target audience, who prefer using a CLI-optimized application and prefer not to use mouse controls to scroll through scroll boxes.
+Currently, the `ResultDisplay` box does not wrap text, which means that long lines of text will extend beyond the width of the box. This results in the need for two scroll bars, a horizontal one for the result box and a vertical one for the currently shown list of persons. This is not ideal as it makes the UI less optimized for the target audience, who prefer using a CLI-optimized application and prefer not to use mouse controls to scroll through scroll boxes.
 
 ##### Planned Implementation
 
-We plan to modify the `ResultDisplay` box to wrap text so that there is no longer a need for the horizontal scrollbar in the `ResultDisplay` box.
+We plan to modify the `ResultDisplay` box to wrap text so that there is no longer a need for the horizontal scroll bar in the `ResultDisplay` box.
 
 In the case where the wrapped text still exceeds the height of the `ResultDisplay` box, we plan to enable it to dynamically adjust its height as needed.
 
@@ -1363,7 +1449,7 @@ Additionally, some persons such as staff members and course instructors may not 
 
 #### UX: Make Sample Data Tags More Relevant and Helpful to the User
 
-Currently, the sample data tags are not very helpful to the user, having tags like `friends`, `neighbours` and `family`. This may pose confusion to users about the context of the application, which is the head TA's management of persons related to CS1101S.
+Currently, the sample data tags are not very helpful to the user, having tags like `friends`, `neighbors` and `family`. This may pose confusion to users about the context of the application, which is the head TA's management of persons related to CS1101S.
 
 ##### Planned Implementation
 
@@ -1386,6 +1472,8 @@ Retain all other relevant `Tag` objects like `colleagues` and `student` to bette
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div style="page-break-after: always;"></div>
+
 <div id="appendix"></div>
 
 ## **Appendix**
@@ -1396,9 +1484,9 @@ Retain all other relevant `Tag` objects like `colleagues` and `student` to bette
 
 **Target user profile**:
 
-* Name: Sarah Johnson
-* Age: 23
-* Occupation: Head Tutor for CS1101S
+**Name:** Sarah Johnson,
+**Age:** 23,
+**Occupation:** Head Tutor for CS1101S
 
 * Head tutor for CS1101S course
 * Has a need to manage various aspects of course administration
@@ -1411,21 +1499,29 @@ Retain all other relevant `Tag` objects like `colleagues` and `student` to bette
 * Prefers typing to mouse interactions
 * Is reasonably comfortable using CLI apps
 
+<br>
+
 **Value proposition**:
 
 * Manage persons faster than a typical mouse/GUI driven app
-* Centralised platform to store and manage person details for all relevant individuals involved in course administration
+* Centralized platform to store and manage person details for all relevant individuals involved in course administration
 * Able to store and manage exam scores for all students in the course
-* Easier access to information through organising relevant persons into different subgroups
+* Easier access to information through organizing relevant persons into different subgroups
 * Able to set up the application through different data-loading options
 * Able to assist with management of large scale communication
 
+<br>
+
 **Problem scope**:
 
-* The CS1101S Head Tutor will face challenges in effectively organising and managing contact information within the department due to the large scale the course has to operate on. Existing methods, such as paper-based lists or basic digital spreadsheets, lack the necessary functionality to efficiently handle the diverse needs of proper contact management. There is a need for a user-friendly and offline-capable address book solution tailored specifically to the needs of a single user. This address book system should provide features such as easy contact entry and editing, quick search functionality, customizable categorization options, and the ability to add notes for each contact. Additionally, it should operate offline without requiring an internet connection and should not rely on complex database management systems.
-* While Avengers Assemble will greatly improve contact management and organisation for the CS1101S Head Tutor, it will not address broader departmental communication or collaboration needs beyond individual contact management since the application is designed to be a single-user system. It will not facilitate communication between users or provide collaboration tools for group projects or tasks. Additionally, the address book system will not handle complex data analysis or reporting functions beyond basic contact information management. Finally, while the system will provide offline functionality, it will not offer real-time synchronisation with online databases or cloud storage solutions.
+* The CS1101S Head Tutor will face challenges in effectively organizing and managing contact information within the department due to the large scale the course has to operate on. Existing methods, such as paper-based lists or basic digital spreadsheets, lack the necessary functionality to efficiently handle the diverse needs of proper contact management. There is a need for a user-friendly and offline-capable address book solution tailored specifically to the needs of a single user. This address book system should provide features such as easy contact entry and editing, quick search functionality, customizable categorization options, and the ability to add notes for each contact. Additionally, it should operate offline without requiring an internet connection and should not rely on complex database management systems.
+* While Avengers Assemble will greatly improve contact management and organization for the CS1101S Head Tutor, it will not address broader departmental communication or collaboration needs beyond individual contact management since the application is designed to be a single-user system. It will not facilitate communication between users or provide collaboration tools for group projects or tasks. Additionally, the address book system will not handle complex data analysis or reporting functions beyond basic contact information management. Finally, while the system will provide offline functionality, it will not offer real-time synchronization with online databases or cloud storage solutions.
+
+<div style="page-break-after: always;"></div>
 
 <div id="appendix_b"></div>
+
+<br>
 
 ### Appendix B: User Stories
 
@@ -1433,7 +1529,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### General
 
-| Priority | As a …​                                      | I want to …​                           | So that I can…​                                                          |
+| Priority | As a …​                                      | I want to …​                            | So that I can…​                                                          |
 |----------|---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------|
 | `* * *`  | potential user exploring the app            | see the app populated with sample data | immediately see an example of the app in use                            |
 | `* * *`  | new user                                    | see usage instructions                 | refer to instructions when I forget how to use the App                  |
@@ -1452,7 +1548,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | user                                        | delete a specific group of entries      | remove multiple entries that I no longer need more efficiently         |
 | `* * *`  | user                                        | view all saved contacts                 | oversee the data stored within my app                                  |
 | `* * *`  | user                                        | find a person through their particulars | locate details of persons without having to go through the entire list |
-| `* * *`  | head tutor using the app                    | categorise my persons into groups       | manage different groups of students effectively                        |
+| `* * *`  | head tutor using the app                    | categorize my persons into groups       | manage different groups of students effectively                        |
 | `* * *`  | head tutor using the app                    | copy email addresses of a group         | effectively communicate with target groups                             |
 | `* * *`  | head tutor using the app                    | export the details of persons to a CSV  | easily share the details of a group with others                        |
 
@@ -1463,17 +1559,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | head tutor using the app                    | import assessment scores from a CSV file | easily add a large number of scores to the application |
 | `* * *`  | head tutor using the app                    | add exams to the app                     | keep track of student performance                      |
 | `* * *`  | head tutor using the app                    | delete exams from the app                | remove exams that are no longer relevant               |
-| `* * *`  | head tutor using the app                    | view scores for a specific exam          | analyse student scores                                 |
+| `* * *`  | head tutor using the app                    | view scores for a specific exam          | analyze student scores                                 |
 | `* * *`  | head tutor using the app                    | add scores to the app                    | keep track of student performance                      |
 | `* * *`  | head tutor using the app                    | edit scores in the app                   | correct errors in the scores                           |
 | `* * *`  | head tutor using the app                    | delete scores from the app               | remove scores that are no longer relevant              |
 | `* * *`  | head tutor using the app                    | export scores to a CSV file              | easily share the scores with others                    |
-| `* * *`  | head tutor using the app                    | view statistics of scores                | analyse student performance                            |
-
-
-<div id="appendix_c"></div>
+| `* * *`  | head tutor using the app                    | view statistics of scores                | analyze student performance                            |
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
+
+<div id="appendix_c"></div>
 
 ### Appendix C: Use Cases
 
@@ -1513,15 +1610,17 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *  1a. The file to be imported is not a CSV file.
 
-    *  1a1. AvengersAssemble displays an error message indicating that the file type is not recognised and should be a CSV file.
+    *  1a1. AvengersAssemble displays an error message indicating that the file type is not recognized and should be a CSV file.
 
        Use case ends.
 
 *  1b. AvengersAssemble cannot find the file to be imported.
 
-    *  1b1. AvengersAssemble displays a message indicating that the file is not recognised.
+    *  1b1. AvengersAssemble displays a message indicating that the file is not recognized.
 
        Use case ends.
+
+<div style="page-break-after: always;"></div>
 
 ##### Use Case: UC04 — Adding a Person
 
@@ -1625,6 +1724,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
        Use case ends.
 
+<div style="page-break-after: always;"></div>
+
 ##### Use Case: UC08 — Listing All Persons
 
 **MSS:**
@@ -1659,6 +1760,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     *  1a1. AvengersAssemble displays a message indicating that no persons match the search criteria.
 
        Use case ends.
+
+<div style="page-break-after: always;"></div>
 
 ##### Use Case: UC10 — Copying Email Addresses
 
@@ -1699,6 +1802,9 @@ into user's clipboard.
 
        Use case ends.
 
+
+<div style="page-break-after: always;"></div>
+
 ##### Use Case: UC12 — Importing Exam Results from a CSV File
 
 **MSS:**
@@ -1712,13 +1818,13 @@ into user's clipboard.
 
 *   2a. AvengersAssemble cannot find the file specified.
 
-    *  2a1. AvengersAssemble displays a message indicating that the file is not recognised.
+    *  2a1. AvengersAssemble displays a message indicating that the file is not recognized.
 
        Use case ends.
 
 *   2b. The file to be imported is not a CSV file.
 
-    *  2b1. AvengersAssemble displays an error message indicating that the file type is not recognised and should be a CSV file
+    *  2b1. AvengersAssemble displays an error message indicating that the file type is not recognized and should be a CSV file
 
        Use case ends.
 
@@ -1733,6 +1839,8 @@ into user's clipboard.
     *  2d1. AvengersAssemble displays a message indicating that there are invalid entries in the CSV file, and all other valid entries have been imported.
 
        Use case ends.
+
+<div style="page-break-after: always;"></div>
 
 ##### Use Case: UC13 — Adding an Exam
 
@@ -1776,6 +1884,8 @@ into user's clipboard.
        Step 1d1 is repeated until a valid name is entered.
 
        Use case resumes at step 2.
+
+<div style="page-break-after: always;"></div>
 
 ##### Use Case: UC14 — Deleting an Exam
 
@@ -1827,6 +1937,8 @@ into user's clipboard.
     *  1a1. AvengersAssemble displays an error message indicating that the exam does not exist.
 
        Use case ends.
+
+<div style="page-break-after: always;"></div>
 
 ##### Use Case: UC17 — Adding Scores to a Student for an Exam
 
@@ -1934,6 +2046,8 @@ into user's clipboard.
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div style="page-break-after: always;"></div>
+
 <div id="appendix_d"></div>
 
 ### Appendix D: Non-Functional Requirements
@@ -1963,6 +2077,9 @@ into user's clipboard.
 --------------------------------------------------------------------------------------------------------------------
 
 <div id="appendix_f"></div>
+
+
+<div style="page-break-after: always;"></div>
 
 ### Appendix F: Instructions for Manual Testing
 
@@ -2001,6 +2118,8 @@ testers are expected to do more *exploratory* testing.
     * **Test case:** `exit`<br>
       **Expected:** The GUI closes and the application exits.
     <br><br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="test_save"></div>
 
@@ -2059,6 +2178,8 @@ testers are expected to do more *exploratory* testing.
 
 <br>
 
+<div style="page-break-after: always;"></div>
+
 <div id="test_import"></div>
 
 #### Importing Persons: `import`
@@ -2116,6 +2237,8 @@ The import command requires the use of an external CSV file. The test cases belo
      **Expected:** Error message shown in the error report. No change in list of persons.
 
     <br>
+
+<div style="page-break-after: always;"></div>
 
 4. Importing data from a CSV File with duplicate compulsory headers in header row
 
@@ -2176,6 +2299,8 @@ The import command requires the use of an external CSV file. The test cases belo
 
    <br>
 
+<div style="page-break-after: always;"></div>
+
 7. Importing data from a CSV file with extra headers in header row
 
    * **Prerequisites**
@@ -2231,6 +2356,8 @@ The import command requires the use of an external CSV file. The test cases belo
 
    <br>
 
+<div style="page-break-after: always;"></div>
+
 <div id="test_add"></div>
 
 #### Adding a Person: `add`
@@ -2284,6 +2411,8 @@ The import command requires the use of an external CSV file. The test cases belo
     **Expected:** An error message is shown indicating that the email already exists.
     <br><br>
 
+<div style="page-break-after: always;"></div>
+
 4. Adding a person with only compulsory fields.
 
     * **Prerequisites:**
@@ -2322,6 +2451,8 @@ The import command requires the use of an external CSV file. The test cases belo
         <br><br>
     Note that there is no automatic tagging.
     <br><br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="test_edit"></div>
 
@@ -2363,6 +2494,8 @@ The import command requires the use of an external CSV file. The test cases belo
     * **Test case:** `edit 1 e|berniceyu@example.com`<br>
     **Expected:** An error message is shown indicating that the email already exists.
     <br><br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="test_delete"></div>
 
@@ -2410,6 +2543,7 @@ The import command requires the use of an external CSV file. The test cases belo
     **Expected:** No person is deleted. Error details shown in the status message.
     <br><br>
 
+<div style="page-break-after: always;"></div>
 
 <div id="test_deleteshown"></div>
 
@@ -2470,6 +2604,8 @@ The import command requires the use of an external CSV file. The test cases belo
 
 <div id="test_find"></div>
 
+<div style="page-break-after: always;"></div>
+
 #### Finding a Person: `find`
 
 **Command:** `find`<br>
@@ -2504,6 +2640,8 @@ The import command requires the use of an external CSV file. The test cases belo
     * **Test case:** `find s|S01`<br>
       **Expected:** Persons with the studio "S01" are shown. Status message shows the number of persons found.
       <br><br>
+
+<div style="page-break-after: always;"></div>
 
 2. Finding persons by score.
 
@@ -2546,6 +2684,8 @@ The import command requires the use of an external CSV file. The test cases belo
 
 <div id="test_copy"></div>
 
+<div style="page-break-after: always;"></div>
+
 #### Copying Emails: `copy`
 
 **Command:** `copy`<br>
@@ -2571,6 +2711,8 @@ The import command requires the use of an external CSV file. The test cases belo
       **Expected:** All emails of the currently displayed persons are copied to the clipboard. Status message shows the number of emails copied.
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="test_export"></div>
 
@@ -2614,6 +2756,8 @@ The import command requires the use of an external CSV file. The test cases belo
 
 <br>
 
+<div style="page-break-after: always;"></div>
+
 <div id="test_addexam"></div>
 
 #### Adding an Exam: `addExam`
@@ -2644,7 +2788,7 @@ The import command requires the use of an external CSV file. The test cases belo
 
 3. Adding an exam with missing fields
 
-   * **Prerequisites:** 
+   * **Prerequisites:**
        * No exams in the exams list.
          <br><br>
    * **Test case (missing score):** `addExam n|Final`<br>
@@ -2661,14 +2805,11 @@ The import command requires the use of an external CSV file. The test cases belo
 
 1. Deleting an exam
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Exactly one exam in the exams list. Hence, exam has an index of 1.
           <br><br>
     * **Test case:** `deleteExam 1`<br>
       **Expected:** First exam is deleted from the exams list. Status message shows the exam deleted.
-      <br><br>
-    * **Test case:** `deleteExam 0`<br>
-      **Expected:** No exam is deleted. Error message shown. No change in the exams list.
       <br><br>
     * **Test case (index out of bounds):** `deleteExam 2`<br>
       **Expected:** No exam is deleted. Error message shown. No change in the exams list.
@@ -2677,6 +2818,8 @@ The import command requires the use of an external CSV file. The test cases belo
       **Expected:** No exam is deleted. Error message shown. No change in the exams list.
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="test_selectexam"></div>
 
@@ -2687,7 +2830,7 @@ The import command requires the use of an external CSV file. The test cases belo
 
 1. Selecting an exam
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Exactly one exam in the exams list. Hence, exam has an index of 1.
           <br><br>
     * **Test case:** `selectExam 1`<br>
@@ -2723,6 +2866,8 @@ The import command requires the use of an external CSV file. The test cases belo
       **Expected:** No exam is deselected. Error message shown. No change in the exams list.
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="test_importexam"></div>
 
@@ -2773,6 +2918,8 @@ The import command requires the use of an external CSV file. The test cases belo
     **Expected:** Similar to previous.
     <br><br>
 
+<div style="page-break-after: always;"></div>
+
 4. Importing a CSV file with duplicate entries.
 
     * **Prerequisites:**
@@ -2813,6 +2960,8 @@ The import command requires the use of an external CSV file. The test cases belo
     * **Other incorrect `importExamScores` commands to try:** CSV files with a mix of invalid scores, nonexistent emails, and nonexistent exams.<br>
     **Expected:** Similar to previous.
     <br><br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="test_addscore"></div>
 
@@ -2856,6 +3005,8 @@ The import command requires the use of an external CSV file. The test cases belo
       **Expected:** No score is added to any persons. Error details are shown in the status message.
       <br><br>
 
+<div style="page-break-after: always;"></div>
+
 2. Adding a score to a person while person list is filtered.
 
     * **Prerequisites:**
@@ -2867,6 +3018,8 @@ The import command requires the use of an external CSV file. The test cases belo
       **Expected:** Similar to previous.
 
 <br>
+
+<div style="page-break-after: always;"></div>
 
 <div id="test_editscore"></div>
 
@@ -2959,6 +3112,8 @@ The import command requires the use of an external CSV file. The test cases belo
 
 <br>
 
+<div style="page-break-after: always;"></div>
+
 <div id="test_statistics"></div>
 
 #### Mean and Median of Exam Scores
@@ -2985,6 +3140,8 @@ The import command requires the use of an external CSV file. The test cases belo
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div style="page-break-after: always;"></div>
+
 <div id="appendix_g"></div>
 
 ### Appendix G: Effort
@@ -3003,7 +3160,7 @@ different features, interactions between each entity, and the management and sto
 entities. The consideration of these factors turned out to be more challenging than initially anticipated.
 
 Moreover, in addition to enhancing the original features of AB3 to cater to our target users, Avengers Assemble also introduces
-many new commands to improve the usability of our application, as well as to handle the diverse behaviours and interactions
+many new commands to improve the usability of our application, as well as to handle the diverse behaviors and interactions
 of `Person` and `Exam`. This required a significant amount of effort to ensure that the new features were
 implemented correctly and seamlessly integrated with the existing features.
 
@@ -3028,7 +3185,7 @@ to filter out persons less than or more than a specified score, revamping the wa
 
 **Automatic Tagging of Persons**<br>
 In the context of our application, it is mainly used to store students', instructors' and teaching assistants' contacts.
-Hence, on top of the original behaviour of the tag feature, we adapted it to automatically tag contacts with a
+Hence, on top of the original behavior of the tag feature, we adapted it to automatically tag contacts with a
 matriculation number as students.
 
 **User Interface**<br>
@@ -3037,6 +3194,8 @@ modified to accommodate the new features, and the theme of the application was c
 course that we were developing the application for. Furthermore, the logic for the updating of user interface was also
 modified to a more developer-friendly approach which would allow developers to understand and modify the user interface
 more easily.
+
+<div style="page-break-after: always;"></div>
 
 ##### New Features
 
@@ -3085,6 +3244,8 @@ require more user interactions to access the information. On the other hand, a m
 information at a glance, but might overwhelm users with too much information. Striking a balance between these two
 trade-offs was a challenge that required extended discussions and iterations before arriving at a solution that we were
 satisfied with: the selection system for exams.
+
+<div style="page-break-after: always;"></div>
 
 **Implementation of Exam and Exam Score Features** <br>
 
