@@ -2723,7 +2723,7 @@ On Window systems, you can right click the file and copy the file path, remember
     email,Exam:Midterm
     alexyeoh@example.com,50
     ```
-    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    * **Test case:** `importExamScores i|/path/to/file.csv`<br>
     **Expected:** The person with the email of `alexyeoh@example.com` now has a `Midterm` score of `50`.
     <br><br>
 
@@ -2733,7 +2733,7 @@ On Window systems, you can right click the file and copy the file path, remember
         * Start with sample data and the `Midterm` exam.
         * Create a file named `invalid.json`.
         <br><br>
-    * **Test case:** `importExamScores invalid.json`<br>
+    * **Test case:** `importExamScores i|invalid.json`<br>
     **Expected:** An error message is shown indicating that the file is not a CSV file.
     <br><br>
 
@@ -2747,7 +2747,7 @@ On Window systems, you can right click the file and copy the file path, remember
     email,Exam:Midterm,email
     alexyeoh@example.com,50,alexyeoh@example.com
     ```
-    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    * **Test case:** `importExamScores i|/path/to/file.csv`<br>
     **Expected:** An error message is shown indicating that the email header should exist only in the first column.
     <br><br>
     * **Other incorrect `importExamScores` commands to try:** CSV files where email is not the first header.<br>
@@ -2765,7 +2765,7 @@ On Window systems, you can right click the file and copy the file path, remember
     email,Exam:Midterm,Exam:Midterm
     alexyeoh@example.com,50,60
     ```
-    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    * **Test case:** `importExamScores i|/path/to/file.csv`<br>
     **Expected:** A message is shown indicating that there are duplicate entries in the CSV file, and only the first instance has been kept. The `Midterm` score for the person with the email of `alexyeoh@example.com` is `50`.
     <br><br>
 
@@ -2782,7 +2782,7 @@ On Window systems, you can right click the file and copy the file path, remember
     berniceyu@example.com,50,60
     nonexistent@example.com,100,100
     ```
-    * **Test case:** `importExamScores /path/to/file.csv`<br>
+    * **Test case:** `importExamScores i|/path/to/file.csv`<br>
     **Expected:** A message is shown indicating that there are invalid entries in the CSV file, and all other valid entries have been imported. The errors shown are as follows:
 
         * The score for `alexyeoh@example.com` for the `Midterm` exam is invalid.
