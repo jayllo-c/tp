@@ -391,21 +391,21 @@ to navigate to the user guide link.
 
 #### **Clear Command** : `clear`
 
-The `clear` command allows users to clear all persons and exams from the address book.
+The `clear` command allows users to clear all persons and exams from the persons and exams list.
 
 ##### Executing the Command
 
-The `ClearCommand` simply sets the `AddressBook` in the `Model` component to a new `AddressBook` object, effectively clearing all persons and exams from the address book.
+The `ClearCommand` simply sets the `AddressBook` in the `Model` component to a new `AddressBook` object, effectively clearing all persons and exams from the persons and exams list.
 
 ##### Design Considerations
 
-We designed the `clear` command to clear all persons and exams from the address book to provide users with a quick and easy way to reset the address book to its initial state. This is useful for users who want to start over or clear the address book for a fresh start.
+We designed the `clear` command to clear all persons and exams from their respective lists to provide users with a quick and easy way to reset the application to its initial state. This is useful for users who want to start over or clear the address book for a fresh start.
 
 <div id="list"></div>
 
 #### **List Command** : `list`
 
-The `list` command allows users to list all persons in the address book.
+The `list` command allows users to list all persons in the persons list.
 
 ##### Executing the Command
 
@@ -413,7 +413,7 @@ The `ListCommand` retrieves the `filteredPersonList` from the `Model` component 
 
 ##### Design Considerations
 
-We designed the `list` command to list all persons in the address book to provide users with a quick and easy way to view all persons in the address book. This is useful to revert the UI back to the default view after a find command has been executed which filters the persons displayed on the UI.
+We designed the `list` command to list all persons in the persons list to provide users with a quick and easy way to view all persons in the persons list. This is useful to revert the UI back to the default view after a find command has been executed which filters the persons displayed on the UI.
 
 <div id="contact-management"></div>
 
@@ -426,7 +426,7 @@ There is an additional `filteredPersons` list stored in the `Model` component th
 
 #### **Add Person Command** : `add`
 
-The `add` command allows users to add a person to the address book.
+The `add` command allows users to add a person to the persons list.
 
 The user can specify the person's:
 * name (`Name`),
@@ -664,7 +664,7 @@ If the currently filtered list does is not showing between 0 and the total numbe
 
 ##### Updating Filtered Person List
 
-After deleting all persons currently displayed in the `PersonListPanel`, the `filteredPersons` list in the `Model` component is updated to show all remaining persons in the address book.
+After deleting all persons currently displayed in the `PersonListPanel`, the `filteredPersons` list in the `Model` component is updated to show all remaining persons in the persons list.
 
 The following activity diagram illustrates the workflow of the execution of the `deleteShown` command:
 
@@ -796,7 +796,7 @@ However, future enhancements could include the ability to copy other details of 
 
 **Alternative 1: Copying emails of all persons**
 
-Copies the emails of all persons in the address book, regardless of whether they are currently displayed in the `PersonListPanel`.
+Copies the emails of all persons in the persons list, regardless of whether they are currently displayed in the `PersonListPanel`.
 However, this approach may lead to users copying a large number of emails unintentionally, which could be overwhelming.
 Furthermore, it may not be clear to users which emails are being copied.
 
@@ -1401,13 +1401,13 @@ Retain all other relevant `Tag` objects like `colleagues` and `student` to bette
 * Centralised platform to store and manage person details for all relevant individuals involved in course administration
 * Able to store and manage exam scores for all students in the course
 * Easier access to information through organising relevant persons into different subgroups
-* Able to set up the address book through different data-loading options
+* Able to set up the application through different data-loading options
 * Able to assist with management of large scale communication
 
 **Problem scope**:
 
 * The CS1101S Head Tutor will face challenges in effectively organising and managing contact information within the department due to the large scale the course has to operate on. Existing methods, such as paper-based lists or basic digital spreadsheets, lack the necessary functionality to efficiently handle the diverse needs of proper contact management. There is a need for a user-friendly and offline-capable address book solution tailored specifically to the needs of a single user. This address book system should provide features such as easy contact entry and editing, quick search functionality, customizable categorization options, and the ability to add notes for each contact. Additionally, it should operate offline without requiring an internet connection and should not rely on complex database management systems.
-* While the address book system will greatly improve contact management and organisation for the CS1101S Head Tutor, it will not address broader departmental communication or collaboration needs beyond individual contact management since the address book is designed to be a single-user system. It will not facilitate communication between users or provide collaboration tools for group projects or tasks. Additionally, the address book system will not handle complex data analysis or reporting functions beyond basic contact information management. Finally, while the system will provide offline functionality, it will not offer real-time synchronisation with online databases or cloud storage solutions.
+* While Avengers Assemble will greatly improve contact management and organisation for the CS1101S Head Tutor, it will not address broader departmental communication or collaboration needs beyond individual contact management since the application is designed to be a single-user system. It will not facilitate communication between users or provide collaboration tools for group projects or tasks. Additionally, the address book system will not handle complex data analysis or reporting functions beyond basic contact information management. Finally, while the system will provide offline functionality, it will not offer real-time synchronisation with online databases or cloud storage solutions.
 
 <div id="appendix_b"></div>
 
@@ -1417,42 +1417,42 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### General
 
-| Priority | As a …​                                      | I want to …​                            | So that I can…​                                                          |
+| Priority | As a …​                                      | I want to …​                           | So that I can…​                                                          |
 |----------|---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------|
 | `* * *`  | potential user exploring the app            | see the app populated with sample data | immediately see an example of the app in use                            |
 | `* * *`  | new user                                    | see usage instructions                 | refer to instructions when I forget how to use the App                  |
 | `* * *`  | new user                                    | easily clear the example data          | start using the app with real-life data                                 |
-| `* *`    | experienced user                            | use the address book offline           | update and interact with it anywhere                                    |
+| `* *`    | experienced user                            | use the application offline            | update and interact with it anywhere                                    |
 
 #### For Contact Management
 
-| Priority | As a …​                                      | I want to …​                            | So that I can…​                                                          |
-|----------|---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------|
-| `* * *`  | head tutor using the app                    | import persons from a csv file         | easily add a large number of persons to the address book                |
-| `* * *`  | new user                                    | save the data I input into the app     | don't lose the information I've entered                                 |
-| `* * *`  | user                                        | add a new person                       | make minor additions to the persons in the address book                 |
-| `* * *`  | user                                        | update and edit person details         | keep my address book accurate                                           |
-| `* * *`  | user                                        | delete a person                        | remove entries that I no longer need                                    |
-| `* * *`  | user                                        | delete a specific group of entries     | remove multiple entries that I no longer need more efficiently          |
-| `* * *`  | user                                        | view all saved contacts                | oversee the data stored within my app                                   |
-| `* * *`  | user                                        | find a person through their particulars| locate details of persons without having to go through the entire list  |
-| `* * *`  | head tutor using the app                    | categorise my persons into groups      | manage different groups of students effectively                         |
-| `* * *`  | head tutor using the app                    | copy email addresses of a group        | effectively communicate with target groups                              |
-| `* * *`  | head tutor using the app                    | export the details of persons to a csv | easily share the details of a group with others                         |
+| Priority | As a …​                                      | I want to …​                            | So that I can…​                                                        |
+|----------|---------------------------------------------|----------------------------------------|------------------------------------------------------------------------|
+| `* * *`  | head tutor using the app                    | import persons from a csv file         | easily add a large number of persons to the application                |
+| `* * *`  | new user                                    | save the data I input into the app     | don't lose the information I've entered                                |
+| `* * *`  | user                                        | add a new person                       | make minor additions to the persons in the application                 |
+| `* * *`  | user                                        | update and edit person details         | keep my persons list accurate                                          |
+| `* * *`  | user                                        | delete a person                        | remove entries that I no longer need                                   |
+| `* * *`  | user                                        | delete a specific group of entries     | remove multiple entries that I no longer need more efficiently         |
+| `* * *`  | user                                        | view all saved contacts                | oversee the data stored within my app                                  |
+| `* * *`  | user                                        | find a person through their particulars| locate details of persons without having to go through the entire list |
+| `* * *`  | head tutor using the app                    | categorise my persons into groups      | manage different groups of students effectively                        |
+| `* * *`  | head tutor using the app                    | copy email addresses of a group        | effectively communicate with target groups                             |
+| `* * *`  | head tutor using the app                    | export the details of persons to a csv | easily share the details of a group with others                        |
 
 #### For Exam and Score Management
 
-| Priority | As a …​                                      | I want to …​                            | So that I can…​                                                          |
-|----------|---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------|
-| `* * *`  | head tutor using the app                    | import assesment scores from a csv file| easily add a large number of scores to the address book                 |
-| `* * *`  | head tutor using the app                    | add exams to the app                   | keep track of student performance                                       |
-| `* * *`  | head tutor using the app                    | delete exams from the app              | remove exams that are no longer relevant                                |
-| `* * *`  | head tutor using the app                    | view scores for a specific exam        | analyse student scores                                                  |
-| `* * *`  | head tutor using the app                    | add scores to the app                  | keep track of student performance                                       |
-| `* * *`  | head tutor using the app                    | edit scores in the app                 | correct errors in the scores                                            |
-| `* * *`  | head tutor using the app                    | delete scores from the app             | remove scores that are no longer relevant                               |
-| `* * *`  | head tutor using the app                    | export scores to a csv file            | easily share the scores with others                                     |
-| `* * *`  | head tutor using the app                    | view statistics of scores              | analyse student performance                                             |
+| Priority | As a …​                                      | I want to …​                            | So that I can…​                                        |
+|----------|---------------------------------------------|----------------------------------------|--------------------------------------------------------|
+| `* * *`  | head tutor using the app                    | import assesment scores from a csv file| easily add a large number of scores to the application |
+| `* * *`  | head tutor using the app                    | add exams to the app                   | keep track of student performance                      |
+| `* * *`  | head tutor using the app                    | delete exams from the app              | remove exams that are no longer relevant               |
+| `* * *`  | head tutor using the app                    | view scores for a specific exam        | analyse student scores                                 |
+| `* * *`  | head tutor using the app                    | add scores to the app                  | keep track of student performance                      |
+| `* * *`  | head tutor using the app                    | edit scores in the app                 | correct errors in the scores                           |
+| `* * *`  | head tutor using the app                    | delete scores from the app             | remove scores that are no longer relevant              |
+| `* * *`  | head tutor using the app                    | export scores to a csv file            | easily share the scores with others                    |
+| `* * *`  | head tutor using the app                    | view statistics of scores              | analyse student performance                            |
 
 
 <div id="appendix_c"></div>
