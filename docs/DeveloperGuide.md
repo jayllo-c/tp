@@ -265,14 +265,30 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 The following is a more detailed explaination on how user input is parsed into a `Command` object (Not mentioned above for simplicity).
 
+##### Using Argument Tokenizer and Argument Multimap
 * After the `XYZCommandParser` is instantiated by the `AddressBookParser`, it uses the `ArgumentTokenizer` class to tokenize the user input string into the arguments.
-* It then uses the `ArgumentMultimap` class to extract the arguments based on the prefixes present in the user input string.
-* For some commands, some arguments are mandatory and the `ArgumentMultimap` class is used to check if these mandatory arguments are present. If not, an exception is thrown.
-* For some commands, multiple arguments under the same category (e.g. two name arguments for an AddCommand) are not allowed. The `ArgumentMultimap` class is used to check for undesirable multiple arguments. If multiple arguments are present, an exception is thrown.
+  * This is done through the `tokenize` method which returns an `ArgumentMultimap` object.
+* The `ArgumentMultimap` class is then used to extract the relevant arguments.
+
+<br>
+
+**Mandatory Arguments and Multiple Arguments**
+
+* For some commands, some arguments are mandatory and the `arePrefixesPresent` method is used to check if the arguments (i.e the corresponding prefixes) are present in the user input. If not, an exception is thrown.
+* For some commands, multiple arguments under the same category (e.g. two name arguments for an AddCommand) are not allowed. The `ArgumentMultimap` class is used to check for undesirable multiple arguments using the `verifyNoDuplicatePrefixesFor` method. If multiple arguments are present, an exception is thrown.
+
+<br>
+
+**Validation of Arguments**
+
 * Validation of each extracted argument is done using the methods defined in the `ParserUtil` class. This class contains methods to validate different arguments extracted by the `ArgumentMultimap` class based on the `VALIDATION_REGEX` defined in component classes (`Name.java`, `Score.java`, etc.).
 * The parsed arguments are then used to create a `XYZCommand` object to be executed.
 
-**Note:** Some commands do not require any arguments (e.g., `help`, `clear`, `list`, `exit`). In such cases, the `XYZCommand` class is directly instantiated by the `AddressBookParser` class without the parsing of arguments. As such, any arguments passed to these commands are ignored.
+<box type="info" seamless>
+
+Note: Some commands do not require any arguments (e.g., `help`, `clear`, `list`, `exit`). In such cases, the `XYZCommand` class is directly instantiated by the `AddressBookParser` class without the parsing of arguments. As such, any arguments passed to these commands are ignored.
+
+</box>
 
 #### Considerations for Logic
 
@@ -2020,9 +2036,9 @@ testers are expected to do more *exploratory* testing.
 1. Getting more information on the usage of the app.
 
     * **Test case:** `help`<br>
-      **Expected:** Link to the user guide is copied to the clipboard. Status message shows that the link has been copied. 
+      **Expected:** Link to the user guide is copied to the clipboard. Status message shows that the link has been copied.
       The link should be accessible from a browser.
-      
+
 <br>
 
 <div id="test_clear"></div>
@@ -2458,7 +2474,7 @@ On Window systems, you can right click the file and copy the file path, remember
 
 1. Finding persons by contact details.
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Ensure that there are multiple persons in the list.
           <br><br>
     * **Test case:** `find n|Alice`<br>
@@ -2488,7 +2504,7 @@ On Window systems, you can right click the file and copy the file path, remember
 
 2. Finding persons by score.
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Ensure that there are multiple persons in the list.
         * Ensure that at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
         * Ensure an exam is selected using the `selectExam` command. For this example, we shall select the `test exam`.
@@ -2503,12 +2519,12 @@ On Window systems, you can right click the file and copy the file path, remember
       **Expected:** An error message is shown indicating that the `score` provided is invalid.
       <br><br>
     * **Test case:** `find mt|101`<br>
-      **Expected:** An error message is shown indicating that the `score` provided is greater than the maximum score of the selected exam. 
+      **Expected:** An error message is shown indicating that the `score` provided is greater than the maximum score of the selected exam.
       <br><br>
 
 3. Finding persons by multiple prefixes.
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Ensure that there are multiple persons in the list.
           <br><br>
     * **Test case (multiple unique prefixes):** `find n|Alice e|Alice`<br>
@@ -2534,7 +2550,7 @@ On Window systems, you can right click the file and copy the file path, remember
 
 1. Copying the emails of all persons.
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Ensure that there are multiple persons in the list.
         * Ensure all persons are displayed using the `list` command.
           <br><br>
@@ -2544,7 +2560,7 @@ On Window systems, you can right click the file and copy the file path, remember
 
 2. Copying the emails of a specific group.
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Ensure that there are multiple persons in the list.
         * Filter the person list using the `find` command.
           <br><br>
@@ -2625,7 +2641,7 @@ On Window systems, you can right click the file and copy the file path, remember
 
 3. Adding an Exam with Missing Fields
 
-   * **Prerequisites:** 
+   * **Prerequisites:**
        * No exams in the address book.
          <br><br>
    * **Test case (missing score):** `addExam n|Final`<br>
@@ -2642,7 +2658,7 @@ On Window systems, you can right click the file and copy the file path, remember
 
 1. Deleting an Exam
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Exactly one exam in the address book. Hence, exam has an index of 1.
           <br><br>
     * **Test case:** `deleteExam 1`<br>
@@ -2668,7 +2684,7 @@ On Window systems, you can right click the file and copy the file path, remember
 
 1. Selecting an exam
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Exactly one exam in the address book. Hence, exam has an index of 1.
           <br><br>
     * **Test case:** `selectExam 1`<br>
@@ -2694,7 +2710,7 @@ On Window systems, you can right click the file and copy the file path, remember
 
 1. Deselecting an Exam
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * An exam has been selected.
           <br><br>
     * **Test case:** `deselectExam`<br>
@@ -2729,7 +2745,7 @@ On Window systems, you can right click the file and copy the file path, remember
 
 2. Importing an invalid file.
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Start with sample data and the `Midterm` exam.
         * Create a file named `invalid.json`.
         <br><br>
