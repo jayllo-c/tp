@@ -286,7 +286,7 @@ The following is a more detailed explanation on how user input is parsed into a 
 
 <box type="info" seamless>
 
-Note: Some commands do not require any arguments (e.g., `help`, `clear`, `list`, `exit`). In such cases, the `XYZCommand` class is directly instantiated by the `AddressBookParser` class without the parsing of arguments. As such, any arguments passed to these commands are ignored.
+**Note:** Some commands do not require any arguments (e.g., `help`, `clear`, `list`, `exit`). In such cases, the `XYZCommand` class is directly instantiated by the `AddressBookParser` class without the parsing of arguments. As such, any arguments passed to these commands are ignored.
 
 </box>
 
@@ -336,7 +336,7 @@ The `Model` component,
 
 #### Saving of Data
 
-The `Storage` component uses the `Jackson` library to convert objects to JSON format. The conversion methods are predefined in the `JsonAdapted*` classes for their corresponding objects.
+The `Storage` component uses the `Jackson` library to convert objects to JSON format. The conversion methods are predefined in the `JsonAdapted` classes for their corresponding objects.
 
 The `Logic` class stores a `StorageManager` object that implements the methods in the `Storage` class. For **every** command that is executed, `Logic` uses `StorageManager` to save the updated `AddressBook` through the `saveAddressBook` method.
 
@@ -351,7 +351,7 @@ The sequence diagram below illustrates how data is saved within the `Storage` co
 
 #### Loading of Data
 
-When the application is initialised, the `Storage` component reads the JSON objects from the save file and converts them back to objects that can be used to initialise the `Model` component. This is done using the `readJsonFile` method of the `JsonUtil` class which utilises the methods defined in the `JsonAdapted*` classes to convert the saved JSON data back to objects that can be used by the `Model` component.
+When the application is initialised, the `Storage` component reads the JSON objects from the save file and converts them back to objects that can be used to initialise the `Model` component. This is done using the `readJsonFile` method of the `JsonUtil` class which utilises the methods defined in the `JsonAdapted` classes to convert the saved JSON data back to objects that can be used by the `Model` component.
 
 The sequence diagram below illustrates how data is loaded within the `Storage` component when the application is initialised.
 
@@ -393,7 +393,7 @@ The `help` command utilizes the `java.awt.Toolkit` class to copy the user guide 
 
 ##### Executing the Command
 
-On execution of the `HelpCommand`, the `copyToClipboard` method is called which retrives the system clipboard
+On execution of the `HelpCommand`, the `copyToClipboard` method is called which retrieves the system clipboard
 through `Toolkit.getDefaultToolkit().getSystemClipboard()` and copies the user guide link to the clipboard by using
 `setContents` method.
 
@@ -522,7 +522,7 @@ It uses the `ArgumentTokenizer` class to tokenize the user input string, extract
 
 The `EditCommand` first retrieves the person to be edited from the `Model` component.
 This is done by first retrieving the `filteredPersonList` from the `Model` component using the `getFilteredPersonList` method
-The person to be edited is then retrived from the `filteredPersonList` using the index provided by the user.
+The person to be edited is then retrieved from the `filteredPersonList` using the index provided by the user.
 The `EditCommand` then creates a new `Person` object with the new details provided by the user and the selected person's existing details. The `Person` object is then updated in the `UniquePersonList` through the `setPerson` method in the `Model` component.
 
 ##### Activity Diagram
