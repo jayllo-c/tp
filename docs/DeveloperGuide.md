@@ -265,14 +265,30 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 The following is a more detailed explaination on how user input is parsed into a `Command` object (Not mentioned above for simplicity).
 
+##### Using Argument Tokenizer and Argument Multimap
 * After the `XYZCommandParser` is instantiated by the `AddressBookParser`, it uses the `ArgumentTokenizer` class to tokenize the user input string into the arguments.
-* It then uses the `ArgumentMultimap` class to extract the arguments based on the prefixes present in the user input string.
-* For some commands, some arguments are mandatory and the `ArgumentMultimap` class is used to check if these mandatory arguments are present. If not, an exception is thrown.
-* For some commands, multiple arguments under the same category (e.g. two name arguments for an AddCommand) are not allowed. The `ArgumentMultimap` class is used to check for undesirable multiple arguments. If multiple arguments are present, an exception is thrown.
+  * This is done through the `tokenize` method which returns an `ArgumentMultimap` object.
+* The `ArgumentMultimap` class is then used to extract the relevant arguments.
+
+<br>
+
+**Mandatory Arguments and Multiple Arguments**
+
+* For some commands, some arguments are mandatory and the `arePrefixesPresent` method is used to check if the arguments (i.e the corresponding prefixes) are present in the user input. If not, an exception is thrown.
+* For some commands, multiple arguments under the same category (e.g. two name arguments for an AddCommand) are not allowed. The `ArgumentMultimap` class is used to check for undesirable multiple arguments using the `verifyNoDuplicatePrefixesFor` method. If multiple arguments are present, an exception is thrown.
+
+<br>
+
+**Validation of Arguments**
+
 * Validation of each extracted argument is done using the methods defined in the `ParserUtil` class. This class contains methods to validate different arguments extracted by the `ArgumentMultimap` class based on the `VALIDATION_REGEX` defined in component classes (`Name.java`, `Score.java`, etc.).
 * The parsed arguments are then used to create a `XYZCommand` object to be executed.
 
-**Note:** Some commands do not require any arguments (e.g., `help`, `clear`, `list`, `exit`). In such cases, the `XYZCommand` class is directly instantiated by the `AddressBookParser` class without the parsing of arguments. As such, any arguments passed to these commands are ignored.
+<box type="info" seamless>
+
+Note: Some commands do not require any arguments (e.g., `help`, `clear`, `list`, `exit`). In such cases, the `XYZCommand` class is directly instantiated by the `AddressBookParser` class without the parsing of arguments. As such, any arguments passed to these commands are ignored.
+
+</box>
 
 #### Considerations for Logic
 
@@ -1687,7 +1703,7 @@ into user's clipboard.
 
 **MSS:**
 
-1. User requests to import exam results from a csv file.
+1. User requests to import exam results from a CSV file.
 2. AvengersAssemble displays a message that all exam results have been imported.
 
     Use case ends.
@@ -1700,21 +1716,21 @@ into user's clipboard.
 
        Use case ends.
 
-*   2b. The file to be imported is not a csv file.
+*   2b. The file to be imported is not a CSV file.
 
-    *  2b1. AvengersAssemble displays an error message indicating that the file type is not recognised and should be a csv file
-
-       Use case ends.
-
-*   2c. There are duplicate entries in the csv file.
-
-    *  2c1. AvengersAssemble displays a message indicating that there are duplicate entries in the csv file, and only the first instance has been kept.
+    *  2b1. AvengersAssemble displays an error message indicating that the file type is not recognised and should be a CSV file
 
        Use case ends.
 
-* 2d. The csv file contains invalid entries.
+*   2c. There are duplicate entries in the CSV file.
 
-    *  2d1. AvengersAssemble displays a message indicating that there are invalid entries in the csv file, and all other valid entries have been imported.
+    *  2c1. AvengersAssemble displays a message indicating that there are duplicate entries in the CSV file, and only the first instance has been kept.
+
+       Use case ends.
+
+* 2d. The CSV file contains invalid entries.
+
+    *  2d1. AvengersAssemble displays a message indicating that there are invalid entries in the CSV file, and all other valid entries have been imported.
 
        Use case ends.
 
@@ -2020,9 +2036,9 @@ testers are expected to do more *exploratory* testing.
 1. Getting more information on the usage of the app.
 
     * **Test case:** `help`<br>
-      **Expected:** Link to the user guide is copied to the clipboard. Status message shows that the link has been copied. 
+      **Expected:** Link to the user guide is copied to the clipboard. Status message shows that the link has been copied.
       The link should be accessible from a browser.
-      
+
 <br>
 
 <div id="test_clear"></div>
@@ -2035,10 +2051,10 @@ testers are expected to do more *exploratory* testing.
 1. Clearing all contact information from the app.
 
     * **Prerequisites:**
-        * Ensure that there are multiple persons in the list.
+        * Ensure that there is at least one person and exam in the app.
           <br><br>
     * **Test case:** `clear`<br>
-      **Expected:** All persons are deleted from the list. Status message shows that all persons and exams have been
+      **Expected:** All persons and exams are deleted from the list. Status message shows that all persons and exams have been
       deleted from the app.
 
 <br>
@@ -2461,8 +2477,8 @@ On Window systems, you can right-click the file and copy the file path, remember
 
 1. Finding persons by contact details.
 
-    * **Prerequisites:** 
-        * Ensure that there are multiple persons in the list.
+    * **Prerequisites:**
+        * Ensure that there are multiple persons in the app.
           <br><br>
     * **Test case:** `find n|Alice`<br>
       **Expected:** Persons with the name "Alice" are shown. Status message shows the number of persons found.
@@ -2491,8 +2507,8 @@ On Window systems, you can right-click the file and copy the file path, remember
 
 2. Finding persons by score.
 
-    * **Prerequisites:** 
-        * Ensure that there are multiple persons in the list.
+    * **Prerequisites:**
+        * Ensure that there are multiple persons in the app.
         * Ensure that at least one exam is added using the `addExam` command. For this example, we shall add a new exam with name `test exam` and maximum score `100`.
         * Ensure an exam is selected using the `selectExam` command. For this example, we shall select the `test exam`.
           <br><br>
@@ -2506,13 +2522,13 @@ On Window systems, you can right-click the file and copy the file path, remember
       **Expected:** An error message is shown indicating that the `score` provided is invalid.
       <br><br>
     * **Test case:** `find mt|101`<br>
-      **Expected:** An error message is shown indicating that the `score` provided is greater than the maximum score of the selected exam. 
+      **Expected:** An error message is shown indicating that the `score` provided is greater than the maximum score of the selected exam.
       <br><br>
 
 3. Finding persons by multiple prefixes.
 
-    * **Prerequisites:** 
-        * Ensure that there are multiple persons in the list.
+    * **Prerequisites:**
+        * Ensure that there are multiple persons in the app.
           <br><br>
     * **Test case (multiple unique prefixes):** `find n|Alice e|Alice`<br>
       **Expected:** An error message is shown indicating that the format of the command is incorrect.
@@ -2537,8 +2553,8 @@ On Window systems, you can right-click the file and copy the file path, remember
 
 1. Copying the emails of all persons.
 
-    * **Prerequisites:** 
-        * Ensure that there are multiple persons in the list.
+    * **Prerequisites:**
+        * Ensure that there are multiple persons in the app.
         * Ensure all persons are displayed using the `list` command.
           <br><br>
     * **Test case:** `copy`<br>
@@ -2547,8 +2563,8 @@ On Window systems, you can right-click the file and copy the file path, remember
 
 2. Copying the emails of a specific group.
 
-    * **Prerequisites:** 
-        * Ensure that there are multiple persons in the list.
+    * **Prerequisites:**
+        * Ensure that there are multiple persons in the app.
         * Filter the person list using the `find` command.
           <br><br>
     * **Test case:** `copy`<br>
@@ -2591,7 +2607,7 @@ On Window systems, you can right-click the file and copy the file path, remember
         * List all persons using the `list` command.
           <br><br>
     * **Test case:** `export`<br>
-      **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file. A column with column heading `Exam:Test Exam` is present in the same CSV file, but no values present in that column.
+      **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file. A column with column heading `Exam:Test Exam` is present in the same CSV file, but no values are present in that column.
       <br><br>
     * **Test case:** Add exam scores to persons in displayed list using `addScore`, then `export`<br>
       **Expected:** A file named `addressbookdata` containing `avengersassemble.csv` is created in the same directory where the JAR file of the Avengers Assemble is located. All currently displayed persons and their details are exported to the CSV file. A column with column heading `Exam:Test Exam` is present in the same CSV file, with corresponding exam scores for each person included in that column.
@@ -2605,7 +2621,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 **Command:** `addExam`<br>
 **More information on usage:** <a href="UserGuide.md#addexam">Adding an Exam</a>
 
-1. Adding an Exam with Valid Data
+1. Adding an exam with valid data
 
    * **Prerequisites:**
        * No exams in the exams list.
@@ -2617,7 +2633,7 @@ On Window systems, you can right-click the file and copy the file path, remember
      **Expected:** New exam is added to the exams list. Status message shows the exam added.
      <br><br>
 
-2. Adding an Exam that Already Exists
+2. Adding an exam that already exists
 
    * **Prerequisites:**
        * An exam of name: Final, Score: 100 exists in the exams list.
@@ -2626,13 +2642,13 @@ On Window systems, you can right-click the file and copy the file path, remember
      **Expected:** Error message shown in the error report. No change in the exams list.
      <br><br>
 
-3. Adding an Exam with Missing Fields
+3. Adding an exam with missing fields
 
    * **Prerequisites:** 
        * No exams in the exams list.
          <br><br>
    * **Test case (missing score):** `addExam n|Final`<br>
-     **Expected:** Error message shown in the error report. No change in the exams lsit.
+     **Expected:** Error message shown in the error report. No change in the exams list.
 
 <br>
 
@@ -2643,7 +2659,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 **Command:** `deleteExam`<br>
 **More information on usage:** <a href="UserGuide.md#deleteexam">Deleting an Exam</a>
 
-1. Deleting an Exam
+1. Deleting an exam
 
     * **Prerequisites:** 
         * Exactly one exam in the exams list. Hence, exam has an index of 1.
@@ -2695,9 +2711,9 @@ On Window systems, you can right-click the file and copy the file path, remember
 **Command:** `deselectExam`<br>
 **More information on usage:** <a href="UserGuide.md#deselectexam">Deselecting an Exam</a>
 
-1. Deselecting an Exam
+1. Deselecting an exam
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * An exam has been selected.
           <br><br>
     * **Test case:** `deselectExam`<br>
@@ -2732,7 +2748,7 @@ On Window systems, you can right-click the file and copy the file path, remember
 
 2. Importing an invalid file.
 
-    * **Prerequisites:** 
+    * **Prerequisites:**
         * Start with sample data and the `Midterm` exam.
         * Create a file named `invalid.json`.
         <br><br>
