@@ -399,7 +399,7 @@ The `ClearCommand` simply sets the `AddressBook` in the `Model` component to a n
 
 ##### Design Considerations
 
-We designed the `clear` command to clear all persons and exams from their respective lists to provide users with a quick and easy way to reset the application to its initial state. This is useful for users who want to start over or clear the address book for a fresh start.
+We designed the `clear` command to clear all persons and exams from their respective lists to provide users with a quick and easy way to reset the application to its initial state. This is useful for users who want to start over or clear the application for a fresh start.
 
 <div id="list"></div>
 
@@ -827,10 +827,10 @@ The `export` command does not require any additional arguments from the user. He
 **Data Retrieval** <br>
 * The `execute` method retrieves the `filteredPersons` list in `Model` by calling the `getFilteredPersonList()` method in `Model`.
   This list stores the relevant persons currently displayed in the `PersonListPanel`.
-  It then creates a temporary `AddressBook` object and iterates through the `filteredPersons` list to add each person from the list into the AddressBook.
+  It then creates a temporary `AddressBook` object and iterates through the `filteredPersons` list to add each person from the list into the `AddressBook`.
   The data is then written to a JSON file named `filteredaddressbook.json` with the `writeToJsonFile` method in `ExportCommand`.
 
-* The `execute` method also retrieves the address book file path by calling the `getAddressBookFilePath()` method in `Model` (this address book stores information of **all** persons and exams).
+* The `execute` method also retrieves the address book file path by calling the `getAddressBookFilePath()` method in `Model` (this `AddressBook` stores information of **all** persons and exams).
   This file path is retrieved to obtain information on the examinations added in the application
 
 The sequence diagram illustrates the interactions between the Logic and Model components when data is being retrieved from `Model` when `export` is executed:
