@@ -1400,20 +1400,20 @@ Retain all other relevant `Tag` objects like `colleagues` and `student` to bette
 * Age: 23
 * Occupation: Head Tutor for CS1101S
 
-* head tutor for CS1101S course
-* has a need to manage various aspects of course administration
-* has a need to schedule classes
-* has a need to coordinate with teaching assistants
-* has a need to effectively communicate with students
-* has a need to manage a significant number of persons
-* prefer desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+* Head tutor for CS1101S course
+* Has a need to manage various aspects of course administration
+* Has a need to schedule classes
+* Has a need to coordinate with teaching assistants
+* Has a need to effectively communicate with students
+* Has a need to manage a significant number of persons
+* Prefer desktop apps over other types
+* Can type fast
+* Prefers typing to mouse interactions
+* Is reasonably comfortable using CLI apps
 
 **Value proposition**:
 
-* manage persons faster than a typical mouse/GUI driven app
+* Manage persons faster than a typical mouse/GUI driven app
 * Centralised platform to store and manage person details for all relevant individuals involved in course administration
 * Able to store and manage exam scores for all students in the course
 * Easier access to information through organising relevant persons into different subgroups
