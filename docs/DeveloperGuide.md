@@ -302,9 +302,9 @@ The following is a more detailed explanation on how user input is parsed into a 
 
 #### Considerations for Logic
 
-The `Logic` component is designed to be the central component that executes all user commands. 
-This design choice was made to ensure that all commands are executed in a consistent manner, and to prevent the duplication of command execution logic across different components. 
-By centralizing the command execution logic in the `Logic` component, we ensure that all commands are executed in the same way, regardless of the component that initiates the command execution. 
+The `Logic` component is designed to be the central component that executes all user commands.
+This design choice was made to ensure that all commands are executed in a consistent manner, and to prevent the duplication of command execution logic across different components.
+By centralizing the command execution logic in the `Logic` component, we ensure that all commands are executed in the same way, regardless of the component that initiates the command execution.
 This design choice also allows for easier maintenance and extensibility, as any changes to the command execution logic can be made in a single location.
 
 <br>
@@ -368,7 +368,7 @@ The sequence diagram below illustrates how data is saved within the `Storage` co
 
 #### Loading of Data
 
-When the application is initialized, the `Storage` component reads the JSON objects from the save file and converts them back to objects that can be used to initialize the `Model` component. 
+When the application is initialized, the `Storage` component reads the JSON objects from the save file and converts them back to objects that can be used to initialize the `Model` component.
 This is done using the `readJsonFile` method of the `JsonUtil` class which utilizes the methods defined in the `JsonAdapted` classes to convert the saved JSON data back to objects that can be used by the `Model` component.
 
 The sequence diagram below illustrates how data is loaded within the `Storage` component when the application is initialized.
@@ -1529,42 +1529,212 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### General
 
-| Priority | As a …​                                      | I want to …​                            | So that I can…​                                                          |
-|----------|---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------|
-| `* * *`  | potential user exploring the app            | see the app populated with sample data | immediately see an example of the app in use                            |
-| `* * *`  | new user                                    | see usage instructions                 | refer to instructions when I forget how to use the App                  |
-| `* * *`  | new user                                    | easily clear the example data          | start using the app with real-life data                                 |
-| `* *`    | experienced user                            | use the application offline            | update and interact with it anywhere                                    |
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        box-shadow: 0px 10px 10px -10px rgba(0,0,0,0.1);
+    }
+    th, td {
+        border: 1px;
+        border-style: solid;
+        border-color: #e0e4e4;
+        padding: 5px;
+        text-align: left;
+    }
+    th {
+        background-color: #ffffff;
+        border-bottom: 2px solid black;
+    }
+    tr:nth-child(even) {
+        background-color: #F5f5f5;
+    }
+    tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+</style>
+
+<table>
+    <tr>
+        <th>Priority</th>
+        <th>As a …​</th>
+        <th>I want to …​</th>
+        <th>So that I can…​</th>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>potential user exploring the app</td>
+        <td>see the app populated with sample data</td>
+        <td>immediately see an example of the app in use</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>new user</td>
+        <td>see usage instructions</td>
+        <td>refer to instructions when I forget how to use the App</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>new user</td>
+        <td>easily clear the example data</td>
+        <td>start using the app with real-life data</td>
+    </tr>
+    <tr>
+        <td>* *</td>
+        <td>experienced user</td>
+        <td>use the application offline</td>
+        <td>update and interact with it anywhere</td>
+    </tr>
+</table>
+
+<br>
 
 #### For Contact Management
 
-| Priority | As a …​                                      | I want to …​                            | So that I can…​                                                        |
-|----------|---------------------------------------------|-----------------------------------------|------------------------------------------------------------------------|
-| `* * *`  | head tutor using the app                    | import persons from a CSV file          | easily add a large number of persons to the application                |
-| `* * *`  | new user                                    | save the data I input into the app      | don't lose the information I've entered                                |
-| `* * *`  | user                                        | add a new person                        | make minor additions to the persons in the application                 |
-| `* * *`  | user                                        | update and edit person details          | keep my persons list accurate                                          |
-| `* * *`  | user                                        | delete a person                         | remove entries that I no longer need                                   |
-| `* * *`  | user                                        | delete a specific group of entries      | remove multiple entries that I no longer need more efficiently         |
-| `* * *`  | user                                        | view all saved contacts                 | oversee the data stored within my app                                  |
-| `* * *`  | user                                        | find a person through their particulars | locate details of persons without having to go through the entire list |
-| `* * *`  | head tutor using the app                    | categorize my persons into groups       | manage different groups of students effectively                        |
-| `* * *`  | head tutor using the app                    | copy email addresses of a group         | effectively communicate with target groups                             |
-| `* * *`  | head tutor using the app                    | export the details of persons to a CSV  | easily share the details of a group with others                        |
+
+<table>
+    <tr>
+        <th>Priority</th>
+        <th>As a …​</th>
+        <th>I want to …​</th>
+        <th>So that I can…​</th>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>head tutor using the app</td>
+        <td>import persons from a CSV file</td>
+        <td>easily add a large number of persons to the application</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>new user</td>
+        <td>save the data I input into the app</td>
+        <td>don't lose the information I've entered</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>user</td>
+        <td>add a new person</td>
+        <td>make minor additions to the persons in the application</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>user</td>
+        <td>update and edit person details</td>
+        <td>keep my persons list accurate</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>user</td>
+        <td>delete a person</td>
+        <td>remove entries that I no longer need</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>user</td>
+        <td>delete a specific group of entries</td>
+        <td>remove multiple entries that I no longer need more efficiently</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>user</td>
+        <td>view all saved contacts</td>
+        <td>oversee the data stored within my app</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>user</td>
+        <td>find a person through their particulars</td>
+        <td>locate details of persons without having to go through the entire list</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>head tutor using the app</td>
+        <td>categorize my persons into groups</td>
+        <td>manage different groups of students effectively</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>head tutor using the app</td>
+        <td>copy email addresses of a group</td>
+        <td>effectively communicate with target groups</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>head tutor using the app</td>
+        <td>export the details of persons to a CSV</td>
+        <td>easily share the details of a group with others</td>
+    </tr>
+</table>
+
+<br>
+
+<div style="page-break-after: always;"></div>
 
 #### For Exam and Score Management
 
-| Priority | As a …​                                      | I want to …​                             | So that I can…​                                        |
-|----------|---------------------------------------------|------------------------------------------|--------------------------------------------------------|
-| `* * *`  | head tutor using the app                    | import assessment scores from a CSV file | easily add a large number of scores to the application |
-| `* * *`  | head tutor using the app                    | add exams to the app                     | keep track of student performance                      |
-| `* * *`  | head tutor using the app                    | delete exams from the app                | remove exams that are no longer relevant               |
-| `* * *`  | head tutor using the app                    | view scores for a specific exam          | analyze student scores                                 |
-| `* * *`  | head tutor using the app                    | add scores to the app                    | keep track of student performance                      |
-| `* * *`  | head tutor using the app                    | edit scores in the app                   | correct errors in the scores                           |
-| `* * *`  | head tutor using the app                    | delete scores from the app               | remove scores that are no longer relevant              |
-| `* * *`  | head tutor using the app                    | export scores to a CSV file              | easily share the scores with others                    |
-| `* * *`  | head tutor using the app                    | view statistics of scores                | analyze student performance                            |
+<table>
+    <tr>
+        <th>Priority</th>
+        <th>As a …​</th>
+        <th>I want to …​</th>
+        <th>So that I can…​</th>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>head tutor using the app</td>
+        <td>import assessment scores from a CSV file</td>
+        <td>easily add a large number of scores to the application</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>head tutor using the app</td>
+        <td>add exams to the app</td>
+        <td>keep track of student performance</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>head tutor using the app</td>
+        <td>delete exams from the app</td>
+        <td>remove exams that are no longer relevant</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>head tutor using the app</td>
+        <td>view scores for a specific exam</td>
+        <td>analyze student scores</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>head tutor using the app</td>
+        <td>add scores to the app</td>
+        <td>keep track of student performance</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>head tutor using the app</td>
+        <td>edit scores in the app</td>
+        <td>correct errors in the scores</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>head tutor using the app</td>
+        <td>delete scores from the app</td>
+        <td>remove scores that are no longer relevant</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>head tutor using the app</td>
+        <td>export scores to a CSV file</td>
+        <td>easily share the scores with others</td>
+    </tr>
+    <tr>
+        <td>* * *</td>
+        <td>head tutor using the app</td>
+        <td>view statistics of scores</td>
+        <td>analyze student performance</td>
+    </tr>
+</table>
 
 --------------------------------------------------------------------------------------------------------------------
 
